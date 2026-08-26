@@ -1,0 +1,17 @@
+.buttonProcedure {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-menu);
+  height: 2.75rem;
+  font-size: 12px;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  max-width: 9rem;
+  cursor: pointer;
+}
+.buttonProcedure-icon {
+  width: 1rem;
+}
+.buttonProcedure--active {
+  border-bottom: 3px solid var(--color-quaternay);
+}

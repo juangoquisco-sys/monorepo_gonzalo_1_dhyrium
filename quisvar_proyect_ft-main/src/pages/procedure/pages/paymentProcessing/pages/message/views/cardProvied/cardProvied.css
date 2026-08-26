@@ -1,0 +1,10 @@
+.cardProvied {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.cardProvied-btns-container {
+  display: flex;
+  justify-content: space-between;
+}

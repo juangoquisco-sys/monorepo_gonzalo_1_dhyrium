@@ -1,0 +1,614 @@
+.formMealOrder {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: auto;
+  padding: 1.25rem 1.5rem 2rem;
+  background: linear-gradient(180deg, var(--color-primarylight) 0%, #fff 36%),
+    #fff;
+}
+
+.formMealOrder-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.formMealOrder-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.formMealOrder-kicker,
+.formMealOrder-detailKicker {
+  color: var(--color-primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+}
+
+.formMealOrder-title {
+  color: var(--color-secondary);
+  font-size: 1.35rem;
+  font-weight: 750;
+}
+
+.formMealOrder-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
+.formMealOrder-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(9rem, 1fr));
+  gap: 0.8rem;
+}
+
+.formMealOrder-summaryCard {
+  border-color: rgba(0, 27, 105, 0.08);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 26px rgba(0, 27, 105, 0.06);
+}
+
+.formMealOrder-summaryCard [data-slot='card-header'] {
+  padding: 0.85rem 1rem 0.2rem;
+}
+
+.formMealOrder-summaryCard [data-slot='card-title'] {
+  color: var(--color-gray-tertiary);
+  font-size: 0.8rem;
+}
+
+.formMealOrder-summaryCard [data-slot='card-content'] {
+  padding: 0 1rem 0.85rem;
+  color: var(--color-secondary);
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+
+.formMealOrder-planner {
+  display: grid;
+  grid-template-columns: minmax(34rem, 1fr) minmax(24rem, 0.42fr);
+  align-items: start;
+  gap: 1rem;
+  /* min-height: 0; */
+  height: auto;
+}
+
+.formMealOrder-calendarPanel,
+.formMealOrder-detailPanel {
+  min-height: 0;
+  border-color: rgba(0, 27, 105, 0.08);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 18px 42px rgba(0, 27, 105, 0.08);
+}
+
+.formMealOrder-calendarHeader,
+.formMealOrder-detailHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.formMealOrder-monthTitle,
+.formMealOrder-calendarActions,
+.formMealOrder-monthNav,
+.formMealOrder-detailMealTitle,
+.formMealOrder-detailHint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.formMealOrder-calendarActions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.formMealOrder-monthNav {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.formMealOrder-monthTitle {
+  color: var(--color-secondary);
+  font-size: 1.15rem;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.formMealOrder-todayNavButton {
+  min-width: 3.2rem;
+  font-weight: 800;
+}
+
+.formMealOrder-monthTitle svg,
+.formMealOrder-detailHint svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+}
+
+.formMealOrder-bulkInline {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2rem;
+  border: 1px solid rgba(0, 27, 105, 0.08);
+  border-radius: 999px;
+  background: #f8fbff;
+  padding: 0.2rem 0.3rem 0.2rem 0.65rem;
+}
+
+.formMealOrder-bulkLabel {
+  color: var(--color-gray-tertiary);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.formMealOrder-bulkModeText {
+  color: #51627f;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.formMealOrder-bulkClearButton {
+  height: 1.6rem;
+  padding-inline: 0.45rem 0.6rem;
+  font-size: 0.72rem;
+}
+
+.formMealOrder-weekdays,
+.formMealOrder-calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.formMealOrder-weekdays {
+  margin-bottom: 0.65rem;
+}
+
+.formMealOrder-weekdays span {
+  color: #8797b4;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.formMealOrder-calendarGridWrapper {
+  position: relative;
+}
+
+.formMealOrder-dayCell {
+  display: flex;
+  min-height: 6.65rem;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border: 1px solid rgba(0, 27, 105, 0.08);
+  border-radius: 0.8rem;
+  background: #fff;
+  padding: 0.7rem;
+  text-align: left;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.formMealOrder-dayCell:hover:not(:disabled) {
+  border-color: rgba(14, 156, 216, 0.35);
+  box-shadow: 0 10px 24px rgba(14, 156, 216, 0.12);
+  transform: translateY(-1px);
+}
+
+.formMealOrder-dayCell--past {
+  border-color: rgba(100, 116, 139, 0.1);
+  background: #f8fafc;
+}
+
+.formMealOrder-dayCell--past:hover:not(:disabled) {
+  border-color: rgba(100, 116, 139, 0.18);
+  box-shadow: none;
+  transform: none;
+}
+
+.formMealOrder-dayCell--past .formMealOrder-dayNumber {
+  color: #94a3b8;
+}
+
+.formMealOrder-dayCell--past .formMealOrder-mealChip {
+  opacity: 0.9;
+}
+
+.formMealOrder-dayCell--selected {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(14, 156, 216, 0.15);
+}
+
+.formMealOrder-dayCell--today {
+  background: linear-gradient(180deg, #f8fbff 0%, #fff 100%);
+}
+
+.formMealOrder-dayCell--bulkSelectable:hover:not(:disabled) {
+  border-color: rgba(15, 159, 110, 0.38);
+  box-shadow: 0 10px 24px rgba(15, 159, 110, 0.12);
+}
+
+.formMealOrder-dayCell--bulkSelected {
+  border-color: rgba(15, 159, 110, 0.48);
+  background: linear-gradient(180deg, #eefdf7 0%, #fff 100%);
+  box-shadow: inset 0 0 0 2px rgba(15, 159, 110, 0.16);
+}
+
+.formMealOrder-dayCell--bulkSelected:hover:not(:disabled) {
+  border-color: rgba(15, 159, 110, 0.58);
+  box-shadow: 0 10px 24px rgba(15, 159, 110, 0.12),
+    inset 0 0 0 2px rgba(15, 159, 110, 0.2);
+}
+
+.formMealOrder-dayCell--empty {
+  background: rgba(255, 255, 255, 0.35);
+  cursor: default;
+}
+
+.formMealOrder-dayNumber {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  color: #17233f;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.formMealOrder-todayBadge {
+  height: 1.15rem;
+  border-color: rgba(79, 90, 237, 0.12);
+  background: #ecebff;
+  color: #4f46e5;
+  font-size: 0.62rem;
+}
+
+.formMealOrder-dayMeals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+}
+
+.formMealOrder-calendarGrid--loading {
+  pointer-events: none;
+}
+
+.formMealOrder-mealChip {
+  position: relative;
+  display: inline-flex;
+  width: 1.35rem;
+  height: 1.35rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.formMealOrder-mealChipSkeleton {
+  display: inline-flex;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 0.35rem;
+  background: linear-gradient(90deg, #eef4fb 25%, #f8fafc 37%, #eef4fb 63%);
+  background-size: 400% 100%;
+  animation: formMealOrder-shimmer 1.2s ease-in-out infinite;
+}
+
+.formMealOrder-mealChip--locked {
+  box-shadow: inset 0 0 0 1.5px rgba(23, 35, 63, 0.28);
+}
+
+.formMealOrder-mealChipLock {
+  position: absolute;
+  top: -0.44rem;
+  right: -0.44rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  padding: 0.12rem;
+  border: 1px solid rgba(23, 35, 63, 0.2);
+  border-radius: 999px;
+  background: #fff;
+  color: #17233f;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.24);
+}
+
+.formMealOrder-mealChip--yes {
+  border-color: rgba(15, 159, 110, 0.24);
+  background: var(--color-success);
+  color: #fff;
+}
+
+.formMealOrder-mealChip--no {
+  border-color: rgba(220, 38, 38, 0.14);
+  background: var(--color-danger-muted);
+  color: var(--color-danger);
+}
+
+.formMealOrder-mealChip--pending {
+  border-color: rgba(217, 119, 6, 0.32);
+  background: #fff;
+  color: var(--color-warning);
+}
+
+.formMealOrder-mealChip--closed {
+  border-color: rgba(100, 116, 139, 0.14);
+  background: var(--color-review-muted);
+  color: var(--color-review);
+}
+
+.formMealOrder-calendarSeparator {
+  margin: 1rem 0;
+}
+
+.formMealOrder-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem;
+  color: #5f6f8c;
+  font-size: 0.84rem;
+}
+
+.formMealOrder-legend strong {
+  display: inline-flex;
+  width: 1.25rem;
+  height: 1.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.35rem;
+  background: var(--color-review-muted);
+  color: var(--color-secondary);
+  font-size: 0.72rem;
+}
+
+.formMealOrder-legendState {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.28rem 0.55rem;
+  font-weight: 700;
+}
+
+.formMealOrder-legendState--yes {
+  background: var(--color-success-muted);
+  color: var(--color-success);
+}
+
+.formMealOrder-legendState--no {
+  background: var(--color-danger-muted);
+  color: var(--color-danger);
+}
+
+.formMealOrder-legendState--pending {
+  background: var(--color-warning-muted);
+  color: var(--color-warning);
+}
+
+.formMealOrder-legendState--closed {
+  background: var(--color-review-muted);
+  color: var(--color-review);
+}
+
+.formMealOrder-legendLock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgba(23, 35, 63, 0.12);
+  border-radius: 999px;
+  padding: 0.28rem 0.55rem;
+  color: #17233f;
+  font-weight: 700;
+}
+
+.formMealOrder-legendLock svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.formMealOrder-detailBulkHint {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--color-success);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.formMealOrder-detailPanel {
+  display: flex;
+  /* max-height: calc(100vh - 15rem); */
+  flex-direction: column;
+  height: var(--formMealOrder-calendar-height, auto);
+  max-height: var(--formMealOrder-calendar-height, none);
+  overflow: hidden;
+}
+
+.formMealOrder-detailPanel [data-slot='card-content'] {
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.formMealOrder-detailContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  overflow: auto;
+  padding-right: 0.75rem;
+}
+
+.formMealOrder-detailMeal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border: 1px solid rgba(0, 27, 105, 0.08);
+  border-radius: 0.8rem;
+  background: #fff;
+  padding: 0.9rem;
+}
+
+.formMealOrder-detailMeal--readonly {
+  background: #f8fafc;
+}
+
+.formMealOrder-detailMealTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.formMealOrder-detailMealTitle strong {
+  color: var(--color-secondary);
+  font-size: 1rem;
+}
+
+.formMealOrder-detailField {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.formMealOrder-detailField label {
+  color: var(--color-gray-tertiary);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.formMealOrder-detailHint {
+  color: var(--color-gray-tertiary);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.formMealOrder-feedback {
+  position: relative;
+  display: flex;
+  min-height: 14rem;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px dashed rgba(0, 27, 105, 0.12);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--color-gray-tertiary);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+@keyframes formMealOrder-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}
+
+@media (max-width: 1200px) {
+  .formMealOrder-planner {
+    grid-template-columns: 1fr;
+  }
+
+  .formMealOrder-detailPanel {
+    height: auto;
+    max-height: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .formMealOrder {
+    padding: 1rem;
+  }
+
+  .formMealOrder-toolbar,
+  .formMealOrder-calendarHeader,
+  .formMealOrder-detailHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .formMealOrder-actions {
+    justify-content: flex-start;
+  }
+
+  .formMealOrder-calendarActions,
+  .formMealOrder-monthNav {
+    justify-content: flex-start;
+  }
+
+  .formMealOrder-summary {
+    grid-template-columns: repeat(2, minmax(8rem, 1fr));
+  }
+
+  .formMealOrder-bulkInline {
+    align-self: stretch;
+    border-radius: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .formMealOrder-weekdays,
+  .formMealOrder-calendarGrid {
+    gap: 0.45rem;
+  }
+
+  .formMealOrder-dayCell {
+    min-height: 5.7rem;
+    padding: 0.55rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .formMealOrder-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .formMealOrder-weekdays span {
+    font-size: 0.65rem;
+  }
+
+  .formMealOrder-dayCell {
+    min-height: 4.9rem;
+  }
+
+  .formMealOrder-mealChip {
+    width: 1.15rem;
+    height: 1.15rem;
+    font-size: 0.62rem;
+  }
+
+  .formMealOrder-mealChipSkeleton {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .formMealOrder-mealChipLock {
+    top: -0.38rem;
+    right: -0.38rem;
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+
+  .formMealOrder-detailField {
+    grid-template-columns: 1fr;
+  }
+}

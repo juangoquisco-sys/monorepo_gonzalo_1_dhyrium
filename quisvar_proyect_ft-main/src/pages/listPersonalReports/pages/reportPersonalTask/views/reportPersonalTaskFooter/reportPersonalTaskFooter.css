@@ -1,0 +1,15 @@
+.reportPersonalTaskView-footer {
+  display: flex;
+  height: 10.9375rem;
+  padding: 0.625rem 0rem;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.reportPersonalTaskView-footer-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 17rem;
+}

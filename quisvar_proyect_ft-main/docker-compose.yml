@@ -1,0 +1,27 @@
+version: '3.3'
+
+services:
+  builder:
+    image: node
+    container_name: builder_frontend
+    entrypoint: /bin/sh
+    restart: always
+    working_dir: /srv/app
+    volumes:
+      - ./:/srv/app
+    tty: true
+
+  frontend:
+    image: nginx:alpine
+    container_name: project_frontend_nginx
+    restart: always
+    ports:
+      - ${PORT}:80
+    environment:
+      VIRTUAL_HOST: quisvar.com, www.quisvar.com
+    volumes:
+      - ./dist:/usr/share/nginx/html
+networks:
+  default:
+    external:
+      name: proxynet

@@ -1,0 +1,2810 @@
+.gateControlLayout {
+  display: flex;
+  min-height: 100%;
+  height: 100%;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  background: #f6f8fb;
+  color: var(--foreground);
+}
+
+.gateControl {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 1.35rem 18px 2.4rem 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  background: transparent;
+}
+
+.gateControl-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.gateControl-headingActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gateControl-heading span {
+  display: block;
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.gateControl-heading h2 {
+  margin: 4px 0 0;
+  color: var(--color-secondary);
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+
+.gateControl-iconBtn,
+.gateControl-primary,
+.gateControl-return,
+.gateControl-actions button,
+.gateControl-presets button {
+  border: 0;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.gateControl-iconBtn {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--color-secondary);
+  background: var(--background);
+}
+
+.gateControl-secondaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 0 14px;
+  color: var(--color-secondary);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.gateControl-secondaryAction:hover,
+.gateControl-iconBtn:hover {
+  border-color: var(--color-primary);
+  background: var(--color-ligth-secondary);
+}
+
+.gateControl-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.gateControl-summary div,
+.gateControl-panel,
+.gateControl-create,
+.gateControl-form,
+.gateControl-adjustPanel,
+.gateControl-activeSelf {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.gateControl-summary div {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+}
+
+.gateControl-summary svg {
+  color: var(--color-primary);
+}
+
+.gateControl-summary span,
+.gateControl-row span,
+.gateControl-row small,
+.gateControl-historyItem small,
+.gateControl-rank small {
+  color: var(--color-gray-text);
+}
+
+.gateControl-summary strong {
+  color: var(--color-secondary);
+  font-size: 28px;
+}
+
+.gateControl-create {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) auto minmax(180px, 260px) auto;
+  gap: 10px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.gateControl-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--color-gray-text);
+}
+
+.gateControl-search--compact {
+  width: min(420px, 100%);
+}
+
+.gateControl-search input,
+.gateControl-create > input,
+.gateControl-form input,
+.gateControl-form select,
+.gateControl-form textarea {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  color: var(--foreground);
+  background: transparent;
+}
+
+.gateControl-create > input,
+.gateControl-form input,
+.gateControl-form select,
+.gateControl-form textarea {
+  min-height: 46px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+}
+
+.gateControl-form textarea {
+  min-height: 92px;
+  padding-top: 12px;
+  resize: vertical;
+}
+
+.gateControl-results {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  box-shadow: 0 0.75rem 2rem rgba(0, 27, 105, 0.14);
+}
+
+.gateControl-results button {
+  display: grid;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  color: var(--foreground);
+  text-align: left;
+  background: transparent;
+  cursor: pointer;
+}
+
+.gateControl-results button:hover {
+  background: var(--color-ligth-secondary);
+}
+
+.gateControl-results button.is-highlighted {
+  background: var(--color-ligth-primary);
+  box-shadow: inset 3px 0 0 var(--color-primary);
+}
+
+.gateControl-results span {
+  color: var(--color-gray-text);
+  font-size: 12px;
+}
+
+.gateControl-presets {
+  display: flex;
+  gap: 8px;
+}
+
+.gateControl-presets button {
+  min-width: 72px;
+  min-height: 46px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--color-secondary);
+  background: #ffffff;
+}
+
+.gateControl-presets .is-selected {
+  border-color: var(--color-primary);
+  color: var(--color-secondary);
+  background: var(--color-ligth-primary);
+}
+
+.gateControl-presets--large button {
+  flex: 1;
+  min-height: 58px;
+}
+
+.gateControl-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 8px;
+  color: #ffffff;
+  background: var(--color-primary);
+}
+
+.gateControl-monitorPage {
+  width: min(1216px, calc(100% - 40px));
+}
+
+.gateControl-monitorHeading {
+  margin-bottom: 26px;
+}
+
+.gateControl-monitorHeading h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.55rem;
+}
+
+.gateControl-monitorHeading h2 em {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  background: var(--color-done);
+}
+
+.gateControl-controllerMode {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 0 16px;
+  color: var(--color-secondary);
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 27, 105, 0.05);
+}
+
+.gateControl-controllerMode svg {
+  color: var(--color-done);
+}
+
+.gateControl-monitorSummary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.gateControl-monitorSummary article {
+  display: grid;
+  gap: 16px;
+  min-height: 116px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 22px 20px;
+  box-shadow: 0 2px 5px rgba(0, 27, 105, 0.05);
+}
+
+.gateControl-monitorSummary article > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.gateControl-monitorSummary span {
+  color: var(--color-gray-text);
+  font-weight: 700;
+}
+
+.gateControl-monitorSummary strong {
+  color: var(--color-secondary);
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.gateControl-monitorSummary svg {
+  color: #9aa6bd;
+}
+
+.gateControl-monitorSummary .is-outside {
+  border-color: color-mix(in srgb, var(--color-process) 38%, white);
+}
+
+.gateControl-monitorSummary .is-outside strong,
+.gateControl-monitorSummary .is-outside svg,
+.gateControl-monitorSummary .is-outside span {
+  color: #f97316;
+}
+
+.gateControl-monitorSummary .is-review svg {
+  color: #a855f7;
+}
+
+.gateControl-monitorSummary .is-late strong {
+  color: var(--color-unresolved);
+}
+
+.gateControl-monitorCreate {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 34px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 18px 16px;
+  box-shadow: 0 3px 10px rgba(0, 27, 105, 0.08);
+}
+
+.gateControl-monitorCreateTop {
+  display: grid;
+  grid-template-columns: minmax(20rem, 1fr) auto auto;
+  gap: 14px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+
+.gateControl-monitorCreate .gateControl-search {
+  min-height: 48px;
+  border-color: color-mix(in srgb, var(--border) 80%, var(--color-primary));
+  background: #fbfcfe;
+}
+
+.gateControl-monitorCreate .gateControl-search input::placeholder {
+  color: #8b96b2;
+}
+
+.gateControl-monitorPresets {
+  display: flex;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--color-primarylight);
+  padding: 5px;
+}
+
+.gateControl-monitorPresets button {
+  min-width: 74px;
+  min-height: 40px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-secondary);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.gateControl-monitorPresets button.is-selected {
+  background: #ffffff;
+  color: var(--color-primary);
+  box-shadow: 0 1px 4px rgba(0, 27, 105, 0.14);
+}
+
+.gateControl-monitorAuthorize {
+  min-width: 138px;
+  min-height: 52px;
+  box-shadow: 0 0.45rem 1rem rgba(0, 158, 224, 0.2);
+}
+
+.gateControl-monitorReasons {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gateControl-monitorReasons > span {
+  color: var(--color-gray-text);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.gateControl-monitorReasons button,
+.gateControl-monitorReasons label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 0 12px;
+  color: var(--color-secondary);
+  font-weight: 700;
+}
+
+.gateControl-monitorReasons button {
+  cursor: pointer;
+}
+
+.gateControl-monitorReasons button.is-selected {
+  border-color: var(--color-primary);
+  background: var(--color-ligth-primary);
+  color: var(--color-primary);
+}
+
+.gateControl-monitorReasons label {
+  border-style: dashed;
+}
+
+.gateControl-monitorReasons input {
+  width: 9.5rem;
+  border: 0;
+  outline: none;
+  color: var(--foreground);
+}
+
+.gateControl-monitorSectionTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.gateControl-monitorSectionTitle h3 {
+  margin: 0;
+  color: var(--color-secondary);
+  font-size: 1rem;
+}
+
+.gateControl-monitorSectionTitle span {
+  display: grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--color-primarylight);
+  color: var(--color-gray-text);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.gateControl-monitorSectionTitle--pending {
+  display: block;
+  margin-top: 4px;
+  margin-bottom: 14px;
+}
+
+.gateControl-pendingToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 58px;
+  border: 1px solid #fde68a;
+  border-left: 4px solid #f59e0b;
+  border-radius: 8px;
+  background: #fffbeb;
+  padding: 10px 14px;
+  color: var(--color-secondary);
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 27, 105, 0.05);
+}
+
+.gateControl-pendingToggle:hover {
+  border-color: #fbbf24;
+  background: #fff7d6;
+}
+
+.gateControl-pendingToggle > div {
+  display: grid;
+  gap: 3px;
+  text-align: left;
+}
+
+.gateControl-pendingToggleTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gateControl-pendingToggle h3 {
+  margin: 0;
+  color: var(--color-secondary);
+  font-size: 0.98rem;
+  font-weight: 800;
+}
+
+.gateControl-pendingToggle small {
+  color: #8a5a05;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.gateControl-pendingToggle span {
+  background: #fff7d6;
+  color: #a16207;
+  border: 1px solid #fde68a;
+}
+
+.gateControl-pendingToggle--authorized {
+  border-color: #bae6fd;
+  border-left-color: var(--color-primary);
+  background: #f0f9ff;
+}
+
+.gateControl-pendingToggle--authorized:hover {
+  border-color: #7dd3fc;
+  background: #e0f2fe;
+}
+
+.gateControl-pendingToggle--authorized small,
+.gateControl-pendingToggle--authorized svg {
+  color: #0369a1;
+}
+
+.gateControl-pendingToggle--authorized span {
+  border-color: #bae6fd;
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.gateControl-pendingToggle svg {
+  color: #a16207;
+  transition: transform 0.18s ease;
+}
+
+.gateControl-pendingToggle svg.is-open {
+  transform: rotate(180deg);
+}
+
+.gateControl-monitorList {
+  gap: 14px;
+}
+
+.gateControl-monitorPendingList {
+  gap: 8px;
+  margin: -2px 0 26px;
+}
+
+.gateControl-pendingRow {
+  display: grid;
+  grid-template-columns: auto minmax(18rem, 1fr) minmax(8rem, 0.2fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  border: 1px solid #fde68a;
+  border-left: 4px solid #f59e0b;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 10px 12px;
+  box-shadow: 0 1px 3px rgba(0, 27, 105, 0.04);
+}
+
+.gateControl-pendingRow--authorized {
+  border-color: #bae6fd;
+  border-left-color: var(--color-primary);
+  background: #ffffff;
+}
+
+.gateControl-pendingAvatar {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid #fde68a;
+  background: #fff7d6;
+  color: #b45309;
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.gateControl-pendingAvatar--authorized {
+  border-color: #bae6fd;
+  background: #e0f2fe;
+  color: var(--color-primary);
+}
+
+.gateControl-pendingInfo {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.gateControl-pendingInfo strong {
+  overflow: hidden;
+  color: var(--color-secondary);
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gateControl-pendingInfo div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.gateControl-pendingInfo em {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 18rem;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--color-primarylight);
+  padding: 3px 7px;
+  color: var(--color-secondary);
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gateControl-pendingTimes {
+  display: grid;
+  gap: 2px;
+  color: var(--color-secondary);
+  text-align: left;
+}
+
+.gateControl-pendingTimes span {
+  color: #8b96b2;
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.gateControl-pendingTimes strong {
+  font-size: 0.9rem;
+}
+
+.gateControl-pendingTimes small {
+  color: var(--color-gray-text);
+  font-size: 0.72rem;
+}
+
+.gateControl-monitorRow {
+  display: grid;
+  grid-template-columns: auto minmax(18rem, 1fr) minmax(11rem, 0.28fr) auto;
+  align-items: center;
+  gap: 16px;
+  min-height: 106px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--color-primary);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 16px;
+  box-shadow: 0 2px 5px rgba(0, 27, 105, 0.04);
+}
+
+.gateControl-monitorRow--license {
+  border-left-color: #0ea5e9;
+  background: linear-gradient(90deg, #f5fbff 0%, #ffffff 28%);
+}
+
+.gateControl-monitorRow--pendingLicense {
+  border-left-color: #f59e0b;
+  background: linear-gradient(90deg, #fffbeb 0%, #ffffff 34%);
+}
+
+.gateControl-pendingLicenseBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: max-content;
+  border: 1px solid #fde68a;
+  border-radius: 6px;
+  background: #fff7d6;
+  padding: 2px 8px;
+  color: #92400e;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.gateControl-authorizedLicenseBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: max-content;
+  border: 1px solid #9fe4d2;
+  border-radius: 6px;
+  background: #e8fff7;
+  padding: 2px 8px;
+  color: #047857;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.gateControl-authorizedState {
+  justify-self: end;
+  width: max-content;
+  border-radius: 999px;
+  background: var(--color-primarylight);
+  padding: 6px 12px;
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.gateControl-monitorTimer--pending strong {
+  color: #a16207;
+  font-size: 1.1rem;
+}
+
+.gateControl-monitorApprove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 132px;
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 0.45rem 1rem rgba(0, 158, 224, 0.2);
+}
+
+.gateControl-monitorApprove--compact {
+  min-width: 112px;
+  min-height: 38px;
+  padding: 0 12px;
+  font-size: 0.82rem;
+  box-shadow: none;
+}
+
+.gateControl-monitorApprove:hover {
+  filter: brightness(0.97);
+}
+
+.gateControl-empty--compact {
+  min-height: 58px;
+  margin-bottom: 28px;
+}
+
+.gateControl-monitorRow--LATE {
+  border-color: color-mix(in srgb, var(--color-unresolved) 35%, white);
+  border-left-color: var(--color-unresolved);
+  background: color-mix(in srgb, var(--color-bg-unresolved) 45%, white);
+}
+
+.gateControl-monitorAvatar {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 28%, white);
+  background: color-mix(in srgb, var(--color-primary) 12%, white);
+  color: var(--color-primary);
+  font-weight: 900;
+}
+
+.gateControl-monitorRow--LATE .gateControl-monitorAvatar {
+  border-color: color-mix(in srgb, var(--color-unresolved) 28%, white);
+  background: color-mix(in srgb, var(--color-unresolved) 13%, white);
+  color: var(--color-unresolved);
+}
+
+.gateControl-monitorPerson {
+  display: grid;
+  gap: 7px;
+}
+
+.gateControl-monitorPerson strong {
+  color: var(--color-secondary);
+  font-size: 0.98rem;
+}
+
+.gateControl-monitorPerson div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.gateControl-monitorPerson em {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 4px;
+  background: var(--color-primarylight);
+  padding: 3px 8px;
+  color: var(--color-secondary);
+  font-size: 0.74rem;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.gateControl-monitorRow--LATE .gateControl-monitorPerson em {
+  background: color-mix(in srgb, var(--color-bg-unresolved) 80%, white);
+  color: var(--color-unresolved);
+}
+
+.gateControl-monitorPerson small {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  color: var(--color-gray-text);
+}
+
+.gateControl-licenseBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid #9fe4d2;
+  border-radius: 4px;
+  background: #e8fff7;
+  padding: 3px 8px;
+  color: #047857;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.gateControl-monitorMetaDot {
+  color: #b7bfd2;
+  font-weight: 900;
+}
+
+.gateControl-monitorTimer {
+  display: grid;
+  place-items: center;
+  gap: 3px;
+  min-height: 72px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fbfcfe;
+  padding: 10px 14px;
+  text-align: center;
+}
+
+.gateControl-monitorTimer span {
+  color: #8b96b2;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.gateControl-monitorTimer strong {
+  color: var(--color-primary);
+  font-size: 1.95rem;
+  line-height: 1;
+}
+
+.gateControl-monitorRow--LATE .gateControl-monitorTimer {
+  border-color: color-mix(in srgb, var(--color-unresolved) 28%, white);
+  background: var(--color-bg-unresolved);
+}
+
+.gateControl-monitorRow--LATE .gateControl-monitorTimer span,
+.gateControl-monitorRow--LATE .gateControl-monitorTimer strong {
+  color: var(--color-unresolved);
+}
+
+.gateControl-monitorReturn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 180px;
+  min-height: 54px;
+  border: 0;
+  border-radius: 8px;
+  background: #10b981;
+  color: #ffffff;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 0.45rem 1rem rgba(16, 185, 129, 0.22);
+}
+
+.gateControl-monitorReturn:disabled {
+  background: var(--color-disabled);
+  color: var(--color-gray-text);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.gateControl-list {
+  display: grid;
+  gap: 12px;
+}
+
+.gateControl-sidePanel {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  grid-template-columns: 1fr minmax(22rem, 34rem);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.gateControl-sidePanel.is-open {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.gateControl-sidePanelBackdrop {
+  border: 0;
+  background: rgba(0, 27, 105, 0.18);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.18s ease;
+}
+
+.gateControl-sidePanel.is-open .gateControl-sidePanelBackdrop {
+  opacity: 1;
+}
+
+.gateControl-sidePanelBody {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex-direction: column;
+  gap: 14px;
+  border-left: 1px solid var(--border);
+  background: var(--background);
+  padding: 20px;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.2s ease;
+  box-shadow: -0.8rem 0 2rem rgba(0, 27, 105, 0.16);
+}
+
+.gateControl-sidePanel.is-open .gateControl-sidePanelBody {
+  transform: translateX(0);
+}
+
+.gateControl-sidePanelTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.gateControl-sidePanelTop span {
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.gateControl-sidePanelTop h3 {
+  margin: 4px 0 0;
+  color: var(--color-secondary);
+  font-size: 1.2rem;
+}
+
+.gateControl-sidePanelTop button {
+  min-height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 0 10px;
+  color: var(--color-secondary);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.gateControl-sidePanelHint {
+  margin: 0;
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  line-height: 1.45;
+}
+
+.gateControl-adjustPanel {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.gateControl-adjustHeader span {
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.gateControl-adjustHeader h3 {
+  margin: 4px 0 0;
+  color: var(--color-secondary);
+  font-size: 1rem;
+}
+
+.gateControl-adjustSearch,
+.gateControl-adjustForm {
+  display: grid;
+  gap: 10px;
+}
+
+.gateControl-adjustSearch {
+  grid-template-columns: minmax(260px, 1fr) auto;
+  align-items: end;
+}
+
+.gateControl-adjustForm {
+  grid-template-columns: minmax(260px, 1.35fr) 110px minmax(240px, 1fr) auto;
+  align-items: end;
+}
+
+.gateControl-adjustSearch label,
+.gateControl-adjustForm label {
+  display: grid;
+  gap: 6px;
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  font-weight: 800;
+}
+
+.gateControl-adjustSearch label > span {
+  color: var(--color-gray-text);
+  font-size: 0.68rem;
+  font-weight: 500;
+}
+
+.gateControl-adjustSearch label > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  padding: 0 12px;
+  color: var(--color-gray-text);
+}
+
+.gateControl-adjustSearch input,
+.gateControl-adjustForm input,
+.gateControl-adjustForm select {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  padding: 0 12px;
+  color: var(--foreground);
+  outline: none;
+}
+
+.gateControl-adjustSearch input {
+  min-height: auto;
+  border: 0;
+  padding: 0;
+}
+
+.gateControl-adjustSearch > button {
+  min-height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--color-secondary);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.gateControl-adjustResults {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 10px;
+}
+
+.gateControl-sidePanelBody .gateControl-adjustSearch,
+.gateControl-sidePanelBody .gateControl-adjustForm {
+  grid-template-columns: 1fr;
+}
+
+.gateControl-sidePanelBody .gateControl-adjustResults {
+  grid-template-columns: 1fr;
+  max-height: 18rem;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.gateControl-adjustResults button {
+  display: grid;
+  gap: 4px;
+  min-height: 6.2rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 12px;
+  color: var(--foreground);
+  text-align: left;
+  cursor: pointer;
+}
+
+.gateControl-adjustResults button.is-selected {
+  border-color: var(--color-primary);
+  background: var(--color-bg-correction);
+  box-shadow: inset 0 0 0 1px var(--color-primary);
+}
+
+.gateControl-adjustResults strong,
+.gateControl-selectedPenalty strong {
+  color: var(--color-secondary);
+}
+
+.gateControl-adjustResults span,
+.gateControl-adjustResults small,
+.gateControl-selectedPenalty span,
+.gateControl-selectedPenalty small {
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+}
+
+.gateControl-adjustEmpty,
+.gateControl-selectedPenalty {
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  background: var(--color-primarylight);
+  padding: 12px;
+}
+
+.gateControl-selectedPenalty {
+  display: grid;
+  gap: 4px;
+  min-height: 42px;
+}
+
+.gateControl-primary:disabled {
+  background: var(--color-disabled);
+  color: var(--color-gray-text);
+  cursor: not-allowed;
+}
+
+.gateControl-row {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+}
+
+.gateControl-reviewCase {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+}
+
+.gateControl-reviewCaseHeader {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.gateControl-reviewCaseHeader > div:first-child {
+  display: grid;
+  gap: 4px;
+}
+
+.gateControl-reviewCaseHeader strong,
+.gateControl-reviewStep strong {
+  color: var(--color-secondary);
+}
+
+.gateControl-reviewCaseHeader span {
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.gateControl-reviewCaseHeader small {
+  color: var(--color-gray-text);
+}
+
+.gateControl-reviewTimeline {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.gateControl-reviewStep {
+  display: grid;
+  gap: 5px;
+  min-height: 7rem;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  background: var(--color-primarylight);
+  padding: 12px;
+}
+
+.gateControl-reviewStep span {
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.gateControl-reviewStep small {
+  color: var(--color-gray-text);
+}
+
+.gateControl-reviewStep em {
+  width: max-content;
+  border-radius: 999px;
+  background: #ffffff;
+  padding: 3px 8px;
+  color: var(--color-secondary);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.gateControl-row--LATE {
+  border-color: var(--color-unresolved);
+  background: var(--color-bg-unresolved);
+}
+
+.gateControl-row--NEAR_DUE {
+  border-color: var(--color-process);
+  background: color-mix(in srgb, var(--color-process) 12%, white);
+}
+
+.gateControl-row--PENDING_REVIEW {
+  border-color: var(--color-primary);
+  background: var(--color-bg-correction);
+}
+
+.gateControl-row > div:first-child,
+.gateControl-historyItem,
+.gateControl-rank {
+  display: grid;
+  gap: 4px;
+}
+
+.gateControl-timer {
+  min-width: 100px;
+  text-align: right;
+}
+
+.gateControl-timer strong {
+  display: block;
+  font-size: 26px;
+  color: var(--color-primary);
+}
+
+.gateControl-row--LATE .gateControl-timer strong {
+  color: var(--color-unresolved);
+}
+
+.gateControl-return {
+  min-width: 120px;
+  max-width: 190px;
+  min-height: 48px;
+  border-radius: 8px;
+  color: #ffffff;
+  background: var(--color-done);
+  white-space: normal;
+}
+
+.gateControl-return:disabled {
+  color: var(--color-gray-text);
+  background: var(--color-disabled);
+  cursor: not-allowed;
+}
+
+.gateControl-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.8fr) minmax(360px, 1.2fr);
+  gap: 14px;
+}
+
+.gateControl-panel {
+  padding: 16px;
+}
+
+.gateControl-panel h3,
+.gateControl-form h3 {
+  margin: 0 0 12px;
+  color: var(--color-secondary);
+}
+
+.gateControl-historyPage {
+  width: min(1480px, calc(100% - 64px));
+  padding-right: 28px;
+  padding-left: 28px;
+}
+
+.gateControl-historyPage .gateControl-heading {
+  margin-bottom: 18px;
+}
+
+.gateControl-historyPage .gateControl-search {
+  min-height: 38px;
+  border-color: color-mix(in srgb, var(--border) 80%, var(--color-primary));
+  box-shadow: none;
+}
+
+.gateControl-historyPage .gateControl-search input::placeholder {
+  color: #8b96b2;
+}
+
+.gateControl-fineReport {
+  overflow: hidden;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 27, 105, 0.05);
+}
+
+.gateControl-fineReportTop {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.72fr) minmax(0, 1.55fr);
+  align-items: end;
+  gap: 24px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+}
+
+.gateControl-fineReportTop > div,
+.gateControl-fineReportTop > form {
+  min-width: 0;
+}
+
+.gateControl-fineReportTop span {
+  color: var(--color-primary);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.gateControl-fineReportTop h3 {
+  margin: 4px 0 6px;
+  color: var(--color-secondary);
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.gateControl-fineReportTop p {
+  max-width: 34rem;
+  margin: 0;
+  color: var(--color-gray-text);
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.gateControl-fineFilters {
+  display: grid;
+  grid-template-columns:
+    minmax(12rem, 1.15fr)
+    minmax(8.6rem, 0.75fr)
+    minmax(8.6rem, 0.75fr)
+    minmax(9.8rem, 0.85fr)
+    minmax(6.8rem, auto)
+    minmax(6.8rem, auto);
+  align-items: end;
+  gap: 12px;
+}
+
+.gateControl-fineFilters label,
+.gateControl-fineAdjustment label {
+  display: grid;
+  gap: 5px;
+  color: var(--color-secondary);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.gateControl-fineFilters input,
+.gateControl-fineFilters select,
+.gateControl-fineAdjustment input {
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 0 10px;
+  color: var(--color-secondary);
+  font-weight: 700;
+  outline: none;
+}
+
+.gateControl-fineFilters input:focus,
+.gateControl-fineFilters select:focus,
+.gateControl-fineAdjustment input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+.gateControl-primaryButton,
+.gateControl-outlineButton,
+.gateControl-detailButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  border-radius: 8px;
+  padding: 0 14px;
+  font-weight: 900;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.gateControl-primaryButton:disabled,
+.gateControl-outlineButton:disabled,
+.gateControl-detailButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.gateControl-primaryButton {
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.gateControl-outlineButton,
+.gateControl-detailButton {
+  border: 1px solid color-mix(in srgb, var(--color-primary) 56%, var(--border));
+  background: color-mix(in srgb, var(--color-primary) 8%, white);
+  color: var(--color-primary);
+}
+
+.gateControl-outlineButton--danger {
+  border-color: color-mix(in srgb, var(--color-unresolved) 48%, var(--border));
+  background: color-mix(in srgb, var(--color-unresolved) 8%, white);
+  color: var(--color-unresolved);
+}
+
+.gateControl-fineSummary,
+.gateControl-fineCards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  padding: 16px 22px 0;
+}
+
+.gateControl-fineCards {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  padding-bottom: 16px;
+}
+
+.gateControl-fineSummary article,
+.gateControl-fineCard,
+.gateControl-fineDetailSummary article {
+  display: grid;
+  gap: 5px;
+  min-height: 66px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 10px 12px;
+}
+
+.gateControl-fineSummary span,
+.gateControl-fineCard span,
+.gateControl-fineDetailSummary span {
+  color: var(--color-gray-text);
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.gateControl-fineSummary strong,
+.gateControl-fineCard strong,
+.gateControl-fineDetailSummary strong {
+  color: var(--color-secondary);
+  font-size: 1.22rem;
+  font-weight: 900;
+}
+
+.gateControl-fineSummary--danger {
+  border-color: color-mix(
+    in srgb,
+    var(--color-unresolved) 44%,
+    var(--border)
+  ) !important;
+  background: color-mix(in srgb, var(--color-unresolved) 7%, white) !important;
+}
+
+.gateControl-fineSummary--danger strong {
+  color: var(--color-unresolved);
+}
+
+.gateControl-fineSummary--adjusted {
+  border-color: color-mix(in srgb, #f59e0b 48%, var(--border)) !important;
+  background: color-mix(in srgb, #f59e0b 8%, white) !important;
+}
+
+.gateControl-fineSummary--adjusted strong {
+  color: #b45309;
+}
+
+.gateControl-fineCard small {
+  color: var(--color-gray-text);
+  font-size: 0.78rem;
+}
+
+.gateControl-fineCard--puntual {
+  border-color: color-mix(in srgb, #10b981 36%, var(--border));
+  background: color-mix(in srgb, #10b981 8%, white);
+}
+
+.gateControl-fineCard--tarde {
+  border-color: color-mix(in srgb, #f59e0b 42%, var(--border));
+  background: color-mix(in srgb, #f59e0b 10%, white);
+}
+
+.gateControl-fineCard--simple,
+.gateControl-fineCard--grave,
+.gateControl-fineCard--muy_grave {
+  border-color: color-mix(in srgb, var(--color-unresolved) 40%, var(--border));
+  background: color-mix(in srgb, var(--color-unresolved) 8%, white);
+}
+
+.gateControl-fineTableWrap {
+  overflow: auto;
+  border-top: 1px solid var(--border);
+}
+
+.gateControl-fineTable,
+.gateControl-fineDetailTableWrap table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--color-secondary);
+}
+
+.gateControl-fineTable th,
+.gateControl-fineTable td,
+.gateControl-fineDetailTableWrap th,
+.gateControl-fineDetailTableWrap td {
+  border-bottom: 1px solid var(--border);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.gateControl-fineTable th,
+.gateControl-fineDetailTableWrap th {
+  background: #f4f7fb;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.gateControl-fineCount,
+.gateControl-fineAmount {
+  text-align: center !important;
+  font-weight: 900;
+}
+
+.gateControl-fineCount--puntual {
+  background: #86e7d3;
+}
+
+.gateControl-fineCount--tarde {
+  background: #ffe676;
+}
+
+.gateControl-fineCount--simple {
+  background: #ffb0b5;
+}
+
+.gateControl-fineCount--grave {
+  background: #ff6b70;
+}
+
+.gateControl-fineCount--muy_grave {
+  background: #ff5257;
+}
+
+.gateControl-fineAmount--danger {
+  color: var(--color-unresolved);
+}
+
+.gateControl-fineAmount--adjusted {
+  color: #b45309;
+}
+
+.gateControl-fineAmount--zero {
+  color: #059669;
+}
+
+.gateControl-fineDetailRow td {
+  padding: 0;
+  background: color-mix(in srgb, var(--color-primary) 4%, white);
+}
+
+.gateControl-fineDetail {
+  display: grid;
+  gap: 12px;
+  border-left: 4px solid var(--color-primary);
+  padding: 14px;
+}
+
+.gateControl-fineDetailSummary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.gateControl-finePreview--pending {
+  color: #b45309 !important;
+}
+
+.gateControl-fineDetailHint {
+  margin: 0;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 18%, var(--border));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--color-primary) 4%, white);
+  padding: 8px 10px;
+  color: var(--color-gray-text);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.gateControl-fineAdjustment {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.5fr) minmax(18rem, 1.4fr) auto auto auto;
+  align-items: end;
+  gap: 10px;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 24%, var(--border));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--color-primary) 5%, white);
+  padding: 10px;
+}
+
+.gateControl-fineDetailTableWrap {
+  max-height: 310px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.gateControl-fineBadge {
+  display: inline-flex;
+  justify-content: center;
+  min-width: 7.4rem;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
+.gateControl-fineBadge--puntual {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.gateControl-fineBadge--tarde {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.gateControl-fineBadge--simple,
+.gateControl-fineBadge--grave,
+.gateControl-fineBadge--muy_grave {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.gateControl-historySummary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.gateControl-historySummary article {
+  display: grid;
+  gap: 6px;
+  min-height: 74px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 12px 14px;
+  box-shadow: 0 2px 5px rgba(0, 27, 105, 0.04);
+}
+
+.gateControl-historySummary span {
+  color: var(--color-gray-text);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.gateControl-historySummary strong {
+  color: var(--color-secondary);
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+
+.gateControl-historySummary--warning {
+  border-color: color-mix(in srgb, #f59e0b 42%, var(--border));
+  background: color-mix(in srgb, #f59e0b 8%, white);
+}
+
+.gateControl-historySummary--danger {
+  border-color: color-mix(in srgb, var(--color-unresolved) 42%, var(--border));
+  background: color-mix(in srgb, var(--color-unresolved) 8%, white);
+}
+
+.gateControl-historySummary--danger strong {
+  color: var(--color-unresolved);
+}
+
+.gateControl-historyLayout {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.8fr) minmax(30rem, 1.65fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.gateControl-historyCard {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 27, 105, 0.05);
+}
+
+.gateControl-historyCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 60px;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.gateControl-historyCardHeader > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gateControl-historyCardHeader svg {
+  color: var(--color-primary);
+}
+
+.gateControl-historyCardHeader h3 {
+  margin: 0;
+  color: var(--color-secondary);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.gateControl-historyCardHeader button {
+  border: 0;
+  background: transparent;
+  color: var(--color-primary);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.gateControl-rankingList,
+.gateControl-movementList {
+  display: grid;
+}
+
+.gateControl-rankingRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
+  padding: 22px 20px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, white);
+}
+
+.gateControl-rankingRow:last-child,
+.gateControl-movementRow:last-child {
+  border-bottom: 0;
+}
+
+.gateControl-rankingPlace {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--color-primarylight);
+  color: var(--color-secondary);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.gateControl-rankingRow div {
+  display: grid;
+  gap: 7px;
+}
+
+.gateControl-rankingRow strong,
+.gateControl-movementPerson strong,
+.gateControl-movementTime strong {
+  color: var(--color-secondary);
+}
+
+.gateControl-rankingRow em {
+  width: max-content;
+  max-width: 100%;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--color-unresolved) 12%, white);
+  padding: 4px 9px;
+  color: var(--color-unresolved);
+  font-size: 0.74rem;
+  font-style: normal;
+}
+
+.gateControl-rankingRow small {
+  color: var(--color-gray-text);
+}
+
+.gateControl-historyEmpty {
+  padding: 34px 28px;
+  color: #8b96b2;
+  text-align: center;
+  line-height: 1.45;
+}
+
+.gateControl-historyEmpty--soft {
+  border-top: 1px solid color-mix(in srgb, var(--border) 72%, white);
+}
+
+.gateControl-movementRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  min-height: 84px;
+  padding: 14px 20px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, white);
+}
+
+.gateControl-avatar {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-primary) 14%, white);
+  color: var(--color-primary);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.gateControl-movementPerson {
+  display: grid;
+  gap: 6px;
+}
+
+.gateControl-movementPerson > div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.gateControl-movementPerson small,
+.gateControl-movementTime small {
+  color: var(--color-gray-text);
+}
+
+.gateControl-movementPenalty {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-unresolved) 12%, white);
+  padding: 3px 8px;
+  color: var(--color-unresolved) !important;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.gateControl-historyStatus {
+  width: max-content;
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: var(--color-secondary);
+  background: var(--color-primarylight);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.gateControl-historyStatus--returned {
+  color: var(--color-done);
+  background: var(--color-bg-done);
+}
+
+.gateControl-historyStatus--cancelled {
+  color: var(--color-unresolved);
+  background: var(--color-bg-unresolved);
+}
+
+.gateControl-historyStatus--active,
+.gateControl-historyStatus--pending_exit_review,
+.gateControl-historyStatus--pending_return_review {
+  color: var(--color-primary);
+  background: var(--color-ligth-primary);
+}
+
+.gateControl-movementTime {
+  display: grid;
+  gap: 4px;
+  min-width: 12rem;
+  text-align: right;
+}
+
+.gateControl-movementTime strong span {
+  color: var(--color-gray-text);
+  font-weight: 500;
+}
+
+.gateControl-rank,
+.gateControl-historyItem {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.gateControl-rank span {
+  color: var(--color-unresolved);
+  font-weight: 800;
+}
+
+.gateControl-metrics {
+  display: grid;
+  gap: 4px;
+  min-width: 130px;
+  text-align: right;
+}
+
+.gateControl-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.gateControl-actions button {
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--color-secondary);
+  background: #ffffff;
+}
+
+.gateControl-actions button:first-child {
+  border-color: var(--color-primary);
+  color: #ffffff;
+  background: var(--color-primary);
+}
+
+.gateControl-empty {
+  padding: 28px;
+  color: var(--color-gray-text);
+  text-align: center;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+}
+
+.gateControl--mobile {
+  width: min(680px, calc(100% - 24px));
+}
+
+.gateControl-selfPage {
+  width: min(430px, 100%);
+  padding: 0 0 2rem;
+  background: #ffffff;
+}
+
+.gateControl-selfHeading {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  background: #ffffff;
+  padding: 16px 18px;
+  margin: 0 -1px 18px;
+}
+
+.gateControl-selfHeading h2 {
+  font-size: 1.08rem;
+}
+
+.gateControl-selfHistoryBtn {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-primarylight);
+  color: var(--color-secondary);
+  cursor: pointer;
+}
+
+.gateControl-myHistoryPanel {
+  display: grid;
+  gap: 8px;
+  margin: 0 18px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 12px;
+}
+
+.gateControl-myHistoryTop {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-secondary);
+}
+
+.gateControl-myHistoryTop svg {
+  color: var(--color-primary);
+}
+
+.gateControl-myHistoryPanel article {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  border-radius: 8px;
+  background: var(--color-primarylight);
+  padding: 10px;
+}
+
+.gateControl-myHistoryPanel article div {
+  display: grid;
+  gap: 3px;
+}
+
+.gateControl-myHistoryPanel strong {
+  color: var(--color-secondary);
+}
+
+.gateControl-myHistoryPanel span,
+.gateControl-myHistoryPanel small,
+.gateControl-myHistoryPanel p {
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+}
+
+.gateControl-confirmedPass {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  margin: 0 20px 22px;
+  border: 1px solid color-mix(in srgb, var(--color-done) 35%, white);
+  border-radius: 8px;
+  background: var(--color-bg-done);
+  padding: 18px;
+}
+
+.gateControl-confirmedPass > svg {
+  margin-top: 6px;
+  color: var(--color-done);
+}
+
+.gateControl-confirmedPass > div {
+  display: grid;
+  gap: 5px;
+}
+
+.gateControl-confirmedPass > div > strong {
+  color: var(--color-secondary);
+}
+
+.gateControl-confirmedPass > div > span {
+  color: color-mix(in srgb, var(--color-done) 70%, var(--color-secondary));
+}
+
+.gateControl-confirmedPass > button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  color: var(--color-done);
+  cursor: pointer;
+}
+
+.gateControl-confirmedSummary {
+  display: grid;
+  gap: 5px;
+  width: min(100%, 238px);
+  margin-top: 6px;
+  border: 1px solid color-mix(in srgb, var(--color-done) 26%, white);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--color-bg-done) 64%, white);
+  padding: 10px;
+}
+
+.gateControl-confirmedSummary small {
+  color: color-mix(in srgb, var(--color-done) 72%, var(--color-secondary));
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.gateControl-confirmedSummary strong {
+  color: var(--color-done);
+}
+
+.gateControl-confirmedSummary strong span {
+  color: var(--color-gray-text);
+}
+
+.gateControl-confirmedSummary em {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #c75a00;
+  font-size: var(--size-label);
+  font-style: normal;
+  font-weight: 800;
+}
+
+.gateControl-selfFeedback {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  border: 1px solid color-mix(in srgb, var(--color-done) 42%, white);
+  border-radius: 8px;
+  background: var(--color-bg-done);
+  padding: 12px 14px;
+  color: var(--color-secondary);
+}
+
+.gateControl-selfPage .gateControl-selfFeedback,
+.gateControl-selfPage .gateControl-activeSelf,
+.gateControl-selfPage .gateControl-selfDone,
+.gateControl-selfPage .gateControl-form {
+  margin-left: 18px;
+  margin-right: 18px;
+}
+
+.gateControl-selfFeedback svg {
+  color: var(--color-done);
+}
+
+.gateControl-selfFeedback div {
+  display: grid;
+  gap: 3px;
+}
+
+.gateControl-selfFeedback span {
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+}
+
+.gateControl-selfFeedback button {
+  min-height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--color-secondary);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.gateControl-activeSelf {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.gateControl-activeSelf strong {
+  font-size: 34px;
+  color: var(--color-primary);
+}
+
+.gateControl-selfFlow {
+  display: grid;
+  gap: 28px;
+  padding: 0 18px;
+}
+
+.gateControl-selfStep {
+  display: grid;
+  gap: 14px;
+}
+
+.gateControl-stepTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-secondary);
+}
+
+.gateControl-stepTitle span {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--color-primarylight);
+  color: var(--color-gray-text);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.gateControl-durationCards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.gateControl-durationCards button {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  min-height: 84px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--color-secondary);
+  cursor: pointer;
+}
+
+.gateControl-durationCards button.is-selected {
+  border-color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 8%, white);
+  color: var(--color-primary);
+}
+
+.gateControl-durationCards svg {
+  color: var(--color-secondary);
+}
+
+.gateControl-durationCards button.is-selected svg {
+  color: var(--color-primary);
+}
+
+.gateControl-reasonChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gateControl-reasonChips button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--color-primarylight);
+  padding: 0 16px;
+  color: var(--color-secondary);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.gateControl-reasonChips button.is-selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.gateControl-otherReason {
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 0 12px;
+  color: var(--foreground);
+  outline: none;
+}
+
+.gateControl-evidenceNotice {
+  display: grid;
+  gap: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--color-primarylight) 62%, white);
+  padding: 16px;
+}
+
+.gateControl-evidenceNotice > div:first-child {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.gateControl-evidenceNotice > div:first-child svg {
+  color: var(--color-process);
+}
+
+.gateControl-evidenceNotice > div:first-child div {
+  display: grid;
+  gap: 3px;
+}
+
+.gateControl-evidenceNotice strong {
+  color: var(--color-secondary);
+}
+
+.gateControl-evidenceNotice span {
+  color: var(--color-gray-text);
+}
+
+.gateControl-selfFooter {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  margin: 1.25rem -18px 0;
+  border-top: 1px solid var(--border);
+  background: #ffffff;
+  padding: 16px 14px;
+  box-shadow: 0 -0.5rem 1.4rem rgba(0, 27, 105, 0.08);
+}
+
+.gateControl-selfFooter .gateControl-primary {
+  width: 100%;
+  min-height: 60px;
+  box-shadow: 0 0.45rem 1.2rem rgba(0, 158, 224, 0.22);
+  text-transform: none;
+}
+
+.gateControl-lastPass {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  padding: 14px;
+}
+
+.gateControl-lastPassTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.gateControl-lastPassTop div {
+  display: grid;
+  gap: 4px;
+}
+
+.gateControl-lastPassTop span {
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.gateControl-lastPassTop strong {
+  color: var(--color-secondary);
+  font-size: 1.05rem;
+}
+
+.gateControl-lastPassTop small,
+.gateControl-lastPassMeta,
+.gateControl-hiddenHistory span {
+  color: var(--color-gray-text);
+}
+
+.gateControl-lastPassMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: var(--size-label);
+}
+
+.gateControl-lastPassMeta span {
+  border-radius: 999px;
+  background: var(--color-primarylight);
+  padding: 5px 9px;
+}
+
+.gateControl-historyToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--color-secondary);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.gateControl-historyToggle .is-open {
+  transform: rotate(180deg);
+}
+
+.gateControl-hiddenHistory {
+  display: grid;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+.gateControl-hiddenHistory div {
+  display: grid;
+  gap: 3px;
+  border-radius: 8px;
+  background: var(--color-primarylight);
+  padding: 10px;
+}
+
+.gateControl-hiddenHistory strong {
+  color: var(--color-secondary);
+}
+
+.gateControl-form {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.gateControl-flowCard > div:first-child {
+  display: grid;
+  gap: 4px;
+}
+
+.gateControl-flowCard > div:first-child span {
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.gateControl-flowCard > div:first-child small {
+  color: var(--color-gray-text);
+}
+
+.gateControl-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--color-gray-text);
+  font-weight: 700;
+}
+
+.gateControl-evidenceBox {
+  display: grid;
+  gap: 10px;
+}
+
+.gateControl-evidenceModes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.gateControl-evidenceModes button,
+.gateControl-whatsappEvidence button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--color-secondary);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.gateControl-evidenceModes button.is-selected {
+  border-color: var(--color-primary);
+  background: var(--color-ligth-primary);
+}
+
+.gateControl-evidenceNotice .gateControl-evidenceModes {
+  overflow: hidden;
+  gap: 0;
+  border-radius: 8px;
+  background: #eaf0f7;
+  padding: 4px;
+}
+
+.gateControl-evidenceNotice .gateControl-evidenceModes button {
+  border: 0;
+  background: transparent;
+  min-height: 48px;
+}
+
+.gateControl-evidenceNotice .gateControl-evidenceModes button.is-selected {
+  background: #ffffff;
+  color: var(--color-secondary);
+  box-shadow: 0 1px 3px rgba(0, 27, 105, 0.08);
+}
+
+.gateControl-whatsappEvidence {
+  display: grid;
+  gap: 10px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  background: var(--color-primarylight);
+  padding: 12px;
+}
+
+.gateControl-evidenceNotice .gateControl-whatsappEvidence {
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.gateControl-evidenceNotice .gateControl-whatsappEvidence button {
+  min-height: 58px;
+  border-color: #22c55e;
+  background: #22c55e;
+}
+
+.gateControl-evidenceNotice .gateControl-whatsappEvidence label {
+  min-height: 46px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 0 12px;
+}
+
+.gateControl-evidenceNotice .gateControl-whatsappEvidence input {
+  width: 20px;
+  height: 20px;
+}
+
+.gateControl-whatsappEvidence button {
+  border-color: var(--color-done);
+  background: var(--color-done);
+  color: #ffffff;
+}
+
+.gateControl-whatsappEvidence label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-secondary);
+}
+
+.gateControl-whatsappEvidence input {
+  width: auto;
+  min-height: auto;
+}
+
+.gateControl-selfDone {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--color-done) 42%, white);
+  border-radius: 8px;
+  background: var(--color-bg-done);
+  padding: 16px;
+  color: var(--color-secondary);
+}
+
+.gateControl-selfDone svg {
+  color: var(--color-done);
+}
+
+.gateControl-selfDone div {
+  display: grid;
+  gap: 4px;
+}
+
+.gateControl-selfDone span {
+  color: var(--color-gray-text);
+}
+
+@media (max-width: 1280px) {
+  .gateControl-historyPage {
+    width: min(1180px, calc(100% - 32px));
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .gateControl-fineReportTop {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .gateControl-fineReportTop p {
+    max-width: none;
+  }
+
+  .gateControl-fineFilters {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .gateControl-fineSummary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gateControl-fineCards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .gateControl-summary,
+  .gateControl-create,
+  .gateControl-monitorSummary,
+  .gateControl-monitorCreateTop,
+  .gateControl-monitorRow,
+  .gateControl-pendingRow,
+  .gateControl-adjustSearch,
+  .gateControl-adjustForm,
+  .gateControl-grid,
+  .gateControl-row {
+    grid-template-columns: 1fr;
+  }
+
+  .gateControl-reviewCaseHeader,
+  .gateControl-reviewTimeline,
+  .gateControl-historyLayout,
+  .gateControl-movementRow {
+    grid-template-columns: 1fr;
+  }
+
+  .gateControl-historyPage {
+    width: min(100% - 24px, 680px);
+  }
+
+  .gateControl-historyPage .gateControl-heading {
+    margin-bottom: 18px;
+  }
+
+  .gateControl-historyPage .gateControl-search {
+    width: 100%;
+  }
+
+  .gateControl-historySummary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gateControl-fineReportTop,
+  .gateControl-fineFilters,
+  .gateControl-fineSummary,
+  .gateControl-fineCards,
+  .gateControl-fineDetailSummary,
+  .gateControl-fineAdjustment {
+    grid-template-columns: 1fr;
+  }
+
+  .gateControl-fineTableWrap,
+  .gateControl-fineDetailTableWrap {
+    overflow-x: auto;
+  }
+
+  .gateControl-fineTable,
+  .gateControl-fineDetailTableWrap table {
+    min-width: 920px;
+  }
+
+  .gateControl-historyLayout {
+    gap: 14px;
+  }
+
+  .gateControl-movementTime {
+    min-width: 0;
+    text-align: left;
+  }
+
+  .gateControl-monitorPage {
+    width: min(100% - 24px, 680px);
+  }
+
+  .gateControl-monitorHeading {
+    align-items: flex-start;
+  }
+
+  .gateControl-controllerMode {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .gateControl-monitorCreate {
+    padding: 14px;
+  }
+
+  .gateControl-monitorPresets {
+    width: 100%;
+  }
+
+  .gateControl-monitorPresets button,
+  .gateControl-monitorAuthorize,
+  .gateControl-monitorReturn {
+    flex: 1;
+    width: 100%;
+  }
+
+  .gateControl-monitorTimer {
+    place-items: start;
+    text-align: left;
+  }
+
+  .gateControl-pendingToggle {
+    align-items: flex-start;
+  }
+
+  .gateControl-monitorApprove--compact {
+    width: 100%;
+  }
+
+  .gateControl-timer,
+  .gateControl-metrics {
+    text-align: left;
+  }
+
+  .gateControl-actions {
+    flex-wrap: wrap;
+  }
+
+  .gateControl-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .gateControl-headingActions {
+    width: 100%;
+  }
+
+  .gateControl-secondaryAction {
+    flex: 1;
+  }
+
+  .gateControl-sidePanel {
+    grid-template-columns: 1fr;
+  }
+
+  .gateControl-sidePanelBackdrop {
+    display: none;
+  }
+
+  .gateControl-sidePanelBody {
+    width: 100%;
+    border-left: 0;
+  }
+}

@@ -1,0 +1,48 @@
+.header-toggle {
+  background-color: var(--color-primary);
+  color: white;
+  position: absolute;
+  font-size: 13px;
+  bottom: -1rem;
+  left: 3.1rem;
+  width: 10rem;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border: 2px solid var(--color-primary);
+}
+.header-toggle li {
+  width: 100%;
+  padding: var(--radius-input);
+}
+.icon-menu-left {
+  width: 1.2rem;
+  height: 100%;
+}
+.icon-menu-right {
+  width: 1.3rem;
+  height: 100%;
+  margin-right: auto;
+}
+.list-menu p {
+  flex-grow: 1;
+}
+.list-menu {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  max-height: 3rem;
+}
+
+.line {
+  width: 96%;
+  height: 2px;
+  background-color: white;
+}
+.fullname-menu {
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0.5rem 0;
+}

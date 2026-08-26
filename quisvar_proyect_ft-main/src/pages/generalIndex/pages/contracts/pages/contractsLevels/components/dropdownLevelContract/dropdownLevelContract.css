@@ -1,0 +1,125 @@
+.DropdownLevelContract-dropdown-content {
+  display: grid;
+  grid-template-rows: var(--rows, 0fr);
+  transition: 0.3s grid-template-rows;
+  overflow-y: auto;
+}
+.DropdownLevelContract-dropdown-sub {
+  overflow: hidden;
+  width: 98%;
+  margin-left: auto;
+  margin-top: 0.2rem;
+}
+.DropdownLevelContract-upload-file {
+  padding: 0.5rem;
+}
+.DropdownLevelContract-sub-list-item:has(:checked)
+  + .DropdownLevelContract-dropdown-content {
+  grid-template-rows: 1fr;
+}
+.DropdownLevelContract-sub-list-item:has(:checked) {
+  --rotate: rotate(180deg);
+  --background: #d9d9d9;
+}
+.DropdownLevelContract-sub-list-item {
+  display: flex;
+  color: var(--color-secondary);
+  background-color: #ebf0fa99;
+  width: 100%;
+  padding: 7px 13px;
+  text-transform: capitalize;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  justify-content: space-between;
+  align-items: center;
+}
+.DropdownLevelContract-section {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+.DropdownLevelContract-section-names {
+  display: flex;
+  border-radius: 0.5rem;
+  align-items: center;
+}
+.DropdownLevelContract-dropdown-arrow {
+  width: 1.5rem;
+  transform: var(--rotate, 0);
+  transition: 0.2s transform;
+}
+.DropdownLevelContract-dropdown-check {
+  position: absolute;
+  min-width: 100%;
+  opacity: 0;
+  cursor: pointer;
+  height: 100%;
+}
+.DropdownLevelContract-hide {
+  opacity: 0;
+}
+.DropdownLevelContract-sub-list-name {
+  color: #171c26;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.25rem;
+  letter-spacing: 0.0175rem;
+}
+
+.DropdownLevelContract-sub-list-span {
+  font-weight: 500;
+  margin-right: 1rem;
+}
+.DropdownLevelContract-dropdown-arrow--hidden {
+  opacity: 0;
+}
+.DropdownLevelContract-figure {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+.DropdownLevelContract-file-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.DropdownLevelContract-file-container-anchor {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.DropdownLevelContract-file-container-name {
+  color: #000;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.015rem;
+}
+.DropdownLevelContract-file-container:hover
+  .DropdownLevelContract-file-container-name {
+  color: var(--color-secondary);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.015rem;
+  text-decoration-line: underline;
+}
+.DropdownLevelContract-figure-trash {
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.DropdownLevelContract-file-container:hover
+  .DropdownLevelContract-figure-trash {
+  opacity: 1;
+}

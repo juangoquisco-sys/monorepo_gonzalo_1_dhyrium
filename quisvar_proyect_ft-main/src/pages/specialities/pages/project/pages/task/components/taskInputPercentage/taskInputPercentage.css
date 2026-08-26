@@ -1,0 +1,44 @@
+.taskInpuPercentage {
+  width: 8rem;
+  position: relative;
+}
+.taskInpuPercentage-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.taskInpuPercentage-input {
+  padding-right: 1.9rem;
+  color: #000;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: 0.01125rem;
+}
+
+.taskInpuPercentage-icon {
+  position: absolute;
+  right: 0.5rem;
+}
+.taskInpuPercentage-span-container {
+  width: 100%;
+  position: absolute;
+  top: 110%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.2rem;
+}
+.taskInpuPercentage-span-text {
+  cursor: pointer;
+  color: var(--color-gray);
+  font-size: 0.5rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 150%;
+  letter-spacing: 0.01rem;
+  padding: 0.1rem 0.3rem;
+  background-color: var(--color-gray-ligth);
+  border-radius: 0.2rem;
+}

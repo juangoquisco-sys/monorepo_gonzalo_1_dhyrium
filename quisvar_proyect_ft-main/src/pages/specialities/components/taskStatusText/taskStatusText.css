@@ -1,0 +1,50 @@
+.statusText {
+  color: #171c26;
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.25rem;
+  letter-spacing: 0.0175rem;
+  border-radius: 0.625rem;
+  padding: 0.0625rem 0.625rem;
+}
+
+.statusText-cursor {
+  cursor: pointer;
+}
+
+.UNRESOLVED {
+  color: var(--color-unresolved);
+  background-color: var(--color-bg-unresolved);
+}
+
+.PROCESS {
+  color: var(--color-asigned);
+  background-color: var(--color-bg-asigned);
+}
+
+.INREVIEW {
+  color: var(--color-review);
+  background-color: var(--color-bg-review);
+}
+
+.DENIED {
+  /* color: var(--color-correction);
+  background-color: var(--color-bg-correction); */
+  color: var(--color-asigned);
+  background-color: var(--color-bg-asigned);
+}
+
+.DONE {
+  color: var(--color-done);
+  background-color: var(--color-bg-done);
+}
+.REVIEWED {
+  color: var(--color-liquidation);
+  background-color: var(--color-bg-liquidation);
+}
+
+.LIQUIDATION {
+  color: var(--color-liquidation);
+  background-color: var(--color-bg-liquidation);
+}

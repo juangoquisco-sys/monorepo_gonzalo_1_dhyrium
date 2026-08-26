@@ -1,0 +1,28 @@
+.subtaskUploadFiles-area {
+  cursor: pointer;
+  display: flex;
+  border-radius: 0.41519rem;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0.21519rem 0.83038rem;
+  border-radius: 0.41519rem;
+  border: 1.329px dashed var(--color-gray, #8b8b8b);
+}
+
+.subtaskUploadFiles-icon {
+  pointer-events: none;
+  text-align: center;
+  font-size: 0.91344rem;
+  font-style: normal;
+}
+
+.subtaskUploadFiles-input {
+  z-index: 2;
+  cursor: pointer;
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  opacity: 0;
+}

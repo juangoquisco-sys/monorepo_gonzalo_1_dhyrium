@@ -1,0 +1,112 @@
+.dl-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* overflow-y: auto; */
+}
+
+.dl-container {
+  width: 100%;
+  height: 65vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.dl-theader {
+  display: grid;
+  grid-template-columns: 2.2fr 3fr 2fr;
+  align-items: center;
+  width: 80vw;
+}
+
+.dl-htitle {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0.02em;
+  text-align: center;
+  background-color: var(--color-tertiary);
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+  color: white;
+  padding: 0.5rem 0.4rem;
+}
+
+.dl-header {
+  display: grid;
+  grid-template-columns: 0.2fr 1.5fr 0.5fr 2fr 1fr 1fr 1fr;
+  background-color: var(--color-primarylight);
+  padding: 0.5rem 0.4rem;
+  align-items: center;
+  width: 80vw;
+  overflow-x: auto;
+}
+
+.dl-title {
+  font-size: 0.5rem;
+  font-style: normal;
+  font-weight: 600;
+  text-align: center;
+}
+
+.dl-body {
+  display: grid;
+  grid-template-columns: 6.2fr 1fr;
+  background-color: white;
+  /* padding: 0.5rem 0.4rem; */
+  min-height: 2rem;
+  position: relative;
+  width: 80vw;
+  /* border: 1px solid var(--color-primary); */
+}
+
+.dl-btns {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  padding: 0.5rem;
+  margin-top: 1rem;
+}
+
+.dl-duty-content {
+  width: 100%;
+  height: 100%;
+  border-bottom: 2px solid rgba(128, 128, 128, 0.452);
+  border-right: 2px solid rgba(128, 128, 128, 0.452);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.dl-duty-content:hover {
+  border: 2px solid rgba(128, 128, 128, 0.452);
+}
+
+.dl-content-center {
+  text-align: center;
+}
+
+.dl-meeting {
+  margin: 1rem 0;
+  text-transform: uppercase;
+}
+
+.dl-sumbit {
+  display: flex;
+  gap: 1rem;
+}
+
+.dl-cancel {
+  background-color: #c81d1e;
+  color: white;
+  border-color: #c81d1e;
+}
+
+.dl-save {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}

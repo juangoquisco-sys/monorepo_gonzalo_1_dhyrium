@@ -1,0 +1,134 @@
+.tableMail {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+.tableMail-header-row {
+  width: 100%;
+  height: 2rem;
+  padding: 0 0.3rem;
+  align-items: center;
+  background-color: var(--color-primarylight);
+}
+
+.tableMail-header-item {
+  padding-left: 0.05rem;
+  font-size: 0.6875rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1rem;
+  letter-spacing: 0.0275rem;
+}
+.tableMail-body-row {
+  height: 2rem;
+  padding: 0 0.3rem;
+  align-items: center;
+  background-color: var(--color-menu);
+  transition: 150ms background-color ease;
+}
+
+.tableMail-body-item {
+  max-width: 20rem;
+  font-size: 0.73rem;
+  font-style: normal;
+  padding: 0 0.6rem;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tableMail-status {
+  border-radius: 0.2rem;
+  padding: 0.2rem 0.4rem;
+  font-weight: 600;
+  font-size: 0.6rem;
+}
+.tableMail-archiver {
+  cursor: pointer;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.table-body {
+  width: 100%;
+  height: 80px;
+  overflow: auto;
+}
+
+/* Set header to stick to the top of the container. */
+.tableMail-header {
+  position: sticky;
+  top: 0;
+}
+
+.tableMail-body-row:hover {
+  background-color: var(--color-includeLvl);
+}
+.tableMail-body-selected {
+  background-color: var(--color-includeLvl);
+}
+
+.tableMail-pagination-container {
+  margin-top: 0.5rem;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+.tableMail-pagination {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tableMail-pagination-btn {
+  border: 1px solid #aaa;
+  border-radius: 0.2rem;
+  cursor: pointer;
+  padding: 0.1rem 1rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.tableMail-pagination-text {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tableMail-pagination-input {
+  width: 4rem;
+  border: 1px solid #aaa;
+  border-radius: 0.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.1rem 1rem;
+}
+
+.tableMail-pagination-select {
+  border: 1px solid #aaa;
+  border-radius: 0.2rem;
+  padding: 0.1rem 1rem;
+}
+
+.tableMail-pagination-more-info {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.TableNoData {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}

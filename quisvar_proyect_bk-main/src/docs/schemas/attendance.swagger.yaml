@@ -1,0 +1,355 @@
+/list:
+  post:
+    tags: [Asistencia]
+    summary: Crear una lista manual o abrir una captura biometrica
+    security: [{ bearerAuth: [] }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/AttendanceListCreate' }
+    responses:
+      '200':
+        description: Lista creada
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreatedAttendanceList' }
+      '400': { description: Datos o modo de captura invalidos }
+      '409': { description: Ya existe una lista manual o biometrica en curso }
+
+/list/attendance:
+  get:
+    tags: [Asistencia]
+    summary: Listar las llamadas del dia para administracion
+    description: Los participantes conservan la fotografía persistida de la lista y se ordenan por Gerencia General, gerentes y finalmente los demás usuarios; cada grupo conserva el orden alfabético.
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - in: query
+        name: startDate
+        required: true
+        schema: { type: string, format: date }
+    responses:
+      '200':
+        description: Incluye listas OPEN, REVIEW y FINALIZED para gestion
+        content:
+          application/json:
+            schema:
+              type: array
+              items: { $ref: '#/components/schemas/AttendanceList' }
+
+/list/pending:
+  get:
+    tags: [Asistencia]
+    summary: Consultar la unica lista de asistencia pendiente
+    description: Devuelve una lista MANUAL/OPEN, BIOMETRIC/OPEN o BIOMETRIC/REVIEW sin importar su fecha, o null cuando no existe.
+    security: [{ bearerAuth: [] }]
+    responses:
+      '200':
+        description: Lista pendiente global o null
+        content:
+          application/json:
+            schema:
+              allOf:
+                - { $ref: '#/components/schemas/PendingAttendanceList' }
+              nullable: true
+
+/list/{id}/attendance/batch:
+  patch:
+    tags: [Asistencia]
+    summary: Confirmar un batch atomico de cambios administrativos
+    description: Solo admite MANUAL/OPEN o BIOMETRIC/REVIEW. Deduplica por userId conservando el ultimo cambio, valida todo antes de escribir y audita cada cambio confirmado dentro de la misma transaccion.
+    security: [{ bearerAuth: [] }]
+    parameters: [{ $ref: '#/components/parameters/AttendanceListId' }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/AttendanceBatchRequest' }
+    responses:
+      '200':
+        description: Valores canonicos confirmados
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AttendanceBatchResponse' }
+      '400':
+        {
+          description: Batch invalido,
+          participante ajeno o motivo biometrico ausente,
+        }
+      '403': { description: El actor no administra el registro de asistencia }
+      '409': { description: La lista no esta en un estado editable }
+
+/list/attendance/current:
+  get:
+    tags: [Asistencia]
+    summary: Recuperar la participacion de asistencia relevante del usuario autenticado
+    description: No acepta userId. Prioriza cualquier lista OPEN/REVIEW y, si no existe, devuelve la lista FINALIZED mas reciente del dia operativo de Lima. Nunca devuelve listas finalizadas de dias anteriores.
+    security: [{ bearerAuth: [] }]
+    responses:
+      '200':
+        description: Estado recuperable del aviso global
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CurrentAttendance' }
+
+/list/biometric/active:
+  get:
+    deprecated: true
+    tags: [Asistencia]
+    summary: Alias temporal de /list/attendance/current
+    security: [{ bearerAuth: [] }]
+    responses:
+      '200':
+        description: Participacion relevante del usuario autenticado
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CurrentAttendance' }
+
+/list/{id}/close:
+  post:
+    tags: [Asistencia]
+    summary: Cerrar la captura y pasar de OPEN a REVIEW
+    security: [{ bearerAuth: [] }]
+    parameters: [{ $ref: '#/components/parameters/AttendanceListId' }]
+    responses:
+      '200':
+        description: Captura cerrada; iClock deja de aplicar eventos a esta lista
+      '409': { description: La lista no esta OPEN }
+
+/list/{id}/finalize:
+  post:
+    tags: [Asistencia]
+    summary: Finalizar una lista manual o biometrica
+    description: Admite MANUAL/OPEN o BIOMETRIC/REVIEW. Las correcciones deben haberse confirmado previamente mediante el endpoint batch.
+    security: [{ bearerAuth: [] }]
+    parameters: [{ $ref: '#/components/parameters/AttendanceListId' }]
+    responses:
+      '200': { description: Lista FINALIZED }
+      '409': { description: El modo y estado no permiten finalizar }
+
+/list/{id}:
+  delete:
+    tags: [Asistencia]
+    summary: Descartar una lista de asistencia pendiente
+    description: Admite MANUAL/OPEN y BIOMETRIC/OPEN o REVIEW. Elimina la lista y sus participantes; una lista FINALIZED no se puede descartar.
+    security: [{ bearerAuth: [] }]
+    parameters: [{ $ref: '#/components/parameters/AttendanceListId' }]
+    responses:
+      '204': { description: Lista descartada }
+      '404': { description: Lista no encontrada }
+      '409':
+        { description: El modo o estado de la lista no permite descartarla }
+
+components:
+  parameters:
+    AttendanceListId:
+      in: path
+      name: id
+      required: true
+      schema: { type: integer, minimum: 1 }
+  schemas:
+    AttendanceCaptureMode:
+      type: string
+      enum: [MANUAL, BIOMETRIC]
+    AttendanceListState:
+      type: string
+      enum: [OPEN, REVIEW, FINALIZED]
+    AttendanceStatus:
+      type: string
+      enum: [PUNTUAL, TARDE, SIMPLE, GRAVE, MUY_GRAVE, PERMISO, SALIDA]
+    AttendanceStatusSource:
+      type: string
+      enum: [SYSTEM_DEFAULT, BIOMETRIC, MANUAL, MANUAL_CORRECTION, LICENSE]
+    AttendanceListCreate:
+      type: object
+      required: [title, timer, captureMode]
+      properties:
+        title: { type: string }
+        timer: { type: string, example: '09:15' }
+        captureMode:
+          allOf: [{ $ref: '#/components/schemas/AttendanceCaptureMode' }]
+          default: MANUAL
+    AttendanceCorrection:
+      type: object
+      required: [userId, status]
+      properties:
+        userId: { type: integer, minimum: 1 }
+        status: { $ref: '#/components/schemas/AttendanceStatus' }
+        reason: { type: string, minLength: 1, maxLength: 500 }
+    AttendanceBatchRequest:
+      type: object
+      required: [batchId, changes]
+      properties:
+        batchId: { type: string, format: uuid }
+        changes:
+          type: array
+          minItems: 1
+          maxItems: 500
+          items: { $ref: '#/components/schemas/AttendanceCorrection' }
+    AttendanceBatchParticipant:
+      type: object
+      required: [userId, status, statusSource, biometricMarkedAt]
+      properties:
+        userId: { type: integer }
+        status: { $ref: '#/components/schemas/AttendanceStatus' }
+        statusSource: { $ref: '#/components/schemas/AttendanceStatusSource' }
+        biometricMarkedAt: { type: string, format: date-time, nullable: true }
+    AttendanceBatchResponse:
+      type: object
+      required: [batchId, listId, participants]
+      properties:
+        batchId: { type: string, format: uuid }
+        listId: { type: integer }
+        participants:
+          type: array
+          items: { $ref: '#/components/schemas/AttendanceBatchParticipant' }
+    AttendanceParticipant:
+      type: object
+      required:
+        [
+          usersId,
+          listId,
+          status,
+          statusSource,
+          assignedAt,
+          biometricMarkedAt,
+          biometricVerifyMode,
+          biometricDeviceSerial,
+          user,
+        ]
+      properties:
+        usersId: { type: integer, minimum: 1 }
+        listId: { type: integer }
+        status: { $ref: '#/components/schemas/AttendanceStatus' }
+        statusSource: { $ref: '#/components/schemas/AttendanceStatusSource' }
+        assignedAt: { type: string, format: date-time }
+        biometricMarkedAt:
+          type: string
+          format: date-time
+          nullable: true
+        biometricVerifyMode: { type: string, nullable: true }
+        biometricDeviceSerial: { type: string, nullable: true }
+        user:
+          $ref: '#/components/schemas/AttendanceParticipantUser'
+    AttendanceParticipantUser:
+      type: object
+      required: [id, email, profile]
+      properties:
+        id: { type: integer, minimum: 1 }
+        email: { type: string, format: email }
+        profile:
+          nullable: true
+          allOf:
+            - { $ref: '#/components/schemas/AttendanceParticipantProfile' }
+    AttendanceParticipantProfile:
+      type: object
+      required: [firstName, lastName, dni, phone]
+      properties:
+        firstName: { type: string }
+        lastName: { type: string }
+        dni: { type: string }
+        phone: { type: string }
+        room: { type: string, nullable: true }
+        userPc: { type: string, nullable: true }
+    AttendanceList:
+      type: object
+      required:
+        [
+          id,
+          title,
+          timer,
+          position,
+          captureMode,
+          state,
+          openedAt,
+          closedAt,
+          finalizedAt,
+          createdAt,
+          users,
+        ]
+      properties:
+        id: { type: integer }
+        title: { type: string, nullable: true }
+        timer: { type: string, nullable: true }
+        position: { type: integer, minimum: 1 }
+        captureMode: { $ref: '#/components/schemas/AttendanceCaptureMode' }
+        state: { $ref: '#/components/schemas/AttendanceListState' }
+        openedAt: { type: string, format: date-time, nullable: true }
+        closedAt: { type: string, format: date-time, nullable: true }
+        finalizedAt: { type: string, format: date-time, nullable: true }
+        createdAt: { type: string, format: date-time }
+        users:
+          type: array
+          items: { $ref: '#/components/schemas/AttendanceParticipant' }
+    CreatedAttendanceList:
+      type: object
+      required:
+        [
+          id,
+          title,
+          timer,
+          captureMode,
+          state,
+          openedAt,
+          closedAt,
+          finalizedAt,
+          createdAt,
+          updatedAt,
+        ]
+      properties:
+        id: { type: integer }
+        title: { type: string, nullable: true }
+        timer: { type: string, nullable: true }
+        captureMode: { $ref: '#/components/schemas/AttendanceCaptureMode' }
+        state: { $ref: '#/components/schemas/AttendanceListState' }
+        openedAt: { type: string, format: date-time, nullable: true }
+        closedAt: { type: string, format: date-time, nullable: true }
+        finalizedAt: { type: string, format: date-time, nullable: true }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    PendingAttendanceList:
+      type: object
+      required: [id, captureMode, state, openedAt, createdAt]
+      properties:
+        id: { type: integer }
+        title: { type: string, nullable: true }
+        timer: { type: string, nullable: true }
+        captureMode: { $ref: '#/components/schemas/AttendanceCaptureMode' }
+        state:
+          type: string
+          enum: [OPEN, REVIEW]
+        openedAt: { type: string, format: date-time, nullable: true }
+        createdAt: { type: string, format: date-time }
+    CurrentAttendanceParticipant:
+      type: object
+      required:
+        [
+          listId,
+          captureMode,
+          state,
+          status,
+          statusSource,
+          provisional,
+          definitive,
+        ]
+      properties:
+        listId: { type: integer }
+        title: { type: string, nullable: true }
+        timer: { type: string, nullable: true }
+        captureMode: { $ref: '#/components/schemas/AttendanceCaptureMode' }
+        state: { $ref: '#/components/schemas/AttendanceListState' }
+        openedAt: { type: string, format: date-time, nullable: true }
+        finalizedAt: { type: string, format: date-time, nullable: true }
+        status: { $ref: '#/components/schemas/AttendanceStatus' }
+        statusSource: { $ref: '#/components/schemas/AttendanceStatusSource' }
+        biometricMarkedAt: { type: string, format: date-time, nullable: true }
+        provisional: { type: boolean }
+        definitive: { type: boolean }
+    CurrentAttendance:
+      type: object
+      required: [attendance]
+      properties:
+        attendance:
+          nullable: true
+          allOf:
+            - { $ref: '#/components/schemas/CurrentAttendanceParticipant' }

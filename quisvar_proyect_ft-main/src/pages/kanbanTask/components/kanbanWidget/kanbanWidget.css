@@ -1,0 +1,146 @@
+.kw-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 100%;
+  min-height: 180px;
+  max-height: 180px;
+  border-radius: 5px;
+  padding: 0.5rem;
+  background-color: white;
+  user-select: none;
+  border: 0.01px solid rgba(0, 0, 0, 0.25);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.kw-grabbing {
+  cursor: grabbing;
+}
+
+.kw-grab {
+  cursor: grab;
+}
+
+.kw-container-drag {
+  width: 100%;
+  min-height: 180px;
+  max-height: 180px;
+  border-radius: 5px;
+  background-color: var(--color-menu);
+  border: 0.1px solid var(--color-primary);
+}
+
+.kw-text-title {
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.kw-text-description {
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 13px;
+  text-align: left;
+  color: var(--color-gray-text);
+  max-height: 80px;
+  overflow-y: auto;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  max-height: calc(1.5em * 3);
+}
+
+.kw-project-content {
+  display: flex;
+  align-items: center;
+  background-color: #e7f5fb;
+  width: fit-content;
+  border-radius: 5px;
+}
+
+.kw-project-text {
+  color: var(--color-primary);
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 9.75px;
+  text-align: left;
+}
+
+.kw-time-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.kw-time {
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: 300;
+  line-height: 12.19px;
+  text-align: left;
+}
+
+.kw-duration {
+  display: flex;
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: 300;
+  line-height: 12.19px;
+  text-align: left;
+}
+
+.kw-edit-mode {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kw-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.kw-icon:hover {
+  width: 20px;
+  height: 20px;
+  border-radius: 50px;
+  background-color: #e7f5fb;
+}
+
+.kw-text-hover {
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  text-align: left;
+  text-decoration: underline;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+  cursor: pointer;
+}
+
+.kw-input {
+  width: 200px;
+}
+
+.kw-description {
+  width: 100%;
+  height: auto;
+}

@@ -1,0 +1,294 @@
+.salaryListSidebar {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  padding: 0.55rem 0.65rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid #dbe5ec;
+  border-radius: 0.625rem;
+  background: var(--color-primarylight);
+}
+
+.salaryListSidebar-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.45rem;
+  width: auto;
+  margin-left: auto;
+}
+
+.salaryListSidebar-createIcon,
+.salaryListSidebar-iconButton,
+.salaryListSidebar-deleteButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d2e0eb;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--color-secondary);
+  cursor: pointer;
+}
+
+.salaryListSidebar-createIcon {
+  flex: 0 0 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.salaryListSidebar-iconButton,
+.salaryListSidebar-deleteButton {
+  flex: 0 0 2.15rem;
+  width: 2.15rem;
+  height: 2.15rem;
+}
+
+.salaryListSidebar-deleteButton {
+  border-color: #f4c7c7;
+  color: #d32f2f;
+}
+
+.salaryListSidebar-createIcon:hover:not(:disabled),
+.salaryListSidebar-iconButton:hover:not(:disabled) {
+  background: var(--color-secondary);
+  color: #fff;
+}
+
+.salaryListSidebar-selectBlock {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 24rem;
+  gap: 0.25rem;
+  width: auto;
+  min-width: 17rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid #dbe5ec;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.salaryListSidebar-selectBlock label {
+  color: #546e7a;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.salaryListSidebar-selectRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+}
+
+.salaryListSidebar-selectRow select {
+  min-width: 0;
+  flex: 1 1 auto;
+  height: 2.15rem;
+  border: 1px solid #ccd7dd;
+  border-radius: 6px;
+  padding: 0 0.55rem;
+  background: #fff;
+  color: #001b5c;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.salaryListSidebar-phases {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.salaryListSidebar-phase {
+  min-height: 2.05rem;
+  border: 1px solid #f4c7c7;
+  border-color: transparent;
+  border-radius: 999px;
+  padding: 0 0.9rem;
+  background: transparent;
+  color: #334155;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.salaryListSidebar-phase:hover:not(:disabled) {
+  background: #fff;
+  color: var(--color-secondary);
+}
+
+.salaryListSidebar-phase-active {
+  background: #fff;
+  color: var(--color-secondary);
+  box-shadow: 0 1px 6px rgba(0, 27, 92, 0.08);
+}
+
+.salaryListSidebar-deleteButton:hover:not(:disabled) {
+  background: #fff1f1;
+}
+
+.salaryListSidebar-createIcon:disabled,
+.salaryListSidebar-iconButton:disabled,
+.salaryListSidebar-deleteButton:disabled,
+.salaryListSidebar-phase:disabled {
+  border-color: #dce4ea;
+  color: #b0bec5;
+  cursor: not-allowed;
+}
+
+.salaryListSidebar .salarySidebarItemCreated {
+  flex: 0 0 auto;
+  width: 20rem;
+  padding: 0.45rem 0.55rem;
+  background: #fff;
+  margin-left: 0.25rem;
+}
+
+.salaryListSidebar-modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.34);
+}
+
+.salaryListSidebar-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: min(44rem, 96vw);
+  border-radius: 8px;
+  padding: 1rem;
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+}
+
+.salaryListSidebar-modal header,
+.salaryListSidebar-modal footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.salaryListSidebar-modal h2 {
+  margin: 0;
+  color: #001b5c;
+  font-size: 1rem;
+}
+
+.salaryListSidebar-modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: #546e7a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.salaryListSidebar-modal input {
+  height: 2.35rem;
+  border: 1px solid #ccd7dd;
+  border-radius: 6px;
+  padding: 0 0.65rem;
+  color: #001b5c;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.salaryListSidebar-modal header button,
+.salaryListSidebar-modal footer button,
+.salaryListSidebar-months button {
+  border: 1px solid #d2e0eb;
+  border-radius: 6px;
+  background: #fff;
+  color: #001b5c;
+  cursor: pointer;
+}
+
+.salaryListSidebar-modal header button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+}
+
+.salaryListSidebar-periodGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.salaryListSidebar-months {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.salaryListSidebar-months button {
+  min-height: 2rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.salaryListSidebar-months button:hover {
+  background: #edf8fb;
+  color: var(--color-secondary);
+}
+
+.salaryListSidebar-modal footer {
+  justify-content: flex-end;
+}
+
+.salaryListSidebar-modal footer button {
+  min-height: 2.2rem;
+  padding: 0 0.85rem;
+  font-weight: 800;
+}
+
+.salaryListSidebar-modal footer button[type='submit'] {
+  border-color: var(--color-secondary);
+  background: var(--color-secondary);
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .salaryListSidebar {
+    flex-wrap: wrap;
+  }
+
+  .salaryListSidebar-selectBlock {
+    flex: 1 1 100%;
+    min-width: 0;
+    margin-left: 0;
+  }
+
+  .salaryListSidebar-phases {
+    order: 3;
+    justify-content: flex-start;
+    overflow-x: auto;
+    width: 100%;
+  }
+
+  .salaryListSidebar-periodGrid,
+  .salaryListSidebar-months {
+    grid-template-columns: 1fr;
+  }
+}

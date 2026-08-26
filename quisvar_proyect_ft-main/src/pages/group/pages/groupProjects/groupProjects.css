@@ -1,0 +1,41 @@
+.gp-content {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  height: 100%;
+  background-color: rgba(122, 120, 120, 0.904);
+}
+.ele {
+  background-color: rgb(32, 25, 75);
+  padding: 2px;
+  width: 200px;
+  height: 100%;
+}
+.drag {
+  border: 2px solid red;
+  width: 200px;
+  height: 100px;
+}
+.task-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  height: 90%;
+}
+.task-item {
+  display: flex;
+  background-color: rgb(41, 38, 38);
+  color: white;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+}
+.task-item-drag {
+  display: flex;
+  background-color: rgba(41, 38, 38, 0.596);
+  color: white;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+}

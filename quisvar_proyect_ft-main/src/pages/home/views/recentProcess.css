@@ -1,0 +1,56 @@
+.recentProcess-title {
+  color: var(--color-secondary);
+  font-size: 0.68rem;
+  font-weight: 850;
+  line-height: 1.2;
+}
+.recentProcess-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.42rem;
+  padding: 0.68rem 0.78rem 0.55rem;
+  width: 100%;
+  border: 1px solid rgba(0, 27, 105, 0.08);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 7px 18px rgba(0, 27, 105, 0.045);
+}
+
+.recentProcess-cards {
+  display: flex;
+  gap: 0.52rem;
+  overflow-x: auto;
+  width: 100%;
+  padding: 0.08rem 0.08rem 0.55rem;
+  justify-content: flex-start;
+  scroll-snap-type: x proximity;
+  scrollbar-color: transparent transparent;
+  scrollbar-width: thin;
+  transition: scrollbar-color 160ms ease;
+}
+
+.recentProcess-container:hover .recentProcess-cards,
+.recentProcess-container:focus-within .recentProcess-cards {
+  scrollbar-color: #c0c0c0 transparent;
+}
+
+.recentProcess-cards::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.recentProcess-cards::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 999px;
+}
+
+.recentProcess-container:hover .recentProcess-cards::-webkit-scrollbar-thumb,
+.recentProcess-container:focus-within
+  .recentProcess-cards::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+}
+
+@media (max-width: 576px) {
+  .recentProcess-container {
+    padding-inline: 0.58rem;
+  }
+}

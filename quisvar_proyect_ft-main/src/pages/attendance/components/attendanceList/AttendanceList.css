@@ -1,0 +1,163 @@
+.attendanceList-container {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 2fr 1fr 1fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr;
+  width: 100%;
+  /* height: 3.7rem; */
+  background-color: #fff;
+  font-size: 0.8rem;
+  /* border-bottom: 0.15rem solid var(--color-quaternay);  */
+  padding: 0 10px;
+  animation: 0.5s ease-in;
+}
+.attendanceList-container:hover {
+  background-color: rgba(142, 238, 255, 0.415);
+  border-radius: 0.3rem;
+}
+.attendanceList-col {
+  display: flex;
+  max-width: 96%;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  align-items: center;
+  justify-content: baseline;
+}
+
+.attendanceList-name {
+  min-width: 0;
+}
+
+.attendanceList-personName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attendanceList-marking {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.attendanceList-marking--captured {
+  color: var(--color-primary);
+}
+
+.attendanceList-marking--pending,
+.attendanceList-marking--missing,
+.attendanceList-marking--exempt {
+  color: var(--color-grey-text);
+}
+
+.attendanceList-marking--mobile {
+  display: none;
+}
+
+.attendanceList-status {
+  background: var(--orange-0, #fcf2e6);
+  padding: 1px 10px;
+  border-radius: 10px;
+  color: var(--orange-500, #aa5b00);
+}
+
+.attendanceList-btn-area {
+  display: flex;
+  gap: 20px;
+}
+
+.attendance-btn-succes {
+  background-color: var(--color-primary);
+  border-radius: 10px;
+  color: white;
+}
+
+.attendance-btn-denied {
+  border-radius: 10px;
+  border: 1px solid black;
+  color: black;
+}
+
+.attendanceList-radio {
+  width: 15px;
+}
+
+.attendanceList-bg {
+  background-color: #f2f5fa;
+}
+.attendanceList-place {
+  justify-content: center;
+}
+.attendanceList-config {
+  min-width: 1.7rem;
+  padding-bottom: 0.2rem;
+  justify-content: center;
+}
+
+.list-p {
+  background-color: var(--color-list-p);
+  accent-color: #338362b6;
+}
+.list-t {
+  background-color: var(--color-list-t);
+  accent-color: #887227;
+}
+
+.list-f {
+  background-color: var(--color-list-f);
+  accent-color: #a75656;
+}
+
+.list-g {
+  background-color: var(--color-list-g);
+  accent-color: #9403036e;
+}
+
+.list-m {
+  background-color: var(--color-list-m);
+  accent-color: #9a0202;
+}
+
+.list-l {
+  background-color: var(--color-list-l);
+  accent-color: #2263e5;
+}
+.list-s {
+  background-color: var(--color-list-s);
+  accent-color: #4736c9;
+}
+@media (max-width: 768px) {
+  .attendanceList-col {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .attendanceList-container {
+    grid-template-columns: 2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr;
+  }
+  .attendanceList-name {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.35rem 0;
+  }
+  .attendanceList-marking--mobile {
+    display: inline-flex;
+    margin-top: 0.2rem;
+    font-size: 0.58rem;
+    text-transform: none;
+  }
+  .attendanceList-config {
+    min-width: 0;
+    padding-bottom: 0.2rem;
+    justify-content: center;
+  }
+  .hide-field {
+    display: none;
+  }
+}

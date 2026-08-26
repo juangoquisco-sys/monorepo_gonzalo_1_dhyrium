@@ -1,0 +1,54 @@
+.labelStatus-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.labelStatus {
+  border-radius: 0.2rem;
+  padding: 0.3rem 0.4rem;
+  font-weight: 600;
+  font-size: 0.6rem;
+}
+
+.status-RECHAZADO {
+  background-color: var(--color-bg-unresolved);
+  color: var(--color-unresolved);
+}
+.status-OBSERVADO {
+  background-color: var(--color-bg-unresolved);
+  color: var(--color-unresolved);
+}
+.status-PROCESO {
+  background-color: var(--color-bg-asigned);
+  color: var(--color-asigned);
+}
+.status-ARCHIVADO {
+  background-color: var(--color-gray-ligth);
+  color: var(--color-gray-tertiary);
+}
+.status-EN_ESPERA {
+  background-color: var(--color-bg-holding);
+  color: var(--color-danger-soft);
+}
+.status-POR_PAGAR {
+  background-color: var(--color-bg-correction);
+  color: var(--color-correction);
+}
+.status-POR_PAGAR {
+  background-color: var(--color-bg-correction);
+  color: var(--color-correction);
+}
+.status-PAGADO {
+  background-color: var(--color-bg-done);
+  color: var(--color-done);
+}
+
+.status-PENDIENTE {
+  background-color: var(--color-bg-asigned);
+  color: var(--color-asigned);
+}
+
+.status-FINALIZADO {
+  background-color: var(--color-bg-correction);
+  color: var(--color-primary);
+}

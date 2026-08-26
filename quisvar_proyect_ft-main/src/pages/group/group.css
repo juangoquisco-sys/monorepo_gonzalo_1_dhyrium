@@ -1,0 +1,335 @@
+.gr-container {
+  position: relative;
+  display: flex;
+  gap: 0.275rem;
+  height: 100%;
+  min-width: 0;
+  background: var(--color-primarylight);
+}
+
+.gr-sidebarShell {
+  flex: 0 0 auto;
+  width: 300px;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  transition: width 180ms ease, opacity 140ms ease;
+}
+
+.gr-sidebarShell .aside {
+  width: 300px;
+}
+
+.gr-container.is-sidebarCollapsed .gr-sidebarShell {
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gr-sidebarToggle {
+  position: fixed;
+  bottom: 1rem;
+  left: 18.8rem;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  aspect-ratio: 1;
+  margin: 0;
+  border: 1px solid #d8e5f2;
+  border-radius: 0.45rem;
+  background: #fff;
+  color: var(--color-secondary);
+  box-shadow: 0 0.2rem 0.7rem rgb(0 27 105 / 9%);
+  cursor: pointer;
+  opacity: 0.5;
+  transition:
+    color 140ms ease,
+    border-color 140ms ease,
+    opacity 140ms ease,
+    transform 140ms ease;
+}
+
+.gr-sidebarToggle:hover,
+.gr-sidebarToggle:focus-visible {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.gr-container.is-sidebarCollapsed .gr-sidebarToggle {
+  left: 0.75rem;
+}
+
+.gr-drag-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+.gr-list {
+  display: flex;
+  min-width: 10rem;
+  padding: 0.75rem 0.5rem;
+  flex-direction: column;
+  gap: 0.9375rem;
+  background-color: white;
+}
+
+.gr-title {
+  color: var(--color-secondary);
+  font-weight: 600;
+  font-size: 18px;
+  padding: 0 0.8rem;
+}
+
+.gr-sidebarHeader {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0 1rem 0.4rem;
+}
+
+.gr-sidebarHeader span {
+  color: #7c8da8;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.gr-sidebarHeader h1 {
+  margin: 0;
+  color: var(--color-secondary);
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.gr-modeTabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+  margin: 0 0.65rem;
+  padding: 0.25rem;
+  border: 1px solid #dfe8f4;
+  border-radius: 0.55rem;
+  background: #f7faff;
+}
+
+.gr-modeTabs button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.05rem;
+  border: 1px solid transparent;
+  border-radius: 0.42rem;
+  background: transparent;
+  color: #6e7f99;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.gr-modeTabs button.is-active {
+  border-color: #d6e4f2;
+  background: #fff;
+  color: var(--color-primary);
+  box-shadow: 0 0.15rem 0.35rem rgb(0 27 105 / 7%);
+}
+
+.gr-navSection,
+.gr-legacyPanel,
+.gr-legacyOffices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.gr-navSection {
+  padding-top: 0.25rem;
+}
+
+.gr-sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 1rem 0;
+  color: #7c8da8;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.gr-sectionTitle b,
+.gr-legacyToggle b {
+  margin-left: auto;
+  border-radius: 999px;
+  background: #fff4d9;
+  color: #9b6a00;
+  padding: 0.18rem 0.42rem;
+  font-size: 0.58rem;
+  letter-spacing: 0;
+}
+
+.gr-sectionTitle.is-legacy {
+  color: #8a6b1f;
+}
+
+.gr-legacyPanel {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.gr-legacyOffices {
+  min-height: 0;
+  margin: 0.2rem 0.65rem 0;
+  border: 1px solid #e3eaf4;
+  border-radius: 0.55rem;
+  background: #fbfdff;
+  overflow: hidden;
+}
+
+.gr-legacyToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.4rem;
+  border: 0;
+  background: #fff;
+  color: var(--color-secondary);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.gr-legacyToggle span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.gr-content {
+  background-color: white;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+
+.gr-content::-webkit-scrollbar {
+  width: 0.55rem;
+}
+
+.gr-content::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #c8d6e7;
+}
+
+.gr-content::-webkit-scrollbar-track {
+  background: #f4f7fc;
+}
+
+.gr-btn-add {
+  box-shadow: 0px 1.5px 4px rgba(0, 0, 0, 0.2);
+  font-size: 0.7rem;
+  border-radius: 5px;
+  color: var(--color-primary);
+  margin: 0 4rem;
+  /* height: 100%; */
+}
+.gr-btn-order {
+  margin: 0 4rem;
+}
+.gr-order-action {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.gr-btn-cancel {
+  background-color: red;
+  color: white;
+  border: 1px solid red;
+}
+.gr-btn-save {
+  background-color: var(--color-primary);
+  color: white;
+  border: 1px solid var(--color-primary);
+}
+.gr-toggle-area {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.6rem 0.65rem 0;
+}
+
+.gr-switch-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 0;
+  max-height: calc(100vh - 20rem);
+  padding: 0 0.35rem 0.7rem;
+  overflow-y: auto;
+}
+
+.gr-change-option {
+  border: 1px solid #d8e5f2;
+  border-radius: 0.4rem;
+  background: #fff;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.35rem 0.55rem;
+}
+
+.gr-switch-area::-webkit-scrollbar {
+  width: 0.45rem;
+}
+
+.gr-switch-area::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #c8d6e7;
+}
+
+.gr-switch-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media (max-width: 992px) {
+  .gr-container {
+    flex-direction: column;
+    height: auto;
+    overflow: auto;
+  }
+
+  .gr-sidebarShell,
+  .gr-sidebarShell .aside {
+    width: 100%;
+  }
+
+  .gr-container.is-sidebarCollapsed .gr-sidebarShell {
+    width: 100%;
+    max-height: 0;
+  }
+
+  .gr-sidebarToggle {
+    position: fixed;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    margin: 0;
+  }
+
+  .gr-switch-area {
+    max-height: none;
+  }
+}

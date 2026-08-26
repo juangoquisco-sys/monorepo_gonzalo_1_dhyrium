@@ -1,0 +1,109 @@
+/testings/{id}:
+  get:
+    tags:
+      - Tasks
+    summary: Obtener una tarea por ID
+    description: Devuelve los detalles de una tarea específica por ID.
+    parameters:
+      - $ref: '#/components/parameters/id'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '400':
+        $ref: '#/components/responses/400'
+    security:
+      - bearerAuth: []
+/subtasks/report-user/{id}:
+  get:
+    tags:
+      - Subtasks
+      - User
+    summary: Obtener tareas por ID de usuario
+    description: Devuelve los detalles de tareas por ID de usuario.
+    parameters:
+      - $ref: '#/components/parameters/userId'
+      - $ref: '#/components/parameters/projectId'
+      - $ref: '#/components/parameters/stageId'
+      - $ref: '#/components/parameters/salaryAdvance'
+      - $ref: '#/components/parameters/status'
+      - $ref: '#/components/parameters/initialDate'
+      - $ref: '#/components/parameters/untilDate'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/page'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '400':
+        $ref: '#/components/responses/400'
+    security:
+      - bearerAuth: []
+/subtasks/report-mod/{id}:
+  get:
+    tags:
+      - Subtasks
+      - User
+    summary: Obtener tareas por ID de usuario
+    description: Devuelve los detalles de tareas por ID de usuario.
+    parameters:
+      - $ref: '#/components/parameters/userId'
+      - $ref: '#/components/parameters/projectId'
+      - $ref: '#/components/parameters/stageId'
+      - $ref: '#/components/parameters/status'
+      - $ref: '#/components/parameters/initialDate'
+      - $ref: '#/components/parameters/untilDate'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/alltasks'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '400':
+        $ref: '#/components/responses/400'
+    security:
+      - bearerAuth: []
+components:
+  parameters:
+    id:
+      in: path
+      name: id
+      required: true
+      description: ID de la tarea
+      schema:
+        type: integer
+    userId:
+      in: path
+      name: id
+      required: true
+      description: ID del usuario, usar 0 para traer nulos
+      schema:
+        type: integer
+    projectId:
+      in: query
+      name: projectId
+      description: ID del proyecto
+      schema:
+        type: integer
+    stageId:
+      in: query
+      name: stageId
+      description: ID de la etapa
+      schema:
+        type: integer
+    alltasks:
+      in: query
+      name: all
+      description: traer todas las tareas
+      schema:
+        type: boolean
+    salaryAdvance:
+      in: query
+      name: salaryAdvance
+      schema:
+        type: boolean
+    status:
+      name: status
+      in: query
+      enum: ['REVIEWED', 'APPROVED', 'PROCESS', 'DONE', 'UNRESOLVED']
+  schemas:

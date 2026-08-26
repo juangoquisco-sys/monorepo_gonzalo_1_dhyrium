@@ -1,0 +1,26 @@
+.TaskCardHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.TaskCardHeader-title {
+  font-size: 0.75rem;
+  color: var(--color-secondary);
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: 0.01125rem;
+}
+
+.TaskCardHeader-title-span {
+  font-weight: 700;
+}
+
+.TaskCardHeader-actions {
+  display: flex;
+  margin-left: auto;
+  gap: 1rem;
+}

@@ -1,0 +1,36 @@
+.arrowText-container {
+  display: flex;
+}
+.arrowText {
+  position: relative;
+  cursor: pointer;
+  clip-path: polygon(94% 2%, 100% 50%, 94% 100%, 0% 100%, 6% 50%, 0% 0%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrowText-label {
+  position: static;
+  max-width: calc(100% - 1.5rem);
+  margin: 0;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arrowText-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  clip-path: polygon(94% 2%, 100% 50%, 94% 100%, 0% 100%, 6% 50%, 0% 0%);
+}
+.arrowText-pressed {
+  background-color: var(--color-ligth-primary);
+}

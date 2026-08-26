@@ -1,0 +1,302 @@
+.content-list {
+  width: 100%;
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+  min-width: 0;
+  gap: 1rem;
+}
+
+.userList-general-files {
+  position: relative;
+}
+
+.userList-general-files-contain {
+  position: absolute;
+  margin-top: 0.5rem;
+  width: 0;
+  overflow-y: auto;
+  height: 7rem;
+  z-index: 6;
+}
+
+.isShowGeneralFiles {
+  width: 20rem;
+  padding: 1rem;
+  background-color: white;
+  box-shadow: 0px 1.5px 4px rgba(0, 0, 0, 0.6);
+}
+
+.user-list {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.userList-card {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-app-card, 0 1px 3px rgba(15, 23, 42, 0.12));
+}
+
+.userList-card-header {
+  flex-shrink: 0;
+  gap: 1rem;
+}
+
+.userList-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.userList-status-badge {
+  margin-top: 0.1rem;
+}
+
+.userList-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.userList-filters,
+.userList-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.userList-filters {
+  min-width: 0;
+  flex: 1;
+}
+
+.userList-actions {
+  justify-content: flex-end;
+}
+
+.userList-card-content {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+.userList-table-frame {
+  position: relative;
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+}
+
+.user-cell {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 17rem;
+}
+
+.payroll-status-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 5.2rem;
+  padding: 0.25rem 0.45rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+}
+
+.payroll-status-chip.is-complete {
+  color: #047857;
+  background: #dcfce7;
+  border-color: #86efac;
+}
+
+.payroll-status-chip.is-incomplete,
+.payroll-status-chip.is-expiring {
+  color: #92400e;
+  background: #fef3c7;
+  border-color: #facc15;
+}
+
+.payroll-status-chip.is-missing {
+  color: #4b5563;
+  background: #eef2f7;
+  border-color: #cfd8e3;
+}
+
+.payroll-status-chip.is-expired {
+  color: #b91c1c;
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.status-toggle-button {
+  border: 0;
+  background: transparent;
+  padding: 0.25rem;
+  cursor: pointer;
+}
+
+.status-toggle-button:disabled {
+  cursor: not-allowed;
+}
+
+.switch-status {
+  width: 2rem;
+  height: 1rem;
+  padding: 0.2rem;
+  color: #fff;
+  background-color: rgba(237, 100, 90, 0.65);
+  display: flex;
+  border-radius: 2rem;
+}
+
+.switch-status[data-ison='true'] {
+  justify-content: flex-end;
+  background-color: rgba(87, 217, 163, 0.3);
+}
+
+.handle-statuts {
+  width: 0.5rem;
+  height: 100%;
+  background-color: var(--color-unresolved);
+  border-radius: 30rem;
+}
+
+.switch-status[data-ison='true'] .handle-statuts {
+  background-color: var(--color-done);
+}
+
+.userList-pagination {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.userList-page-size,
+.userList-page-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.user-list th {
+  text-align: left;
+  padding: 0.5rem;
+}
+
+.header-container-list {
+  width: 100%;
+  border-bottom: 0.15rem solid var(--color-quaternay);
+  border-radius: 0.3rem;
+  font-size: 0.7rem;
+  color: var(--color-quaternay);
+  font-weight: 600;
+}
+.header-grid-row {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1.6fr 1fr 1fr 0.5fr 0.5fr 0.5fr 0.5fr;
+}
+.header-list-text {
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.user-grid {
+  grid-column: 1/4;
+}
+
+.userList-upload {
+  height: 100%;
+}
+
+.user-list-equipment {
+  display: none;
+  width: 470px;
+  max-width: 100%;
+  background-color: white;
+  flex-direction: column;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.userList-table-scroll {
+  width: 100%;
+  min-width: 0;
+  flex: 1;
+  overflow: auto;
+}
+
+.userList-table-body {
+  width: 100%;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+.userList-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+  color: hsl(var(--muted-foreground));
+  font-weight: 500;
+}
+
+@media (max-width: 1200px) {
+  .content-list {
+    flex-direction: column;
+    height: auto;
+    overflow: auto;
+  }
+
+  .user-list-equipment {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .userList-filters,
+  .userList-actions,
+  .userList-actions button,
+  .userList-pagination,
+  .userList-page-actions {
+    width: 100%;
+  }
+
+  .userList-actions {
+    justify-content: flex-start;
+  }
+
+  .header-grid-row {
+    min-width: 62rem;
+  }
+
+  .userList-page-actions {
+    justify-content: flex-start;
+  }
+}

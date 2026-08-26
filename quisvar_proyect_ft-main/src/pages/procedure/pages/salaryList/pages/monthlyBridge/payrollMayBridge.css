@@ -1,0 +1,2509 @@
+.payrollMayBridge {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 1rem;
+  color: #263238;
+  overflow: visible;
+}
+
+.payrollMayBridge-header,
+.payrollMayBridge-filters,
+.payrollMayBridge-summary,
+.payrollMayBridge-userHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.payrollMayBridge-header {
+  justify-content: space-between;
+}
+
+.payrollMayBridge-headerActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.payrollMayBridge-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.payrollMayBridge-unitFilter {
+  display: grid;
+  grid-template-columns: minmax(20rem, 0.85fr) minmax(34rem, 1.15fr);
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid #dce4ea;
+  border-left: 4px solid #0ea5e9;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.payrollMayBridge-unitFilterText {
+  min-width: 0;
+}
+
+.payrollMayBridge-unitFilterText span {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: #0066ff;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.payrollMayBridge-unitTitleSelect {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 2rem;
+  border: 0;
+  padding: 0 1.9rem 0 0;
+  background-color: transparent;
+  color: #001b5c;
+  font-size: clamp(1.2rem, 1.8vw, 1.75rem);
+  font-weight: 900;
+  line-height: 1.1;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.payrollMayBridge-unitTitleSelect:focus {
+  outline: 2px solid #8ccfff;
+  outline-offset: 2px;
+}
+
+.payrollMayBridge-unitTitleSelect option {
+  color: #263238;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: none;
+}
+
+.payrollMayBridge-unitFilterText p {
+  margin: 0.3rem 0 0;
+  color: #607d8b;
+  font-size: 0.82rem;
+  line-height: 1.25rem;
+}
+
+.payrollElaboration-unitFilter {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+}
+
+.payrollElaboration-unitFilter .payrollMayBridge-unitFilterText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.payrollElaboration-unitFilter .payrollMayBridge-unitTitleSelect {
+  width: auto;
+  max-width: min(42rem, 100%);
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  padding: 0 1.75rem 0 0;
+  background-color: transparent;
+  color: #00246b;
+  font-size: 1.2rem;
+  font-weight: 900;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.payrollElaboration-totalAmount {
+  color: #00246b;
+  font-size: 1rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.payrollMayBridge-filters {
+  display: grid;
+  grid-template-columns: 8rem 8rem 8.5rem minmax(11rem, 1fr) 7rem;
+  gap: 0.55rem;
+  align-items: end;
+  min-width: 0;
+}
+
+.payrollMayBridge-filters label,
+.payrollMayBridge-office,
+.payrollMayBridge-amount {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #546e7a;
+  text-transform: uppercase;
+}
+
+.payrollMayBridge-filters input,
+.payrollMayBridge-filters select,
+.payrollMayBridge-amount input {
+  height: 2.2rem;
+  border: 1px solid #ccd7dd;
+  border-radius: 6px;
+  padding: 0 0.55rem;
+  background: #fff;
+  color: #263238;
+  font: inherit;
+  text-transform: none;
+}
+
+.payrollMayBridge-office {
+  min-width: 13rem;
+}
+
+.payrollMayBridge-userSearch {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-width: 0;
+  height: 2.5rem;
+  border: 1px solid #d6e1e8;
+  border-radius: 7px;
+  padding: 0 0.7rem;
+  background: #fff;
+  color: #607d8b;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.payrollMayBridge-userSearch:focus-within {
+  border-color: #4bb3fd;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
+}
+
+.payrollMayBridge-userSearch input {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #263238;
+  font-size: 0.9rem;
+}
+
+.payrollMayBridge-userSearch input:focus {
+  outline: 0;
+}
+
+.payrollMayBridge-summary {
+  flex-wrap: wrap;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background: #eef6f5;
+  color: #35505a;
+}
+
+.payrollMayBridge-searchSummary {
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.payrollMayBridge-searchBox {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  min-height: 2.3rem;
+  border: 1px solid #d5e0e7;
+  border-radius: 6px;
+  padding: 0 0.75rem;
+  background: #fff;
+  color: #78909c;
+}
+
+.payrollMayBridge-searchBox input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #263238;
+  font-size: 0.9rem;
+}
+
+.payrollMayBridge-searchBox input::placeholder {
+  color: #8fa1aa;
+}
+
+.payrollMayBridge-summary span,
+.payrollMayBridge-summary strong {
+  padding-right: 0.75rem;
+  border-right: 1px solid #c9dddd;
+  font-size: 0.9rem;
+}
+
+.payrollMayBridge-summary strong {
+  border-right: 0;
+  color: #00796b;
+}
+
+.payrollMayBridge-users {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  gap: 0.75rem;
+  overflow: visible;
+  padding-right: 0.35rem;
+}
+
+.payrollMayBridge-officeGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.payrollMayBridge-officeGroupHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 2.6rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid #cfe3e1;
+  border-left: 4px solid #009688;
+  border-radius: 6px;
+  background: #eef8f7;
+  color: #003b5c;
+}
+
+.payrollMayBridge-officeGroupHeader h2 {
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.98rem;
+  font-weight: 800;
+}
+
+.payrollMayBridge-officeGroupHeader span {
+  color: #52747e;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.payrollMayBridge-user {
+  border: 1px solid #dce4ea;
+  border-radius: 6px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.payrollMayBridge-userHeader {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: #f8fafb;
+  border-bottom: 1px solid #e7edf1;
+}
+
+.payrollMayBridge-userCheck {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 16rem;
+  font-weight: 700;
+}
+
+.payrollMayBridge-userNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 2rem;
+  flex: 0 0 2rem;
+  color: #607d8b;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.payrollMayBridge-toggleTasks {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  min-width: 6.8rem;
+  height: 2rem;
+  border: 1px solid #cddfed;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--color-secondary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.payrollMayBridge-toggleTasks:hover {
+  background: #edf7fb;
+}
+
+.payrollMayBridge-downloadZip,
+.payrollMayBridge-downloadUser,
+.payrollMayBridge-contractButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  height: 2rem;
+  border: 1px solid #b9d7c9;
+  border-radius: 6px;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.payrollMayBridge-downloadZip {
+  min-width: 8.8rem;
+  padding: 0 0.8rem;
+}
+
+.payrollMayBridge-downloadUser {
+  min-width: 4.2rem;
+  padding: 0 0.55rem;
+}
+
+.payrollMayBridge-contractButton {
+  width: 2.1rem;
+  min-width: 2.1rem;
+  padding: 0;
+  border-color: #cddfed;
+  background: #fff;
+  color: var(--color-secondary);
+}
+
+.payrollMayBridge-downloadZip:hover:not(:disabled),
+.payrollMayBridge-downloadUser:hover:not(:disabled) {
+  background: #d1fae5;
+  border-color: #6ee7b7;
+}
+
+.payrollMayBridge-contractButton:hover {
+  background: #edf7fb;
+}
+
+.payrollMayBridge-penalties {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  min-width: min(30rem, 100%);
+}
+
+.payrollMayBridge-penalties button,
+.payrollMayBridge-penalties span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 1.85rem;
+  border: 1px solid #f2c7c7;
+  border-radius: 999px;
+  padding: 0 0.55rem;
+  background: #fff5f5;
+  color: #8a1f1f;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.payrollMayBridge-penalties button {
+  cursor: pointer;
+}
+
+.payrollMayBridge-penalties button:hover:not(:disabled) {
+  border-color: #ef9a9a;
+  background: #ffebee;
+  color: #7f1d1d;
+}
+
+.payrollMayBridge-penalties button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.payrollMayBridge-penalties strong {
+  color: #991b1b;
+}
+
+.payrollMayBridge-penaltyApply {
+  border-color: #f5c26b !important;
+  background: #fff7ed !important;
+  color: #a15c00 !important;
+}
+
+.payrollMayBridge-penalties span {
+  border-color: #b9d7c9;
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.payrollMayBridge-downloadZip:disabled,
+.payrollMayBridge-downloadUser:disabled {
+  background: #f4f7f8;
+  border-color: #d6e0e5;
+  color: #90a4ae;
+  cursor: not-allowed;
+}
+
+.payrollMayBridge-amount {
+  min-width: 8rem;
+}
+
+.payrollMayBridge-netAmount {
+  color: #00796b;
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.payrollMayBridge-stageList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+.payrollMayBridge-stage {
+  border-left: 3px solid #009688;
+  padding-left: 0.75rem;
+}
+
+.payrollMayBridge-stage h2,
+.payrollMayBridge-level h3 {
+  margin: 0 0 0.45rem;
+  line-height: 1.3;
+}
+
+.payrollMayBridge-stage h2 {
+  font-size: 0.98rem;
+}
+
+.payrollMayBridge-level {
+  margin-top: 0.65rem;
+}
+
+.payrollMayBridge-level h3 {
+  color: #607d8b;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.payrollMayBridge-task {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr) 8rem auto auto;
+  gap: 0.5rem;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.35rem 0;
+  border-top: 1px solid #eef2f5;
+  font-size: 0.86rem;
+}
+
+.payrollMayBridge-task span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollMayBridge-task small {
+  color: #607d8b;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.payrollMayBridge-taskAmount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.payrollMayBridge-taskAmount span {
+  color: #607d8b;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.payrollMayBridge-taskAmount input {
+  width: 5.6rem;
+  height: 1.8rem;
+  border: 1px solid #cfdbe2;
+  border-radius: 6px;
+  padding: 0 0.45rem;
+  background: #fff;
+  color: #003b5c;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.payrollMayBridge-taskActions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.payrollMayBridge-taskActions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-secondary);
+  cursor: pointer;
+}
+
+.payrollMayBridge-taskActions button:hover {
+  border-color: #cddfed;
+  background: #edf7fb;
+}
+
+.payrollMayBridge-taskActions button:disabled {
+  color: #90a4ae;
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.payrollMayBridge-taskModalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(9, 30, 66, 0.38);
+}
+
+.payrollMayBridge-taskModalPanel {
+  display: flex;
+  width: min(96rem, 100%);
+  min-height: 0;
+  max-height: calc(100vh - 4rem);
+  overflow: auto;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 20px 50px rgba(9, 30, 66, 0.28);
+}
+
+.payrollMayBridge-taskModalPanel .task {
+  width: 100%;
+  min-height: 42rem;
+  padding: 1rem;
+  overflow: auto;
+}
+
+.payrollMayBridge-contractBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1250;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(9, 30, 66, 0.42);
+}
+
+.payrollMayBridge-contractDialog {
+  display: flex;
+  flex-direction: column;
+  width: min(70rem, 100%);
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 20px 50px rgba(9, 30, 66, 0.28);
+}
+
+.payrollMayBridge-contractHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e3ebf0;
+}
+
+.payrollMayBridge-contractHeader h2 {
+  margin: 0;
+  color: #003b5c;
+  font-size: 1rem;
+}
+
+.payrollMayBridge-contractHeader span {
+  display: block;
+  max-width: 48rem;
+  overflow: hidden;
+  color: #607d8b;
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollMayBridge-contractHeader button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #d7e2e8;
+  border-radius: 6px;
+  background: #fff;
+  color: #455a64;
+  cursor: pointer;
+}
+
+.payrollMayBridge-contractHeader button:hover {
+  background: #f2f6f8;
+}
+
+.payrollMayBridge-contractViewer {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 38rem;
+  border: 0;
+}
+
+.payrollMayBridge-contractFallback {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 2rem;
+  color: #455a64;
+}
+
+.payrollMayBridge-penaltyBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1260;
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(9, 30, 66, 0.38);
+}
+
+.payrollMayBridge-penaltyPanel {
+  display: flex;
+  flex-direction: column;
+  width: min(72rem, calc(100vw - 2rem));
+  height: 100vh;
+  min-height: 0;
+  background: #f8fafc;
+  box-shadow: -18px 0 42px rgba(9, 30, 66, 0.22);
+}
+
+.payrollMayBridge-penaltyHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid #dbe6ed;
+  background: #fff;
+}
+
+.payrollMayBridge-penaltyHeader span {
+  display: block;
+  color: #0066ff;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.payrollMayBridge-penaltyHeader h2 {
+  margin: 0.2rem 0;
+  color: #001b5c;
+  font-size: 1.15rem;
+}
+
+.payrollMayBridge-penaltyHeader p {
+  margin: 0;
+  color: #607d8b;
+  font-size: 0.82rem;
+}
+
+.payrollMayBridge-penaltyHeader button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border: 1px solid #d7e2e8;
+  border-radius: 6px;
+  background: #fff;
+  color: #455a64;
+  cursor: pointer;
+}
+
+.payrollMayBridge-penaltyTabs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #dbe6ed;
+  background: #fff;
+}
+
+.payrollMayBridge-penaltyTabs button {
+  height: 2rem;
+  border: 1px solid #d7e2e8;
+  border-radius: 999px;
+  padding: 0 0.85rem;
+  background: #fff;
+  color: #455a64;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.payrollMayBridge-penaltyTabs button.active {
+  border-color: #8ccfff;
+  background: #e8f5ff;
+  color: #003b5c;
+}
+
+.payrollMayBridge-penaltyApplyTotal {
+  margin-left: auto;
+  border-color: #b9d7c9 !important;
+  background: #ecfdf5 !important;
+  color: #047857 !important;
+}
+
+.payrollMayBridge-penaltyContent {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 1rem;
+}
+
+.payrollMayBridge-licensePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.payrollMayBridge-licenseSummary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(8rem, 1fr)) auto;
+  gap: 0.6rem;
+  align-items: stretch;
+}
+
+.payrollMayBridge-licenseSummary div {
+  border: 1px solid #dbe6ed;
+  border-radius: 7px;
+  padding: 0.75rem;
+  background: #fff;
+}
+
+.payrollMayBridge-licenseSummary span {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: #607d8b;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.payrollMayBridge-licenseSummary strong {
+  color: #001b5c;
+  font-size: 1rem;
+}
+
+.payrollMayBridge-licenseSummary button,
+.payrollMayBridge-licenseAdjust button {
+  border: 1px solid #b9d7c9;
+  border-radius: 7px;
+  padding: 0 0.8rem;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.payrollMayBridge-licenseAdjust {
+  display: grid;
+  grid-template-columns: 10rem minmax(14rem, 1fr) auto auto;
+  gap: 0.6rem;
+  align-items: end;
+  border: 1px solid #dbe6ed;
+  border-radius: 7px;
+  padding: 0.75rem;
+  background: #fff;
+}
+
+.payrollMayBridge-licenseAdjust label,
+.payrollMayBridge-licenseRow label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: #607d8b;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.payrollMayBridge-licenseAdjust input,
+.payrollMayBridge-licenseRow input {
+  height: 2rem;
+  border: 1px solid #cfdbe2;
+  border-radius: 6px;
+  padding: 0 0.55rem;
+  background: #fff;
+  color: #263238;
+  font-size: 0.82rem;
+  text-transform: none;
+}
+
+.payrollMayBridge-licenseRows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.payrollMayBridge-licenseRow {
+  display: grid;
+  grid-template-columns: minmax(11rem, 0.9fr) minmax(14rem, 1.1fr) 6rem 7rem minmax(12rem, 1fr);
+  gap: 0.6rem;
+  align-items: center;
+  border: 1px solid #dbe6ed;
+  border-radius: 7px;
+  padding: 0.65rem;
+  background: #fff;
+}
+
+.payrollMayBridge-licenseRow div {
+  min-width: 0;
+}
+
+.payrollMayBridge-licenseRow strong,
+.payrollMayBridge-licenseRow span {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollMayBridge-licenseRow strong {
+  color: #001b5c;
+  font-size: 0.84rem;
+}
+
+.payrollMayBridge-licenseRow span {
+  color: #607d8b;
+  font-size: 0.76rem;
+}
+
+.payrollMayBridge-dangerAmount {
+  color: #dc2626 !important;
+}
+
+.payrollMayBridge-licenseEmpty {
+  border: 1px dashed #cfdbe2;
+  border-radius: 7px;
+  padding: 1.2rem;
+  background: #fff;
+  color: #607d8b;
+  text-align: center;
+}
+
+@media (max-width: 780px) {
+  .payrollMayBridge-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .payrollMayBridge-headerActions {
+    justify-content: flex-start;
+  }
+
+  .payrollMayBridge-unitFilter {
+    grid-template-columns: 1fr;
+  }
+
+  .payrollMayBridge-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .payrollMayBridge-filters label,
+  .payrollMayBridge-office,
+  .payrollMayBridge-amount {
+    width: 100%;
+  }
+
+  .payrollMayBridge-task {
+    grid-template-columns: 1.25rem minmax(0, 1fr);
+  }
+
+  .payrollMayBridge-taskAmount {
+    grid-column: 2;
+    justify-content: flex-start;
+  }
+
+  .payrollMayBridge-task small {
+    grid-column: 2;
+  }
+
+  .payrollMayBridge-taskActions {
+    grid-column: 2;
+    justify-content: flex-start;
+  }
+
+  .payrollMayBridge-taskModalBackdrop {
+    padding: 0.75rem;
+  }
+
+  .payrollMayBridge-taskModalPanel {
+    max-height: calc(100vh - 1.5rem);
+  }
+
+  .payrollMayBridge-contractBackdrop {
+    padding: 0.75rem;
+  }
+
+  .payrollMayBridge-contractViewer {
+    min-height: 30rem;
+  }
+
+  .payrollMayBridge-licenseSummary,
+  .payrollMayBridge-licenseAdjust,
+  .payrollMayBridge-licenseRow {
+    grid-template-columns: 1fr;
+  }
+
+  .payrollMayBridge-penaltyTabs {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .payrollMayBridge-penaltyApplyTotal {
+    margin-left: 0;
+  }
+}
+
+.payrollPersonnelRequests-filters {
+  grid-template-columns: 8rem 8rem;
+  justify-content: end;
+}
+
+.payrollPersonnelRequests {
+  gap: 0.6rem;
+  font-size: 0.86rem;
+}
+
+.payrollPersonnelRequests .payrollMayBridge-pageHeader h1 {
+  font-size: 1.15rem;
+}
+
+.payrollPersonnelRequests .payrollMayBridge-unitHero {
+  min-height: 3rem;
+  padding: 0.4rem 0.65rem;
+}
+
+.payrollPersonnelRequests .payrollMayBridge-unitHero h2 {
+  font-size: 1.08rem;
+  line-height: 1.2;
+}
+
+.payrollPersonnelRequests .payrollMayBridge-unitHero p {
+  margin-top: 0.08rem;
+  font-size: 0.72rem;
+}
+
+.payrollPersonnelRequests .payrollMayBridge-unitHero span {
+  font-size: 0.66rem;
+}
+
+.payrollPersonnelRequests .payrollMayBridge-searchBox {
+  min-height: 2rem;
+  padding: 0 0.55rem;
+}
+
+.payrollPersonnelRequests .payrollMayBridge-searchBox input {
+  font-size: 0.82rem;
+}
+
+.payrollPersonnelRequests .payrollMayBridge-summary {
+  min-height: 2.05rem;
+  padding: 0.35rem 0.6rem;
+}
+
+.payrollPersonnelRequests .payrollMayBridge-summary span,
+.payrollPersonnelRequests .payrollMayBridge-summary strong {
+  font-size: 0.8rem;
+}
+
+.payrollPersonnelRequests .payrollMayBridge-users {
+  gap: 0.5rem;
+}
+
+.payrollPersonnelRequests .payrollMayBridge-officeGroup {
+  gap: 0.35rem;
+}
+
+.payrollPersonnelRequests .payrollMayBridge-officeGroupHeader {
+  min-height: 2rem;
+  padding: 0.35rem 0.65rem;
+}
+
+.payrollPersonnelRequests .payrollMayBridge-officeGroupHeader h2 {
+  font-size: 0.86rem;
+}
+
+.payrollPersonnelRequests .payrollMayBridge-officeGroupHeader span {
+  font-size: 0.72rem;
+}
+
+.payrollPersonnelRequests-user {
+  display: grid;
+  grid-template-columns: minmax(18rem, 1fr) 9rem 8rem 7rem 8rem;
+  gap: 0.55rem;
+  align-items: center;
+  min-height: 2.85rem;
+  border: 1px solid #dce4ea;
+  border-left: 4px solid #00a4d6;
+  border-radius: 6px;
+  padding: 0.45rem 0.65rem;
+  background: #fff;
+}
+
+.payrollPersonnelRequests-user--WITHOUT_UPLOADS {
+  border-left-color: #d64545;
+  background: #fff7f7;
+}
+
+.payrollPersonnelRequests-user--REPORT_CREATED {
+  border-left-color: #009688;
+  background: #f7fffd;
+}
+
+.payrollPersonnelRequests-person {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+
+.payrollPersonnelRequests-user strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #00246b;
+  font-size: 0.88rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollPersonnelRequests-user span {
+  color: #607d8b;
+  font-size: 0.76rem;
+}
+
+.payrollPersonnelRequests-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.45rem;
+  border-radius: 999px;
+  padding: 0 0.55rem;
+  background: #eef6ff;
+  color: #0057a8 !important;
+  font-size: 0.72rem !important;
+  font-weight: 800;
+}
+
+.payrollPersonnelRequests-status--WITHOUT_UPLOADS {
+  background: #ffe4e4;
+  color: #b91c1c !important;
+}
+
+.payrollPersonnelRequests-status--REPORT_CREATED,
+.payrollPersonnelRequests-status--REQUEST_RECEIVED {
+  background: #dff8ee;
+  color: #047857 !important;
+}
+
+.payrollPersonnelRequests-status--IN_ELABORATION {
+  background: #e8f3ff;
+  color: #1565c0 !important;
+}
+
+.payrollPersonnelRequests-status--WITH_CONFORMITY {
+  background: #eef2ff;
+  color: #3730a3 !important;
+}
+
+.payrollPersonnelRequests-status--READY_TO_CREATE {
+  background: #e8f3ff;
+  color: #0057a8 !important;
+}
+
+.payrollElaboration-period {
+  margin: 0.25rem 0 0;
+  color: #607d8b;
+  font-size: 0.82rem;
+}
+
+.payrollElaboration .payrollMayBridge-officeGroupHeader {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.65rem;
+}
+
+.payrollElaboration .payrollMayBridge-officeGroupHeader h2 {
+  font-size: 0.9rem;
+}
+
+.payrollElaboration .payrollMayBridge-officeGroupHeader span {
+  font-size: 0.72rem;
+}
+
+.payrollElaboration .payrollMayBridge-officeGroupHeader .button {
+  min-height: 1.85rem;
+}
+
+.payrollElaboration .payrollMayBridge-userHeader {
+  padding: 0.45rem 0.65rem;
+}
+
+.payrollElaboration .payrollMayBridge-downloadZip {
+  height: 1.75rem;
+  min-width: 6.8rem;
+  padding: 0 0.55rem;
+  font-size: 0.72rem;
+}
+
+.payrollElaboration .payrollMayBridge-contractButton {
+  width: 1.8rem;
+  min-width: 1.8rem;
+  height: 1.8rem;
+}
+
+.payrollElaboration .payrollMayBridge-penalties {
+  min-width: 0;
+  gap: 0.25rem;
+}
+
+.payrollElaboration .payrollMayBridge-penalties button,
+.payrollElaboration .payrollMayBridge-penalties span {
+  min-height: 1.45rem;
+  padding: 0 0.45rem;
+  font-size: 0.68rem;
+}
+
+.payrollElaboration .payrollElaboration-returnRequest {
+  min-height: 1.8rem;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.72rem;
+}
+
+.payrollElaboration .payrollMayBridge-toggleTasks {
+  min-width: 5.7rem;
+  height: 1.75rem;
+  gap: 0.2rem;
+  font-size: 0.72rem;
+}
+
+.payrollElaboration-person {
+  display: flex;
+  min-width: 15rem;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+
+.payrollElaboration-person strong,
+.payrollElaboration-person span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollElaboration-person strong {
+  color: #00246b;
+  font-size: 0.9rem;
+}
+
+.payrollElaboration-person span {
+  color: #78909c;
+  font-size: 0.72rem;
+}
+
+.payrollElaboration-reports {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.45rem 0.55rem 0.55rem;
+}
+
+.payrollElaboration-report {
+  border: 1px solid #e1e9ee;
+  border-radius: 6px;
+  background: #fbfdfe;
+}
+
+.payrollElaboration-report > header {
+  display: grid;
+  grid-template-columns: 6.2rem minmax(14rem, 1fr) 7rem 7rem 8rem 1.9rem 1.9rem 7.2rem;
+  gap: 0.4rem;
+  align-items: center;
+  padding: 0.4rem;
+}
+
+.payrollElaboration-reportTitle,
+.payrollElaboration-iconButton,
+.payrollElaboration-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #cddfed;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--color-secondary);
+  cursor: pointer;
+}
+
+.payrollElaboration-reportTitle {
+  justify-content: flex-start;
+  gap: 0.35rem;
+  min-width: 0;
+  height: 1.75rem;
+  padding: 0 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.payrollElaboration-reportTitle span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollElaboration-iconButton,
+.payrollElaboration-delete {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.payrollElaboration-delete {
+  border-color: #ffd0d0;
+  color: #d71920;
+}
+
+.payrollElaboration-delete:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.payrollElaboration-fine {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  color: #607d8b;
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.payrollElaboration-fine input {
+  height: 1.7rem;
+  border: 1px solid #cfdbe2;
+  border-radius: 6px;
+  padding: 0 0.4rem;
+  color: #00246b;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.payrollElaboration-finePenalty input {
+  border-color: #ffc9c9;
+  background: #fff7f7;
+  color: #8c1111;
+}
+
+.payrollElaboration-amounts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.payrollElaboration-amounts span {
+  color: #78909c;
+}
+
+.payrollElaboration-amounts strong {
+  color: #00796b;
+}
+
+.payrollElaboration-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #00246b;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.payrollElaboration-evidence {
+  padding: 0 0.65rem 0.7rem;
+}
+
+.payrollElaboration-valuationSummary {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin: 0.15rem 0 0.65rem;
+  border: 1px solid #dbe8ee;
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+  background: #f8fbfc;
+}
+
+.payrollElaboration-valuationSummary span,
+.payrollElaboration-valuationSummary strong {
+  font-size: 0.8rem;
+}
+
+.payrollElaboration-valuationSummary span {
+  color: #78909c;
+}
+
+.payrollElaboration-valuationSummary strong {
+  color: #003b5c;
+}
+
+.payrollElaboration-valuationSummary strong:last-child {
+  color: #00796b;
+}
+
+.payrollElaboration-task {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 8rem auto 4.5rem;
+  gap: 0.65rem;
+  align-items: center;
+  min-height: 2rem;
+  border-top: 1px solid #eef2f5;
+  padding: 0.35rem 0.45rem;
+  background: #fff;
+  font-size: 0.84rem;
+}
+
+.payrollElaboration-task span {
+  min-width: 0;
+  overflow: hidden;
+  color: #263238;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollElaboration-task small {
+  color: #607d8b;
+  white-space: nowrap;
+}
+
+.payrollElaboration-taskAmount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.payrollElaboration-taskAmount span {
+  color: #607d8b;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.payrollElaboration-taskAmount input {
+  width: 5.8rem;
+  height: 1.8rem;
+  border: 1px solid #cfdbe2;
+  border-radius: 6px;
+  padding: 0 0.45rem;
+  background: #fff;
+  color: #003b5c;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.payrollElaboration-taskActions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.payrollElaboration-taskActions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--color-secondary);
+  cursor: pointer;
+}
+
+.payrollElaboration-taskActions button:hover:not(:disabled) {
+  background: #edf7fb;
+}
+
+.payrollElaboration-taskActions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.payrollElaboration-returnRequest,
+.payrollPersonnelRequests-myRequest,
+.payrollPersonnelRequests-actions button,
+.payrollPersonnelRequests-rowActions button,
+.payrollSelfSubmission-cart button,
+.payrollSelfSubmission-submissions button,
+.payrollSelfSubmission-sideActions button,
+.payrollSelfSubmission-historyReport button {
+  border: 1px solid #cddfed;
+  border-radius: 6px;
+  padding: 0.45rem 0.65rem;
+  background: #fff;
+  color: #00246b;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.payrollPersonnelRequests .payrollPersonnelRequests-myRequest,
+.payrollPersonnelRequests .payrollPersonnelRequests-actions button,
+.payrollPersonnelRequests .payrollPersonnelRequests-rowActions button {
+  min-height: 1.85rem;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.72rem;
+}
+
+.payrollElaboration-returnRequest:disabled,
+.payrollPersonnelRequests-myRequest:disabled,
+.payrollPersonnelRequests-actions button:disabled,
+.payrollPersonnelRequests-rowActions button:disabled,
+.payrollSelfSubmission-cart button:disabled,
+.payrollSelfSubmission-submissions button:disabled,
+.payrollSelfSubmission-sideActions button:disabled,
+.payrollSelfSubmission-historyReport button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.payrollPersonnelRequests-myRequest {
+  border-color: #b7d7ff;
+  background: #f2f8ff;
+  color: #003b8f;
+}
+
+.payrollPersonnelRequests-myRequest:hover {
+  background: #e4f0ff;
+}
+
+.payrollPersonnelRequests-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid #dce7ee;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.payrollPersonnelRequests-actions span {
+  margin-right: auto;
+  color: #607d8b;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.payrollPersonnelRequests-user {
+  grid-template-columns:
+    1.25rem minmax(14rem, 1.25fr) 9.3rem minmax(11rem, 0.95fr)
+    minmax(12rem, 14rem) 8.2rem;
+}
+
+.payrollPersonnelRequests-select {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payrollPersonnelRequests-rowActions {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.payrollPersonnelRequests-phase,
+.payrollPersonnelRequests-evidence,
+.payrollPersonnelRequests-money {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.16rem;
+}
+
+.payrollPersonnelRequests-phase small,
+.payrollPersonnelRequests-money small {
+  color: #78909c;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.payrollPersonnelRequests-evidence strong {
+  color: #31586b;
+  font-size: 0.74rem;
+  font-weight: 800;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollPersonnelRequests-evidence span,
+.payrollPersonnelRequests-money small {
+  overflow: hidden;
+  color: #607d8b;
+  font-size: 0.72rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollPersonnelRequests-money {
+  align-items: flex-start;
+}
+
+.payrollPersonnelRequests-user--REQUEST_RECEIVED {
+  border-left-color: #00897b;
+  background: #f4fbf8;
+}
+
+.payrollPersonnelRequests-user--IN_ELABORATION {
+  border-left-color: #1565c0;
+  background: #f4f8ff;
+}
+
+.payrollSelfSubmission-target,
+.payrollSelfSubmission-submissions,
+.payrollSelfSubmission-filters,
+.payrollSelfSubmission-cart,
+.payrollSelfSubmission-cartPanel,
+.payrollSelfSubmission-sideSection {
+  border: 1px solid #dce7ee;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.payrollSelfSubmission {
+  height: calc(100vh - 1rem);
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.75rem 0.75rem 2rem;
+}
+
+.payrollSelfSubmission-target {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0.9rem;
+  border-left: 4px solid #0ea5e9;
+}
+
+.payrollSelfSubmission-target span,
+.payrollSelfSubmission-filters label,
+.payrollSelfSubmission-cart label {
+  color: #607d8b;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.payrollSelfSubmission-target strong {
+  display: block;
+  color: #00246b;
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.payrollSelfSubmission-target p {
+  margin: 0.2rem 0 0;
+  color: #607d8b;
+  font-size: 0.82rem;
+}
+
+.payrollSelfSubmission-blocked {
+  border: 1px solid #ffcdd2;
+  border-radius: 6px;
+  padding: 0.75rem;
+  background: #fff5f5;
+  color: #b71c1c;
+  font-weight: 800;
+}
+
+.payrollSelfSubmission-workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 21rem);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.payrollSelfSubmission-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.payrollSelfSubmission-sidePanel {
+  position: sticky;
+  top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  max-height: calc(100vh - 1.5rem);
+  min-width: 0;
+  overflow-y: auto;
+}
+
+.payrollSelfSubmission-submissions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.7rem;
+}
+
+.payrollSelfSubmission-submissions h2 {
+  margin: 0;
+  color: #00246b;
+  font-size: 0.95rem;
+}
+
+.payrollSelfSubmission-submissions article {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-top: 1px solid #edf2f5;
+  padding-top: 0.45rem;
+}
+
+.payrollSelfSubmission-submissions span {
+  display: block;
+  color: #607d8b;
+  font-size: 0.8rem;
+}
+
+.payrollSelfSubmission-filters {
+  display: grid;
+  grid-template-columns: minmax(12rem, 1.2fr) minmax(10rem, 1fr) 8rem 8rem 8rem;
+  gap: 0.55rem;
+  padding: 0.7rem;
+}
+
+.payrollSelfSubmission-filters label,
+.payrollSelfSubmission-cart label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.payrollSelfSubmission-filters input,
+.payrollSelfSubmission-filters select,
+.payrollSelfSubmission-cart input {
+  height: 2rem;
+  border: 1px solid #cfdbe2;
+  border-radius: 6px;
+  padding: 0 0.55rem;
+  background: #fff;
+  color: #263238;
+  font-weight: 700;
+}
+
+.payrollSelfSubmission-cart {
+  display: flex;
+  align-items: end;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  padding: 0.65rem;
+}
+
+.payrollSelfSubmission-cart span {
+  margin-left: auto;
+  color: #607d8b;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.payrollSelfSubmission-cartPanel,
+.payrollSelfSubmission-sideSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.7rem;
+}
+
+.payrollSelfSubmission-cartPanel {
+  border-left: 4px solid #0ea5e9;
+}
+
+.payrollSelfSubmission-cartPanel p,
+.payrollSelfSubmission-sideEmpty {
+  margin: 0;
+  color: #607d8b;
+  font-size: 0.8rem;
+  line-height: 1.25rem;
+}
+
+.payrollSelfSubmission-cartPanel label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  color: #607d8b;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.payrollSelfSubmission-cartPanel input {
+  height: 2.15rem;
+  border: 1px solid #cfdbe2;
+  border-radius: 6px;
+  padding: 0 0.55rem;
+  color: #001b5c;
+  font-weight: 800;
+}
+
+.payrollSelfSubmission-sideHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.payrollSelfSubmission-sideHeader span {
+  color: #607d8b;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.payrollSelfSubmission-sideHeader strong {
+  color: #00246b;
+  font-size: 0.95rem;
+  font-weight: 900;
+}
+
+.payrollSelfSubmission-sideReport,
+.payrollSelfSubmission-historyReport {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.45rem;
+  border-top: 1px solid #edf2f5;
+  padding-top: 0.55rem;
+}
+
+.payrollSelfSubmission-sideReport strong,
+.payrollSelfSubmission-historyReport strong {
+  display: block;
+  overflow: hidden;
+  margin-top: 0.2rem;
+  color: #001b5c;
+  font-size: 0.84rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollSelfSubmission-sideReport span,
+.payrollSelfSubmission-historyReport span,
+.payrollSelfSubmission-historyReport small {
+  display: block;
+  overflow: hidden;
+  color: #607d8b;
+  font-size: 0.76rem;
+  line-height: 1.15rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollSelfSubmission-sideActions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.payrollSelfSubmission-sideActions button,
+.payrollSelfSubmission-historyReport button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.payrollSelfSubmission-historyReport {
+  grid-template-columns: minmax(0, 1fr) 2.25rem;
+  align-items: center;
+}
+
+.payrollSelfSubmission-historyReport button {
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+}
+
+.payrollSelfSubmission-reportGroupHeader,
+.payrollSelfSubmission-reportItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.payrollSelfSubmission-reportGroupHeader {
+  border-radius: 6px;
+  padding: 0.45rem 0.55rem;
+  background: #f6fafc;
+}
+
+.payrollSelfSubmission-reportGroupHeader div,
+.payrollSelfSubmission-reportItem div,
+.payrollSelfSubmission-historyReport div {
+  min-width: 0;
+}
+
+.payrollSelfSubmission-reportGroupHeader span {
+  display: block;
+  color: #607d8b;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.payrollSelfSubmission-reportGroupHeader strong {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+.payrollSelfSubmission-reportItem {
+  border-top: 1px solid #edf2f5;
+  padding-top: 0.45rem;
+}
+
+.payrollSelfSubmission-attachmentButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 1.85rem;
+  border: 1px solid #c8d9e5;
+  border-radius: 6px;
+  padding: 0 0.55rem;
+  background: #fff;
+  color: #00246b;
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.payrollSelfSubmission-attachmentButton:disabled {
+  opacity: 0.45;
+}
+
+.payrollSelfSubmission-historyGroup {
+  display: grid;
+  gap: 0.45rem;
+  border-top: 1px solid #edf2f5;
+  padding-top: 0.55rem;
+}
+
+.payrollSelfSubmission-attachmentOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(15, 23, 42, 0.38);
+}
+
+.payrollSelfSubmission-attachmentPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: min(30rem, 100%);
+  height: 100%;
+  padding: 1rem;
+  background: #f8fbfd;
+  box-shadow: -18px 0 40px rgba(15, 23, 42, 0.18);
+}
+
+.payrollSelfSubmission-attachmentPanel > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.payrollSelfSubmission-attachmentPanel > header span {
+  display: block;
+  color: #0066ff;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.payrollSelfSubmission-attachmentPanel > header strong {
+  display: block;
+  margin-top: 0.2rem;
+  color: #001b5c;
+  font-size: 1rem;
+}
+
+.payrollSelfSubmission-attachmentPanel > header button,
+.payrollSelfSubmission-attachmentList article > button:last-child {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #c8d9e5;
+  border-radius: 6px;
+  background: #fff;
+  color: #00246b;
+}
+
+.payrollSelfSubmission-uploadBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 4.25rem;
+  border: 1px dashed #9cc7e5;
+  border-radius: 8px;
+  background: #fff;
+  color: #005aa8;
+  font-size: 0.86rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.payrollSelfSubmission-uploadBox input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.payrollSelfSubmission-attachmentList {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  gap: 0.45rem;
+  overflow: auto;
+}
+
+.payrollSelfSubmission-attachmentList article {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 2rem;
+  gap: 0.45rem;
+  align-items: center;
+  border: 1px solid #dce7ee;
+  border-radius: 7px;
+  padding: 0.45rem;
+  background: #fff;
+}
+
+.payrollSelfSubmission-attachmentList article > button:first-child {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: #263238;
+  text-align: left;
+}
+
+.payrollSelfSubmission-attachmentList article span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollSelfSubmission-attachmentList article > button:last-child {
+  color: #dc2626;
+}
+
+.payrollSelfSubmission-stages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.payrollSelfSubmission-task {
+  display: grid;
+  grid-template-columns: 1.4rem minmax(0, 1fr) auto;
+  gap: 0.6rem;
+  align-items: center;
+  border-top: 1px solid #eef2f5;
+  padding: 0.45rem 0.55rem;
+  color: #263238;
+}
+
+.payrollSelfSubmission-task span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollSelfSubmission-task small {
+  color: #607d8b;
+  white-space: nowrap;
+}
+
+.payrollSelfSubmission-tabs {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.payrollSelfSubmission-tabs button {
+  min-height: 2.25rem;
+  border: 1px solid #d2dde5;
+  border-radius: 999px;
+  padding: 0 1rem;
+  background: #fff;
+  color: #00246b;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.payrollSelfSubmission-tabs button.is-active {
+  border-color: #9bd2ff;
+  background: #e8f5ff;
+}
+
+.payrollSelfSubmission-reportKind,
+.payrollElaboration-reportKind {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.25rem;
+  border-radius: 999px;
+  padding: 0 0.45rem;
+  background: #e8f5ff;
+  color: #005aa8;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.payrollElaboration-reportKind.is-admin {
+  background: #fff2d8;
+  color: #925200;
+}
+
+.payrollSelfSubmission-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.payrollSelfSubmission-adminPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 12rem auto;
+  align-items: end;
+  gap: 0.75rem;
+  border: 1px solid #d6e1e8;
+  border-radius: 7px;
+  padding: 0.85rem;
+  background: #fff;
+}
+
+.payrollSelfSubmission-adminPanel span,
+.payrollSelfSubmission-adminPanel label {
+  color: #546e7a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.payrollSelfSubmission-adminPanel strong {
+  display: block;
+  margin-top: 0.25rem;
+  color: #001b5c;
+  font-size: 1rem;
+}
+
+.payrollSelfSubmission-adminPanel p {
+  margin: 0.25rem 0 0;
+  color: #607d8b;
+}
+
+.payrollSelfSubmission-adminPanel label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.payrollSelfSubmission-adminPanel input,
+.payrollPersonnelRequests-adminCreate input {
+  height: 2.15rem;
+  border: 1px solid #ccd7dd;
+  border-radius: 6px;
+  padding: 0 0.55rem;
+  color: #001b5c;
+  font-weight: 800;
+}
+
+.payrollSelfSubmission-adminNotice,
+.payrollSelfSubmission-adminEmpty {
+  margin: 0;
+  border: 1px solid #f8d7a8;
+  border-radius: 6px;
+  padding: 0.75rem;
+  background: #fff8ea;
+  color: #7a4b00;
+}
+
+.payrollElaboration-adminTask {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid #e0e8ee;
+  border-radius: 6px;
+  padding: 0.65rem 0.75rem;
+  background: #fff;
+}
+
+.payrollElaboration-adminTask strong {
+  display: block;
+  color: #00246b;
+}
+
+.payrollElaboration-adminTask span,
+.payrollElaboration-adminTask small {
+  color: #607d8b;
+}
+
+.payrollSelfSubmission-adminTaskList {
+  overflow: hidden;
+  border: 1px solid #d8e4eb;
+  border-radius: 7px;
+  background: #fff;
+}
+
+.payrollSelfSubmission-adminTaskListHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0.85rem;
+  border-bottom: 1px solid #e4edf2;
+  background: #f7fbfc;
+}
+
+.payrollSelfSubmission-adminTaskListHeader strong {
+  display: block;
+  color: #00246b;
+  font-size: 0.9rem;
+}
+
+.payrollSelfSubmission-adminTaskListHeader span {
+  display: block;
+  margin-top: 0.15rem;
+  color: #607d8b;
+  font-size: 0.78rem;
+}
+
+.payrollSelfSubmission-adminTaskListHeader b {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  background: #e8f5ff;
+  color: #005aa8;
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
+.payrollSelfSubmission-adminTaskRows {
+  display: flex;
+  flex-direction: column;
+}
+
+.payrollSelfSubmission-adminTaskRow {
+  display: grid;
+  grid-template-columns: 6.8rem minmax(0, 1fr) minmax(9rem, 14rem) 7rem;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 3.65rem;
+  padding: 0.55rem 0.85rem;
+  border-top: 1px solid #edf2f5;
+}
+
+.payrollSelfSubmission-adminTaskRow:first-child {
+  border-top: 0;
+}
+
+.payrollSelfSubmission-adminTaskRow:hover {
+  background: #f8fbfd;
+}
+
+.payrollSelfSubmission-adminTaskDate {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.1rem;
+  min-height: 2.2rem;
+  border-radius: 6px;
+  padding: 0.3rem 0.45rem;
+  background: #f2f7fa;
+}
+
+.payrollSelfSubmission-adminTaskDate strong {
+  color: #00246b;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.payrollSelfSubmission-adminTaskDate span {
+  color: #607d8b;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.payrollSelfSubmission-adminTaskMain {
+  min-width: 0;
+}
+
+.payrollSelfSubmission-adminTaskTitle {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.payrollSelfSubmission-adminTaskTitle b {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 0.12rem 0.45rem;
+  background: #eef9fb;
+  color: #0086b3;
+  font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.payrollSelfSubmission-adminTaskTitle strong {
+  overflow: hidden;
+  color: #001b5c;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollSelfSubmission-adminTaskMain p {
+  overflow: hidden;
+  margin: 0.18rem 0 0;
+  color: #546e7a;
+  font-size: 0.8rem;
+  line-height: 1.2rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollSelfSubmission-adminTaskMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.payrollSelfSubmission-adminTaskMeta span,
+.payrollSelfSubmission-adminTaskMeta small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payrollSelfSubmission-adminTaskMeta span {
+  color: #31566b;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.payrollSelfSubmission-adminTaskMeta small {
+  color: #78909c;
+  font-size: 0.72rem;
+}
+
+.payrollSelfSubmission-adminTaskState {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.payrollSelfSubmission-adminTaskBadge {
+  border: 1px solid #d9e4ea;
+  border-radius: 999px;
+  padding: 0.18rem 0.55rem;
+  background: #f6f9fb;
+  color: #546e7a;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.payrollSelfSubmission-adminTaskBadge.is-unresolved {
+  border-color: #ffdca0;
+  background: #fff7e6;
+  color: #9a5b00;
+}
+
+.payrollSelfSubmission-adminTaskBadge.is-process {
+  border-color: #bfe2ff;
+  background: #e8f5ff;
+  color: #005aa8;
+}
+
+.payrollSelfSubmission-adminTaskBadge.is-reviewed,
+.payrollSelfSubmission-adminTaskBadge.is-approved {
+  border-color: #b8efd2;
+  background: #e8f8ef;
+  color: #047857;
+}
+
+.payrollSelfSubmission-adminTaskState small {
+  color: #607d8b;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.payrollPersonnelRequests-reportBadges,
+.payrollPersonnelRequests-adminCreate {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.payrollPersonnelRequests-count,
+.payrollPersonnelRequests-amount,
+.payrollPersonnelRequests-adminReady {
+  white-space: nowrap;
+}
+
+.payrollPersonnelRequests-amount {
+  color: #00246b !important;
+  font-weight: 800;
+  text-align: right;
+}
+
+.payrollPersonnelRequests-adminReady {
+  justify-self: start;
+  border-radius: 999px;
+  padding: 0.22rem 0.5rem;
+  background: #eef7f4;
+  color: #047857 !important;
+  font-size: 0.68rem !important;
+  font-weight: 900;
+}
+
+.payrollPersonnelRequests-adminReady--technical {
+  background: #eef6ff;
+  color: #1565c0 !important;
+}
+
+.payrollPersonnelRequests-reportBadges b {
+  border-radius: 999px;
+  padding: 0.18rem 0.45rem;
+  background: #eef3f7;
+  color: #607d8b;
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.payrollPersonnelRequests-reportBadges b.is-ready {
+  background: #dcfce7;
+  color: #047857;
+}
+
+.payrollPersonnelRequests-adminCreate input[type='checkbox'] {
+  width: 0.9rem;
+  height: 0.9rem;
+  padding: 0;
+}
+
+.payrollPersonnelRequests-adminCreate input[type='number'] {
+  width: 6.25rem;
+  height: 1.75rem;
+  font-size: 0.78rem;
+}
+
+.payrollPersonnelRequests-adminCreate button {
+  min-height: 1.75rem;
+  border: 1px solid #b7d7f0;
+  border-radius: 6px;
+  padding: 0 0.5rem;
+  background: #fff;
+  color: #00246b;
+  font-size: 0.7rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.payrollPersonnelRequests-adminCreate button:disabled {
+  opacity: 0.45;
+}
+
+.payrollElaboration-adminEvidence {
+  gap: 0.65rem;
+}

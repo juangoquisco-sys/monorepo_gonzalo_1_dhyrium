@@ -1,0 +1,74 @@
+.select-container {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  gap: 0rem;
+  width: 100%;
+}
+
+.select-label {
+  width: 100%;
+  height: 1.6rem;
+  color: var(--color-quaternay);
+  font-weight: 500;
+  font-size: var(--size-label);
+}
+
+.select-field {
+  height: 1.8rem;
+  width: 100%;
+  background-color: var(--color-menu);
+  border: none;
+  box-shadow: 0px 2px 0px 0px var(--color-quaternay);
+  padding: 0 0.3rem;
+  font-size: var(--size-input);
+}
+
+.AdvancedSelect {
+  width: 100%;
+  background-color: var(--color-menu);
+  border: none;
+  font-size: var(--size-input);
+}
+
+.AdvancedSelect input:focus {
+  box-shadow: none;
+}
+
+.secondary .css-13cymwt-control {
+  height: 1.8rem;
+  width: 100%;
+  background-color: var(--color-menu);
+  border: none;
+  box-shadow: 0px 2px 0px 0px var(--color-quaternay);
+  padding: 0 0.3rem;
+  font-size: var(--size-input);
+  min-height: auto;
+}
+
+.select-style-two {
+  border-radius: 0.25rem;
+  border: 0.5px solid rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
+  background: #fff;
+  font-size: 0.85rem;
+  font-style: normal;
+  font-weight: 400;
+  height: auto;
+  flex: 1;
+  box-shadow: none;
+}
+.select-style-two:focus {
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 2px var(--color-primary);
+}
+
+.select-filter-small {
+  border: none;
+  width: 100%;
+  background-color: var(--color-gray-ligth);
+  padding: 0.5rem 0.3rem;
+  font-size: 11px;
+  height: auto;
+  border-radius: 0.2rem;
+}

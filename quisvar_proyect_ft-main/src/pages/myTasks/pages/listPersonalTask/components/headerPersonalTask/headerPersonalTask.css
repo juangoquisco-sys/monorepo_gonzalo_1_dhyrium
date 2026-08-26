@@ -1,0 +1,25 @@
+.headerPersonalTask {
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.headerPersonalTask-date-filter {
+  display: flex;
+  align-items: center;
+  gap: 1.875rem;
+}
+.headerPersonalTask-general-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.9375rem;
+}
+.headerPersonalTask-status-btns {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+/* .headerPersonalTask-date-picker {
+  width: 11.5rem;
+} */

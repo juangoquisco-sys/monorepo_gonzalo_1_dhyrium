@@ -1,0 +1,33 @@
+/auth/login:
+  post:
+    tags:
+      - Auth
+    summary: Login with a valid account
+    description: |-
+      Para poder iniciar sesión la cuenta debe estar creada previamente. Además
+      debe de tener validado el correo y el número de celular
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/login'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '400':
+        $ref: '#/components/responses/400'
+components:
+  schemas:
+    login:
+      required:
+        - dni
+        - password
+      type: object
+      properties:
+        dni:
+          type: string
+          example: '00000001'
+        password:
+          type: string
+          example: admin

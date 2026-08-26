@@ -1,0 +1,40 @@
+.tableTaskForReview-task-name {
+  min-width: 20rem;
+  width: 100%;
+  color: var(--color-secondary);
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.14288rem;
+  letter-spacing: 0.016rem;
+}
+
+.tableTaskForReview-evaluator {
+  min-width: 20rem;
+  width: 100%;
+}
+
+.tableTaskForReview {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.tableTaskForReview-container {
+  padding-inline: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  margin-top: 0.5rem;
+}
+
+.tableTaskForReview-actions {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}

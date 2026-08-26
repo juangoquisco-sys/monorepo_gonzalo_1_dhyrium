@@ -1,0 +1,29 @@
+.cardRegisterReport {
+  display: flex;
+  width: 38.6875rem;
+  padding: 1.25rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  border-radius: 0.625rem;
+  background: var(--Background, #fff);
+  box-shadow: -4px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.cardRegisterReport-title {
+  color: var(--Custom-black-strong, #222);
+  font-size: 1rem;
+  font-weight: 600;
+}
+.cardRegisterReport-content {
+  display: flex;
+  align-items: flex-end;
+  align-self: stretch;
+  justify-content: space-between;
+}
+.cardRegisterReport-footer {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  align-self: stretch;
+}

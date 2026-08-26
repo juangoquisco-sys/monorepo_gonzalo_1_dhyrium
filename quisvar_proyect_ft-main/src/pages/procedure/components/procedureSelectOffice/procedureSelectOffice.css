@@ -1,0 +1,6 @@
+.procedureSelectOffice {
+  /* width: 100%; */
+  position: fixed;
+  right: 1rem;
+  z-index: 3;
+}

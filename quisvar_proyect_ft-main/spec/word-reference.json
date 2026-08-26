@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 2,
+  "contractVersion": "3.0",
+  "goalId": "H00-A",
+  "updatedAt": "2026-08-10T02:50:57-05:00",
+  "targetReference": {
+    "role": "primary_target",
+    "product": "Word para Microsoft 365",
+    "platform": "Escritorio para Windows",
+    "edition": {
+      "value": null,
+      "status": "requires_external_evidence"
+    },
+    "channel": "Current Channel",
+    "version": "2607",
+    "build": "20228.20158",
+    "publishedAt": "2026-08-04",
+    "architecture": {
+      "value": null,
+      "status": "requires_external_evidence"
+    },
+    "license": {
+      "type": null,
+      "status": null,
+      "evidenceStatus": "requires_external_evidence"
+    },
+    "account": {
+      "classification": null,
+      "tenantPolicy": null,
+      "piiPolicy": "redacted",
+      "evidenceStatus": "requires_external_evidence"
+    },
+    "operatingSystem": {
+      "product": "Windows 11",
+      "edition": null,
+      "build": null,
+      "architecture": null,
+      "evidenceStatus": "requires_external_evidence"
+    },
+    "language": {
+      "officeUi": "es-PE",
+      "preferredEditing": "es-PE",
+      "evidenceStatus": "requires_external_evidence"
+    },
+    "display": {
+      "width": 1920,
+      "height": 1080,
+      "dpi": 96,
+      "scalePercent": 100,
+      "evidenceStatus": "requires_external_evidence"
+    },
+    "visualProfile": {
+      "windowsTheme": "light",
+      "officeTheme": "White",
+      "ribbonMode": "Always show Ribbon",
+      "quickAccessToolbar": "reset; position must be recorded",
+      "customizationReset": true,
+      "evidenceStatus": "requires_external_evidence"
+    },
+    "addIns": {
+      "expectedEnabled": [],
+      "evidenceStatus": "requires_external_evidence"
+    },
+    "fonts": {
+      "interface": "Segoe UI effective font must be recorded",
+      "defaultDocumentFont": null,
+      "loadedFamilies": [],
+      "substitutions": [],
+      "evidenceStatus": "requires_external_evidence"
+    },
+    "availability": {
+      "status": "blocked_external",
+      "machineAccessible": false,
+      "eligibleCaptureBundleAvailable": false,
+      "releaseMetadataVerified": true,
+      "releaseEvidenceId": "REF-OFFICIAL-M365-2607-001",
+      "missingEvidenceId": "REF-TARGET-M365-2607-MISSING"
+    }
+  },
+  "localSecondaryReference": {
+    "role": "secondary_local_interoperability_reference",
+    "evidenceId": "REF-ENV-001",
+    "observedAt": "2026-08-10T02:50:30.6004611-05:00",
+    "product": "Microsoft Word LTSC 2021",
+    "platform": "Escritorio para Windows",
+    "edition": "Office21Word2021VL_KMS_Client_AE",
+    "channel": "Production::LTSC2021",
+    "audienceId": "5030841d-c919-4594-8d2d-84ae4f96e58e",
+    "wordExecutable": "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
+    "wordExecutableVersion": "16.0.14334.20806",
+    "clickToRunClientVersion": "16.0.14334.20756",
+    "architecture": "x64",
+    "license": {
+      "type": "VOLUME_KMSCLIENT",
+      "status": "LICENSED",
+      "keyMaterialStored": false
+    },
+    "account": {
+      "officeIdentityCount": 0,
+      "classification": "no_office_identity_detected",
+      "activationIdentity": "volume_kms",
+      "piiStored": false
+    },
+    "operatingSystem": {
+      "product": "Microsoft Windows 11 Enterprise LTSC",
+      "version": "10.0.26100",
+      "build": "26100",
+      "architecture": "x64",
+      "systemLocale": "es-ES",
+      "userCulture": "es-PE"
+    },
+    "language": {
+      "officeUi": "es-ES",
+      "officeUiLanguageId": 3082,
+      "officeInstallLanguageId": 10250,
+      "preferredEditing": "es-PE"
+    },
+    "display": {
+      "monitorCount": 2,
+      "primary": {
+        "width": 1920,
+        "height": 1080,
+        "workingAreaWidth": 1920,
+        "workingAreaHeight": 1032,
+        "dpi": 96,
+        "scalePercent": 100
+      },
+      "secondary": {
+        "width": 1920,
+        "height": 1080,
+        "dpi": 96,
+        "scalePercent": 100
+      }
+    },
+    "visualProfile": {
+      "windowsTheme": "light",
+      "officeTheme": {
+        "value": null,
+        "status": "not_verified"
+      },
+      "ribbonMode": {
+        "value": "expanded_not_minimized",
+        "probe": "CommandBars.GetPressedMso('MinimizeRibbon') == false",
+        "status": "verified_for_local_word_only"
+      },
+      "quickAccessToolbar": {
+        "value": null,
+        "status": "not_verified"
+      }
+    },
+    "addIns": [
+      {
+        "id": "NitroPDFProfessional.MSOfficeAddin14",
+        "description": "Nitro PDF Pro",
+        "connected": true,
+        "classification": "third-party"
+      },
+      {
+        "id": "PDFMaker.OfficeAddin",
+        "description": "Acrobat PDFMaker Office COM Addin",
+        "connected": true,
+        "classification": "third-party"
+      }
+    ],
+    "fonts": {
+      "interfaceFamiliesAvailable": [
+        "Segoe UI",
+        "Segoe UI Variable"
+      ],
+      "normalStyle": {
+        "themeName": "+Cuerpo",
+        "resolvedFamily": "Calibri",
+        "sizePt": 11
+      },
+      "relevantInstalledFamilies": [
+        "Arial",
+        "Calibri",
+        "Segoe UI",
+        "Segoe UI Variable",
+        "Times New Roman"
+      ],
+      "relevantNotDetectedAsInstalled": [
+        "Aptos",
+        "Carlito"
+      ]
+    },
+    "eligibility": {
+      "eligibleAsPrimaryTarget": false,
+      "eligibleAsSecondaryLocalReference": true,
+      "status": "verified_local_ineligible_primary",
+      "reasons": [
+        "El producto local es Word LTSC 2021, no Word para Microsoft 365.",
+        "El canal local es Production::LTSC2021, no Current Channel.",
+        "La compilación local es 16.0.14334.20806, no 16.0.20228.20158.",
+        "La interfaz local es es-ES, no es-PE.",
+        "Nitro PDF Pro y Acrobat PDFMaker están conectados.",
+        "El tema exacto de Word y la barra de acceso rápido no tienen evidencia visual elegible."
+      ]
+    }
+  },
+  "officialSources": [
+    {
+      "id": "REF-OFFICIAL-M365-2607-001",
+      "url": "https://learn.microsoft.com/en-us/officeupdates/update-history-microsoft365-apps-by-date",
+      "assertion": "Current Channel versión 2607 build 20228.20158, publicada el 4 de agosto de 2026"
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/office/ltsc/2021/overview",
+      "assertion": "Office LTSC 2021 es una edición perpetua distinta de Microsoft 365 Apps"
+    }
+  ],
+  "h00A": {
+    "status": "closed_with_external_blocker",
+    "parityApproved": false,
+    "primaryBaselineApproved": false,
+    "gateSatisfiedBy": "explicit_external_blocker",
+    "nextGoal": "H00-B"
+  }
+}

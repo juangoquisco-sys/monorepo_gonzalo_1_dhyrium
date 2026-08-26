@@ -1,0 +1,26 @@
+.chipFileDownLoadProcedure {
+  border-radius: 0.2rem;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  background-color: white;
+  padding: 0.2rem 0.5rem;
+  transition: 0.2s ease-in;
+  display: flex;
+  gap: 0.8rem;
+  cursor: pointer;
+}
+
+.chipFileDownLoadProcedure:hover {
+  color: white;
+  background-color: var(--color-primary);
+}
+.chipFileDownLoadProcedure:hover .hover {
+  display: block;
+}
+.chipFileDownLoadProcedure:hover .normal {
+  display: none;
+}
+.chipFileDownLoadProcedure-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+}

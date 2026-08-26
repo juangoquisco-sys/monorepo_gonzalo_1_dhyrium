@@ -1,0 +1,877 @@
+.office-document-editor {
+  min-height: 540px;
+}
+
+.office-document-editor__workspace {
+  position: relative;
+  flex-direction: column;
+}
+
+.office-document-editor__workspace > .task-document-editor__original {
+  width: 100%;
+  height: 100%;
+}
+
+.office-document-editor__session-bar {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  min-width: 0;
+  min-height: 36px;
+  padding: 4px 10px;
+  gap: 8px;
+  color: #34445a;
+  background: #f8fafc;
+  border-bottom: 1px solid #cbd5e1;
+  font-size: 10px;
+}
+
+.office-document-editor__session-copy {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.office-document-editor__session-copy strong,
+.office-document-editor__session-copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.office-document-editor__session-copy small {
+  color: #65748a;
+  font-size: 9px;
+}
+
+.office-document-editor__session-bar[data-phase='LOCKED'] {
+  color: #0f5132;
+  background: #edf8f2;
+}
+
+.office-document-editor__session-bar[data-phase='CONFLICT'],
+.office-document-editor__session-bar[data-phase='FAILED'] {
+  color: #8b1d1d;
+  background: #fff3f3;
+}
+
+.office-document-editor__session-actions {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 5px;
+}
+
+.office-document-editor__session-actions > a {
+  color: #0f5fa8;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.office-document-editor__transport-warning {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 5px 10px;
+  color: #7a4d00;
+  background: #fff7d6;
+  border-bottom: 1px solid #e8cb72;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.office-document-editor__viewport {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  padding: 26px 20px 52px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: #e4e8ee;
+  scrollbar-color: #8d99a8 #d9dee5;
+  scrollbar-width: thin;
+}
+
+.office-document-editor__page {
+  width: min(794px, calc(100% - 24px));
+  min-height: max(620px, calc(100% - 4px));
+  padding: 58px 64px;
+  margin: 0 auto;
+  color: #172033;
+  background: #fff;
+  border: 1px solid #c9d1dc;
+  box-shadow: 0 2px 9px rgb(15 23 42 / 22%);
+}
+
+.office-document-editor__page-state {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  max-width: 590px;
+  margin: 40px auto 0;
+  gap: 10px;
+}
+
+.office-document-editor__page-state > svg {
+  width: 38px;
+  height: 38px;
+  color: #185abd;
+}
+
+.office-document-editor__page-state h2,
+.office-document-editor__page-state p {
+  margin: 0;
+}
+
+.office-document-editor__page-state h2 {
+  color: #172033;
+  font-size: 22px;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.office-document-editor__page-state
+  > p:not(.office-document-editor__eyebrow):not(
+    .office-document-editor__notice
+  ) {
+  color: #526177;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.office-document-editor__eyebrow {
+  color: #185abd;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.office-document-editor__notice {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  width: 100%;
+  padding: 9px 11px;
+  gap: 7px;
+  color: #334155;
+  background: #f5f7fa;
+  border: 1px solid #d6dde7;
+  border-radius: 4px;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.office-document-editor__notice.is-warning {
+  color: #7a4d00;
+  background: #fff7d6;
+  border-color: #e8cb72;
+}
+
+.office-document-editor__overlay {
+  position: absolute;
+  z-index: 8;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 24px;
+  gap: 10px;
+  color: #334155;
+  background: rgb(244 247 251 / 92%);
+  text-align: center;
+}
+
+.office-document-editor__overlay.is-error {
+  color: #8b1d1d;
+}
+
+.office-document-editor__spinner {
+  width: 26px;
+  height: 26px;
+  border: 3px solid #cbd5e1;
+  border-top-color: #0f6cbd;
+  border-radius: 50%;
+  animation: office-document-spin 0.8s linear infinite;
+}
+
+.office-document-editor__versions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.office-document-editor__versions small {
+  color: #66758a;
+  font-size: 10px;
+}
+
+.office-document-editor__version-message {
+  padding: 10px;
+  margin: 0;
+  color: #66758a;
+  background: #f6f8fb;
+  border: 1px dashed #d7dee8;
+  border-radius: 5px;
+  font-size: 10px;
+}
+
+.office-document-editor__version-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  padding: 7px;
+  gap: 4px;
+  border: 1px solid #d9e0e9;
+  border-radius: 5px;
+}
+
+.office-document-editor__version-row > div:first-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.office-document-editor__version-row strong,
+.office-document-editor__version-row small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.office-document-editor__version-row strong {
+  font-size: 11px;
+}
+
+.office-document-editor__version-row small {
+  color: #6b7789;
+  font-size: 9px;
+}
+
+@keyframes office-document-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 760px) {
+  .office-document-editor__viewport {
+    padding: 16px 8px 32px;
+  }
+
+  .office-document-editor__page {
+    width: calc(100% - 8px);
+    min-height: 540px;
+    padding: 36px 24px;
+  }
+
+  .office-document-editor__page-state {
+    margin-top: 20px;
+  }
+}
+
+.office-word-ribbon {
+  container-type: inline-size;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  color: #242424;
+  background: #fff;
+  border-bottom: 1px solid #c8c8c8;
+  font-family: 'Segoe UI', Aptos, Calibri, Arial, sans-serif;
+}
+
+.office-word-ribbon__tabs-row {
+  display: flex;
+  align-items: flex-end;
+  min-width: 0;
+  min-height: 30px;
+  padding: 0 6px;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+.office-word-ribbon__tabs {
+  display: flex;
+  align-items: flex-end;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.office-word-ribbon__tab {
+  position: relative;
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 7px clamp(7px, 0.82cqw, 13px) 6px;
+  overflow: hidden;
+  color: #3b3b3b;
+  background: transparent;
+  border: 0;
+  font-size: 11px;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.office-word-ribbon__tab::after {
+  position: absolute;
+  right: 7px;
+  bottom: 0;
+  left: 7px;
+  height: 2px;
+  content: '';
+  background: transparent;
+}
+
+.office-word-ribbon__tab:hover {
+  color: #0f4c81;
+  background: #f3f6f9;
+}
+
+.office-word-ribbon__tab.is-active {
+  color: #0f4c81;
+  font-weight: 600;
+}
+
+.office-word-ribbon__tab.is-active::after {
+  background: #185abd;
+}
+
+.office-word-ribbon__tab:focus-visible,
+.office-word-ribbon__command:focus-visible,
+.office-word-ribbon__value:focus-visible,
+.office-word-ribbon__style-card:focus-visible {
+  z-index: 2;
+  outline: 2px solid #0f6cbd;
+  outline-offset: -2px;
+}
+
+.office-word-ribbon__status {
+  flex: 0 1 190px;
+  max-width: 190px;
+  padding: 4px 8px 5px;
+  overflow: hidden;
+  color: #667085;
+  font-size: 9px;
+  line-height: 1.2;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.office-word-ribbon__panel {
+  min-width: 0;
+  min-height: 108px;
+  padding: 4px 6px 3px;
+  overflow: hidden;
+}
+
+.office-word-ribbon__home {
+  display: grid;
+  grid-template-columns:
+    minmax(132px, 0.72fr)
+    minmax(272px, 1.42fr)
+    minmax(235px, 1.23fr)
+    minmax(270px, 1.48fr)
+    minmax(105px, 0.58fr);
+  width: 100%;
+  min-width: 0;
+  min-height: 101px;
+}
+
+.office-word-ribbon__group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 101px;
+  padding: 0 5px;
+  border-right: 1px solid #d6d6d6;
+}
+
+.office-word-ribbon__group:last-child {
+  border-right: 0;
+}
+
+.office-word-ribbon__group-body {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.office-word-ribbon__group-label {
+  flex: 0 0 13px;
+  padding-top: 2px;
+  overflow: hidden;
+  color: #666;
+  font-size: 9px;
+  line-height: 11px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.office-word-ribbon__command,
+.office-word-ribbon__value,
+.office-word-ribbon__style-card {
+  color: #4b5563;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  cursor: not-allowed;
+}
+
+.office-word-ribbon__command:hover,
+.office-word-ribbon__value:hover,
+.office-word-ribbon__style-card:hover {
+  color: #4b5563;
+  background: #f4f4f4;
+  border-color: #dddddd;
+}
+
+.office-word-ribbon__command {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  justify-items: stretch;
+  flex: 0 1 28px;
+  width: 28px;
+  min-width: 22px;
+  height: 29px;
+  padding: 0;
+}
+
+.office-word-ribbon__command.is-split {
+  grid-template-columns: minmax(0, 1fr) 10px;
+  flex-basis: 37px;
+  width: 37px;
+}
+
+.office-word-ribbon__command-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  padding: 2px;
+  gap: 3px;
+}
+
+.office-word-ribbon__command-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+}
+
+.office-word-ribbon__command-icon > svg {
+  width: 19px;
+  height: 19px;
+}
+
+.office-word-ribbon__command-label {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 10px;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.office-word-ribbon__split {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  border-left: 1px solid #d2d2d2;
+}
+
+.office-word-ribbon__split > svg {
+  width: 9px;
+  height: 9px;
+}
+
+.office-word-ribbon__command.has-label {
+  width: 100%;
+  min-width: 0;
+  height: 23px;
+}
+
+.office-word-ribbon__command.has-label:not(.is-split) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.office-word-ribbon__command.has-label .office-word-ribbon__command-main {
+  justify-content: flex-start;
+  padding: 1px 4px;
+}
+
+.office-word-ribbon__command.has-label .office-word-ribbon__command-icon,
+.office-word-ribbon__command.has-label .office-word-ribbon__command-icon > svg {
+  width: 16px;
+  height: 16px;
+}
+
+.office-word-ribbon__command.is-large {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  flex: 0 0 48px;
+  width: 48px;
+  height: 72px;
+}
+
+.office-word-ribbon__command.is-large.is-split {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) 13px;
+}
+
+.office-word-ribbon__command.is-large .office-word-ribbon__command-main {
+  flex-direction: column;
+  padding: 4px 3px 2px;
+  gap: 3px;
+}
+
+.office-word-ribbon__command.is-large .office-word-ribbon__command-icon,
+.office-word-ribbon__command.is-large .office-word-ribbon__command-icon > svg {
+  width: 28px;
+  height: 28px;
+}
+
+.office-word-ribbon__command.is-large .office-word-ribbon__command-label {
+  max-width: 100%;
+  font-size: 9px;
+  text-align: center;
+}
+
+.office-word-ribbon__command.is-large .office-word-ribbon__split {
+  border-top: 1px solid #d2d2d2;
+  border-left: 0;
+}
+
+.office-word-ribbon__command.has-font-accent
+  .office-word-ribbon__command-icon::after,
+.office-word-ribbon__command.has-highlight-accent
+  .office-word-ribbon__command-icon::after {
+  position: absolute;
+  right: 1px;
+  bottom: -1px;
+  left: 1px;
+  height: 3px;
+  content: '';
+}
+
+.office-word-ribbon__command.has-font-accent
+  .office-word-ribbon__command-icon::after {
+  background: #c50f1f;
+}
+
+.office-word-ribbon__command.has-highlight-accent
+  .office-word-ribbon__command-icon::after {
+  background: #fff100;
+  border: 1px solid #d8c900;
+}
+
+.office-word-ribbon__value {
+  display: grid;
+  grid-template-columns: 17px minmax(0, 1fr) 10px;
+  align-items: center;
+  flex: 1 1 54px;
+  width: 54px;
+  min-width: 42px;
+  height: 25px;
+  padding: 0 3px;
+  gap: 2px;
+  font-size: 10px;
+  text-align: left;
+}
+
+.office-word-ribbon__value.is-wide {
+  flex-basis: 118px;
+  width: 118px;
+  min-width: 92px;
+}
+
+.office-word-ribbon__value > svg {
+  width: 15px;
+  height: 15px;
+}
+
+.office-word-ribbon__value > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.office-word-ribbon__clipboard-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  gap: 3px;
+}
+
+.office-word-ribbon__vertical-commands {
+  display: flex;
+  justify-content: center;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  gap: 1px;
+}
+
+.office-word-ribbon__matrix {
+  display: flex;
+  justify-content: center;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
+.office-word-ribbon__row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  gap: 1px;
+}
+
+.office-word-ribbon__styles-gallery {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(42px, 1fr)) 26px;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  min-height: 70px;
+  gap: 2px;
+}
+
+.office-word-ribbon__style-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  min-width: 0;
+  padding: 5px 6px;
+  gap: 4px;
+  text-align: left;
+}
+
+.office-word-ribbon__style-card > span,
+.office-word-ribbon__style-card > small {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.office-word-ribbon__style-card > span {
+  color: #203864;
+  font-family: Calibri, 'Segoe UI', sans-serif;
+  font-size: 15px;
+  line-height: 1.15;
+}
+
+.office-word-ribbon__style-card > small {
+  color: #4f4f4f;
+  font-size: 8px;
+}
+
+.office-word-ribbon__style-card.is-style-2 > span {
+  color: #222;
+  font-size: 13px;
+}
+
+.office-word-ribbon__style-card.is-style-3 > span {
+  color: #2f5496;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.office-word-ribbon__style-card.is-style-4 > span {
+  color: #2f5496;
+  font-size: 15px;
+}
+
+.office-word-ribbon__style-card.is-style-5 > span {
+  color: #17365d;
+  font-size: 19px;
+}
+
+.office-word-ribbon__more-styles {
+  align-self: stretch;
+  width: 26px;
+  height: auto;
+}
+
+.office-word-ribbon__generic {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  min-height: 101px;
+}
+
+.office-word-ribbon__generic-commands {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-width: 0;
+  gap: 2px;
+}
+
+.office-word-ribbon__generic .office-word-ribbon__command.is-large {
+  flex: 1 1 64px;
+  width: auto;
+  min-width: 46px;
+}
+
+@container (max-width: 1180px) {
+  .office-word-ribbon__status {
+    flex-basis: 8px;
+    width: 8px;
+    max-width: 8px;
+    padding: 0;
+    color: transparent;
+    font-size: 0;
+  }
+
+  .office-word-ribbon__status::after {
+    display: block;
+    width: 5px;
+    height: 5px;
+    margin: 0 auto 8px;
+    content: '';
+    background: #185abd;
+    border-radius: 50%;
+  }
+
+  .office-word-ribbon__home {
+    grid-template-columns:
+      minmax(100px, 0.62fr)
+      minmax(215px, 1.34fr)
+      minmax(185px, 1.14fr)
+      minmax(205px, 1.25fr)
+      minmax(82px, 0.52fr);
+  }
+
+  .office-word-ribbon__group {
+    padding: 0 3px;
+  }
+
+  .office-word-ribbon__command {
+    flex-basis: 25px;
+    width: 25px;
+    min-width: 20px;
+  }
+
+  .office-word-ribbon__command.is-split {
+    flex-basis: 32px;
+    width: 32px;
+  }
+
+  .office-word-ribbon__command.is-large {
+    flex-basis: 43px;
+    width: 43px;
+  }
+
+  .office-word-ribbon__command-icon,
+  .office-word-ribbon__command-icon > svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .office-word-ribbon__value {
+    flex-basis: 44px;
+    width: 44px;
+    min-width: 38px;
+    grid-template-columns: 14px minmax(0, 1fr) 8px;
+    padding: 0 2px;
+  }
+
+  .office-word-ribbon__value.is-wide {
+    flex-basis: 92px;
+    width: 92px;
+    min-width: 76px;
+  }
+
+  .office-word-ribbon__styles-gallery {
+    grid-template-columns: repeat(3, minmax(42px, 1fr)) 24px;
+  }
+
+  .office-word-ribbon__style-card.is-style-4,
+  .office-word-ribbon__style-card.is-style-5 {
+    display: none;
+  }
+
+  .office-word-ribbon__more-styles {
+    width: 24px;
+  }
+
+  .office-word-ribbon__group.is-clipboard
+    .office-word-ribbon__command.has-label
+    .office-word-ribbon__command-label {
+    display: none;
+  }
+}
+
+@container (max-width: 820px) {
+  .office-word-ribbon__panel {
+    min-height: 202px;
+  }
+
+  .office-word-ribbon__home {
+    grid-template-areas:
+      'clipboard font paragraph'
+      'styles styles editing';
+    grid-template-columns: minmax(96px, 0.55fr) minmax(210px, 1.2fr) minmax(
+        180px,
+        1fr
+      );
+    grid-template-rows: repeat(2, 99px);
+  }
+
+  .office-word-ribbon__group {
+    min-height: 97px;
+    border-bottom: 1px solid #d6d6d6;
+  }
+
+  .office-word-ribbon__group.is-clipboard {
+    grid-area: clipboard;
+  }
+
+  .office-word-ribbon__group.is-font {
+    grid-area: font;
+  }
+
+  .office-word-ribbon__group.is-paragraph {
+    grid-area: paragraph;
+    border-right: 0;
+  }
+
+  .office-word-ribbon__group.is-styles {
+    grid-area: styles;
+    border-bottom: 0;
+  }
+
+  .office-word-ribbon__group.is-editing {
+    grid-area: editing;
+    border-right: 0;
+    border-bottom: 0;
+  }
+}

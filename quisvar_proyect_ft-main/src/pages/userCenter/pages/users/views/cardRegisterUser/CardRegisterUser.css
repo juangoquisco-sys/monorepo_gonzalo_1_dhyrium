@@ -1,0 +1,198 @@
+.card-register {
+  position: relative;
+}
+.content-area {
+  width: 100%;
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card-register-title-info {
+  padding: 0;
+  font-size: 1rem;
+  color: var(--color-secondary);
+  font-weight: 700;
+}
+.card-register-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.select-area {
+  display: grid;
+  gap: 2rem;
+  width: 100%;
+}
+
+select:focus {
+  outline: none;
+}
+
+.card-register-users {
+  width: 100%;
+  max-height: 98vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-radius: 5px;
+  background-color: white;
+  overflow: auto;
+}
+
+.card-register-users.is-embedded {
+  max-height: none;
+  padding: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.card-register-users.is-compact {
+  gap: 0.75rem;
+}
+
+.card-register-users.is-compact .btn-build {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  justify-content: flex-end;
+  padding: 0.875rem 0 0.125rem;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--background) 0%, transparent),
+    var(--background) 28%
+  );
+}
+
+.btn-build {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  width: 50%;
+  height: 3.5rem;
+  border-radius: 8px;
+  font-size: var(--size-button);
+  font-weight: bold;
+  background-color: var(--color-primary);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+  margin-top: 30px;
+}
+
+.btn:hover {
+  background-color: var(--color-secondary);
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  display: none;
+}
+
+.input-check {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cheack-content {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 3.5rem;
+}
+
+.cheack-content p {
+  color: var(--color-secondary);
+  font-size: var(--size-label);
+}
+.user-station {
+  display: flex;
+  gap: 0.4rem;
+  border-radius: 10px;
+  border: 1px solid var(--color-secondary);
+  padding: 0.25rem 0.3125rem;
+  cursor: pointer;
+}
+.user-station-list {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.col-station-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.user-station-pc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.card-register-radio-input-text {
+  font-size: 0.85rem;
+}
+.terms-checkbox {
+  margin-right: 10px;
+}
+.card-register-payroll {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(16, 153, 187, 0.28);
+  border-radius: 8px;
+  background: rgba(16, 153, 187, 0.06);
+}
+
+.card-register-payroll-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.card-register-payroll h2 {
+  margin: 0;
+  color: var(--color-secondary);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.card-register-payroll p {
+  margin: 0.25rem 0 0;
+  color: #4b5563;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.card-register-payroll-hint {
+  padding: 0.75rem 0.85rem;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(16, 153, 187, 0.2);
+}
+
+.card-register-payroll-hint p {
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .card-register-payroll-header {
+    flex-direction: column;
+  }
+}
+.card-register-radio-container {
+  display: flex;
+
+  flex-direction: column;
+  gap: 0.5rem;
+}

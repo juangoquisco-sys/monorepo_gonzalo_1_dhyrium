@@ -1,0 +1,301 @@
+/basictask:
+  post:
+    tags:
+      - Basictasks
+    summary: Crear tarea en basicos
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/createTask'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '201':
+        $ref: '#/components/responses/201'
+      '400':
+        $ref: '#/components/responses/400'
+      '404':
+        $ref: '#/components/responses/404'
+/basictasks/{id}:
+  get:
+    tags:
+      - Basictasks
+    summary: Obtener tarea en basicos
+    parameters:
+      - $ref: '#/components/parameters/id'
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '201':
+        $ref: '#/components/responses/201'
+      '400':
+        $ref: '#/components/responses/400'
+      '404':
+        $ref: '#/components/responses/404'
+  post:
+    tags:
+      - Basictasks
+    summary: Añadir niveles arriba y abajo
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/upper-or-lower'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/createTask'
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '201':
+        $ref: '#/components/responses/201'
+      '400':
+        $ref: '#/components/responses/400'
+      '404':
+        $ref: '#/components/responses/404'
+  delete:
+    tags:
+      - Basictasks
+    summary: Eliminar tarea en basicos
+    parameters:
+      - $ref: '#/components/parameters/id'
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '201':
+        $ref: '#/components/responses/201'
+      '400':
+        $ref: '#/components/responses/400'
+      '404':
+        $ref: '#/components/responses/404'
+/basictasks/add-user:
+  post:
+    tags:
+      - Basictasks
+      - Users On Tasks
+    summary: Añadir usuario a una tarea
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/add-user'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '201':
+        $ref: '#/components/responses/201'
+      '400':
+        $ref: '#/components/responses/400'
+      '404':
+        $ref: '#/components/responses/404'
+/basictasks/report-user/{id}:
+  get:
+    tags:
+      - Basictasks
+      - Users On Tasks
+    summary: Ver lista de tareas por usuario
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/initialDate'
+      - $ref: '#/components/parameters/untilDate'
+      - $ref: '#/components/parameters/status-task'
+      - $ref: '#/components/parameters/type-salary'
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        $ref: '../global.yaml#/components/responses/200'
+      '201':
+        $ref: '../global.yaml#/components/responses/201'
+      '400':
+        $ref: '../global.yaml#/components/responses/400'
+      '404':
+        $ref: '../global.yaml#/components/responses/404'
+/basictasks/remove-user/{id}:
+  delete:
+    tags:
+      - Basictasks
+      - Users On Tasks
+    summary: Eliminar usuario de una tarea
+    parameters:
+      - $ref: '#/components/parameters/id'
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        $ref: '.../global.yaml#/components/responses/200'
+      '201':
+        $ref: '../global.yaml#/components/responses/201'
+      '400':
+        $ref: '../global.yaml#/components/responses/400'
+      '404':
+        $ref: '../global.yaml#/components/responses/404'
+/basictasks/groups-users/{id}:
+  get:
+    tags:
+      - Basictasks
+      - Users On Tasks
+    summary: Ver lista de usuarios y lista de usuarios por grupo de una tarea
+    parameters:
+      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/with-users'
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        $ref: '../global.yaml#/components/responses/200'
+      '201':
+        $ref: '../global.yaml#/components/responses/201'
+      '400':
+        $ref: '../global.yaml#/components/responses/400'
+      '404':
+        $ref: '../global.yaml#/components/responses/404'
+/basictasks/add-colabs/{id}:
+  post:
+    tags:
+      - Basictasks
+      - Users On Tasks
+    summary: Añadir colaboradores a una tarea
+    parameters:
+      - $ref: '#/components/parameters/feedbackUserId'
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/feedback-colabs-form'
+    responses:
+      '200':
+        $ref: '../global.yaml#/components/responses/200'
+      '201':
+        $ref: '../global.yaml#/components/responses/201'
+      '400':
+        $ref: '../global.yaml#/components/responses/400'
+      '404':
+        $ref: '../global.yaml#/components/responses/404'
+  user-status:
+  put:
+    tags:
+      - Basictasks
+      - Users On Tasks
+    summary: Cambiar el estado de usuarios de una tarea
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/feedback-change-status-form'
+    responses:
+      '200':
+        $ref: '../global.yaml#/components/responses/200'
+      '201':
+        $ref: '../global.yaml#/components/responses/201'
+      '400':
+        $ref: '../global.yaml#/components/responses/400'
+      '404':
+        $ref: '../global.yaml#/components/responses/404'
+components:
+  schemas:
+    createTask:
+      required:
+        - name
+        - days
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'nueva_tarea_creada'
+        days:
+          type: integer
+          example: 2
+        levels_Id:
+          type: integer
+          example: 10
+    add-user:
+      required:
+        - taskId
+        - userId
+      properties:
+        taskId:
+          type: number
+          example: 1
+        userId:
+          type: number
+          example: 1
+    feedback-colabs-form:
+      type: array
+      items:
+        type: object
+        required:
+          - userId
+          - percentage
+        properties:
+          id:
+            type: integer
+          percentage:
+            type: integer
+      example:
+        - userId: 1
+          percentage: 70
+        - userId: 2
+          percentage: 30
+  parameters:
+    id:
+      name: id
+      in: path
+      description: Ingresar id de tarea
+      required: true
+      schema:
+        type: integer
+    upper-or-lower:
+      name: type
+      in: query
+      description: Usar las siguientes variables <b>[upper,lower]</b>
+      required: true
+      schema:
+        type: string
+    status-task:
+      name: status
+      in: query
+      description: Traer tramites filtrados por estado <b>[IN_PROCESS, UNRESOLVED, DONE, REVIEWED]</b>
+      schema:
+        type: string
+    type-salary:
+      name: salaryAdvance
+      in: query
+      description: Traer tramites filtrados por <b>[APPROVED, REVIEWED]</b>
+      schema:
+        type: boolean
+    with-users:
+      name: users
+      in: query
+      description: Traer consulta con o sin usuarios
+      required: false
+      schema:
+        type: boolean
+    feedbackUserId:
+      name: id
+      in: path
+      description: Ingresar id del usuario en la lista feedback
+      required: true
+      schema:
+        type: integer

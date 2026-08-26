@@ -1,0 +1,33 @@
+.da-header-add-btn {
+  cursor: pointer;
+  padding: 0.3rem 0.8rem;
+  border-radius: 9.5px;
+  background-color: #f5f5f5;
+  border: none;
+}
+
+.da-add-input {
+  position: relative;
+  z-index: 2;
+}
+
+.da-icon-area {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+
+.da-icon-action {
+  cursor: pointer;
+  background-color: #f5f5f5;
+}
+
+.da-add-btn-limit {
+  padding-right: 3rem;
+  width: 95%;
+  margin-right: 1rem;
+}

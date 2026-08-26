@@ -1,0 +1,39 @@
+.moreInfoUsers-details-contain {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.moreInfoUsers-datails-absolute {
+  position: absolute;
+  border-radius: 0.4375rem;
+  padding: 0.5rem;
+  border: 0.5px solid rgba(191, 191, 191, 0.3);
+  background: #fff;
+  box-shadow: -2px 2px 3px 0px rgba(0, 0, 0, 0.1);
+  margin-top: 1.7rem;
+  z-index: 1;
+}
+
+.moreInfoUsers-user-names {
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.moreInfoUsers-users-contain {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.2rem;
+  text-align: left;
+}
+
+.moreInfoUsers-count {
+  font-size: rem;
+  font-weight: 600;
+}
+
+.moreInfoUsers-info {
+  font-size: 0.7rem;
+  font-weight: 600;
+}

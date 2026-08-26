@@ -1,0 +1,134 @@
+.moreInfo-currency-contain {
+  display: flex;
+  gap: 1rem;
+}
+
+.moreInfo-currency {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  width: 7rem;
+}
+
+.moreInfo-currency-width {
+  width: 4rem;
+}
+
+.moreInfo-currency-info {
+  color: #687182;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.125rem;
+  align-items: center;
+  letter-spacing: 0.0225rem;
+}
+
+.moreInfo-currency-money {
+  position: relative;
+  color: var(--color-grey-text);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.25rem;
+}
+
+.money--red {
+  color: #d12953;
+}
+
+.moreInfo-details-contain {
+  cursor: pointer;
+  display: flex;
+  gap: 1rem;
+}
+.moreInfo-details-absolute {
+  position: absolute;
+  border-radius: 0.4375rem;
+  padding: 0.5rem;
+  border: 0.5px solid rgba(191, 191, 191, 0.3);
+  background: #fff;
+  box-shadow: -2px 2px 3px 0px rgba(0, 0, 0, 0.1);
+  margin-top: 1.7rem;
+  z-index: 1;
+  right: 0;
+}
+
+.moreInfo-detail {
+  width: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.moreInfo-detail-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.moreInfo-detail-circle-text {
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.125rem;
+  /* 150% */
+  letter-spacing: 0.0225rem;
+}
+
+.moreInfo-detail-circle {
+  display: flex;
+  padding: 0.0625rem 0.625rem;
+  justify-content: center;
+  align-items: center;
+  background-color: #faf0f3;
+  border-radius: 0.625rem;
+}
+
+.moreInfo-detail-info {
+  color: #687182;
+  text-align: center;
+  font-size: 0.5625rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 0.71875rem;
+  /* 127.778% */
+  letter-spacing: 0.01688rem;
+}
+
+.color-unresolver {
+  color: #d12953;
+  background-color: #faf0f3;
+}
+
+.color-pending {
+  color: #aa5b00;
+  background-color: #fcf2e6;
+}
+
+.color-process {
+  color: #5a6376;
+  background-color: #e9edf5;
+}
+
+.color-correct {
+  color: #2264e5;
+  background-color: #ebf0fa;
+}
+
+.color-done {
+  color: #14804a;
+  background-color: #e1fcef;
+}
+
+.color-liquidation {
+  color: #4f5aed;
+  background-color: #f0f1fa;
+}
+
+.moreInfo-detail-icon {
+  width: 1.4rem;
+}

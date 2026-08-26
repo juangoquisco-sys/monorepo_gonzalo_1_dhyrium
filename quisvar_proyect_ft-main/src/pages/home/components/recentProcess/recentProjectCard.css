@@ -1,0 +1,82 @@
+.RecentProcessCard-container {
+  display: flex;
+  min-width: 14.75rem;
+  max-width: 14.75rem;
+  min-height: 3.75rem;
+  padding: 0.55rem;
+  align-items: flex-start;
+  gap: 0.48rem;
+  border: 1px solid rgba(14, 156, 216, 0.1);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 5px 13px rgba(0, 27, 105, 0.045);
+  color: inherit;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  user-select: none;
+  scroll-snap-align: start;
+  transition: border-color 160ms ease, box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.RecentProcessCard-container svg {
+  flex: 0 0 auto;
+  margin-top: 0.1rem;
+}
+
+.RecentProcessCard-container:hover,
+.RecentProcessCard-container:focus-visible {
+  border-color: rgba(14, 156, 216, 0.42);
+  box-shadow: 0 8px 18px rgba(0, 27, 105, 0.09);
+  transform: translateY(-1px);
+}
+
+.RecentProcessCard-container:focus-visible {
+  outline: 3px solid rgba(14, 156, 216, 0.22);
+  outline-offset: 2px;
+}
+.RecentProcessCard-content {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.06rem;
+}
+.RecentProcessCard-header {
+  overflow: hidden;
+  color: #9aa1ad;
+  text-overflow: ellipsis;
+  font-size: 0.58rem;
+  font-weight: 600;
+  line-height: 0.82rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.RecentProcessCard-title {
+  overflow: hidden;
+  display: -webkit-box;
+  color: #111827;
+  font-size: 0.68rem;
+  font-weight: 750;
+  line-height: 1.28;
+  letter-spacing: 0;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.RecentProcessCard-footer {
+  overflow: hidden;
+  color: var(--color-gray-text);
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 0.92rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 576px) {
+  .RecentProcessCard-container {
+    min-width: 13rem;
+    max-width: 13rem;
+  }
+}

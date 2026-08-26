@@ -1,0 +1,16 @@
+.fh-container {
+  display: grid;
+  width: 100%;
+  background-color: #f4f7fc;
+  padding: 10px 0;
+  grid-template-columns: 1fr 7fr 2fr 2fr;
+}
+
+.fh-text {
+  font-family: Montserrat;
+  font-size: 10.06px;
+  font-weight: 600;
+  line-height: 14.63px;
+  letter-spacing: 0.04em;
+  text-align: center;
+}

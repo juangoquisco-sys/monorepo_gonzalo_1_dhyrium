@@ -1,0 +1,31 @@
+.documentProcedure-file-add {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.documentProcedure-add-document {
+  color: var(--color-secondary);
+  font-family: Montserrat;
+  font-size: 0.85rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5rem;
+  letter-spacing: 0.00938rem;
+}
+.documentProcedure-file-area {
+  border: 1px dashed #6e6e6e;
+  min-height: 3rem;
+  font-size: 14px;
+  color: #6e6e6e;
+}
+.documentProcedure-container-file-grid {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 0.5rem;
+  font-size: 14px;
+  align-items: center;
+}
+.documentProcedure-files-list {
+  max-width: 12rem;
+}

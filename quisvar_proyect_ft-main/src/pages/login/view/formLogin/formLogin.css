@@ -1,0 +1,5 @@
+.formLogin {
+  display: flex;
+  flex-direction: column;
+  gap: 2.813rem;
+}

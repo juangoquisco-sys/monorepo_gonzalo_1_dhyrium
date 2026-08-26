@@ -1,0 +1,11 @@
+node_modules
+dist
+.git
+.scannerwork
+.husky
+coverage
+test-results
+playwright-report
+npm-debug.log*
+Dockerfile
+docker-compose*.yml

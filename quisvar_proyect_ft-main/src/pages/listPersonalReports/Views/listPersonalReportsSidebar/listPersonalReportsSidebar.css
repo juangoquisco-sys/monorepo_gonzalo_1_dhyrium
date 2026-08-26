@@ -1,0 +1,33 @@
+.listPersonalReportsSidebar {
+  display: flex;
+  width: 18.9375rem;
+  height: 100%;
+  padding: 1.25rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9375rem;
+  flex-shrink: 0;
+  border-right: 0.5px solid var(--color-gray);
+  position: relative;
+}
+.listPersonalReportsSidebar-title {
+  color: var(--color-secondary);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: 0.01406rem;
+}
+.listPersonalReportsSidebar-reports-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9375rem;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+}
+.listPersonalReportsSidebar-options {
+  display: flex;
+  gap: 0.9375rem;
+  width: 100%;
+  align-items: center;
+}

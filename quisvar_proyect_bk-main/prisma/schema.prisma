@@ -1,0 +1,3844 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id                                  Int                               @id @default(autoincrement())
+  status                              Boolean                           @default(false)
+  userType                            UserType                          @default(REGULAR)
+  isSystemUser                        Boolean                           @default(false)
+  password                            String
+  email                               String                            @unique
+  createdAt                           DateTime                          @default(now())
+  updatedAt                           DateTime                          @updatedAt
+  contract                            String[]                          @default([])
+  cv                                  String?
+  declaration                         String?
+  withdrawalDeclaration               String?
+  ruc                                 String?
+  address                             String?
+  profile                             Profiles?
+  project                             Projects[]
+  basicTasks                          TaskOnUsers[]
+  modBacsicTask                       BasicTasks[]
+  modTask                             SubTasks[]
+  Levels                              Levels[]
+  list                                ListOnUsers[]
+  attendanceReconciliations           AttendanceReconciliation[]        @relation("AttendanceReconciliationUser")
+  createdAttendanceReconciliations    AttendanceReconciliation[]        @relation("AttendanceReconciliationCreator")
+  voidedAttendanceReconciliations     AttendanceReconciliation[]        @relation("AttendanceReconciliationVoider")
+  attendancePenaltyAdjustments        AttendancePenaltyAdjustment[]     @relation("AttendancePenaltyAdjustmentUser")
+  createdAttendancePenaltyAdjustments AttendancePenaltyAdjustment[]     @relation("AttendancePenaltyAdjustmentCreator")
+  voidedAttendancePenaltyAdjustments  AttendancePenaltyAdjustment[]     @relation("AttendancePenaltyAdjustmentVoider")
+  licensePenaltyAdjustments           LicensePenaltyAdjustment[]        @relation("LicensePenaltyAdjustmentUser")
+  createdLicensePenaltyAdjustments    LicensePenaltyAdjustment[]        @relation("LicensePenaltyAdjustmentCreator")
+  voidedLicensePenaltyAdjustments     LicensePenaltyAdjustment[]        @relation("LicensePenaltyAdjustmentVoider")
+  stages                              Stages[]
+  message                             Mail[]
+  paymessage                          PayMail[]
+  messageReply                        MessageHistory[]
+  feedbacks                           UsersOnFeedbacks[]
+  feedbacksBasic                      BasicUsersOnFeedbacks[]
+  equipment                           Equipment?
+  groups                              GroupOnUsers[]
+  roleId                              Int?
+  role                                Role?                             @relation(fields: [roleId], references: [id])
+  verificationUser                    VerificationUser?
+  offices                             UserToOffice[]
+  basicTask                           BasicTaskOnUsers[]
+  SubTaskOnUsers                      SubTaskOnUsers[]
+  operationalTasks                    OperationalTasks[]
+  reports                             Reports[]
+  mealOrderOnUsers                    MealOrderOnUsers[]
+  leadOffices                         Division[]                        @relation("OfficeLeaders")
+  LastVisitedStage                    LastVisitedStage[]
+  LastVisitedTask                     LastVisitedTask[]
+  AuditLog                            AuditLog[]
+  assignedDutyRotations               DutyRotationAssignment[]          @relation("AssignedDutyRotationUser")
+  executedDutyRotations               DutyRotationAssignment[]          @relation("ExecutedDutyRotationUser")
+  dutyRotationParticipations          DutyRotationParticipant[]
+  dutySwapRequests                    DutySwapRequest[]                 @relation("DutySwapRequester")
+  targetedDutySwaps                   DutySwapRequest[]                 @relation("DutySwapTarget")
+  dutyOccurrenceExclusions            DutyRotationOccurrenceExclusion[] @relation("DutyOccurrenceExcludedUser")
+  createdDutyOccurrenceExclusions     DutyRotationOccurrenceExclusion[] @relation("DutyOccurrenceExclusionCreator")
+  submittedDutyAssignmentEvidence     DutyRotationAssignmentEvidence[]  @relation("DutyAssignmentEvidenceSubmitter")
+  gatePasses                          GatePass[]                        @relation("GatePassUser")
+  createdGatePasses                   GatePass[]                        @relation("GatePassCreator")
+  departureMarkedGatePasses           GatePass[]                        @relation("GatePassDepartureMarker")
+  returnMarkedGatePasses              GatePass[]                        @relation("GatePassReturnMarker")
+  requestedGateReviewRequests         GateReviewRequest[]               @relation("GateReviewRequester")
+  reviewedGateReviewRequests          GateReviewRequest[]               @relation("GateReviewReviewer")
+  submittedGateEvidence               GateEvidence[]                    @relation("GateEvidenceSubmitter")
+  gateEvents                          GateEvent[]                       @relation("GateEventActor")
+  productionBonusAssignments          ProductionBonusRequest[]          @relation("ProductionBonusUser")
+  assignedProductionBonuses           ProductionBonusRequest[]          @relation("ProductionBonusAssigner")
+  requestedProductionBonuses          ProductionBonusRequest[]          @relation("ProductionBonusRequester")
+  supervisedProductionBonuses         ProductionBonusRequest[]          @relation("ProductionBonusSupervisor")
+  validatedProductionBonuses          ProductionBonusRequest[]          @relation("ProductionBonusValidator")
+  liquidatedProductionBonuses         ProductionBonusRequest[]          @relation("ProductionBonusLiquidator")
+  productionBonusEvidences            ProductionBonusEvidence[]         @relation("ProductionBonusEvidenceCreator")
+  productionBonusEvents               ProductionBonusEvent[]            @relation("ProductionBonusEventActor")
+  createdMetradoProjects              MetradoProject[]                  @relation("MetradoProjectCreator")
+  updatedMetradoProjects              MetradoProject[]                  @relation("MetradoProjectUpdater")
+  createdMetradoImports               MetradoImport[]                   @relation("MetradoImportCreator")
+  createdMetradoExports               MetradoExport[]                   @relation("MetradoExportCreator")
+  metradoEvents                       MetradoEvent[]                    @relation("MetradoEventActor")
+  orgMemberships                      OrganizationalMembership[]
+  createdMeetings                     Meeting[]                         @relation("MeetingCreator")
+  meetingLifecycleEvents              MeetingLifecycleEvent[]           @relation("MeetingLifecycleActor")
+  createdMeetingActaRevisions         MeetingActaRevision[]             @relation("MeetingActaRevisionCreator")
+  meetingParticipants                 MeetingParticipant[]
+  createdMeetingExternalContacts      MeetingExternalContact[]          @relation("MeetingExternalContactCreator")
+  createdCalendarActivities           CalendarActivity[]                @relation("CalendarActivityCreator")
+  calendarActivityParticipants        CalendarActivityParticipant[]
+  createdReports                      ProgressReport[]                  @relation("ProgressReportCreator")
+  presentedReports                    ProgressReport[]                  @relation("ProgressReportPresenter")
+  progressReportParticipants          ProgressReportParticipant[]
+  createdReportIndexTemplates         ReportIndexTemplate[]             @relation("ReportIndexTemplateCreator")
+  ownedReportIndexTemplates           ReportIndexTemplate[]             @relation("ReportIndexTemplateOwner")
+  createdCommitments                  Commitment[]                      @relation("CommitmentCreator")
+  proposedCommitments                 Commitment[]                      @relation("CommitmentProposer")
+  confirmedCommitments                Commitment[]                      @relation("CommitmentConfirmer")
+  uploadedBasicResources              BasicResource[]
+  commitmentAssignees                 CommitmentAssignee[]
+  reviewedCommitmentReviews           CommitmentReview[]                @relation("CommitmentReviewReviewer")
+  frontendLogEvents                   FrontendLogEvent[]
+  payrollInfo                         UserPayrollInfo?
+  documentArtifacts                   DocumentArtifact[]
+  contractDocumentVersions            ContractDocumentVersion[]
+  createdCorporateArchiveRoots        CorporateArchiveRoot[]           @relation("CorporateArchiveRootCreator")
+  createdCorporateArchiveFolders      CorporateArchiveFolder[]         @relation("CorporateArchiveFolderCreator")
+  archivedCorporateArchiveFolders     CorporateArchiveFolder[]         @relation("CorporateArchiveFolderArchiver")
+  createdCorporateArchiveDocuments    CorporateArchiveDocument[]       @relation("CorporateArchiveDocumentCreator")
+  archivedCorporateArchiveDocuments   CorporateArchiveDocument[]       @relation("CorporateArchiveDocumentArchiver")
+  uploadedCorporateArchiveVersions    CorporateArchiveDocumentVersion[] @relation("CorporateArchiveVersionUploader")
+  createdTaskDocuments                TaskDocument[]                    @relation("TaskDocumentCreator")
+  updatedTaskDocuments                TaskDocument[]                    @relation("TaskDocumentUpdater")
+  taskDocumentVersions                TaskDocumentVersion[]             @relation("TaskDocumentVersionCreator")
+  taskDocumentFileVersions            TaskDocumentFileVersion[]         @relation("TaskDocumentFileVersionCreator")
+  taskDocumentEditSessions            TaskDocumentEditSession[]         @relation("TaskDocumentEditSessionActor")
+  taskDocumentEvents                  TaskDocumentEvent[]               @relation("TaskDocumentEventActor")
+  iclockCommands                      IclockDeviceCommand[]
+}
+
+model IclockDeviceCommand {
+  id             Int                    @id @default(autoincrement())
+  serialNumber   String                 @db.VarChar(64)
+  userId         Int
+  pin            String                 @db.VarChar(9)
+  name           String                 @db.VarChar(64)
+  operation      IclockCommandOperation @default(UPSERT_USER)
+  status         IclockCommandStatus    @default(PENDING)
+  attempts       Int                    @default(0)
+  leasedAt       DateTime?
+  leaseExpiresAt DateTime?
+  completedAt    DateTime?
+  returnCode     Int?
+  result         String?                @db.VarChar(512)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+  user           Users                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([serialNumber, status, createdAt])
+  @@index([leaseExpiresAt])
+}
+
+model AuditLog {
+  id            Int      @id @default(autoincrement())
+  userId        Int?
+  action        String
+  method        String   @default("")
+  path          String   @default("")
+  severity      String   @default("INFO")
+  requestBody   Json     @default("{}")
+  queryParams   Json     @default("{}")
+  errorResponse Json     @default("{}")
+  referrer      String   @default("")
+  responseTime  Int      @default(0)
+  statusCode    Int      @default(0)
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime @default(now())
+  user          Users?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([statusCode])
+  @@index([method])
+  @@index([severity])
+  @@index([userId, createdAt])
+}
+
+model FrontendLogEvent {
+  id             Int      @id @default(autoincrement())
+  userId         Int?
+  level          String   @default("ERROR")
+  type           String
+  message        String
+  stack          String?
+  componentStack String?
+  route          String   @default("")
+  previousRoute  String   @default("")
+  source         String   @default("")
+  line           Int?
+  column         Int?
+  apiMethod      String   @default("")
+  apiUrl         String   @default("")
+  statusCode     Int?
+  requestId      String   @default("")
+  sessionId      String   @default("")
+  release        String   @default("unknown")
+  environment    String   @default("production")
+  breadcrumbs    Json     @default("[]")
+  context        Json     @default("{}")
+  ipAddress      String?
+  userAgent      String?
+  createdAt      DateTime @default(now())
+  user           Users?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([type])
+  @@index([level])
+  @@index([route])
+  @@index([statusCode])
+  @@index([sessionId])
+  @@index([environment])
+  @@index([release])
+}
+
+model VerificationUser {
+  id        Int       @id @default(autoincrement())
+  token     String?
+  code      String?
+  expiresAt DateTime?
+  user      Users     @relation(fields: [userId], references: [id])
+  userId    Int       @unique
+}
+
+model Office {
+  id        Int            @id @default(autoincrement())
+  name      String
+  quantity  Int            @default(0)
+  paymesage PayMessages[]
+  message   Messages[]
+  users     UserToOffice[]
+  reports   Reports[]
+}
+
+model UserToOffice {
+  usersId         Int
+  officeId        Int
+  isOfficeManager Boolean @default(false)
+  user            Users   @relation(fields: [usersId], references: [id], onDelete: Cascade)
+  office          Office  @relation(fields: [officeId], references: [id], onDelete: Cascade)
+
+  @@id([usersId, officeId])
+}
+
+model WorkStation {
+  id          Int         @id @default(autoincrement())
+  name        String
+  total       Int
+  doc         String?
+  description String?
+  price       String
+  equipment   Equipment[]
+}
+
+model Equipment {
+  id            Int          @id @default(autoincrement())
+  name          String
+  doc           String?
+  description   String?
+  userId        Int?         @unique
+  user          Users?       @relation(fields: [userId], references: [id])
+  workStationId Int
+  workStation   WorkStation? @relation(fields: [workStationId], references: [id])
+}
+
+model GeneralFiles {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  dir         String?
+  description String?
+  createdAt   DateTime @default(now())
+}
+
+model Profiles {
+  id           Int      @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  firstNameRef String   @default("")
+  lastNameRef  String   @default("")
+  addressRef   String?  @default("")
+  dni          String   @unique @db.VarChar(8)
+  phone        String?  @unique
+  phoneRef     String?  @default("")
+  updatedAt    DateTime @updatedAt
+  degree       String   @default("Egresado")
+  job          String?
+  description  String?
+  department   String?
+  province     String?
+  district     String?
+  room         String?
+  gender       Gender   @default(F)
+  userPc       String?
+  usuario      String?
+  userId       Int      @unique
+  user         Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserPayrollInfo {
+  id                String    @id @default(uuid())
+  userId            Int       @unique
+  contractStartDate DateTime?
+  contractEndDate   DateTime?
+  monthlySalary     Decimal?  @db.Decimal(12, 2)
+  contractType      String    @default("PLANILLA")
+  status            Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  user              Users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([contractStartDate, contractEndDate])
+  @@index([status])
+}
+
+model Sector {
+  id           Int            @id @default(autoincrement())
+  name         String
+  specialities Specialities[]
+}
+
+model Specialities {
+  id               Int                @id @default(autoincrement())
+  name             String
+  cod              String?
+  sectorId         Int?
+  createdAt        DateTime           @default(now())
+  Sector           Sector?            @relation(fields: [sectorId], references: [id])
+  typeSpecialities TypeSpecialities[]
+}
+
+model TypeSpecialities {
+  id             Int           @id @default(autoincrement())
+  name           String
+  specialitiesId Int?
+  projects       Projects[]
+  Specialities   Specialities? @relation(fields: [specialitiesId], references: [id])
+}
+
+model Group {
+  id         Int            @id @default(autoincrement())
+  name       String
+  gNumber    Int?
+  createdAt  DateTime       @default(now())
+  stage      Stages[]
+  groups     GroupOnUsers[]
+  active     Boolean        @default(true)
+  // modId     Int?
+  // moderator Users?         @relation(fields: [modId], references: [id])
+  GroupList  GroupList[]
+  divisionId Int?
+  division   Division?      @relation(fields: [divisionId], references: [id])
+}
+
+model OrganizationalUnit {
+  id                   String                               @id @default(uuid())
+  name                 String
+  codemap              String?
+  type                 OrganizationalUnitType
+  parentId             String?
+  isActive             Boolean                              @default(true)
+  createdAt            DateTime                             @default(now())
+  updatedAt            DateTime                             @updatedAt
+  parent               OrganizationalUnit?                  @relation("OrganizationalUnitTree", fields: [parentId], references: [id])
+  children             OrganizationalUnit[]                 @relation("OrganizationalUnitTree")
+  memberships          OrganizationalMembership[]
+  legacyMap            OrganizationalUnitLegacyMap?
+  meetings             Meeting[]
+  calendarActivities   CalendarActivity[]
+  projectFocus         OrgUnitProjectFocus[]
+  projectStageFocus    OrgUnitProjectStageFocus[]
+  progressReports      ProgressReport[]
+  reportIndexTemplates ReportIndexTemplate[]
+  commitmentAssignees  CommitmentAssignee[]
+  commitments          Commitment[]
+  commitmentContexts   CommitmentContext[]
+  payrollOverrides     PayrollPaymessageOrgUnitOverride[]
+  meetingViewConfig    OrganizationalUnitMeetingViewConfig?
+
+  @@index([parentId])
+  @@index([type])
+  @@index([isActive])
+}
+
+model OrganizationalMembership {
+  id                    String                       @id @default(uuid())
+  userId                Int
+  unitId                String
+  role                  OrganizationalMembershipRole
+  positionTitle         String?
+  isPrimary             Boolean                      @default(false)
+  isUnitLead            Boolean                      @default(false)
+  canManageUnitProjects Boolean                      @default(false)
+  startDate             DateTime
+  endDate               DateTime?
+  createdAt             DateTime                     @default(now())
+  updatedAt             DateTime                     @updatedAt
+  user                  Users                        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  unit                  OrganizationalUnit           @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([unitId])
+  @@index([isUnitLead])
+  @@index([canManageUnitProjects])
+  @@index([startDate])
+  @@index([endDate])
+}
+
+model OrganizationalUnitLegacyMap {
+  id         String                   @id @default(uuid())
+  unitId     String                   @unique
+  legacyType OrganizationalLegacyType
+  legacyId   Int
+  createdAt  DateTime                 @default(now())
+  updatedAt  DateTime                 @updatedAt
+  unit       OrganizationalUnit       @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@unique([legacyType, legacyId])
+  @@index([legacyType])
+}
+
+model GroupOnUsers {
+  userId  Int
+  groupId Int
+  active  Boolean @default(true)
+  mod     Boolean @default(false)
+  guest   Boolean @default(false)
+  // Attendance AttendanceGroup[]
+  users   Users   @relation(fields: [userId], references: [id])
+  groups  Group   @relation(fields: [groupId], references: [id])
+
+  @@id([userId, groupId])
+}
+
+model Division {
+  id      Int     @id @default(autoincrement())
+  name    String
+  order   Int?
+  leaders Users[] @relation("OfficeLeaders")
+  groups  Group[]
+}
+
+model GroupList {
+  id        Int      @id @default(autoincrement())
+  file      String?
+  nombre    String?
+  createdAt DateTime @default(now())
+  groupId   Int
+  groups    Group    @relation(fields: [groupId], references: [id])
+  // attendance AttendanceGroup[]
+  duty      Duty[]
+}
+
+model Duty {
+  id            Int           @id @default(autoincrement())
+  CUI           String
+  project       String
+  shortName     String?
+  titleMeeting  String?
+  dutyGroup     String?
+  dutyGroupDate String?
+  members       DutyMembers[]
+  listId        Int
+  createdAt     DateTime      @default(now())
+  groupList     GroupList     @relation(fields: [listId], references: [id], onDelete: Cascade)
+}
+
+model DutyMembers {
+  id            Int         @id @default(autoincrement())
+  position      String?
+  fullName      String
+  task          DutyTasks[]
+  feedBack      String?
+  feedBackDate  String?
+  dailyDuty     String?
+  dailyDutyDate String?
+  attendance    ListDetails @default(PUNTUAL)
+  dutyId        Int
+  duty          Duty        @relation(fields: [dutyId], references: [id], onDelete: Cascade)
+}
+
+model DutyTasks {
+  id           Int         @id @default(autoincrement())
+  name         String?
+  percentage   Int?
+  dutyMemberId Int
+  member       DutyMembers @relation(fields: [dutyMemberId], references: [id], onDelete: Cascade)
+}
+
+model OrgUnitProjectFocus {
+  id         String                     @id @default(uuid())
+  unitId     String
+  projectId  Int
+  status     OrgUnitProjectFocusStatus  @default(ACTIVE)
+  isCurrent  Boolean                    @default(true)
+  startDate  DateTime                   @default(now())
+  endDate    DateTime?
+  notes      String?
+  createdAt  DateTime                   @default(now())
+  updatedAt  DateTime                   @updatedAt
+  unit       OrganizationalUnit         @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  project    Projects                   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  stageFocus OrgUnitProjectStageFocus[]
+
+  @@unique([unitId, projectId])
+  @@index([unitId, status])
+  @@index([projectId])
+  @@index([isCurrent])
+}
+
+model OrgUnitProjectStageFocus {
+  id             String                    @id @default(uuid())
+  unitId         String
+  projectId      Int
+  stageId        Int
+  projectFocusId String?
+  status         OrgUnitProjectFocusStatus @default(ACTIVE)
+  isCurrent      Boolean                   @default(true)
+  startDate      DateTime                  @default(now())
+  endDate        DateTime?
+  notes          String?
+  createdAt      DateTime                  @default(now())
+  updatedAt      DateTime                  @updatedAt
+  unit           OrganizationalUnit        @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  project        Projects                  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  stage          Stages                    @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  projectFocus   OrgUnitProjectFocus?      @relation(fields: [projectFocusId], references: [id], onDelete: SetNull)
+
+  @@unique([unitId, stageId])
+  @@index([unitId])
+  @@index([projectId])
+  @@index([stageId])
+  @@index([status])
+  @@index([isCurrent])
+  @@index([projectFocusId])
+}
+
+model Meeting {
+  id                String                  @id @default(uuid())
+  unitId            String
+  title             String
+  scheduledAt       DateTime                @default(now())
+  startedAt         DateTime?
+  endedAt           DateTime?
+  status            MeetingStatus           @default(DRAFT)
+  scope             MeetingScope            @default(SELF)
+  defaultView       MeetingWorkspaceView    @default(UNITS)
+  visibleViews      MeetingWorkspaceView[]  @default([UNITS, TECHNICAL_TREE, MEMBERS, PROJECTS_MEMBERS])
+  summary           String?
+  createdById       Int
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt
+  unit              OrganizationalUnit      @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  createdBy         Users                   @relation("MeetingCreator", fields: [createdById], references: [id])
+  projects          MeetingProject[]
+  participants      MeetingParticipant[]
+  minutes           MeetingMinute[]
+  agendaItems       MeetingAgendaItem[]
+  lifecycleEvents   MeetingLifecycleEvent[]
+  actaRevisions     MeetingActaRevision[]
+  commitmentReviews CommitmentReview[]
+  activities        CalendarActivity[]
+  reports           ProgressReport[]
+  commitments       Commitment[]
+
+  @@index([unitId, scheduledAt])
+  @@index([status])
+  @@index([createdById])
+}
+
+model OrganizationalUnitMeetingViewConfig {
+  id           String                 @id @default(uuid())
+  unitId       String                 @unique
+  defaultScope MeetingScope           @default(SELF)
+  defaultView  MeetingWorkspaceView   @default(UNITS)
+  visibleViews MeetingWorkspaceView[] @default([UNITS, TECHNICAL_TREE, MEMBERS, PROJECTS_MEMBERS])
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  unit         OrganizationalUnit     @relation(fields: [unitId], references: [id], onDelete: Cascade)
+}
+
+model MeetingProject {
+  id        String          @id @default(uuid())
+  meetingId String
+  projectId Int
+  topic     String?
+  priority  Int             @default(0)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  meeting   Meeting         @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  project   Projects        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  minutes   MeetingMinute[]
+
+  @@unique([meetingId, projectId])
+  @@index([projectId])
+}
+
+model MeetingParticipant {
+  id                String                   @id @default(uuid())
+  meetingId         String
+  userId            Int?
+  externalContactId String?
+  participantType   MeetingParticipantType   @default(USER)
+  origin            MeetingParticipantOrigin @default(UNIT_MEMBER)
+  status            MeetingParticipantStatus @default(PRESENT)
+  role              String?
+  notes             String?
+  displayName       String?
+  position          String?
+  organization      String?
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime                 @updatedAt
+  meeting           Meeting                  @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  user              Users?                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  externalContact   MeetingExternalContact?  @relation(fields: [externalContactId], references: [id], onDelete: Cascade)
+
+  @@unique([meetingId, userId])
+  @@unique([meetingId, externalContactId])
+  @@index([userId])
+  @@index([externalContactId])
+  @@index([participantType])
+  @@index([origin])
+  @@index([status])
+}
+
+model MeetingExternalContact {
+  id           String               @id @default(uuid())
+  name         String
+  position     String?
+  organization String?
+  email        String?
+  phone        String?
+  document     String?
+  notes        String?
+  isActive     Boolean              @default(true)
+  createdById  Int?
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  createdBy    Users?               @relation("MeetingExternalContactCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  participants MeetingParticipant[]
+
+  @@index([name])
+  @@index([organization])
+  @@index([document])
+  @@index([isActive])
+}
+
+model MeetingAgendaItem {
+  id           String              @id @default(uuid())
+  meetingId    String
+  projectId    Int?
+  activityId   String?
+  commitmentId String?
+  title        String
+  description  String?
+  minutes      String?
+  scope        MeetingAgendaScope  @default(GENERAL)
+  status       MeetingAgendaStatus @default(OPEN)
+  order        Int                 @default(0)
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  meeting      Meeting             @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  project      Projects?           @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  activity     CalendarActivity?   @relation(fields: [activityId], references: [id], onDelete: SetNull)
+  commitment   Commitment?         @relation(fields: [commitmentId], references: [id], onDelete: SetNull)
+
+  @@index([meetingId, order])
+  @@index([projectId])
+  @@index([activityId])
+  @@index([commitmentId])
+  @@index([scope])
+  @@index([status])
+}
+
+model CalendarActivity {
+  id           String                        @id @default(uuid())
+  unitId       String
+  projectId    Int?
+  meetingId    String?
+  title        String
+  description  String?
+  startAt      DateTime
+  endAt        DateTime?
+  allDay       Boolean                       @default(false)
+  status       CalendarActivityStatus        @default(SCHEDULED)
+  priority     CalendarActivityPriority      @default(NORMAL)
+  createdById  Int
+  createdAt    DateTime                      @default(now())
+  updatedAt    DateTime                      @updatedAt
+  unit         OrganizationalUnit            @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  project      Projects?                     @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  meeting      Meeting?                      @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  createdBy    Users                         @relation("CalendarActivityCreator", fields: [createdById], references: [id])
+  participants CalendarActivityParticipant[]
+  agendaItems  MeetingAgendaItem[]
+
+  @@index([unitId, startAt])
+  @@index([projectId, startAt])
+  @@index([meetingId])
+  @@index([createdById])
+  @@index([status])
+}
+
+model CalendarActivityParticipant {
+  id         String                 @id @default(uuid())
+  activityId String
+  userId     Int
+  role       CommitmentAssigneeRole @default(OWNER)
+  createdAt  DateTime               @default(now())
+  activity   CalendarActivity       @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  user       Users                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([activityId, userId])
+  @@index([userId])
+}
+
+model MeetingMinute {
+  id               String             @id @default(uuid())
+  meetingId        String
+  meetingProjectId String?
+  scope            MeetingMinuteScope @default(GENERAL)
+  content          String             @default("")
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  meeting          Meeting            @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  meetingProject   MeetingProject?    @relation(fields: [meetingProjectId], references: [id], onDelete: Cascade)
+
+  @@index([meetingId, scope])
+  @@index([meetingProjectId])
+}
+
+model MeetingLifecycleEvent {
+  id         String                    @id @default(uuid())
+  meetingId  String
+  type       MeetingLifecycleEventType
+  reason     String?
+  metadata   Json                      @default("{}")
+  actorId    Int
+  occurredAt DateTime                  @default(now())
+  meeting    Meeting                   @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  actor      Users                     @relation("MeetingLifecycleActor", fields: [actorId], references: [id])
+
+  @@index([meetingId, occurredAt])
+  @@index([actorId])
+  @@index([type])
+}
+
+model MeetingActaRevision {
+  id          String            @id @default(uuid())
+  meetingId   String
+  version     Int
+  status      MeetingActaStatus @default(DRAFT)
+  content     String            @default("")
+  snapshot    Json              @default("{}")
+  createdById Int
+  createdAt   DateTime          @default(now())
+  finalizedAt DateTime?
+  meeting     Meeting           @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  createdBy   Users             @relation("MeetingActaRevisionCreator", fields: [createdById], references: [id])
+
+  @@unique([meetingId, version])
+  @@index([meetingId, status])
+  @@index([createdById])
+}
+
+model ReportItemTemplate {
+  id          String                   @id @default(uuid())
+  name        String
+  source      ProgressReportItemSource @default(REUSABLE_TEMPLATE)
+  description String?
+  isActive    Boolean                  @default(true)
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
+  items       ProgressReportItem[]
+
+  @@index([source])
+  @@index([isActive])
+}
+
+model ReportIndexTemplate {
+  id          String                    @id @default(uuid())
+  name        String
+  scope       ReportIndexTemplateScope  @default(PERSONAL)
+  unitId      String?
+  ownerUserId Int?
+  createdById Int?
+  description String?
+  isActive    Boolean                   @default(true)
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime                  @updatedAt
+  unit        OrganizationalUnit?       @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  owner       Users?                    @relation("ReportIndexTemplateOwner", fields: [ownerUserId], references: [id], onDelete: Cascade)
+  createdBy   Users?                    @relation("ReportIndexTemplateCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  items       ReportIndexTemplateItem[]
+
+  @@index([scope])
+  @@index([unitId])
+  @@index([ownerUserId])
+  @@index([isActive])
+}
+
+model ReportIndexTemplateItem {
+  id                  String                   @id @default(uuid())
+  templateId          String
+  name                String
+  source              ProgressReportItemSource @default(REUSABLE_TEMPLATE)
+  defaultStatus       ProgressReportItemStatus @default(IN_PROGRESS)
+  defaultProgress     Int                      @default(0)
+  defaultObservations String?
+  order               Int                      @default(0)
+  createdAt           DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
+  template            ReportIndexTemplate      @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([templateId, order])
+}
+
+model ProgressReport {
+  id              String                      @id @default(uuid())
+  unitId          String
+  projectId       Int
+  meetingId       String?
+  presenterType   MeetingPresenterType        @default(USER)
+  presenterUserId Int?
+  presenterLabel  String?
+  title           String?
+  presenterKey    String?
+  readyKey        String?
+  createdById     Int
+  overallProgress Int                         @default(0)
+  observations    String?
+  status          ProgressReportStatus        @default(DRAFT)
+  createdAt       DateTime                    @default(now())
+  updatedAt       DateTime                    @updatedAt
+  unit            OrganizationalUnit          @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  project         Projects                    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  meeting         Meeting?                    @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  presenter       Users?                      @relation("ProgressReportPresenter", fields: [presenterUserId], references: [id], onDelete: SetNull)
+  createdBy       Users                       @relation("ProgressReportCreator", fields: [createdById], references: [id])
+  items           ProgressReportItem[]
+  participants    ProgressReportParticipant[]
+
+  @@unique([unitId, projectId, readyKey])
+  @@index([unitId, projectId])
+  @@index([meetingId])
+  @@index([createdById])
+  @@index([presenterUserId])
+  @@index([presenterKey])
+  @@index([readyKey])
+  @@index([status])
+}
+
+model ProgressReportParticipant {
+  id        String                        @id @default(uuid())
+  reportId  String
+  userId    Int
+  role      ProgressReportParticipantRole @default(SUPPORT)
+  createdAt DateTime                      @default(now())
+  updatedAt DateTime                      @updatedAt
+  report    ProgressReport                @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  user      Users                         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([reportId, userId])
+  @@index([userId])
+  @@index([role])
+}
+
+model ProgressReportItem {
+  id           String                   @id @default(uuid())
+  reportId     String
+  templateId   String?
+  name         String
+  source       ProgressReportItemSource @default(CUSTOM)
+  status       ProgressReportItemStatus @default(IN_PROGRESS)
+  progress     Int                      @default(0)
+  uploadDate   DateTime?
+  supportDate  DateTime?
+  approvalDate DateTime?
+  observations String?
+  responsible  String?
+  order        Int                      @default(0)
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+  report       ProgressReport           @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  template     ReportItemTemplate?      @relation(fields: [templateId], references: [id], onDelete: SetNull)
+
+  @@index([reportId, order])
+  @@index([source])
+  @@index([status])
+}
+
+model Commitment {
+  id                 String                       @id @default(uuid())
+  unitId             String
+  projectId          Int?
+  meetingId          String?
+  title              String
+  description        String?
+  dueDate            DateTime?
+  status             CommitmentStatus             @default(PENDING)
+  priority           CommitmentPriority           @default(NORMAL)
+  confirmationStatus CommitmentConfirmationStatus @default(CONFIRMED)
+  origin             CommitmentOrigin             @default(MANUAL)
+  createdById        Int
+  proposedById       Int?
+  confirmedById      Int?
+  confirmedAt        DateTime?
+  createdAt          DateTime                     @default(now())
+  updatedAt          DateTime                     @updatedAt
+  unit               OrganizationalUnit           @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  project            Projects?                    @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  meeting            Meeting?                     @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  createdBy          Users                        @relation("CommitmentCreator", fields: [createdById], references: [id])
+  proposedBy         Users?                       @relation("CommitmentProposer", fields: [proposedById], references: [id], onDelete: SetNull)
+  confirmedBy        Users?                       @relation("CommitmentConfirmer", fields: [confirmedById], references: [id], onDelete: SetNull)
+  assignees          CommitmentAssignee[]
+  agendaItems        MeetingAgendaItem[]
+  contexts           CommitmentContext[]
+  reviews            CommitmentReview[]
+
+  @@index([unitId, status])
+  @@index([projectId])
+  @@index([meetingId])
+  @@index([dueDate])
+  @@index([createdById])
+  @@index([proposedById])
+  @@index([confirmedById])
+  @@index([confirmationStatus])
+}
+
+model CommitmentContext {
+  id              String               @id @default(uuid())
+  commitmentId    String
+  targetType      CommitmentTargetType
+  unitId          String?
+  projectId       Int?
+  stageId         Int?
+  levelId         Int?
+  subTaskId       Int?
+  includeChildren Boolean              @default(false)
+  isPrimary       Boolean              @default(true)
+  createdAt       DateTime             @default(now())
+  commitment      Commitment           @relation(fields: [commitmentId], references: [id], onDelete: Cascade)
+  unit            OrganizationalUnit?  @relation(fields: [unitId], references: [id], onDelete: SetNull)
+  project         Projects?            @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  stage           Stages?              @relation(fields: [stageId], references: [id], onDelete: SetNull)
+  level           Levels?              @relation(fields: [levelId], references: [id], onDelete: SetNull)
+  subTask         SubTasks?            @relation(fields: [subTaskId], references: [id], onDelete: SetNull)
+  reviews         CommitmentReview[]
+
+  @@index([commitmentId])
+  @@index([targetType])
+  @@index([unitId])
+  @@index([projectId])
+  @@index([stageId])
+  @@index([levelId])
+  @@index([subTaskId])
+}
+
+model CommitmentReview {
+  id           String                   @id @default(uuid())
+  commitmentId String
+  contextId    String?
+  meetingId    String?
+  decision     CommitmentReviewDecision
+  comment      String?
+  reviewedById Int
+  reviewedAt   DateTime                 @default(now())
+  commitment   Commitment               @relation(fields: [commitmentId], references: [id], onDelete: Cascade)
+  context      CommitmentContext?       @relation(fields: [contextId], references: [id], onDelete: SetNull)
+  meeting      Meeting?                 @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  reviewedBy   Users                    @relation("CommitmentReviewReviewer", fields: [reviewedById], references: [id])
+
+  @@index([commitmentId])
+  @@index([contextId])
+  @@index([meetingId])
+  @@index([decision])
+  @@index([reviewedById])
+}
+
+model CommitmentAssignee {
+  id           String                 @id @default(uuid())
+  commitmentId String
+  userId       Int?
+  unitId       String?
+  role         CommitmentAssigneeRole @default(OWNER)
+  createdAt    DateTime               @default(now())
+  commitment   Commitment             @relation(fields: [commitmentId], references: [id], onDelete: Cascade)
+  user         Users?                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  unit         OrganizationalUnit?    @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@index([commitmentId])
+  @@index([userId])
+  @@index([unitId])
+}
+
+model ContractMilestone {
+  id         String                  @id @default(uuid())
+  contractId Int
+  title      String
+  dueDate    DateTime?
+  status     ContractMilestoneStatus @default(PENDING)
+  notes      String?
+  createdAt  DateTime                @default(now())
+  updatedAt  DateTime                @updatedAt
+  contract   Contratc                @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  @@index([contractId, status])
+  @@index([dueDate])
+}
+
+enum DutyRotationFrequency {
+  ONCE
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum DutyRotationAssignmentStrategy {
+  ONE_OWNER_PER_PERIOD
+  ONE_OWNER_PER_SLOT
+  DISTRIBUTE_PARTICIPANTS
+}
+
+enum DutyRotationParticipantSource {
+  EXPLICIT
+  ACTIVE_ELIGIBLE_SYNC
+}
+
+enum DutyRotationEvidencePolicy {
+  NONE
+  OPTIONAL_PHOTO
+  REQUIRED_PHOTO
+}
+
+enum DutyRotationWeekday {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum DutyRotationAssignmentStatus {
+  PENDING
+  COMPLETED
+  NO_SHOW
+  OPEN_POOL
+}
+
+enum DutyRotationAssignmentOrigin {
+  AUTO
+  MANUAL
+  SWAP
+  OPEN_POOL
+}
+
+enum DutySwapRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CLAIMED
+}
+
+model DutyRotation {
+  id                     String                         @id @default(uuid())
+  name                   String
+  description            String?
+  capabilityKey          String?
+  accessWindowDays       Int                            @default(14)
+  frequency              DutyRotationFrequency
+  assignmentStrategy     DutyRotationAssignmentStrategy
+  participantSource      DutyRotationParticipantSource  @default(EXPLICIT)
+  evidencePolicy         DutyRotationEvidencePolicy     @default(NONE)
+  rosterVersion          Int                            @default(1)
+  recurrenceRule         Json
+  weekStartsOn           DutyRotationWeekday            @default(MONDAY)
+  validFrom              DateTime                       @db.Date
+  validUntil             DateTime?                      @db.Date
+  planningStartsOn       DateTime                       @db.Date
+  excludedOccurrenceKeys String[]                       @default([])
+  configurationVersion   Int                            @default(1)
+  creationKey            String?                        @unique
+  lastMutationKey        String?
+  isActive               Boolean                        @default(true)
+  lastReconciledAt       DateTime?
+  createdAt              DateTime                       @default(now())
+  updatedAt              DateTime                       @updatedAt
+
+  participants         DutyRotationParticipant[]
+  assignments          DutyRotationAssignment[]
+  occurrenceExclusions DutyRotationOccurrenceExclusion[]
+
+  @@index([isActive, validFrom, validUntil])
+  @@index([capabilityKey])
+}
+
+model DutyRotationParticipant {
+  id        String       @id @default(uuid())
+  dutyId    String
+  duty      DutyRotation @relation(fields: [dutyId], references: [id], onDelete: Cascade)
+  userId    Int
+  user      Users        @relation(fields: [userId], references: [id])
+  position  Int
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@unique([dutyId, userId])
+  @@unique([dutyId, position])
+  @@index([userId])
+}
+
+model DutyRotationAssignment {
+  id                         String                       @id @default(uuid())
+  dutyId                     String
+  duty                       DutyRotation                 @relation(fields: [dutyId], references: [id], onDelete: Cascade)
+  occurrenceKey              String
+  periodStart                DateTime                     @db.Date
+  periodEnd                  DateTime                     @db.Date
+  dueOn                      DateTime                     @db.Date
+  slotKey                    String
+  slotLabel                  String
+  slotInstructions           String?
+  baseSlotKey                String?
+  slotPosition               Int?
+  participantUniquenessScope String?
+  assignedUserId             Int
+  assignedUser               Users                        @relation("AssignedDutyRotationUser", fields: [assignedUserId], references: [id])
+  executedByUserId           Int?
+  executedByUser             Users?                       @relation("ExecutedDutyRotationUser", fields: [executedByUserId], references: [id])
+  status                     DutyRotationAssignmentStatus @default(PENDING)
+  configurationVersion       Int
+  rosterVersion              Int                          @default(1)
+  evidencePolicy             DutyRotationEvidencePolicy   @default(NONE)
+  completionRequestKey       String?                      @unique
+  origin                     DutyRotationAssignmentOrigin @default(AUTO)
+  isLocked                   Boolean                      @default(false)
+  resolutionNotes            String?
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime                     @updatedAt
+
+  swapRequests DutySwapRequest[]
+  evidences    DutyRotationAssignmentEvidence[]
+
+  @@unique([dutyId, occurrenceKey, slotKey])
+  @@unique([dutyId, occurrenceKey, assignedUserId, participantUniquenessScope])
+  @@index([periodStart, periodEnd])
+  @@index([dueOn, status])
+  @@index([assignedUserId, periodEnd])
+  @@index([status])
+}
+
+model DutyRotationOccurrenceExclusion {
+  id            String       @id @default(uuid())
+  dutyId        String
+  occurrenceKey String
+  userId        Int
+  reason        String?
+  createdById   Int
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  duty          DutyRotation @relation(fields: [dutyId], references: [id], onDelete: Cascade)
+  user          Users        @relation("DutyOccurrenceExcludedUser", fields: [userId], references: [id], onDelete: Cascade)
+  createdBy     Users        @relation("DutyOccurrenceExclusionCreator", fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@unique([dutyId, occurrenceKey, userId])
+  @@index([dutyId, occurrenceKey])
+  @@index([userId])
+}
+
+model DutyRotationAssignmentEvidence {
+  id            String                 @id @default(uuid())
+  assignmentId  String
+  submittedById Int
+  storageKey    String                 @unique
+  originalName  String
+  mimeType      String
+  sizeBytes     Int
+  createdAt     DateTime               @default(now())
+  assignment    DutyRotationAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  submittedBy   Users                  @relation("DutyAssignmentEvidenceSubmitter", fields: [submittedById], references: [id], onDelete: Restrict)
+
+  @@index([assignmentId])
+  @@index([submittedById])
+}
+
+model DutySwapRequest {
+  id              String                 @id @default(uuid())
+  assignmentId    String
+  assignment      DutyRotationAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  requesterUserId Int
+  requesterUser   Users                  @relation("DutySwapRequester", fields: [requesterUserId], references: [id])
+  targetUserId    Int?
+  targetUser      Users?                 @relation("DutySwapTarget", fields: [targetUserId], references: [id])
+  status          DutySwapRequestStatus  @default(PENDING)
+  reason          String?
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+
+  @@index([assignmentId])
+  @@index([requesterUserId])
+  @@index([targetUserId])
+  @@index([status])
+}
+
+model Projects {
+  id                  Int                        @id @default(autoincrement())
+  name                String?                    @unique
+  userId              Int?
+  createdAt           DateTime                   @default(now())
+  updatedAt           DateTime                   @updatedAt
+  typeSpecialityId    Int
+  typeSpeciality      TypeSpecialities           @relation(fields: [typeSpecialityId], references: [id])
+  moderator           Users?                     @relation(fields: [userId], references: [id])
+  contractId          Int                        @unique
+  contract            Contratc                   @relation(fields: [contractId], references: [id])
+  stages              Stages[]
+  projectFocus        OrgUnitProjectFocus[]
+  projectStageFocus   OrgUnitProjectStageFocus[]
+  stageVersionGroups  StageVersionGroup[]
+  stageVersionSources StageVersion[]             @relation("StageVersionSourceProject")
+  meetingProjects     MeetingProject[]
+  agendaItems         MeetingAgendaItem[]
+  calendarActivities  CalendarActivity[]
+  progressReports     ProgressReport[]
+  commitments         Commitment[]
+  metrados            MetradoProject[]
+  commitmentContexts  CommitmentContext[]
+  basicResources      BasicResource[]
+}
+
+model Stages {
+  id                  Int                        @id @default(autoincrement())
+  name                String
+  //-----------------------------------------------------
+  startDate           DateTime                   @default(now())
+  untilDate           DateTime                   @default(now())
+  status              Boolean                    @default(false)
+  isProject           Boolean                    @default(false)
+  moderatorId         Int?
+  rootTypeItem        TypeItem                   @default(NUM)
+  //-----------------------------------------------------
+  // company          Company?          @relation(fields: [companyId], references: [id])
+  // consortium       Consortium?       @relation(fields: [consortiumId], references: [id])
+  // specialists      PersonBussiness[]
+  moderator           Users?                     @relation(fields: [moderatorId], references: [id])
+  //-----------------------------------------------------
+  bachelorCost        Float                      @default(0)
+  professionalCost    Float                      @default(0)
+  graduateCost        Float                      @default(0)
+  internCost          Float                      @default(0)
+  monthlyPrice        Float                      @default(0)
+  stayPrice           Float                      @default(1000)
+  budget              Float                      @default(0)
+  groupId             Int?
+  group               Group?                     @relation(fields: [groupId], references: [id])
+  //-----------------------------------------------------
+  createdAt           DateTime                   @default(now())
+  updatedAt           DateTime                   @updatedAt
+  project             Projects                   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId           Int
+  levels              Levels[]
+  basics              BasicLevels[]
+  commitmentContexts  CommitmentContext[]
+  basicResources      BasicResource[]
+  projectStageFocus   OrgUnitProjectStageFocus[]
+  versionMetadata     StageVersion?              @relation("StageVersionStage")
+  sourceStageVersions StageVersion[]             @relation("StageVersionSource")
+  // companyId        Int?
+  // consortiumId     Int?
+  LastVisitedStage    LastVisitedStage[]
+  liquidationReports  Reports[]                  @relation("LiquidationStage")
+}
+
+model StageVersionGroup {
+  id        String            @id @default(uuid())
+  projectId Int
+  baseName  String
+  stageType StageVersionType?
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  project  Projects       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  versions StageVersion[]
+
+  @@index([projectId])
+  @@index([stageType])
+}
+
+model StageVersion {
+  id              String                 @id @default(uuid())
+  groupId         String
+  stageId         Int                    @unique
+  versionNumber   Int
+  versionLabel    String?
+  sourceKind      StageVersionSourceKind
+  sourceProjectId Int?
+  sourceStageId   Int?
+  status          StageVersionStatus     @default(ACTIVE)
+  isCurrent       Boolean                @default(false)
+  notes           String?
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+
+  group         StageVersionGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  stage         Stages            @relation("StageVersionStage", fields: [stageId], references: [id], onDelete: Cascade)
+  sourceProject Projects?         @relation("StageVersionSourceProject", fields: [sourceProjectId], references: [id], onDelete: SetNull)
+  sourceStage   Stages?           @relation("StageVersionSource", fields: [sourceStageId], references: [id], onDelete: SetNull)
+
+  @@unique([groupId, versionNumber])
+  @@index([sourceProjectId])
+  @@index([sourceStageId])
+  @@index([status])
+}
+
+enum StageVersionSourceKind {
+  SAME_STAGE
+  SAME_PROJECT_STAGE
+  OTHER_PROJECT_STAGE
+  EMPTY
+}
+
+enum StageVersionStatus {
+  ACTIVE
+  ARCHIVED
+  CANCELLED
+}
+
+enum StageVersionType {
+  BASICOS
+  ESPECIALIDADES
+  COSTOS
+  OTRO
+}
+
+model LastVisitedStage {
+  id        Int      @id @default(autoincrement())
+  user      Users    @relation(fields: [userId], references: [id])
+  userId    Int
+  stage     Stages   @relation(fields: [stageId], references: [id])
+  stageId   Int
+  visitedAt DateTime @default(now())
+
+  @@unique([userId, stageId])
+  @@index([userId, visitedAt])
+}
+
+model Levels {
+  id                   Int                   @id @default(autoincrement())
+  index                Int
+  name                 String
+  level                Int                   @default(0)
+  rootLevel            Int
+  levelList            Int[]                 @default([])
+  cover                Boolean               @default(false)
+  typeItem             TypeItem              @default(NUM)
+  rootTypeItem         TypeItem              @default(NUM)
+  //-----------------------------------------------------------
+  item                 String?
+  isProject            Boolean?              @ignore
+  isArea               Boolean?              @ignore
+  isInclude            Boolean?              @ignore
+  user                 Users?                @relation(fields: [userId], references: [id])
+  //-----------------------------------------------------------
+  stagesId             Int
+  userId               Int?
+  rootId               Int
+  unique               Boolean               @default(false)
+  subTasks             SubTasks[]
+  stages               Stages                @relation(fields: [stagesId], references: [id], onDelete: Cascade)
+  commitmentContexts   CommitmentContext[]
+  basicResourceTargets BasicResourceTarget[]
+}
+
+model BasicLevels {
+  id           Int          @id @default(autoincrement())
+  index        Int
+  name         String
+  level        Int          @default(0)
+  rootLevel    Int
+  levelList    Int[]
+  cover        Boolean      @default(false)
+  typeItem     TypeItem     @default(NUM)
+  rootTypeItem TypeItem     @default(NUM)
+  stagesId     Int
+  rootId       Int
+  unique       Boolean      @default(false)
+  subTasks     BasicTasks[]
+  // users        Users[]
+  // user         Users?     @relation(fields: [userId], references: [id])
+  stages       Stages       @relation(fields: [stagesId], references: [id], onDelete: Cascade)
+}
+
+model TaskOnUsers {
+  subtaskId  Int
+  userId     Int
+  status     Boolean @default(false)
+  percentage Int     @default(0)
+
+  untilDate  DateTime @default(now())
+  subtask    SubTasks @relation(fields: [subtaskId], references: [id])
+  user       Users    @relation(fields: [userId], references: [id])
+  assignedAt DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  reviewed   Boolean?
+
+  @@id([subtaskId, userId])
+}
+
+model SubTaskOnUsers {
+  id                Int       @id @default(autoincrement())
+  taskId            Int
+  subtaskId         Int?
+  status            Boolean   @default(false)
+  statusPayment     Boolean   @default(false)
+  userId            Int
+  groupId           String?
+  percentage        Int       @default(0)
+  percentagePayment Int       @default(0)
+  reportId          Int?
+  assignedAt        DateTime  @default(now())
+  finishedAt        DateTime?
+  item              String?
+  price             Float     @default(0)
+  updatedAt         DateTime  @updatedAt
+  task              SubTasks  @relation(fields: [taskId], references: id, onDelete: Cascade)
+  user              Users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  report            Reports?  @relation(fields: [reportId], references: [id])
+  isAuthorized      Boolean?
+}
+
+model BasicTaskOnUsers {
+  id                Int        @id @default(autoincrement())
+  taskId            Int
+  status            Boolean    @default(false)
+  statusPayment     Boolean    @default(false)
+  userId            Int
+  groupId           String?
+  percentage        Int        @default(0)
+  percentagePayment Int        @default(0)
+  reportId          Int?
+  assignedAt        DateTime   @default(now())
+  finishedAt        DateTime?
+  updatedAt         DateTime   @updatedAt
+  task              BasicTasks @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user              Users      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // report            Reports?   @relation(fields: [reportId], references: [id])
+  reports           Reports[]
+}
+
+model LastVisitedTask {
+  id        Int      @id @default(autoincrement())
+  user      Users    @relation(fields: [userId], references: [id])
+  userId    Int
+  task      SubTasks @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId    Int
+  visitedAt DateTime @default(now())
+
+  @@unique([userId, taskId])
+  @@index([userId, visitedAt])
+}
+
+model SubTasks {
+  id                   Int                   @id @default(autoincrement())
+  status               TaskRole              @default(UNRESOLVED)
+  name                 String
+  //-----------------------------------------------
+  item                 String?
+  description          String?               @ignore
+  //-----------------------------------------------
+  index                Int
+  typeItem             TypeItem              @default(NUM)
+  price                Decimal               @default(0) @db.Money
+  days                 Float
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  reviewedAt           DateTime              @default(now())
+  levels_Id            Int
+  files                Files[]
+  Levels               Levels                @relation(fields: [levels_Id], references: [id], onDelete: Cascade)
+  feedBacks            Feedback[]
+  mods                 Users[]
+  usersold             TaskOnUsers[]
+  users                SubTaskOnUsers[]
+  LastVisitedTask      LastVisitedTask[]
+  commitmentContexts   CommitmentContext[]
+  basicResourceTargets BasicResourceTarget[]
+  document             TaskDocument?         @relation("SubTaskDocument")
+}
+
+model BasicTasks {
+  id        Int                @id @default(autoincrement())
+  status    TaskRole           @default(UNRESOLVED)
+  name      String
+  index     Int
+  typeItem  TypeItem           @default(NUM)
+  days      Float
+  price     Decimal            @default(0.00) @db.Money
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  levels_Id Int
+  files     BasicFiles[]
+  Levels    BasicLevels        @relation(fields: [levels_Id], references: [id], onDelete: Cascade)
+  feedBacks BasicFeedback[]
+  mods      Users[]
+  users     BasicTaskOnUsers[]
+  document  TaskDocument?      @relation("BasicTaskDocument")
+}
+
+model TaskDocument {
+  id                String                    @id @default(uuid())
+  subTaskId         Int?                      @unique
+  basicTaskId       Int?                      @unique
+  title             String                    @default("") @db.VarChar(300)
+  contentJson       Json
+  contentHtml       String                    @db.Text
+  plainText         String                    @db.Text
+  revision          Int                       @default(1)
+  versionNumber     Int                       @default(1)
+  fileVersionNumber Int                       @default(0)
+  createdById       Int
+  updatedById       Int
+  createdAt         DateTime                  @default(now())
+  updatedAt         DateTime                  @updatedAt
+  subTask           SubTasks?                 @relation("SubTaskDocument", fields: [subTaskId], references: [id], onDelete: Cascade)
+  basicTask         BasicTasks?               @relation("BasicTaskDocument", fields: [basicTaskId], references: [id], onDelete: Cascade)
+  createdBy         Users                     @relation("TaskDocumentCreator", fields: [createdById], references: [id])
+  updatedBy         Users                     @relation("TaskDocumentUpdater", fields: [updatedById], references: [id])
+  versions          TaskDocumentVersion[]
+  fileVersions      TaskDocumentFileVersion[]
+  editSessions      TaskDocumentEditSession[]
+  events            TaskDocumentEvent[]
+
+  @@index([updatedAt])
+  @@index([createdById])
+  @@index([updatedById])
+}
+
+model TaskDocumentVersion {
+  id            String       @id @default(uuid())
+  documentId    String
+  versionNumber Int
+  title         String       @default("") @db.VarChar(300)
+  contentJson   Json
+  contentHtml   String       @db.Text
+  plainText     String       @db.Text
+  createdById   Int
+  createdAt     DateTime     @default(now())
+  document      TaskDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  createdBy     Users        @relation("TaskDocumentVersionCreator", fields: [createdById], references: [id])
+
+  @@unique([documentId, versionNumber])
+  @@index([documentId, createdAt])
+  @@index([createdById])
+}
+
+enum TaskDocumentFileVersionSource {
+  ORIGINAL_IMPORT
+  WORD_DESKTOP
+  RESTORE
+}
+
+enum TaskDocumentEditProvider {
+  WORD_DESKTOP
+}
+
+enum TaskDocumentEditSessionStatus {
+  ACTIVE
+  SAVED
+  RELEASED
+  EXPIRED
+  CONFLICT
+  FAILED
+}
+
+enum TaskDocumentEventAction {
+  ORIGINAL_IMPORTED
+  SESSION_OPENED
+  SESSION_HEARTBEAT
+  VERSION_SAVED
+  VERSION_RESTORED
+  SESSION_RELEASED
+  SESSION_EXPIRED
+  SESSION_CONFLICT
+  SESSION_FAILED
+}
+
+model TaskDocumentFileVersion {
+  id                String                        @id @default(uuid())
+  documentId        String
+  versionNumber     Int
+  sourceFileId      Int?
+  sourceBasicFileId Int?
+  storageKey        String                        @unique @db.VarChar(500)
+  originalName      String                        @db.VarChar(300)
+  mimeType          String                        @db.VarChar(150)
+  sizeBytes         BigInt
+  checksumSha256    String                        @db.VarChar(64)
+  source            TaskDocumentFileVersionSource
+  createdById       Int
+  createdAt         DateTime                      @default(now())
+  document          TaskDocument                  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  createdBy         Users                         @relation("TaskDocumentFileVersionCreator", fields: [createdById], references: [id])
+  sourceSessions    TaskDocumentEditSession[]     @relation("TaskDocumentSessionSourceVersion")
+  currentSessions   TaskDocumentEditSession[]     @relation("TaskDocumentSessionCurrentVersion")
+  events            TaskDocumentEvent[]
+
+  @@unique([documentId, versionNumber])
+  @@index([documentId, createdAt])
+  @@index([createdById])
+  @@index([checksumSha256])
+  @@index([sourceFileId])
+  @@index([sourceBasicFileId])
+}
+
+model TaskDocumentEditSession {
+  id                    String                        @id @default(uuid())
+  documentId            String
+  sourceVersionId       String
+  currentVersionId      String
+  actorId               Int
+  provider              TaskDocumentEditProvider
+  status                TaskDocumentEditSessionStatus @default(ACTIVE)
+  tokenHash             String                        @unique @db.VarChar(64)
+  documentKey           String                        @unique @db.VarChar(128)
+  activeLeaseKey        String?                       @unique @db.VarChar(64)
+  expectedVersionNumber Int
+  expiresAt             DateTime
+  lastHeartbeatAt       DateTime                      @default(now())
+  closedAt              DateTime?
+  createdAt             DateTime                      @default(now())
+  updatedAt             DateTime                      @updatedAt
+  document              TaskDocument                  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  sourceVersion         TaskDocumentFileVersion       @relation("TaskDocumentSessionSourceVersion", fields: [sourceVersionId], references: [id], onDelete: Restrict)
+  currentVersion        TaskDocumentFileVersion       @relation("TaskDocumentSessionCurrentVersion", fields: [currentVersionId], references: [id], onDelete: Restrict)
+  actor                 Users                         @relation("TaskDocumentEditSessionActor", fields: [actorId], references: [id])
+  events                TaskDocumentEvent[]
+
+  @@index([documentId, status])
+  @@index([actorId, status])
+  @@index([expiresAt])
+}
+
+model TaskDocumentEvent {
+  id            String                   @id @default(uuid())
+  documentId    String
+  fileVersionId String?
+  sessionId     String?
+  actorId       Int?
+  action        TaskDocumentEventAction
+  metadata      Json                     @default("{}")
+  createdAt     DateTime                 @default(now())
+  document      TaskDocument             @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  fileVersion   TaskDocumentFileVersion? @relation(fields: [fileVersionId], references: [id], onDelete: SetNull)
+  session       TaskDocumentEditSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  actor         Users?                   @relation("TaskDocumentEventActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([documentId, createdAt])
+  @@index([sessionId])
+  @@index([actorId])
+}
+
+model OperationalTasks {
+  id             Int                @id @default(autoincrement())
+  status         TaskRole           @default(UNRESOLVED)
+  projectName    String?
+  name           String
+  description    String
+  additionalInfo String?
+  startTime      DateTime?
+  endTime        DateTime?
+  time           Int?
+  price          Decimal            @default(0) @db.Money
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  userId         Int
+  user           Users              @relation(fields: [userId], references: [id])
+  reportId       Int?
+  report         Reports?           @relation(fields: [reportId], references: [id])
+  items          OperationalItems[]
+  order          Int?
+  validate       Boolean            @default(false)
+}
+
+model Feedback {
+  id         Int                @id @default(autoincrement())
+  comment    String?
+  author     String?            @default("")
+  reviewer   String?
+  type       FeedbackType       @default(HOLDING)
+  status     Boolean            @default(false)
+  replacedAt DateTime?
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+  percentage Int                @default(0)
+  subTasksId Int
+  subTasks   SubTasks           @relation(fields: [subTasksId], references: [id], onDelete: Cascade)
+  files      Files[]
+  users      UsersOnFeedbacks[]
+
+  @@index([subTasksId, status, replacedAt, createdAt])
+}
+
+model BasicFeedback {
+  id         Int                     @id @default(autoincrement())
+  comment    String?
+  author     String
+  reviewer   String?
+  type       FeedbackType            @default(HOLDING)
+  status     Boolean                 @default(false)
+  createdAt  DateTime                @default(now())
+  updatedAt  DateTime                @updatedAt
+  percentage Int                     @default(0)
+  subTasksId Int
+  subTasks   BasicTasks              @relation(fields: [subTasksId], references: [id], onDelete: Cascade)
+  files      BasicFiles[]
+  users      BasicUsersOnFeedbacks[]
+}
+
+model UsersOnFeedbacks {
+  userId     Int
+  feedbackId Int
+  feedback   Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  user       Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userMain   Boolean  @default(false)
+  assignedAt DateTime @default(now())
+
+  @@id([userId, feedbackId])
+}
+
+model BasicUsersOnFeedbacks {
+  userId     Int
+  feedbackId Int
+  feedback   BasicFeedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  user       Users         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userMain   Boolean       @default(false)
+  assignedAt DateTime      @default(now())
+
+  @@id([userId, feedbackId])
+}
+
+model Files {
+  id           Int       @id @default(autoincrement())
+  name         String
+  author       String?
+  originalname String?
+  userId       Int? //-----
+  dir          String
+  type         FileTypes
+  subTasksId   Int
+  feedbackId   Int?
+  assignedAt   DateTime  @default(now())
+  feedback     Feedback? @relation(fields: [feedbackId], references: [id])
+  subTasks     SubTasks  @relation(fields: [subTasksId], references: [id], onDelete: Cascade)
+}
+
+model BasicFiles {
+  id              Int            @id @default(autoincrement())
+  name            String
+  originalname    String?
+  author          String?
+  dir             String?
+  type            FileTypes
+  subTasksId      Int
+  basicFeedbackId Int?
+  feedbackId      Int?
+  assignedAt      DateTime       @default(now())
+  // feedback   Feedback? @relation(fields: [feedbackId], references: [id])
+  subTasks        BasicTasks     @relation(fields: [subTasksId], references: [id], onDelete: Cascade)
+  feedback        BasicFeedback? @relation(fields: [basicFeedbackId], references: [id])
+}
+
+model BasicResource {
+  id           String                @id @default(uuid())
+  projectId    Int
+  stageId      Int
+  title        String?
+  description  String?
+  storedName   String
+  originalName String
+  storageKey   String                @unique
+  mimeType     String
+  extension    String
+  sizeBytes    BigInt
+  kind         BasicResourceKind     @default(OTHER)
+  uploadedById Int
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  project      Projects              @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  stage        Stages                @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  uploadedBy   Users                 @relation(fields: [uploadedById], references: [id])
+  targets      BasicResourceTarget[]
+
+  @@index([projectId, stageId, createdAt])
+  @@index([uploadedById, createdAt])
+}
+
+model BasicResourceTarget {
+  id                 String        @id @default(uuid())
+  resourceId         String
+  levelId            Int?
+  subTaskId          Int?
+  includeDescendants Boolean       @default(false)
+  createdAt          DateTime      @default(now())
+  resource           BasicResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  level              Levels?       @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  subTask            SubTasks?     @relation(fields: [subTaskId], references: [id], onDelete: Cascade)
+
+  @@index([resourceId])
+  @@index([levelId])
+  @@index([subTaskId])
+}
+
+model OperationalItems {
+  id          Int                @id @default(autoincrement())
+  description String
+  price       Float
+  createdAt   DateTime           @default(now())
+  taskId      Int
+  task        OperationalTasks   @relation(fields: [taskId], references: [id])
+  files       OperationalFiles[]
+}
+
+model OperationalFiles {
+  id           Int              @id @default(autoincrement())
+  name         String
+  author       String?
+  originalname String?
+  dir          String
+  itemId       Int
+  item         OperationalItems @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
+
+model Phases {
+  id          Int      @id @default(autoincrement())
+  name        String
+  initialDate DateTime
+  untilDate   DateTime
+  // reports     Reports[]
+}
+
+model Reports {
+  id                       Int                              @id @default(autoincrement())
+  name                     String
+  price                    Float
+  subprice                 Float
+  percentage               Float
+  attendanceDiscount       Float                            @default(0)
+  licensesDiscount         Float                            @default(0)
+  earlyPaymentDiscount     Float                            @default(0)
+  initialDate              DateTime
+  untilDate                DateTime
+  type                     ReportUserType
+  basictask                BasicTaskOnUsers[]
+  userId                   Int
+  createdAt                DateTime                         @default(now())
+  user                     Users                            @relation(fields: [userId], references: [id])
+  task                     SubTaskOnUsers[]
+  payroll                  Payrolls?                        @relation(fields: [payrollId], references: [id])
+  payrollId                Int?
+  paymessageId             Int?
+  paymessage               PayMessages?                     @relation(fields: [paymessageId], references: [id])
+  office                   Office                           @relation(fields: [officeId], references: [id])
+  officeId                 Int
+  isAuthorized             Boolean                          @default(false)
+  isAuthorizedGrop         Boolean                          @default(false)
+  paymentGroup             String?
+  paymentGroupDate         DateTime?
+  operationalTasks         OperationalTasks[]
+  liquidationScopeType     LiquidationScopeType?
+  liquidationStageId       Int?
+  liquidationScopeSnapshot Json?
+  amortizedAmount          Float                            @default(0)
+  isAmortized              Boolean                          @default(false)
+  amortizedAt              DateTime?
+  liquidationStage         Stages?                          @relation("LiquidationStage", fields: [liquidationStageId], references: [id])
+  consumedAdvances         LiquidationAdvanceAmortization[] @relation("LiquidationReport")
+  amortizedByLink          LiquidationAdvanceAmortization?  @relation("AdvanceReport")
+
+  @@index([userId, type, isAmortized])
+  @@index([type, liquidationScopeType, liquidationStageId])
+}
+
+model LiquidationAdvanceAmortization {
+  id                  Int      @id @default(autoincrement())
+  liquidationReportId Int
+  advanceReportId     Int      @unique
+  amount              Float
+  createdAt           DateTime @default(now())
+
+  liquidationReport Reports @relation("LiquidationReport", fields: [liquidationReportId], references: [id], onDelete: Cascade)
+  advanceReport     Reports @relation("AdvanceReport", fields: [advanceReportId], references: [id], onDelete: Restrict)
+
+  @@index([liquidationReportId])
+}
+
+model Payrolls {
+  id           Int                                @id @default(autoincrement())
+  name         String
+  pad          Int                                @default(0)
+  status       Boolean                            @default(true)
+  periodStart  DateTime?
+  periodEnd    DateTime?
+  createdAt    DateTime                           @default(now())
+  reports      Reports[]
+  orgOverrides PayrollPaymessageOrgUnitOverride[]
+}
+
+model PayrollPaymessageOrgUnitOverride {
+  id           String             @id @default(uuid())
+  payrollId    Int
+  paymessageId Int
+  unitId       String
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  payroll      Payrolls           @relation(fields: [payrollId], references: [id], onDelete: Cascade)
+  paymessage   PayMessages        @relation(fields: [paymessageId], references: [id], onDelete: Cascade)
+  unit         OrganizationalUnit @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@unique([payrollId, paymessageId])
+  @@index([unitId])
+  @@index([paymessageId])
+}
+
+model PersonBussiness {
+  id         Int     @id @default(autoincrement())
+  name       String
+  dni        String  @db.VarChar(8)
+  cip        Int
+  career     String
+  phone      String
+  pdf        String?
+  projectsId Int?
+  // Projects   Projects? @relation(fields: [projectsId], references: [id])
+  // stages     Stages? @relation(fields: [stagesId], references: [id])
+  // stagesId   Int?
+}
+
+model Consortium {
+  id        Int                     @id @default(autoincrement())
+  name      String
+  manager   String
+  img       String?
+  projectId Int?                    @unique
+  contracts Contratc[]
+  companies ConsortiumOnCompanies[]
+  archiveRoots CorporateArchiveRoot[]
+  // companies Company[]
+  // project   Projects  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  // stages    Stages[]
+}
+
+// model Company {
+//   id           Int    @id @default(autoincrement())
+//   name         String
+//   ruc          String
+//   manager      String
+//   percentage   Int    @default(100)
+//   consortiumId Int?
+//   projectId    Int?   @unique
+//   // Consortium   Consortium? @relation(fields: [consortiumId], references: [id])
+//   // project      Projects?   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+//   // stages       Stages[]
+// }
+
+model Companies {
+  id            Int                     @id @default(autoincrement())
+  name          String
+  ruc           String                  @unique @db.VarChar(11)
+  manager       String
+  address       String
+  departure     String
+  orderQuantity Int                     @default(0)
+  color         String                  @default("#00B0F0")
+  phone         String                  @default("957 415 743")
+  email         String                  @default("sschilisrl_106@gmail.com")
+  inscription   DateTime?
+  activities    DateTime?
+  SEE           DateTime?
+  CCI           String                  @unique
+  description   String?
+  img           String?
+  consortium    ConsortiumOnCompanies[]
+  contracts     Contratc[]
+  archiveRoots  CorporateArchiveRoot[]
+}
+
+model CorporateArchiveRoot {
+  id           String                    @id @default(uuid())
+  scopeType    CorporateArchiveScopeType
+  companyId    Int?
+  consortiumId Int?
+  categoryKey  CorporateArchiveCategory
+  rootFolderId String?                   @unique
+  createdById  Int
+  createdAt    DateTime                  @default(now())
+  updatedAt    DateTime                  @updatedAt
+  company      Companies?                @relation(fields: [companyId], references: [id], onDelete: Restrict)
+  consortium   Consortium?               @relation(fields: [consortiumId], references: [id], onDelete: Restrict)
+  createdBy    Users                     @relation("CorporateArchiveRootCreator", fields: [createdById], references: [id])
+  rootFolder   CorporateArchiveFolder?   @relation("CorporateArchiveRootFolder", fields: [rootFolderId, id], references: [id, rootId])
+  folders      CorporateArchiveFolder[]  @relation("CorporateArchiveFolders")
+
+  @@unique([companyId, categoryKey])
+  @@unique([consortiumId, categoryKey])
+  @@unique([rootFolderId, id])
+  @@index([scopeType, companyId])
+  @@index([scopeType, consortiumId])
+}
+
+model CorporateArchiveFolder {
+  id           String                   @id @default(uuid())
+  rootId       String
+  parentId     String?
+  name         String                   @db.VarChar(180)
+  nameNormalized String                 @db.VarChar(180)
+  isRoot       Boolean                  @default(false)
+  createdById  Int
+  archivedAt   DateTime?
+  archivedById Int?
+  archiveOperationId String?
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+  root         CorporateArchiveRoot     @relation("CorporateArchiveFolders", fields: [rootId], references: [id], onDelete: Restrict)
+  rootFor      CorporateArchiveRoot?    @relation("CorporateArchiveRootFolder")
+  parent       CorporateArchiveFolder?  @relation("CorporateArchiveFolderTree", fields: [parentId, rootId], references: [id, rootId], onDelete: Restrict)
+  children     CorporateArchiveFolder[] @relation("CorporateArchiveFolderTree")
+  documents    CorporateArchiveDocument[]
+  createdBy    Users                    @relation("CorporateArchiveFolderCreator", fields: [createdById], references: [id])
+  archivedBy   Users?                   @relation("CorporateArchiveFolderArchiver", fields: [archivedById], references: [id], onDelete: SetNull)
+
+  @@index([rootId, parentId])
+  @@unique([id, rootId])
+  @@unique([rootId, parentId, nameNormalized])
+  @@index([rootId, archivedAt])
+  @@index([archiveOperationId])
+}
+
+model CorporateArchiveDocument {
+  id               String                          @id @default(uuid())
+  rootId           String
+  folderId         String
+  displayName      String                          @db.VarChar(300)
+  status           CorporateArchiveDocumentStatus  @default(ACTIVE)
+  currentVersionId String?                         @unique
+  createdById      Int
+  archivedAt       DateTime?
+  archivedById     Int?
+  archiveOperationId String?
+  createdAt        DateTime                        @default(now())
+  updatedAt        DateTime                        @updatedAt
+  folder           CorporateArchiveFolder          @relation(fields: [folderId, rootId], references: [id, rootId], onDelete: Restrict)
+  currentVersion   CorporateArchiveDocumentVersion? @relation("CorporateArchiveCurrentVersion", fields: [currentVersionId, id], references: [id, documentId], onDelete: Restrict)
+  versions         CorporateArchiveDocumentVersion[] @relation("CorporateArchiveDocumentVersions")
+  createdBy        Users                           @relation("CorporateArchiveDocumentCreator", fields: [createdById], references: [id])
+  archivedBy       Users?                          @relation("CorporateArchiveDocumentArchiver", fields: [archivedById], references: [id], onDelete: SetNull)
+
+  @@index([rootId, folderId, status])
+  @@index([folderId, createdAt])
+  @@index([archiveOperationId])
+  @@unique([currentVersionId, id])
+}
+
+model CorporateArchiveDocumentVersion {
+  id          String                   @id @default(uuid())
+  documentId  String
+  version     Int
+  storageKey  String                   @unique @db.VarChar(500)
+  originalName String                  @db.VarChar(300)
+  mimeType    String                   @db.VarChar(150)
+  sizeBytes   BigInt
+  sha256      String                   @db.VarChar(64)
+  uploadedById Int
+  createdAt   DateTime                 @default(now())
+  document    CorporateArchiveDocument @relation("CorporateArchiveDocumentVersions", fields: [documentId], references: [id], onDelete: Cascade)
+  currentFor  CorporateArchiveDocument? @relation("CorporateArchiveCurrentVersion")
+  uploadedBy  Users                    @relation("CorporateArchiveVersionUploader", fields: [uploadedById], references: [id])
+
+  @@unique([documentId, version])
+  @@unique([id, documentId])
+  @@index([documentId, createdAt])
+}
+
+model ConsortiumOnCompanies {
+  consortiumId Int
+  companiesId  Int
+  percentaje   Int?       @default(0)
+  consortium   Consortium @relation(fields: [consortiumId], references: [id])
+  companies    Companies  @relation(fields: [companiesId], references: [id])
+
+  @@id([consortiumId, companiesId])
+}
+
+model AreaSpecialty {
+  id                  Int                   @id @default(autoincrement())
+  institution         String
+  startDate           DateTime?
+  untilDate           DateTime?
+  file                String?
+  areaSpecialtyNameId Int
+  areaSpecialtyName   AreaSpecialtyNameList @relation(fields: [areaSpecialtyNameId], references: [id], onDelete: Cascade)
+}
+
+model AreaSpecialtyNameList {
+  id                Int             @id @default(autoincrement())
+  specialtyName     Int
+  areaSpecialtyName AreaSpecialty[]
+  specialistId      Int
+  specialist        Specialists     @relation(fields: [specialistId], references: [id], onDelete: Cascade)
+  listSpecialities  ListSpecialties @relation(fields: [specialtyName], references: [id], onDelete: Cascade)
+}
+
+model ListSpecialties {
+  id                Int                     @id @default(autoincrement())
+  name              String                  @unique
+  // areaSpecialties AreaSpecialtyToSpecialty[]
+  contracts         ContractSpecialties[]
+  areaSpecialtyList AreaSpecialtyNameList[]
+}
+
+model Specialists {
+  id              Int                          @id @default(autoincrement())
+  dni             String                       @unique @db.VarChar(8)
+  firstName       String
+  lastName        String
+  phone           String
+  career          String
+  degree          String
+  agreementFile   String?
+  cvFile          String?
+  area            AreaSpecialtyNameList[]
+  training        TrainingSpecialistNameList[]
+  price           String
+  tuition         TypeTuition
+  inscriptionDate DateTime                     @default(now())
+  inscription     String
+  email           String
+  projects        ProjectSpecialist[]
+  contracts       ContractSpecialties[]
+}
+
+model ContractSpecialties {
+  id                Int             @id @default(autoincrement())
+  contratc          Contratc        @relation(fields: [contratcId], references: [id])
+  contratcId        Int
+  listSpecialties   ListSpecialties @relation(fields: [listSpecialtiesId], references: [id])
+  listSpecialtiesId Int
+  specialists       Specialists?    @relation(fields: [specialistsId], references: [id])
+  specialistsId     Int?
+  createdAt         DateTime        @default(now())
+}
+
+model ProjectSpecialist {
+  id           Int         @id @default(autoincrement())
+  specialistId Int
+  projectId    Int
+  specialist   Specialists @relation(fields: [specialistId], references: [id])
+
+  @@unique([specialistId, projectId])
+}
+
+model TrainingSpecialistNameList {
+  id                     Int                  @id @default(autoincrement())
+  trainingName           String
+  trainingSpecialistName TrainingSpecialist[]
+  specialistId           Int
+  specialist             Specialists          @relation(fields: [specialistId], references: [id], onDelete: Cascade)
+}
+
+model TrainingSpecialist {
+  id                       Int                        @id @default(autoincrement())
+  institution              String
+  hours                    String
+  level                    TrainingLevel              @default(BASICO)
+  issue                    DateTime?
+  startDate                DateTime?
+  untilDate                DateTime?
+  trainingFile             String?
+  TrainingSpecialistNameId Int
+  specialist               TrainingSpecialistNameList @relation(fields: [TrainingSpecialistNameId], references: [id], onDelete: Cascade)
+}
+
+enum TrainingLevel {
+  BASICO
+  INTERMEDIO
+  AVANZADO
+  ESPECIALISTA
+}
+
+model List {
+  id          Int                   @id @default(autoincrement())
+  title       String?
+  timer       String?
+  captureMode AttendanceCaptureMode @default(MANUAL)
+  state       AttendanceListState   @default(FINALIZED)
+  openedAt    DateTime?
+  closedAt    DateTime?
+  finalizedAt DateTime?
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  users       ListOnUsers[]
+
+  @@index([captureMode, state, openedAt])
+}
+
+model Licenses {
+  id                 Int                        @id @default(autoincrement())
+  usersId            Int
+  supervisorId       Int?
+  reason             String?
+  feedback           String?
+  type               LicenseType?
+  status             LicensesStatus             @default(PROCESO)
+  fine               ListDetails?
+  departureFile      String?
+  arrivalFile        String?
+  startDate          DateTime
+  checkout           DateTime?
+  untilDate          DateTime
+  createdAt          DateTime                   @default(now())
+  isRecurringParent  Boolean                    @default(false)
+  recurrenceParentId Int?
+  recurrenceGroupId  String?
+  recurrenceIndex    Int?
+  recurrenceRule     String?
+  gatePasses         GatePass[]
+  penaltyAdjustments LicensePenaltyAdjustment[]
+}
+
+model LicensePenaltyAdjustment {
+  id             String                         @id @default(uuid())
+  scope          LicensePenaltyAdjustmentScope  @default(LICENSE)
+  licenseId      Int?
+  userId         Int
+  adjustedById   Int
+  originalFine   ListDetails?
+  originalAmount Float
+  adjustedAmount Float
+  reason         String
+  sourceModule   LicensePenaltyAdjustmentSource @default(SALIDAS_REPORT)
+  status         LicensePenaltyAdjustmentStatus @default(ACTIVE)
+  periodStart    DateTime?
+  periodEnd      DateTime?
+  createdAt      DateTime                       @default(now())
+  updatedAt      DateTime                       @updatedAt
+  voidedAt       DateTime?
+  voidedById     Int?
+  voidReason     String?
+  license        Licenses?                      @relation(fields: [licenseId], references: [id], onDelete: SetNull)
+  user           Users                          @relation("LicensePenaltyAdjustmentUser", fields: [userId], references: [id], onDelete: Cascade)
+  adjustedBy     Users                          @relation("LicensePenaltyAdjustmentCreator", fields: [adjustedById], references: [id])
+  voidedBy       Users?                         @relation("LicensePenaltyAdjustmentVoider", fields: [voidedById], references: [id], onDelete: SetNull)
+
+  @@index([scope])
+  @@index([licenseId])
+  @@index([userId])
+  @@index([adjustedById])
+  @@index([status])
+  @@index([periodStart, periodEnd])
+  @@index([sourceModule])
+}
+
+model ProductionBonusRequest {
+  id                 String                    @id @default(uuid())
+  userId             Int
+  origin             ProductionBonusOrigin     @default(ASSIGNED_BY_MANAGER)
+  assignedById       Int?
+  requestedById      Int?
+  supervisorId       Int?
+  validatedById      Int?
+  liquidatedById     Int?
+  type               ProductionBonusType
+  status             ProductionBonusStatus     @default(ASIGNADO)
+  reason             String
+  feedback           String?
+  validationFeedback String?
+  workDate           DateTime
+  startDate          DateTime
+  endDate            DateTime
+  assignedHours      Float                     @default(0)
+  requestedHours     Float?
+  approvedHours      Float?
+  executedHours      Float?
+  validatedHours     Float?
+  amount             Float?
+  evidenceFile       String?
+  assignedAt         DateTime?
+  approvedAt         DateTime?
+  validatedAt        DateTime?
+  liquidatedAt       DateTime?
+  createdAt          DateTime                  @default(now())
+  updatedAt          DateTime                  @updatedAt
+  user               Users                     @relation("ProductionBonusUser", fields: [userId], references: [id], onDelete: Cascade)
+  assignedBy         Users?                    @relation("ProductionBonusAssigner", fields: [assignedById], references: [id], onDelete: SetNull)
+  requestedBy        Users?                    @relation("ProductionBonusRequester", fields: [requestedById], references: [id], onDelete: SetNull)
+  supervisor         Users?                    @relation("ProductionBonusSupervisor", fields: [supervisorId], references: [id], onDelete: SetNull)
+  validatedBy        Users?                    @relation("ProductionBonusValidator", fields: [validatedById], references: [id], onDelete: SetNull)
+  liquidatedBy       Users?                    @relation("ProductionBonusLiquidator", fields: [liquidatedById], references: [id], onDelete: SetNull)
+  evidences          ProductionBonusEvidence[]
+  events             ProductionBonusEvent[]
+
+  @@index([userId, startDate])
+  @@index([status])
+  @@index([origin])
+  @@index([type])
+  @@index([assignedById])
+  @@index([startDate, endDate])
+}
+
+model ProductionBonusEvidence {
+  id                       String                      @id @default(uuid())
+  productionBonusRequestId String
+  type                     ProductionBonusEvidenceType @default(NOTE)
+  filePath                 String?
+  originalName             String?
+  mimeType                 String?
+  note                     String?
+  createdById              Int?
+  createdAt                DateTime                    @default(now())
+  productionBonusRequest   ProductionBonusRequest      @relation(fields: [productionBonusRequestId], references: [id], onDelete: Cascade)
+  createdBy                Users?                      @relation("ProductionBonusEvidenceCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([productionBonusRequestId])
+  @@index([createdById])
+  @@index([type])
+}
+
+model ProductionBonusEvent {
+  id                       String                   @id @default(uuid())
+  productionBonusRequestId String
+  actorId                  Int?
+  eventType                ProductionBonusEventType
+  eventAt                  DateTime                 @default(now())
+  notes                    String?
+  metadata                 Json?
+  productionBonusRequest   ProductionBonusRequest   @relation(fields: [productionBonusRequestId], references: [id], onDelete: Cascade)
+  actor                    Users?                   @relation("ProductionBonusEventActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([productionBonusRequestId])
+  @@index([actorId])
+  @@index([eventType])
+  @@index([eventAt])
+}
+
+model MetradoProject {
+  id                     String                   @id @default(uuid())
+  projectId              Int?
+  name                   String
+  code                   String                   @default("")
+  uniqueCode             String?
+  localCode              String?
+  modularCode            String?
+  executingUnit          String                   @default("")
+  educationalInstitution String                   @default("")
+  location               String                   @default("")
+  status                 MetradoProjectStatus     @default(DRAFT)
+  decimalPrecision       Int                      @default(2)
+  sourceWorkbookName     String?
+  excelMetadata          Json?
+  createdById            Int
+  updatedById            Int?
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  project                Projects?                @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  createdBy              Users                    @relation("MetradoProjectCreator", fields: [createdById], references: [id])
+  updatedBy              Users?                   @relation("MetradoProjectUpdater", fields: [updatedById], references: [id], onDelete: SetNull)
+  blocks                 MetradoBlock[]
+  items                  MetradoItem[]
+  platformadoLines       MetradoPlatformadoLine[]
+  attachments            MetradoAttachment[]
+  imports                MetradoImport[]
+  exports                MetradoExport[]
+  validations            MetradoValidationIssue[]
+  events                 MetradoEvent[]
+
+  @@index([projectId])
+  @@index([createdById])
+  @@index([updatedById])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model MetradoBlock {
+  id               String                   @id @default(uuid())
+  metradoProjectId String
+  code             String
+  name             String
+  generalSheetName String?
+  rebarSheetName   String?
+  active           Boolean                  @default(true)
+  order            Int
+  metadata         Json?
+  metradoProject   MetradoProject           @relation(fields: [metradoProjectId], references: [id], onDelete: Cascade)
+  measurementLines MetradoMeasurementLine[]
+  rebarLines       MetradoRebarLine[]
+  attachments      MetradoAttachment[]
+
+  @@unique([metradoProjectId, code])
+  @@index([metradoProjectId, order])
+  @@index([active])
+}
+
+model MetradoItem {
+  id               String                   @id @default(uuid())
+  metradoProjectId String
+  parentId         String?
+  itemCode         String
+  description      String
+  unit             String?
+  level            Int
+  calculationType  MetradoCalculationType   @default(GENERAL)
+  isHeading        Boolean                  @default(false)
+  order            Int
+  sourceSheet      String?
+  sourceRow        Int?
+  styleType        String?
+  metadata         Json?
+  metradoProject   MetradoProject           @relation(fields: [metradoProjectId], references: [id], onDelete: Cascade)
+  parent           MetradoItem?             @relation("MetradoItemTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children         MetradoItem[]            @relation("MetradoItemTree")
+  measurementLines MetradoMeasurementLine[]
+  rebarLines       MetradoRebarLine[]
+  attachments      MetradoAttachment[]
+
+  @@unique([metradoProjectId, itemCode])
+  @@index([metradoProjectId, order])
+  @@index([parentId])
+  @@index([calculationType])
+  @@index([isHeading])
+}
+
+model MetradoMeasurementLine {
+  id               String              @id @default(uuid())
+  metradoItemId    String
+  metradoBlockId   String
+  lineType         MetradoLineType     @default(DETAIL)
+  description      String
+  times            Decimal?            @db.Decimal(18, 6)
+  unitCount        Decimal?            @db.Decimal(18, 6)
+  length           Decimal?            @db.Decimal(18, 6)
+  width            Decimal?            @db.Decimal(18, 6)
+  height           Decimal?            @db.Decimal(18, 6)
+  area             Decimal?            @db.Decimal(18, 6)
+  partial          Decimal?            @db.Decimal(18, 6)
+  total            Decimal?            @db.Decimal(18, 6)
+  formulas         Json?
+  validationStatus MetradoLineStatus   @default(DRAFT)
+  order            Int
+  sourceSheet      String?
+  sourceRow        Int?
+  styleType        String?
+  metadata         Json?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  item             MetradoItem         @relation(fields: [metradoItemId], references: [id], onDelete: Cascade)
+  block            MetradoBlock        @relation(fields: [metradoBlockId], references: [id], onDelete: Cascade)
+  attachments      MetradoAttachment[]
+
+  @@index([metradoItemId])
+  @@index([metradoBlockId])
+  @@index([lineType])
+  @@index([validationStatus])
+  @@index([order])
+}
+
+model MetradoRebarLine {
+  id               String              @id @default(uuid())
+  metradoItemId    String
+  metradoBlockId   String
+  lineType         MetradoLineType     @default(DETAIL)
+  description      String
+  design           String?
+  diameter         String?
+  sameElements     Decimal?            @db.Decimal(18, 6)
+  piecesPerElement Decimal?            @db.Decimal(18, 6)
+  pieceLength      Decimal?            @db.Decimal(18, 6)
+  lengthTotal      Decimal?            @db.Decimal(18, 6)
+  weightPerMeter   Decimal?            @db.Decimal(18, 6)
+  weightKg         Decimal?            @db.Decimal(18, 6)
+  formulas         Json?
+  validationStatus MetradoLineStatus   @default(DRAFT)
+  order            Int
+  sourceSheet      String?
+  sourceRow        Int?
+  styleType        String?
+  metadata         Json?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  item             MetradoItem         @relation(fields: [metradoItemId], references: [id], onDelete: Cascade)
+  block            MetradoBlock        @relation(fields: [metradoBlockId], references: [id], onDelete: Cascade)
+  attachments      MetradoAttachment[]
+
+  @@index([metradoItemId])
+  @@index([metradoBlockId])
+  @@index([diameter])
+  @@index([lineType])
+  @@index([validationStatus])
+  @@index([order])
+}
+
+model MetradoPlatformadoLine {
+  id               String            @id @default(uuid())
+  metradoProjectId String
+  lineType         MetradoLineType   @default(DETAIL)
+  alignment        String?
+  progressive      String
+  cutArea          Decimal?          @db.Decimal(18, 6)
+  fillArea         Decimal?          @db.Decimal(18, 6)
+  distance         Decimal?          @db.Decimal(18, 6)
+  cutVolume        Decimal?          @db.Decimal(18, 6)
+  fillVolume       Decimal?          @db.Decimal(18, 6)
+  cutAccumulated   Decimal?          @db.Decimal(18, 6)
+  fillAccumulated  Decimal?          @db.Decimal(18, 6)
+  total            Decimal?          @db.Decimal(18, 6)
+  formulas         Json?
+  validationStatus MetradoLineStatus @default(DRAFT)
+  order            Int
+  sourceSheet      String?
+  sourceRow        Int?
+  styleType        String?
+  metadata         Json?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  metradoProject   MetradoProject    @relation(fields: [metradoProjectId], references: [id], onDelete: Cascade)
+
+  @@index([metradoProjectId, order])
+  @@index([lineType])
+  @@index([validationStatus])
+}
+
+model MetradoAttachment {
+  id                       String                  @id @default(uuid())
+  metradoProjectId         String
+  metradoBlockId           String?
+  metradoItemId            String?
+  metradoMeasurementLineId String?
+  metradoRebarLineId       String?
+  kind                     String                  @default("image")
+  scope                    String                  @default("measurement")
+  name                     String
+  mimeType                 String
+  extension                String
+  dataUrl                  String                  @db.Text
+  caption                  String?
+  sourceSheet              String?
+  sourceRow                Int?
+  anchor                   Json?
+  order                    Int                     @default(0)
+  metadata                 Json?
+  createdAt                DateTime                @default(now())
+  updatedAt                DateTime                @updatedAt
+  metradoProject           MetradoProject          @relation(fields: [metradoProjectId], references: [id], onDelete: Cascade)
+  block                    MetradoBlock?           @relation(fields: [metradoBlockId], references: [id], onDelete: SetNull)
+  item                     MetradoItem?            @relation(fields: [metradoItemId], references: [id], onDelete: SetNull)
+  measurementLine          MetradoMeasurementLine? @relation(fields: [metradoMeasurementLineId], references: [id], onDelete: Cascade)
+  rebarLine                MetradoRebarLine?       @relation(fields: [metradoRebarLineId], references: [id], onDelete: Cascade)
+
+  @@index([metradoProjectId])
+  @@index([metradoBlockId])
+  @@index([metradoItemId])
+  @@index([metradoMeasurementLineId])
+  @@index([metradoRebarLineId])
+  @@index([sourceSheet, sourceRow])
+}
+
+model MetradoImport {
+  id               String            @id @default(uuid())
+  metradoProjectId String
+  filename         String
+  filePath         String?
+  size             Int?
+  mimeType         String?
+  status           MetradoFileStatus @default(PROCESSED)
+  summary          Json?
+  createdById      Int
+  createdAt        DateTime          @default(now())
+  metradoProject   MetradoProject    @relation(fields: [metradoProjectId], references: [id], onDelete: Cascade)
+  createdBy        Users             @relation("MetradoImportCreator", fields: [createdById], references: [id])
+
+  @@index([metradoProjectId])
+  @@index([createdById])
+  @@index([status])
+}
+
+model MetradoExport {
+  id               String            @id @default(uuid())
+  metradoProjectId String
+  filename         String
+  filePath         String?
+  size             Int?
+  mimeType         String?
+  status           MetradoFileStatus @default(PROCESSED)
+  summary          Json?
+  createdById      Int
+  createdAt        DateTime          @default(now())
+  metradoProject   MetradoProject    @relation(fields: [metradoProjectId], references: [id], onDelete: Cascade)
+  createdBy        Users             @relation("MetradoExportCreator", fields: [createdById], references: [id])
+
+  @@index([metradoProjectId])
+  @@index([createdById])
+  @@index([status])
+}
+
+model MetradoValidationIssue {
+  id               String             @id @default(uuid())
+  metradoProjectId String
+  sheetName        String
+  cellReference    String?
+  issueType        String
+  originalFormula  String?
+  suggestedFix     String?
+  status           MetradoIssueStatus @default(PENDING)
+  affectedCells    Int?
+  metadata         Json?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  metradoProject   MetradoProject     @relation(fields: [metradoProjectId], references: [id], onDelete: Cascade)
+
+  @@index([metradoProjectId])
+  @@index([status])
+  @@index([sheetName])
+}
+
+model MetradoEvent {
+  id               String           @id @default(uuid())
+  metradoProjectId String
+  actorId          Int?
+  eventType        MetradoEventType
+  entity           String?
+  entityId         String?
+  notes            String?
+  before           Json?
+  after            Json?
+  metadata         Json?
+  eventAt          DateTime         @default(now())
+  metradoProject   MetradoProject   @relation(fields: [metradoProjectId], references: [id], onDelete: Cascade)
+  actor            Users?           @relation("MetradoEventActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([metradoProjectId])
+  @@index([actorId])
+  @@index([eventType])
+  @@index([eventAt])
+}
+
+model GatePass {
+  id                     String              @id @default(uuid())
+  userId                 Int
+  licenseId              Int?
+  reason                 String?
+  requestedMinutes       Int
+  status                 GatePassStatus      @default(ACTIVE)
+  source                 GatePassSource      @default(CONTROLLER)
+  actualExitAt           DateTime?
+  dueAt                  DateTime?
+  actualReturnAt         DateTime?
+  originalPenaltyMinutes Int                 @default(0)
+  finalPenaltyMinutes    Int                 @default(0)
+  createdById            Int
+  departureMarkedById    Int?
+  returnMarkedById       Int?
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+  user                   Users               @relation("GatePassUser", fields: [userId], references: [id], onDelete: Cascade)
+  license                Licenses?           @relation(fields: [licenseId], references: [id], onDelete: SetNull)
+  createdBy              Users               @relation("GatePassCreator", fields: [createdById], references: [id])
+  departureMarkedBy      Users?              @relation("GatePassDepartureMarker", fields: [departureMarkedById], references: [id], onDelete: SetNull)
+  returnMarkedBy         Users?              @relation("GatePassReturnMarker", fields: [returnMarkedById], references: [id], onDelete: SetNull)
+  reviewRequests         GateReviewRequest[]
+  evidences              GateEvidence[]
+  events                 GateEvent[]
+
+  @@index([userId, createdAt])
+  @@index([status])
+  @@index([actualExitAt])
+  @@index([dueAt])
+  @@index([licenseId])
+}
+
+model GateReviewRequest {
+  id                        String                  @id @default(uuid())
+  gatePassId                String
+  type                      GateReviewRequestType
+  requestedById             Int
+  status                    GateReviewRequestStatus @default(PENDING)
+  claimedEventAt            DateTime?
+  requestedReductionMinutes Int?
+  approvedReductionMinutes  Int?
+  reason                    String?
+  reviewNotes               String?
+  reviewedById              Int?
+  reviewedAt                DateTime?
+  createdAt                 DateTime                @default(now())
+  updatedAt                 DateTime                @updatedAt
+  gatePass                  GatePass                @relation(fields: [gatePassId], references: [id], onDelete: Cascade)
+  requestedBy               Users                   @relation("GateReviewRequester", fields: [requestedById], references: [id], onDelete: Cascade)
+  reviewedBy                Users?                  @relation("GateReviewReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  evidences                 GateEvidence[]
+
+  @@index([gatePassId])
+  @@index([requestedById])
+  @@index([reviewedById])
+  @@index([status])
+  @@index([type])
+}
+
+model GateEvidence {
+  id              String             @id @default(uuid())
+  gatePassId      String
+  reviewRequestId String?
+  submittedById   Int
+  type            GateEvidenceType   @default(OTHER_FILE)
+  filePath        String?
+  originalName    String?
+  mimeType        String?
+  textNote        String?
+  createdAt       DateTime           @default(now())
+  gatePass        GatePass           @relation(fields: [gatePassId], references: [id], onDelete: Cascade)
+  reviewRequest   GateReviewRequest? @relation(fields: [reviewRequestId], references: [id], onDelete: Cascade)
+  submittedBy     Users              @relation("GateEvidenceSubmitter", fields: [submittedById], references: [id], onDelete: Cascade)
+
+  @@index([gatePassId])
+  @@index([reviewRequestId])
+  @@index([submittedById])
+  @@index([type])
+}
+
+model GateEvent {
+  id         String        @id @default(uuid())
+  gatePassId String
+  actorId    Int?
+  eventType  GateEventType
+  eventAt    DateTime      @default(now())
+  notes      String?
+  metadata   Json?
+  gatePass   GatePass      @relation(fields: [gatePassId], references: [id], onDelete: Cascade)
+  actor      Users?        @relation("GateEventActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([gatePassId])
+  @@index([actorId])
+  @@index([eventType])
+  @@index([eventAt])
+}
+
+model ListOnUsers {
+  usersId               Int
+  listId                Int
+  user                  Users                          @relation(fields: [usersId], references: [id], onDelete: Cascade)
+  list                  List                           @relation(fields: [listId], references: [id], onDelete: Cascade)
+  status                ListDetails
+  statusSource          AttendanceStatusSource         @default(SYSTEM_DEFAULT)
+  assignedAt            DateTime                       @default(now())
+  biometricMarkedAt     DateTime?
+  biometricVerifyMode   String?
+  biometricDeviceSerial String?
+  reconciliationItems   AttendanceReconciliationItem[]
+  penaltyAdjustments    AttendancePenaltyAdjustment[]
+
+  @@id([usersId, listId])
+}
+
+model AttendanceReconciliation {
+  id          String                         @id @default(uuid())
+  userId      Int
+  createdById Int
+  periodStart DateTime
+  periodEnd   DateTime
+  reason      String
+  status      AttendanceReconciliationStatus @default(ACTIVE)
+  voidedAt    DateTime?
+  voidedById  Int?
+  voidReason  String?
+  createdAt   DateTime                       @default(now())
+  updatedAt   DateTime                       @updatedAt
+  user        Users                          @relation("AttendanceReconciliationUser", fields: [userId], references: [id], onDelete: Cascade)
+  createdBy   Users                          @relation("AttendanceReconciliationCreator", fields: [createdById], references: [id])
+  voidedBy    Users?                         @relation("AttendanceReconciliationVoider", fields: [voidedById], references: [id], onDelete: SetNull)
+  items       AttendanceReconciliationItem[]
+
+  @@index([userId, createdAt])
+  @@index([createdById])
+  @@index([status])
+  @@index([periodStart, periodEnd])
+}
+
+model AttendanceReconciliationItem {
+  id               String                   @id @default(uuid())
+  reconciliationId String
+  usersId          Int
+  listId           Int
+  originalStatus   ListDetails
+  resolvedStatus   ListDetails              @default(PUNTUAL)
+  createdAt        DateTime                 @default(now())
+  reconciliation   AttendanceReconciliation @relation(fields: [reconciliationId], references: [id], onDelete: Cascade)
+  attendance       ListOnUsers              @relation(fields: [usersId, listId], references: [usersId, listId], onDelete: Cascade)
+
+  @@index([reconciliationId])
+  @@index([usersId, listId])
+}
+
+model AttendancePenaltyAdjustment {
+  id             String                            @id @default(uuid())
+  scope          AttendancePenaltyAdjustmentScope  @default(ATTENDANCE_RECORD)
+  usersId        Int?
+  listId         Int?
+  userId         Int
+  adjustedById   Int
+  originalStatus ListDetails?
+  originalAmount Float
+  adjustedAmount Float
+  reason         String
+  sourceModule   AttendancePenaltyAdjustmentSource @default(ATTENDANCE_REPORT)
+  status         AttendancePenaltyAdjustmentStatus @default(ACTIVE)
+  periodStart    DateTime?
+  periodEnd      DateTime?
+  createdAt      DateTime                          @default(now())
+  updatedAt      DateTime                          @updatedAt
+  voidedAt       DateTime?
+  voidedById     Int?
+  voidReason     String?
+  attendance     ListOnUsers?                      @relation(fields: [usersId, listId], references: [usersId, listId], onDelete: SetNull)
+  user           Users                             @relation("AttendancePenaltyAdjustmentUser", fields: [userId], references: [id], onDelete: Cascade)
+  adjustedBy     Users                             @relation("AttendancePenaltyAdjustmentCreator", fields: [adjustedById], references: [id])
+  voidedBy       Users?                            @relation("AttendancePenaltyAdjustmentVoider", fields: [voidedById], references: [id], onDelete: SetNull)
+
+  @@index([scope])
+  @@index([usersId, listId])
+  @@index([userId])
+  @@index([adjustedById])
+  @@index([status])
+  @@index([periodStart, periodEnd])
+  @@index([sourceModule])
+}
+
+model Mail {
+  messageId  Int
+  userId     Int
+  message    Messages    @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user       Users       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type       MessageUser @default(RECEIVER)
+  status     Boolean     @default(false)
+  role       MessageRole @default(SECONDARY)
+  assignedAt DateTime    @default(now())
+  userInit   Boolean     @default(false)
+
+  @@id([userId, messageId])
+}
+
+model PayMail {
+  paymessageId Int
+  userId       Int
+  paymessage   PayMessages @relation(fields: [paymessageId], references: [id], onDelete: Cascade)
+  user         Users       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         MessageUser @default(RECEIVER)
+  status       Boolean     @default(false)
+  role         MessageRole @default(SECONDARY)
+  assignedAt   DateTime    @default(now())
+  userInit     Boolean     @default(false)
+
+  @@id([userId, paymessageId])
+}
+
+model PayMessages {
+  id                  Int                                @id @default(autoincrement())
+  title               String
+  header              String                             @default("")
+  paymentPdfData      String?
+  description         String?
+  comment             String?
+  filesPay            Payment[]
+  rxhFile             RxHFile?
+  status              PayMessageStatus                   @default(PROCESO)
+  type                MessageType                        @default(INFORME)
+  files               FilesMessage[]
+  users               PayMail[]
+  history             MessageHistory[]
+  officeId            Int?
+  beforeOffice        String?
+  payrollId           Int?
+  historyOfficesIds   Int[]
+  report              Reports[]
+  positionSeal        Int                                @default(1)
+  onHolding           Boolean                            @default(true)
+  office              Office?                            @relation(fields: [officeId], references: [id])
+  onHoldingDate       DateTime?
+  createdAt           DateTime                           @default(now())
+  updatedAt           DateTime                           @updatedAt
+  payrollOrgOverrides PayrollPaymessageOrgUnitOverride[]
+}
+
+model Messages {
+  id                Int              @id @default(autoincrement())
+  title             String
+  category          MessageCategory
+  header            String
+  description       String?
+  comment           String?
+  status            MessageStatus    @default(PENDIENTE)
+  type              MessageType      @default(INFORME)
+  files             FilesMessage[]
+  users             Mail[]
+  history           MessageHistory[]
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  officeId          Int?
+  beforeOffice      String?
+  historyOfficesIds Int[]
+  positionSeal      Int              @default(1)
+  office            Office?          @relation(fields: [officeId], references: [id])
+  onHolding         Boolean          @default(true)
+  onHoldingDate     DateTime?
+}
+
+model MessageHistory {
+  id           Int                   @id @default(autoincrement())
+  title        String
+  header       String                @default("")
+  description  String?
+  userId       Int?
+  user         Users?                @relation(fields: [userId], references: [id])
+  files        FilesMessageHistory[]
+  paymessage   PayMessages?          @relation(fields: [paymessageId], references: [id])
+  paymessageId Int?
+  message      Messages?             @relation(fields: [messageId], references: [id])
+  messageId    Int?
+  createdAt    DateTime              @default(now())
+}
+
+model FilesMessage {
+  id           Int          @id @default(autoincrement())
+  attempt      String       @default("") //Date.getTime()
+  name         String
+  path         String
+  originalname String?
+  message      Messages?    @relation(fields: [messageId], references: [id])
+  paymessage   PayMessages? @relation(fields: [paymessageId], references: [id])
+  messageId    Int?
+  paymessageId Int?
+  createdAt    DateTime     @default(now())
+}
+
+model Payment {
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  paymessageId Int?
+  paymessage   PayMessages?   @relation(fields: [paymessageId], references: [id])
+  files        FilesPayment[]
+}
+
+model FilesPayment {
+  id           Int      @id @default(autoincrement())
+  name         String
+  originalname String?
+  path         String
+  createdAt    DateTime @default(now())
+  paymentId    Int?
+  payment      Payment? @relation(fields: [paymentId], references: [id])
+}
+
+model RxHFile {
+  id           Int         @id @default(autoincrement())
+  name         String
+  originalname String?
+  path         String
+  createdAt    DateTime    @default(now())
+  paymessageId Int         @unique
+  paymessage   PayMessages @relation(fields: [paymessageId], references: [id])
+}
+
+model FilesMessageHistory {
+  id           Int             @id @default(autoincrement())
+  name         String
+  path         String
+  originalname String?
+  replyId      Int?
+  reply        MessageHistory? @relation(fields: [replyId], references: [id])
+  createdAt    DateTime        @default(now())
+}
+
+model Contratc {
+  id               Int                   @id @default(autoincrement())
+  cui              String                @unique
+  name             String
+  contractNumber   String                @default("")
+  municipality     String                @default("")
+  observations     String                @default("")
+  projectName      String
+  department       String
+  province         String
+  district         String
+  projectShortName String?
+  difficulty       Int
+  createdAt        DateTime?             @default(now())
+  isIndependent    Boolean               @default(false)
+  indexContract    String
+  details          String?
+  type             ContractType          @default(CONTRATO)
+  phases           String                @default("[]")
+  amount           Float                 @default(0)
+  projectId        Int? //@unique
+  project          Projects?
+  consortiumId     Int?
+  companyId        Int?
+  consortium       Consortium?           @relation(fields: [consortiumId], references: [id])
+  company          Companies?            @relation(fields: [companyId], references: [id])
+  specialties      ContractSpecialties[]
+  milestones       ContractMilestone[]
+  documents        ContractDocument[]
+}
+
+model DocumentArtifact {
+  id               String                    @id @default(uuid())
+  ownerId          Int
+  type             DocumentArtifactType
+  status           DocumentArtifactStatus    @default(PROCESSING)
+  safeName         String
+  originalName     String?
+  storageKey       String                    @unique
+  mimeType         String                    @default("application/pdf")
+  sizeBytes        Int
+  pageCount        Int
+  sha256           String
+  manifest         Json?
+  idempotencyKey   String?
+  failureCode      String?
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @updatedAt
+  expiresAt        DateTime?
+  owner            Users                     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  contractVersions ContractDocumentVersion[]
+
+  @@unique([ownerId, idempotencyKey])
+  @@index([ownerId, status])
+  @@index([expiresAt])
+}
+
+model ContractDocument {
+  id               String                    @id @default(uuid())
+  contractId       Int
+  levelCode        String
+  levelName        String
+  currentVersionId String?                   @unique
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @updatedAt
+  contract         Contratc                  @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  versions         ContractDocumentVersion[] @relation("ContractDocumentVersions")
+  currentVersion   ContractDocumentVersion?  @relation("CurrentContractDocumentVersion", fields: [currentVersionId], references: [id], onDelete: SetNull)
+
+  @@unique([contractId, levelCode])
+  @@index([contractId])
+}
+
+model ContractDocumentVersion {
+  id                 String                    @id @default(uuid())
+  contractDocumentId String
+  artifactId         String
+  versionNumber      Int
+  authorId           Int
+  previousVersionId  String?
+  createdAt          DateTime                  @default(now())
+  document           ContractDocument          @relation("ContractDocumentVersions", fields: [contractDocumentId], references: [id], onDelete: Cascade)
+  currentFor         ContractDocument?         @relation("CurrentContractDocumentVersion")
+  artifact           DocumentArtifact          @relation(fields: [artifactId], references: [id], onDelete: Restrict)
+  author             Users                     @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  previousVersion    ContractDocumentVersion?  @relation("ContractDocumentVersionHistory", fields: [previousVersionId], references: [id], onDelete: SetNull)
+  nextVersions       ContractDocumentVersion[] @relation("ContractDocumentVersionHistory")
+
+  @@unique([contractDocumentId, versionNumber])
+  @@index([artifactId])
+  @@index([authorId])
+}
+
+model Role {
+  id         Int          @id @default(autoincrement())
+  name       String       @unique
+  hierarchy  Int          @default(1)
+  users      Users[]
+  menuPoints MenuPoints[]
+}
+
+model MenuPoints {
+  id            Int             @id @default(autoincrement())
+  typeRol       MenuRol
+  menuId        Int
+  subMenuPoints SubMenuPoints[]
+  roleId        Int?
+  role          Role?           @relation(fields: [roleId], references: [id], onDelete: Cascade)
+}
+
+model SubMenuPoints {
+  id           Int         @id @default(autoincrement())
+  typeRol      MenuRol
+  menuId       Int
+  menuPointsId Int?
+  menuPoints   MenuPoints? @relation(fields: [menuPointsId], references: [id], onDelete: Cascade)
+}
+
+model Logs {
+  id    Int     @id @default(autoincrement())
+  ip    String?
+  query Json
+}
+
+model Asitec {
+  id          Int       @id @default(autoincrement())
+  evaluator   String?
+  lastVc      DateTime?
+  followingVc DateTime?
+}
+
+model FolderVideos {
+  id        Int            @id @default(autoincrement())
+  name      String
+  parentId  Int?
+  parent    FolderVideos?  @relation("FolderToParent", fields: [parentId], references: [id])
+  children  FolderVideos[] @relation("FolderToParent")
+  videos    Video[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@index([parentId])
+}
+
+model Video {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String?
+  miniature   String?
+  url         String
+  folderId    Int
+  docs        VideoDocs[]
+  folder      FolderVideos @relation(fields: [folderId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([folderId])
+}
+
+model VideoDocs {
+  id        Int      @id @default(autoincrement())
+  name      String
+  path      String
+  createdAt DateTime @default(now())
+  videoId   Int
+  video     Video    @relation(fields: [videoId], references: [id])
+}
+
+model Meal {
+  id        Int         @id @default(autoincrement())
+  type      String
+  userTypes UserType[]  @default([INTERINO, REGULAR])
+  hour      String
+  mealOrder MealOrder[]
+}
+
+model MealOrder {
+  id               Int                @id @default(autoincrement())
+  meal             Meal               @relation(fields: [mealId], references: [id])
+  mealId           Int
+  type             String
+  orderTime        String
+  isClose          Boolean            @default(false)
+  orderDate        DateTime
+  createdAt        DateTime           @default(now())
+  mealOrderOnUsers MealOrderOnUsers[]
+
+  @@unique([mealId, orderDate])
+}
+
+model MealOrderOnUsers {
+  userId          Int
+  mealOrderId     Int
+  user            Users             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mealOrder       MealOrder         @relation(fields: [mealOrderId], references: [id], onDelete: Cascade)
+  status          Boolean           @default(false)
+  comment         String            @default("")
+  amountOfFood    AmountOfFood      @default(Normal)
+  pickupStatus    MealPickupStatus?
+  pickupUpdatedAt DateTime?
+  createdAt       DateTime          @default(now())
+
+  @@id([userId, mealOrderId])
+}
+
+enum AmountOfFood {
+  Poco
+  Normal
+  Harto
+}
+
+enum MealPickupStatus {
+  PICKED_UP
+  NOT_PICKED_UP
+  RESERVED
+}
+
+enum UserType {
+  INTERINO
+  REGULAR
+  REMOTO
+}
+
+enum MenuRol {
+  MOD
+  MEMBER
+  VIEWER
+  USER
+}
+
+enum Menus {
+  home
+  tramites
+  especialidades
+  asistencia
+  lista_de_usuarios
+  empresas
+  especialistas
+  indice_general
+  grupos
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  ASSISTANT
+  ASSISTANT_ADMINISTRATIVE
+  SUPER_MOD
+  AREA_MOD
+  MOD
+  EMPLOYEE
+}
+
+enum TaskRole {
+  UNRESOLVED
+  PROCESS
+  INREVIEW
+  DENIED
+  REVIEWED
+  APPROVED
+  DONE
+  LIQUIDATION
+}
+
+enum FileTypes {
+  MODEL
+  UPLOADS
+  REVIEW
+  EDITABLES
+}
+
+enum ListDetails {
+  PUNTUAL
+  TARDE
+  SIMPLE
+  GRAVE
+  MUY_GRAVE
+  PERMISO
+  SALIDA
+}
+
+enum AttendanceCaptureMode {
+  MANUAL
+  BIOMETRIC
+}
+
+enum AttendanceStatusSource {
+  SYSTEM_DEFAULT
+  BIOMETRIC
+  MANUAL
+  MANUAL_CORRECTION
+  LICENSE
+}
+
+enum IclockCommandOperation {
+  UPSERT_USER
+}
+
+enum IclockCommandStatus {
+  PENDING
+  LEASED
+  COMPLETED
+  FAILED
+}
+
+enum AttendanceListState {
+  OPEN
+  REVIEW
+  FINALIZED
+}
+
+enum AttendanceReconciliationStatus {
+  ACTIVE
+  VOIDED
+}
+
+enum AttendancePenaltyAdjustmentScope {
+  ATTENDANCE_RECORD
+  USER_PERIOD
+}
+
+enum AttendancePenaltyAdjustmentStatus {
+  ACTIVE
+  VOIDED
+}
+
+enum AttendancePenaltyAdjustmentSource {
+  ATTENDANCE_REPORT
+  ROTACIONES
+  PLANILLA
+}
+
+enum LicensePenaltyAdjustmentScope {
+  LICENSE
+  USER_PERIOD
+}
+
+enum LicensePenaltyAdjustmentStatus {
+  ACTIVE
+  VOIDED
+}
+
+enum LicensePenaltyAdjustmentSource {
+  SALIDAS_REPORT
+  ROTACIONES
+  PLANILLA
+  CONTROL_PUERTA
+}
+
+enum LicensesStatus {
+  ACTIVO
+  ACEPTADO
+  INACTIVO
+  PROCESO
+  DENEGADO
+  ACTIVE
+  INACTIVE
+  PROCESS
+  DENIED
+}
+
+enum GatePassStatus {
+  ACTIVE
+  RETURNED
+  CANCELLED
+  PENDING_EXIT_REVIEW
+  PENDING_RETURN_REVIEW
+}
+
+enum GatePassSource {
+  CONTROLLER
+  SELF_SERVICE
+}
+
+enum GateReviewRequestType {
+  EXIT_REGULARIZATION
+  RETURN_REGULARIZATION
+  PENALTY_REDUCTION
+}
+
+enum GateReviewRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  NEEDS_INFO
+}
+
+enum GateEvidenceType {
+  PHOTO
+  WHATSAPP_SCREENSHOT
+  LOCATION
+  NOTE
+  OTHER_FILE
+}
+
+enum GateEventType {
+  PASS_CREATED
+  EXIT_MARKED
+  RETURN_MARKED
+  REQUEST_SUBMITTED
+  REQUEST_APPROVED
+  REQUEST_REJECTED
+  PENALTY_REDUCED
+}
+
+enum MessageUser {
+  SENDER
+  RECEIVER
+}
+
+enum MessageType {
+  CARTA
+  INFORME
+  MEMORANDUM
+  ACUERDO
+  OFICIO
+  COORDINACION
+  MEMORANDUM_GLOBAL
+}
+
+enum MessageRole {
+  MAIN
+  SECONDARY
+}
+
+enum PayMessageStatus {
+  PROCESO
+  OBSERVADO
+  RECHAZADO
+  ARCHIVADO
+  FINALIZADO
+  POR_PAGAR
+  PAGADO
+  GUARDADO
+}
+
+enum MessageStatus {
+  PENDIENTE
+  OBSERVADO
+  RECHAZADO
+  FINALIZADO
+  ARCHIVADO
+  ELIMINADO
+}
+
+enum TypeItem {
+  ABC
+  ROM
+  NUM
+}
+
+enum TypeTuition {
+  CIP
+  CAP
+  CCP
+}
+
+enum MessageCategory {
+  GLOBAL
+  DIRECT
+}
+
+enum Gender {
+  M
+  F
+}
+
+enum ContractType {
+  CONTRATO
+  ORDEN_DE_SERVICIO
+  CONTRATACION_DIRECTA
+}
+
+enum DocumentArtifactType {
+  ORIGINAL_PDF
+  COMPOSED_PDF
+  LEGACY_PDF
+}
+
+enum DocumentArtifactStatus {
+  PROCESSING
+  TEMPORARY
+  PUBLISHED
+  FAILED
+  EXPIRED
+}
+
+enum CorporateArchiveScopeType {
+  COMPANY
+  CONSORTIUM
+}
+
+enum CorporateArchiveCategory {
+  IDENTITY
+  MANAGEMENT
+  ADMINISTRATION
+  PEOPLE
+  COMMERCIAL
+  COMPLIANCE
+  EXPERIENCE
+  CONTRACTS
+}
+
+enum CorporateArchiveDocumentStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum LicenseType {
+  PERMISO
+  SALIDA
+}
+
+enum ProductionBonusOrigin {
+  ASSIGNED_BY_MANAGER
+  REQUESTED_BY_USER
+  REGISTERED_BY_ADMIN
+}
+
+enum ProductionBonusStatus {
+  BORRADOR
+  ASIGNADO
+  EN_CURSO
+  PROCESO
+  APROBADO
+  RECHAZADO
+  OBSERVADO
+  PENDIENTE_VALIDACION
+  VALIDADO
+  ANULADO
+  LIQUIDADO
+  CERRADO
+}
+
+enum ProductionBonusType {
+  HORAS_EXTRA
+  DOMINGO
+  FERIADO
+  MADRUGADA
+  CORRIDO
+  EMERGENCIA
+  OTRO
+}
+
+enum ProductionBonusEvidenceType {
+  PHOTO
+  DOCUMENT
+  WHATSAPP_SCREENSHOT
+  ATTENDANCE_REFERENCE
+  GATE_CONTROL_REFERENCE
+  NOTE
+}
+
+enum ProductionBonusEventType {
+  ASSIGNMENT_CREATED
+  ASSIGNMENT_UPDATED
+  ASSIGNMENT_RESCHEDULED
+  ASSIGNMENT_CANCELLED
+  REQUEST_CREATED
+  REQUEST_APPROVED
+  REQUEST_REJECTED
+  REQUEST_OBSERVED
+  EVIDENCE_ATTACHED
+  HOURS_VALIDATED
+  REQUEST_LIQUIDATED
+}
+
+enum MetradoProjectStatus {
+  DRAFT
+  IMPORTED
+  IN_PROGRESS
+  REVIEWED
+  APPROVED
+  ARCHIVED
+}
+
+enum MetradoCalculationType {
+  GENERAL
+  ACERO
+  PLATAFORMADO
+  MANUAL
+  MIXTO
+}
+
+enum MetradoLineType {
+  DETAIL
+  NOTE
+  GROUP
+  EMPTY
+  SUBTOTAL
+}
+
+enum MetradoLineStatus {
+  DRAFT
+  PENDING_VALIDATION
+  OBSERVED
+  VALIDATED
+}
+
+enum MetradoFileStatus {
+  PENDING
+  PROCESSED
+  FAILED
+}
+
+enum MetradoIssueStatus {
+  PENDING
+  FIXABLE
+  RESOLVED
+  IGNORED
+}
+
+enum MetradoEventType {
+  PROJECT_CREATED
+  PROJECT_UPDATED
+  EXCEL_IMPORTED
+  ITEM_CREATED
+  ITEM_UPDATED
+  ITEM_DELETED
+  ITEM_MOVED
+  LINE_CREATED
+  LINE_UPDATED
+  LINE_DELETED
+  BLOCK_UPDATED
+  VALIDATION_CREATED
+  VALIDATION_RESOLVED
+  EXCEL_EXPORTED
+}
+
+enum FeedbackType {
+  ACCEPTED
+  REJECTED
+  HOLDING
+}
+
+enum ReportUserType {
+  ADELANTO
+  LIQUIDACION
+  MENSUAL
+}
+
+enum LiquidationScopeType {
+  STAGE
+  APPROVED_SPECIALTY
+}
+
+enum OrgUnitProjectFocusStatus {
+  ACTIVE
+  INACTIVE
+  PAUSED
+  WATCHED
+  DONE
+}
+
+enum MeetingStatus {
+  DRAFT
+  SCHEDULED
+  LIVE
+  ENDED
+  CANCELLED
+}
+
+enum MeetingScope {
+  SELF
+  DESCENDANTS
+}
+
+enum MeetingWorkspaceView {
+  UNITS
+  TECHNICAL_TREE
+  MEMBERS
+  PROJECTS_MEMBERS
+}
+
+enum MeetingLifecycleEventType {
+  STARTED
+  ENDED
+  RESUMED
+}
+
+enum MeetingActaStatus {
+  DRAFT
+  FINAL
+  SUPERSEDED
+}
+
+enum MeetingParticipantStatus {
+  PRESENT
+  LATE
+  ABSENT
+  EXCUSED
+}
+
+enum MeetingParticipantType {
+  USER
+  EXTERNAL
+}
+
+enum MeetingParticipantOrigin {
+  UNIT_MEMBER
+  INVITED
+}
+
+enum MeetingMinuteScope {
+  GENERAL
+  PROJECT
+}
+
+enum MeetingAgendaScope {
+  GENERAL
+  PROJECT
+  ACTIVITY
+  COMMITMENT
+}
+
+enum MeetingAgendaStatus {
+  OPEN
+  REVIEWED
+  CLOSED
+}
+
+enum CalendarActivityStatus {
+  SCHEDULED
+  IN_PROGRESS
+  DONE
+  CANCELLED
+}
+
+enum CalendarActivityPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum MeetingPresenterType {
+  USER
+  TEAM
+  GROUP
+}
+
+enum ProgressReportParticipantRole {
+  PRESENTER
+  SUPPORT
+}
+
+enum ProgressReportStatus {
+  DRAFT
+  READY
+  PRESENTED
+  ARCHIVED
+}
+
+enum ReportIndexTemplateScope {
+  GLOBAL
+  UNIT
+  PERSONAL
+}
+
+enum ProgressReportItemSource {
+  PROJECT_ONLY
+  ASITEC
+  REUSABLE_TEMPLATE
+  CUSTOM
+}
+
+enum ProgressReportItemStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  IN_REVIEW
+  WAITING_ASITEC
+  COMPLETED
+  BLOCKED
+}
+
+enum CommitmentTargetType {
+  ORG_UNIT
+  PROJECT
+  STAGE
+  LEVEL
+  TASK
+}
+
+enum CommitmentReviewDecision {
+  APPROVED
+  REJECTED
+  NOT_APPLICABLE
+}
+
+enum CommitmentStatus {
+  PENDING
+  IN_PROGRESS
+  DONE
+  BLOCKED
+  CANCELLED
+}
+
+enum CommitmentPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum CommitmentConfirmationStatus {
+  PROPOSED
+  CONFIRMED
+  REJECTED
+}
+
+enum CommitmentOrigin {
+  PRE_MEETING
+  MEETING
+  POST_MEETING
+  MANUAL
+}
+
+enum CommitmentAssigneeRole {
+  OWNER
+  SUPPORT
+}
+
+enum BasicResourceKind {
+  PHOTO
+  DOCUMENT
+  DRAWING
+  MODEL
+  ARCHIVE
+  VIDEO
+  OTHER
+}
+
+enum ContractMilestoneStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  OVERDUE
+  CANCELLED
+}
+
+enum OrganizationalUnitType {
+  GERENCIA
+  OFICINA
+  COORDINACION
+  GRUPO
+  ESPECIALIDAD
+  COMITE_TEMPORAL
+}
+
+enum OrganizationalMembershipRole {
+  GERENTE
+  JEFE
+  COORDINADOR
+  ESPECIALISTA
+  ASISTENTE
+  APOYO
+}
+
+enum OrganizationalLegacyType {
+  OFFICE
+  DIVISION
+  GROUP
+  SPECIALITY
+  TYPE_SPECIALITY
+}

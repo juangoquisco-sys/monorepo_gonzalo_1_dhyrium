@@ -1,0 +1,39 @@
+.listProfessionalItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.listProfessionalItem-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.listProfessionalItem-label {
+  font-size: 0.68rem;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: 0.01125rem;
+  text-wrap: nowrap;
+}
+.listProfessionalItem-label-specialists {
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 150%;
+  letter-spacing: 0.01125rem;
+}
+.listProfessionalItem-specialists {
+  display: flex;
+  gap: 0.5rem;
+}
+.listProfessionalItem-right-actions {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+}
+.listProfessionalItem-text-icon {
+  color: #434343;
+  font-size: 0.67rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5rem; /* 240% */
+}

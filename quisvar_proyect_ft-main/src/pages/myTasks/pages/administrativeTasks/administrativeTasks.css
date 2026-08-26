@@ -1,0 +1,22 @@
+.administrativeTasks {
+  padding: 1rem 2.5rem 2.5rem 2.5rem;
+  background-color: #fff;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  width: 100%;
+}
+.administrativeTasks-header {
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.administrativeTasks-header-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.9375rem;
+}

@@ -1,0 +1,103 @@
+.infoHistory-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 5.313rem;
+  gap: 20px;
+  padding: 0.625rem 1.25rem;
+}
+
+.infoHistory-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 5.313rem;
+  gap: 20px;
+  /* padding: 0.625rem 1.25rem; */
+}
+
+.infoHistory-info {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.infoHistory-main {
+  display: flex;
+  justify-content: space-between;
+}
+
+.infoHistory-title {
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 20px;
+  text-align: left;
+  display: flex;
+  gap: 5px;
+  color: black;
+  width: 100%;
+}
+
+.infoHistory-subtitle {
+  font-family: Montserrat;
+  font-size: 11px;
+  font-weight: 300;
+  line-height: 15px;
+  text-align: left;
+}
+
+.infoHistory-date {
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: 300;
+  line-height: 20px;
+  text-align: left;
+}
+
+.infoHistory-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  padding: 1px 5px;
+  border: solid 0.5px var(--color-primary);
+  border-radius: 5px;
+}
+
+.infoHistory-btn h4 {
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: 300;
+  line-height: 20px;
+  text-align: left;
+  color: var(--color-primary);
+}
+
+.ih-aproved {
+  color: var(--color-done);
+  font-weight: 500;
+}
+
+.ih-rejected {
+  color: var(--color-unresolved);
+  font-weight: 500;
+}
+.ih-derived {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.if-icon {
+  background-color: var(--color-secondary);
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

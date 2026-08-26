@@ -1,0 +1,147 @@
+.gd-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  /* position: relative; */
+}
+
+.gd-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gd-date {
+  display: flex;
+  gap: 0.5rem;
+  background-color: #fff;
+  align-items: center;
+  padding: 1rem 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.gda-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: end;
+}
+
+.gda-save {
+  border-radius: 5px;
+  border: none;
+  background-color: var(--color-primary);
+  color: #fff;
+  font-size: 11px;
+  height: 1.8rem;
+  width: fit-content;
+  right: 0;
+  margin-right: 10px;
+}
+
+.gd-close-span {
+  position: absolute;
+  z-index: 1;
+  right: -5px;
+  top: -10px;
+  cursor: pointer;
+  padding: 0.05rem 0.2rem;
+  background-color: red;
+  border-radius: 50%;
+  color: white;
+  font-weight: bolder;
+}
+
+.gd-attach {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  /* justify-content: space-between; */
+}
+
+.gd-options {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  align-items: center;
+}
+
+.gd-gray {
+  background-color: var(--color-text-gray);
+}
+
+.gd-options-btn {
+  color: #6a6f79;
+  font-size: 0.675rem;
+  font-style: normal;
+  font-weight: 500;
+  background-color: var(--color-menu);
+  border: none;
+}
+
+.attendance-add-btn.selected {
+  background-color: var(--color-primary);
+}
+
+.gd-header-title {
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  color: var(--color-text-gray);
+}
+
+.gdh-input {
+  width: 60%;
+  font-size: 0.9375rem;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.gd-titles {
+  display: flex;
+  margin-bottom: 1.25rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gd-table {
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.gd-add {
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.gd-add-project {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  align-items: center;
+}
+
+.gd-add-area {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.gd-cross {
+  display: flex;
+}
+
+.gd-project-list {
+  cursor: pointer;
+  padding: 4px 10px 4px 10px;
+  border-radius: 10px;
+  background: #f3f5f7;
+  color: var(--color-secondary);
+  text-wrap: nowrap;
+}
+
+.gd-border {
+  border-bottom: 2px solid var(--color-secondary);
+}

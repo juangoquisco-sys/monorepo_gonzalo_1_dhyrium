@@ -1,0 +1,122 @@
+.SidebarSpecialityLvlList-sub-list-item:has(:checked) {
+  --rotate: rotate(180deg);
+  --background: #d9d9d9;
+}
+
+.SidebarSpecialityLvlList-sub-list-item:has(:checked)
+  + .dropDownSidebarSpeciality-dropdown-content {
+  grid-template-rows: 1fr;
+}
+
+.SidebarSpecialityLvlList-sub-list-item {
+  display: flex;
+  align-items: center;
+  color: var(--color-secondary);
+  text-transform: capitalize;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0.15rem 0;
+  border-radius: 8px;
+}
+
+.not-border-left {
+  border-left: none;
+}
+.sidebarLevelList-sub-list-span-active {
+  background-color: #aaaaaa29;
+}
+.sidebarLevelList-menu-dots-option {
+  top: auto;
+  right: 2rem;
+}
+
+.SidebarSpecialityLvlList-section {
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+  color: var(--color-secondary);
+  font-size: var(--size-label);
+  align-items: center;
+  font-weight: 700;
+  border-radius: 8px;
+  min-height: 2.35rem;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.SidebarSpecialityLvlList-section:hover {
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px #e3ebf5;
+}
+
+.SidebarSpecialityLvlList-icon {
+  width: 1.5rem;
+}
+
+.SidebarSpecialityLvlList-sub-list-name {
+  flex-grow: 1;
+  padding: 0.5rem;
+  border-radius: 8px;
+  line-height: 1.2;
+}
+
+.letter-small {
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.SidebarSpecialityLvlList-sub-list-span {
+  display: block;
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.CUI {
+  font-weight: 600;
+  color: #80808080;
+}
+
+.not-margin-left {
+  margin-left: 0;
+}
+
+.SidebarSpecialityLvlList-dropdown-check {
+  position: absolute;
+  min-width: 100%;
+  opacity: 0;
+  cursor: pointer;
+  height: 100%;
+}
+.card-register-sworn-declaration-select {
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+  color: var(--color-secondary);
+  font-size: var(--size-label);
+  align-items: center;
+  font-weight: 700;
+}
+.SidebarSpecialityLvlList-dropdown-arrow {
+  width: 1.5rem;
+  margin-left: auto;
+  transform: var(--rotate, 0);
+  transition: 0.2s transform;
+}
+
+.SidebarSpecialityLvlList-inputs {
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+  box-shadow: 0px 1.5px 4px rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
+}
+
+.SidebarSpecialityLvlList-input {
+  flex-grow: 1;
+  height: 2rem;
+  padding: 0 0.5rem;
+  border-radius: var(--radius-input);
+  background-color: var(--color-menu);
+}

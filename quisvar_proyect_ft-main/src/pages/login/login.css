@@ -1,0 +1,153 @@
+.login {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.login-figure {
+  position: relative;
+  height: 100%;
+  flex: 1.5;
+}
+
+.login-figure-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.login-contain-logo {
+  position: absolute;
+  width: 25rem;
+  left: 2rem;
+  bottom: 2rem;
+}
+
+.form-group {
+  display: grid;
+  gap: 2rem;
+}
+
+.login-label {
+  width: 100%;
+  height: 25px;
+  color: #203881;
+  font-size: var(--size-label);
+}
+
+.login-forgot-password {
+  font-size: 0.7rem;
+  text-align: justify;
+}
+
+.login-forgot-email {
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+.login-text-red {
+  color: red;
+}
+.login-text-normal {
+  color: var(--color-secondary);
+}
+
+.login-input {
+  height: 3.5rem;
+  border: 1px solid var(--color-secondary);
+  border-radius: 5px;
+  padding: 0.5rem;
+  font-size: var(--size-input);
+}
+
+.login-btn {
+  width: 100%;
+  height: 3.5rem;
+  border-radius: 8px;
+  font-size: var(--size-button);
+  font-weight: bold;
+  background-color: var(--color-primary);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+}
+
+.login-btn:hover {
+  background-color: var(--color-secondary);
+}
+
+.card-form {
+  display: grid;
+  gap: 45px;
+  width: 100%;
+  max-width: 30rem;
+  padding: 4rem;
+  background-color: #fff;
+  border-radius: 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(50px);
+  box-shadow: 20px 20px 40px -6px #0003;
+}
+
+.login-form {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-menu);
+}
+
+@media (max-width: 768px) {
+  .login {
+    height: auto;
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    overflow-y: auto;
+  }
+
+  .login-figure {
+    flex: none;
+    height: 32vh;
+    min-height: 14rem;
+  }
+
+  .login-contain-logo {
+    width: min(14rem, calc(100% - 2rem));
+    left: 1rem;
+    bottom: 1rem;
+  }
+
+  .login-form {
+    flex: none;
+    min-height: 0;
+    padding: 1rem;
+  }
+
+  .card-form {
+    max-width: 100%;
+    padding: 2rem 1.25rem;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .login-figure {
+    height: 28vh;
+    min-height: 12rem;
+  }
+
+  .card-form {
+    padding: 1.5rem 1rem;
+    border-radius: 16px;
+  }
+}

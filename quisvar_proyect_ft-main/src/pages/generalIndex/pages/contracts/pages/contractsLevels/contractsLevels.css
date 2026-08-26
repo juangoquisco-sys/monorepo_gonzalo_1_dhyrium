@@ -1,0 +1,28 @@
+.contractsLevels-main-level {
+  position: relative;
+  flex: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.contractsLevels-level-title {
+  color: var(--color-secondary);
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+}
+.contractsLevels-level-contain {
+  height: 100%;
+  overflow-y: auto;
+}
+.contractsLevels-main-info {
+  display: flex;
+  flex: 1.5;
+}
+.contractsLevels-select-empty {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 7rem;
+}

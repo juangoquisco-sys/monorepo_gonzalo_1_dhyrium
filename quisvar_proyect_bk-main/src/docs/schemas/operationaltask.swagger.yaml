@@ -1,0 +1,265 @@
+/operationaltasks/self/{id}:
+  get:
+    summary: Retorna tareas por ID de usuario
+    tags:
+      - OperationalTasks
+    parameters:
+      - $ref: '#/components/parameters/optUserId'
+      - $ref: '#/components/parameters/currentDate'
+      - $ref: '#/components/parameters/initialDate'
+      - $ref: '#/components/parameters/untilDate'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/page'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '404':
+        $ref: '#/components/responses/404'
+      '400':
+        $ref: '#/components/responses/400'
+/operationaltasks:
+  post:
+    summary: Crea una nueva tarea
+    tags:
+      - OperationalTasks
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/operationaltaskform'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '201':
+        $ref: '#/components/responses/201'
+      '404':
+        $ref: '#/components/responses/404'
+      '400':
+        $ref: '#/components/responses/400'
+/operationaltasks/{id}:
+  put:
+    summary: Actualiza una tarea
+    tags:
+      - OperationalTasks
+    parameters:
+      - $ref: '#/components/parameters/optId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/operationaltaskform'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '201':
+        $ref: '#/components/responses/201'
+      '404':
+        $ref: '#/components/responses/404'
+      '400':
+        $ref: '#/components/responses/400'
+  delete:
+    summary: Elimina una tarea
+    tags:
+      - OperationalTasks
+    parameters:
+      - $ref: '#/components/parameters/optId'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '201':
+        $ref: '#/components/responses/201'
+      '404':
+        $ref: '#/components/responses/404'
+      '400':
+        $ref: '#/components/responses/400'
+/operationaltasks/item:
+  post:
+    summary: Crea un nuevo item de una tarea
+    tags:
+      - OperationalTasks
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/opsitemform'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '404':
+        $ref: '#/components/responses/404'
+    security:
+      - bearerAuth: []
+/operationaltasks/item/{id}:
+  put:
+    summary: Crea un nuevo item de una tarea
+    tags:
+      - OperationalTasks
+    parameters:
+      - $ref: '#/components/parameters/optId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/opsitemformupdate'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '404':
+        $ref: '#/components/responses/404'
+    security:
+      - bearerAuth: []
+  delete:
+    summary: Elimina un item de una tarea
+    tags:
+      - OperationalTasks
+    parameters:
+      - $ref: '#/components/parameters/optId'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '404':
+        $ref: '#/components/responses/404'
+    security:
+      - bearerAuth: []
+/operationaltasks/{id}/items/:
+  get:
+    summary: Retorna los items de una tarea
+    tags:
+      - OperationalTasks
+    parameters:
+      - $ref: '#/components/parameters/optId'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '404':
+        $ref: '#/components/responses/404'
+    security:
+      - bearerAuth: []
+/operationaltasks/files/{id}:
+  post:
+    summary: Crea un nuevo item de una tarea
+    tags:
+      - OperationalTasks
+    parameters:
+      - $ref: '#/components/parameters/optId'
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '404':
+        $ref: '#/components/responses/404'
+    security:
+      - bearerAuth: []
+  delete:
+    summary: Elimina un item de una tarea
+    tags:
+      - OperationalTasks
+    parameters:
+      - $ref: '#/components/parameters/optId'
+    responses:
+      '200':
+        $ref: './components/responses/200'
+      '404':
+        $ref: './components/responses/404'
+    security:
+      - bearerAuth: []
+
+components:
+  schemas:
+    operationaltaskform:
+      type: object
+      properties:
+        name:
+          type: string
+          required: true
+          description: Nombre de la tarea
+          example: 'tarea de prueba'
+        additionalInfo:
+          type: string
+          description: Informacion adicional
+          example: 'Informacion adicional'
+        time:
+          type: number
+          description: Duracion de la tarea
+          example: 60
+        price:
+          type: number
+          description: Precio de la tarea
+          required: true
+          example: 1000
+        description:
+          type: string
+          description: Descripcion de la tarea
+          example: 'Tarea de prueba'
+        projectName:
+          type: string
+          description: Nombre del proyecto
+          example: 'proyecto de prueba'
+    opsitemform:
+      type: object
+      properties:
+        description:
+          type: string
+          required: true
+          description: Nombre del item
+          example: 'item de prueba'
+        price:
+          type: number
+          description: Precio del item
+          required: true
+          example: 1000
+        taskId:
+          type: integer
+          description: ID de la tarea
+          required: true
+          example: 1
+
+    opsitemformupdate:
+      type: object
+      properties:
+        description:
+          type: string
+          required: true
+          description: Nombre del item
+          example: 'item de prueba'
+        price:
+          type: number
+          description: Precio del item
+          required: true
+          example: 1000
+  parameters:
+    optId:
+      in: path
+      name: id
+      required: true
+      description: ID de la tarea
+      schema:
+        type: integer
+    optUserId:
+      in: path
+      name: userId
+      required: true
+      description: ID del usuario
+      schema:
+        type: integer
+    currentDate:
+      in: query
+      name: currentDate
+      description: Fecha actual
+      schema:
+        type: string
+        example: 2024-08-01

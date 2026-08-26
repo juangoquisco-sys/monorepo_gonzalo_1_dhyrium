@@ -1,0 +1,160 @@
+.cardSubtaskHold {
+  background-color: white;
+  width: 100%;
+  border-radius: var(--radius-input);
+  flex-wrap: wrap;
+  gap: 5px;
+  display: flex;
+  height: 100%;
+  overflow-x: auto;
+}
+
+.cardSubtaskHold-left-details {
+  flex: 1.6;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  gap: 0.5rem;
+  align-items: center;
+  overflow-x: auto;
+}
+.cardSubtaskHold-list-option {
+  height: 6rem;
+}
+.cardSubtaskHold-details {
+  flex: 1;
+  border-left: 2px solid var(--color-secondary);
+  padding-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.4rem;
+  overflow-x: auto;
+}
+
+.cardSubtaskHold-info {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  gap: 1rem;
+  align-items: left;
+}
+
+.cardSubtaskHold-info-date {
+  font-size: 0.87rem;
+}
+
+.cardSubtaskHold-info-price {
+  font-size: 1rem;
+  color: var(--color-done);
+}
+
+.cardSubtaskHold-files-models {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 18rem;
+  gap: 0.5rem;
+}
+
+.cardSubtaskHold-files-models-title {
+  font-size: 0.87rem;
+  color: var(--color-primary);
+}
+
+.-files-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: var(--radius-input);
+  background-color: var(--color-menu);
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.cardSubtaskHold-models {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardSubtaskHold-models-title {
+  font-size: 0.87rem;
+  color: var(--color-primary);
+}
+
+.cardSubtaskHold-logo-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cardSubtaskHold-more-info {
+  color: #99a3a8;
+  text-align: center;
+  font-size: 2.8125rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.42188rem;
+}
+
+.cardSubtaskHold-add-users {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.cardSubtaskHold-more-info-content {
+  display: flex;
+  align-items: center;
+}
+
+.cardSubtaskHold-figure-logo {
+  width: 6rem;
+  aspect-ratio: 1;
+}
+
+.cardSubtaskHold-figure {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.cardSubtaskHold-title-information {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  color: #000;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5rem;
+  letter-spacing: 0.00938rem;
+}
+
+.cardSubtaskHold-asign-btn {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.cardSubtaskHold-model-files {
+  display: flex;
+  align-items: center;
+}
+
+.cardSubtaskHold-btns {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}

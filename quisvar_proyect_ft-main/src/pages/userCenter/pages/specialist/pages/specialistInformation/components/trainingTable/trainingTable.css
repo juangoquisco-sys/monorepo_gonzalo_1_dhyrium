@@ -1,0 +1,34 @@
+.training-table-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+}
+
+.training-table-header {
+  display: grid;
+  width: 100%;
+  height: 2rem;
+  font-size: 0.6875rem;
+  background-color: var(--color-primarylight);
+  grid-template-columns: 0.5fr 1.35fr 1.2fr 1fr 0.75fr 1fr 0.75fr;
+  padding: 0 0.3rem;
+  align-items: center;
+  font-weight: 600;
+}
+
+.training-table-body {
+  display: grid;
+  height: 2rem;
+  width: 100%;
+  font-size: 0.6875rem;
+  background-color: white;
+  grid-template-columns: 0.5fr 1.35fr 1.2fr 1fr 0.75fr 1fr 0.75fr;
+  padding: 0 0.3rem;
+  align-items: center;
+}
+
+.tr-center {
+  display: flex;
+  justify-content: center;
+}

@@ -1,0 +1,44 @@
+# duplicate:
+#   post:
+#     tags:
+#       - Levels
+#       - Duplicates
+#     summary: Duplicar nivel
+#     description: |-
+#       Duplicar una Nivel
+#     security:
+#       - bearerAuth: []
+#     parameters:
+#       - $ref: '#/components/parameters/id'
+#     requestBody:
+#       required: true
+#       content:
+#         application/json:
+#           schema:
+#             $ref: '#/components/schemas/duplicate'
+#     responses:
+#       '200':
+#         $ref: './global.yaml#/components/responses/200'
+#       '201':
+#         $ref: './global.yaml#/components/responses/201'
+#       '404':
+#         $ref: './global.yaml#/components/responses/404'
+#       "400":
+#         $ref: './global.yaml#/components/responses/400'
+# components:
+#   parameters:
+#     id:
+#       name: id
+#       in: path
+#       required: true
+#       schema:
+#         type: integer
+#       description: ID del nivel
+#   schemas:
+#     duplicate:
+#       type: object
+#       properties:
+#         name:
+#           type: string
+#           example: 'nivel_duplicado'
+#           description: Nombre del nivel

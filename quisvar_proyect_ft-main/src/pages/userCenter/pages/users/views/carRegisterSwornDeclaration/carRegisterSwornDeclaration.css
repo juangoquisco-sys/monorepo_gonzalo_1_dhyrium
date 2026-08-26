@@ -1,0 +1,237 @@
+.card-register-sworn-declaration {
+  position: absolute;
+  background-color: white;
+  left: 100%;
+  top: 0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border: 1px solid var(--color-secondary);
+  border-radius: 5px;
+  width: 17rem;
+}
+
+.card-register-sworn-declaration--embedded {
+  position: static;
+  inset: auto;
+  align-self: stretch;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  padding: 1.25rem;
+  border-color: var(--color-gray-secondary);
+  border-radius: 0.5rem;
+}
+
+.card-register-sworn-declaration-embedded-header {
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--color-gray-secondary);
+}
+
+.card-register-sworn-declaration-embedded-header p {
+  margin: 0.25rem 0 0;
+  color: var(--color-gray-tertiary);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.card-register-sworn-declaration-embedded-grid {
+  display: grid;
+  grid-template-columns: minmax(15rem, 2fr) minmax(11rem, 1fr);
+  gap: 1rem;
+  align-items: end;
+}
+
+.card-register-sworn-declaration-embedded-grid--with-months {
+  grid-template-columns: minmax(14rem, 1.6fr) repeat(2, minmax(10rem, 1fr));
+}
+
+.card-register-sworn-declaration-field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.card-register-sworn-declaration-field > span,
+.card-register-sworn-declaration-field legend {
+  padding: 0;
+  color: var(--color-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.card-register-sworn-declaration-field--directives,
+.card-register-sworn-declaration-actions {
+  grid-column: 1 / -1;
+}
+
+.card-register-sworn-declaration--embedded .generalData-edit-info-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+.card-register-sworn-declaration--embedded .card-register-radio-container {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 2.45rem;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--color-gray-secondary);
+  border-radius: 0.25rem;
+}
+
+.card-register-sworn-declaration--embedded .card-register-radio-input {
+  gap: 0.4rem;
+  color: var(--color-gray-text);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.card-register-sworn-declaration-directives-picker {
+  min-width: 0;
+}
+
+.card-register-sworn-declaration--embedded
+  .card-register-sworn-declaration-directives-picker {
+  overflow: hidden;
+  border: 1px solid var(--color-gray-secondary);
+  border-radius: 0.25rem;
+}
+
+.card-register-sworn-declaration-select {
+  position: relative;
+  display: flex;
+  min-height: 2.25rem;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.card-register-sworn-declaration--embedded
+  .card-register-sworn-declaration-select {
+  padding: 0.35rem 0.65rem;
+  color: var(--color-gray-text);
+  font-size: 0.78rem;
+}
+
+.card-register-sworn-declaration-select:has(:checked) {
+  --rotate: rotate(180deg);
+}
+
+.card-register-sworn-declaration-select:has(:checked)
+  + .card-register-sworn-declaration-dropdown-content {
+  grid-template-rows: 1fr;
+}
+
+.card-register-sworn-declaration-arrow {
+  width: 1.25rem;
+  margin-left: auto;
+  transform: var(--rotate, 0);
+  transition: 0.2s transform;
+}
+
+.card-register-sworn-declaration-dropdown-content {
+  display: grid;
+  grid-template-rows: var(--rows, 0fr);
+  transition: 0.3s grid-template-rows;
+}
+
+.card-register-sworn-declaration-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.card-register-sworn-declaration-dropdown-sub {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 98%;
+  margin: 0.2rem 0 0 auto;
+  gap: 0.5rem;
+}
+
+.card-register-sworn-declaration--embedded
+  .card-register-sworn-declaration-dropdown-sub {
+  box-sizing: border-box;
+  width: 100%;
+  max-height: 12rem;
+  margin: 0;
+  padding: 0.65rem;
+  overflow: auto;
+  border-top: 1px solid var(--color-gray-secondary);
+}
+
+.card-register-dropdown-check {
+  position: absolute;
+  width: 100%;
+  min-width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.card-register-sworn-declaration-subtitle {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.card-register-radio-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-register-sworn-declaration-check-container {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+}
+
+.card-register-sworn-declaration-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.card-register-sworn-declaration-actions > a {
+  width: min(100%, 18rem);
+}
+
+@media (max-width: 56rem) {
+  .card-register-sworn-declaration-embedded-grid,
+  .card-register-sworn-declaration-embedded-grid--with-months {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card-register-sworn-declaration-embedded-grid--with-months
+    .card-register-sworn-declaration-field--type {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 40rem) {
+  .card-register-sworn-declaration--embedded {
+    padding: 1rem;
+  }
+
+  .card-register-sworn-declaration-embedded-grid,
+  .card-register-sworn-declaration-embedded-grid--with-months {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card-register-sworn-declaration-embedded-grid--with-months
+    .card-register-sworn-declaration-field--type {
+    grid-column: auto;
+  }
+
+  .card-register-sworn-declaration-actions,
+  .card-register-sworn-declaration-actions > a {
+    width: 100%;
+  }
+}

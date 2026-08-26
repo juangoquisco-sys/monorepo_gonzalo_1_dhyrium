@@ -1,0 +1,16 @@
+.buttonHeader-link-span {
+  cursor: pointer;
+  color: #6a6f79;
+  font-size: 0.675rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.0125rem;
+}
+.buttonHeader-link--active {
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.625rem;
+  background: #f3f5f7;
+  color: var(--color-secondary);
+  font-weight: 600;
+  letter-spacing: 0.02025rem;
+}

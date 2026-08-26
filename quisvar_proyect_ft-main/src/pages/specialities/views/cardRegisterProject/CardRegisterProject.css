@@ -1,0 +1,111 @@
+close-add-card.content-area {
+  width: 100%;
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.CardRegister-input-form {
+  border-bottom: 2px solid var(--color-secondary);
+  padding: 0.4rem;
+  background-color: var(--color-menu);
+  /* width: 100%; */
+  /* border-radius: var(--radius-input) var(--radius-input) 0 0; */
+}
+
+.close-add-card {
+  position: absolute;
+  background-color: #ffffff00;
+  width: 1.2rem;
+  height: 1.2rem;
+  right: 0.5rem;
+  top: 0.5rem;
+  transition: ease 0.5s;
+  cursor: pointer;
+}
+
+.close-icon-project {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  width: 1.3rem;
+  border-radius: 50%;
+}
+
+.select-area {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+}
+
+.switch-status-label {
+  /* font-size: var(--size-label); */
+  text-transform: uppercase;
+}
+
+.card-register-project-container-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.card-register-project-button-show-bussiness {
+  color: var(--color-primary);
+  border: none;
+}
+
+/* .patito-prueba2 {
+  height: var(--register-height);
+}
+
+.patito-prueba3 {
+  height: var(--register-height);
+  background-color: white;
+} */
+
+.input2 {
+  height: 2.5rem;
+  width: 40rem;
+  border: 2px solid var(--color-quaternay);
+  border-radius: var(--radius-input);
+  padding: 0 0.3rem;
+  font-size: var(--size-input);
+  flex: 1;
+}
+
+.edit-this {
+  width: 25%;
+}
+
+.col-unique {
+  text-transform: capitalize;
+  padding: 0.5rem 0;
+  display: flex;
+  font-weight: 600;
+  align-items: center;
+  gap: 2rem;
+}
+
+.btn-build {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  width: 50%;
+  height: 3.5rem;
+  border-radius: 8px;
+  font-size: var(--size-button);
+  font-weight: bold;
+  background-color: var(--color-primary);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+  margin-top: 30px;
+}
+
+.btn:hover {
+  background-color: var(--color-secondary);
+}

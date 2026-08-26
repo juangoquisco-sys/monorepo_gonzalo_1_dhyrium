@@ -1,0 +1,4160 @@
+.dutyRotationsLayout {
+  display: flex;
+  min-height: 100%;
+  height: 100%;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dutyRotations {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 1.35rem;
+  color: var(--foreground);
+  overflow-y: auto;
+}
+
+.dutyRotations-header,
+.dutyRotations-configHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dutyRotations-header {
+  margin-bottom: 1rem;
+}
+
+.dutyRotations-header h1 {
+  margin: 0;
+  color: var(--color-secondary);
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.dutyRotations-titleLine,
+.dutyRotations-labelLine {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.dutyRotations-titleLine {
+  flex-wrap: wrap;
+}
+
+.dutyRotations-labelLine {
+  width: fit-content;
+}
+
+.dutyRotations-help {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  color: var(--color-primary);
+  cursor: help;
+  outline: none;
+}
+
+.dutyRotations-help > svg {
+  width: 1rem;
+  height: 1rem;
+  stroke-width: 2.3;
+}
+
+.dutyRotations-helpBubble {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 0.55rem);
+  left: 50%;
+  width: min(18rem, calc(100vw - 3rem));
+  transform: translateX(-50%) translateY(-0.25rem);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 32%, var(--border));
+  border-radius: 8px;
+  background: var(--background);
+  box-shadow: 0 14px 34px rgb(15 23 42 / 16%);
+  color: var(--foreground);
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.35;
+  opacity: 0;
+  padding: 0.65rem 0.75rem;
+  pointer-events: none;
+  text-align: left;
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.dutyRotations-helpBubble::after {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-top: 1px solid
+    color-mix(in srgb, var(--color-primary) 32%, var(--border));
+  border-left: 1px solid
+    color-mix(in srgb, var(--color-primary) 32%, var(--border));
+  background: var(--background);
+  content: '';
+  transform: translate(-50%, 50%) rotate(45deg);
+}
+
+.dutyRotations-help:hover .dutyRotations-helpBubble,
+.dutyRotations-help:focus-visible .dutyRotations-helpBubble {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.dutyRotations-header p,
+.dutyRotations [data-slot='card-description'] {
+  color: var(--color-gray-text);
+}
+
+.dutyRotations-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(22rem, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dutyRotations-personalSummary {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.dutyRotations-personalMetric {
+  display: grid;
+  gap: 0.55rem;
+  min-height: 5.2rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  padding: 0.9rem 1rem;
+}
+
+.dutyRotations-personalMetric span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.dutyRotations-personalMetric svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.dutyRotations-personalMetric strong {
+  color: var(--color-secondary);
+  font-size: clamp(1.35rem, 1.6vw, 1.85rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.dutyRotations-personalMetric.is-primary {
+  border-color: color-mix(in srgb, var(--color-primary) 30%, var(--border));
+  background: color-mix(in srgb, var(--color-primary) 7%, var(--background));
+}
+
+.dutyRotations-personalMetric.is-success {
+  border-color: color-mix(in srgb, #16a34a 30%, var(--border));
+  background: color-mix(in srgb, #16a34a 6%, var(--background));
+}
+
+.dutyRotations-personalMetric.is-available {
+  border-color: color-mix(in srgb, #f59e0b 32%, var(--border));
+  background: color-mix(in srgb, #f59e0b 7%, var(--background));
+}
+
+.dutyRotations-personalMetric.is-next {
+  border-color: color-mix(in srgb, var(--color-secondary) 24%, var(--border));
+  background: color-mix(in srgb, var(--color-secondary) 4%, var(--background));
+}
+
+.dutyRotations-personalAvailablePanel {
+  grid-column: 1 / -1;
+}
+
+.dutyRotations-panel,
+.dutyRotations-configCard {
+  border-radius: 8px;
+}
+
+.dutyRotations-configCard {
+  margin-top: 1rem;
+}
+
+.dutyRotations-cardStack {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.dutyRotations-shiftCard,
+.dutyRotations-poolCard {
+  display: grid;
+  gap: 0.95rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: color-mix(in srgb, var(--background) 88%, #f8fafc);
+  padding: 1rem;
+}
+
+.dutyRotations-poolCard {
+  border-bottom: 1px solid var(--border);
+}
+
+.dutyRotations-shiftInfo {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.dutyRotations-shiftTitleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dutyRotations-shiftTitleRow h3 {
+  margin: 0;
+  color: var(--color-secondary);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.dutyRotations-shiftTitleRow p,
+.dutyRotations-poolDate {
+  margin: 0.45rem 0 0;
+  color: var(--color-gray-text);
+  font-size: var(--size-paragraph);
+}
+
+.dutyRotations-poolDate {
+  color: var(--color-primary);
+}
+
+.dutyRotations-metaLine,
+.dutyRotations-cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.dutyRotations-metaLine span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--color-gray-text);
+  font-size: var(--size-paragraph);
+}
+
+.dutyRotations-metaLine svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.dutyRotations-cardActions button,
+.dutyRotations-poolCard button {
+  min-width: 8.4rem;
+}
+
+.dutyRotations-poolCard > button {
+  width: 100%;
+}
+
+.dutyRotations-configActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.dutyRotations-configActions label {
+  display: grid;
+  gap: 0.25rem;
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  font-weight: 700;
+}
+
+.dutyRotations-configActions input,
+.dutyRotations-dutyForm input {
+  width: 100%;
+  height: 2.35rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background-color: var(--background);
+  padding: 0 0.75rem;
+  color: var(--foreground);
+  outline: none;
+}
+
+.dutyRotations-configActions input:focus,
+.dutyRotations-dutyForm input:focus {
+  border-color: var(--color-primary);
+}
+
+.dutyRotations-reportActions button {
+  min-width: 6.4rem;
+}
+
+.dutyRotations-configActions.dutyRotations-reportActions {
+  display: grid;
+  grid-template-columns:
+    minmax(13rem, 0.9fr) minmax(18rem, 1.4fr) minmax(13rem, 0.9fr)
+    minmax(17rem, 1.25fr) minmax(12rem, 0.85fr);
+  align-items: end;
+  justify-content: start;
+  gap: 0.6rem 0.75rem;
+  width: 100%;
+}
+
+.dutyRotations-reportActions > label {
+  width: 100%;
+  min-width: 0;
+}
+
+.dutyRotations-reportActions > label.dutyRotations-reportSort {
+  width: 100%;
+}
+
+.dutyRotations-reportActions
+  .dutyRotations-reportSort
+  [data-slot='select-trigger'] {
+  min-height: 2.35rem;
+  white-space: nowrap;
+}
+
+.dutyRotations-reportActionGroup {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.dutyRotations-reportActionGroup > button,
+.dutyRotations-reportActionGroup .dutyRotations-exportMenu > button {
+  min-height: 2.35rem;
+}
+
+.dutyRotations-reportActions .dutyRotations-reportDropdown button {
+  min-width: 0;
+}
+
+.dutyRotations-reportFilter {
+  display: grid;
+  gap: 0.25rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.dutyRotations-reportFilter-status,
+.dutyRotations-reportFilter-user {
+  width: 100%;
+}
+
+.dutyRotations-reportFilter > span {
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  font-weight: 700;
+}
+
+.dutyRotations-reportDropdown {
+  position: relative;
+}
+
+.dutyRotations-reportDropdownTrigger {
+  display: flex;
+  width: 100%;
+  min-height: 2.35rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background-color: var(--background);
+  padding: 0 0.85rem;
+  color: var(--color-secondary);
+  font-size: var(--size-paragraph);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.dutyRotations-reportDropdownTrigger span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dutyRotations-reportDropdownTrigger svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  transition: transform 140ms ease;
+}
+
+.dutyRotations-reportDropdownTrigger[aria-expanded='true'] {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.dutyRotations-reportDropdownTrigger[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+
+.dutyRotations-reportFilterOptions {
+  position: absolute;
+  z-index: 15;
+  top: calc(100% + 0.45rem);
+  left: 0;
+  display: grid;
+  gap: 0.45rem;
+  width: min(100%, 28rem);
+  max-height: 18rem;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  box-shadow: 0 14px 34px rgb(15 23 42 / 14%);
+  padding: 0.65rem;
+}
+
+.dutyRotations-reportFilter-status .dutyRotations-reportFilterOptions {
+  width: min(22rem, calc(100vw - 2rem));
+}
+
+.dutyRotations-reportFilter-user .dutyRotations-reportFilterOptions {
+  width: min(24rem, calc(100vw - 2rem));
+}
+
+.dutyRotations-exportMenu {
+  align-self: end;
+}
+
+.dutyRotations-exportMenu > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.dutyRotations-exportMenu > button[aria-expanded='true'] {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.dutyRotations-exportMenu > button[aria-expanded='true'] svg:last-child {
+  transform: rotate(180deg);
+}
+
+.dutyRotations-exportMenuOptions {
+  position: absolute;
+  z-index: 16;
+  top: calc(100% + 0.45rem);
+  right: 0;
+  display: grid;
+  gap: 0.35rem;
+  width: min(18rem, calc(100vw - 2rem));
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  box-shadow: 0 14px 34px rgb(15 23 42 / 14%);
+  padding: 0.45rem;
+}
+
+.dutyRotations-exportMenuOptions button {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background-color: transparent;
+  color: var(--foreground);
+  padding: 0.55rem 0.65rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dutyRotations-exportMenuOptions button:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 38%, white);
+  background-color: color-mix(in srgb, var(--color-primary) 8%, white);
+}
+
+.dutyRotations-exportMenuOptions svg {
+  color: var(--color-primary);
+}
+
+.dutyRotations-exportMenuOptions span {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.dutyRotations-exportMenuOptions strong {
+  color: var(--color-secondary);
+  font-size: var(--size-paragraph);
+  font-weight: 900;
+}
+
+.dutyRotations-exportMenuOptions small {
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  font-weight: 700;
+}
+
+.dutyRotations-reportFilterHeader,
+.dutyRotations-reportFilterFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dutyRotations-reportFilterHeader strong {
+  color: var(--color-secondary);
+  font-size: var(--size-paragraph);
+  font-weight: 900;
+}
+
+.dutyRotations-reportFilterHeader span,
+.dutyRotations-reportFilterFooter span {
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  font-weight: 700;
+}
+
+.dutyRotations-reportSearch {
+  width: 100%;
+  height: 2.2rem;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background-color: #ffffff;
+  padding: 0 0.75rem;
+  color: var(--foreground);
+  outline: none;
+}
+
+.dutyRotations-reportSearch:focus {
+  border-color: var(--color-primary);
+}
+
+.dutyRotations-reportFilterFooter button {
+  min-height: 1.9rem;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background-color: #ffffff;
+  padding: 0 0.65rem;
+  color: var(--color-secondary);
+  font-size: var(--size-label);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.dutyRotations-reportFilterFooter button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.dutyRotations-reportOptionList {
+  display: grid;
+  gap: 0.4rem;
+  max-height: 12rem;
+  overflow-y: auto;
+}
+
+.dutyRotations-reportOption {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2rem;
+  border: 1px solid #d6dce6;
+  border-radius: 7px;
+  background-color: #ffffff;
+  padding: 0.45rem 0.7rem;
+  color: #334155;
+  font-size: var(--size-label);
+  font-weight: 800;
+  overflow-wrap: anywhere;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dutyRotations-reportOption input {
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  accent-color: var(--color-primary);
+}
+
+.dutyRotations-reportOption span {
+  min-width: 0;
+}
+
+.dutyRotations-reportOption em {
+  min-width: 1.6rem;
+  border-radius: 999px;
+  background-color: #eef2f7;
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  font-style: normal;
+  font-weight: 800;
+  line-height: 1.35;
+  padding: 0.1rem 0.45rem;
+  text-align: center;
+}
+
+.dutyRotations-reportOption.is-selected {
+  border-color: #1d4ed8;
+  background-color: #e8f0ff;
+  color: #0f2f6b;
+}
+
+.dutyRotations-reportOption.is-selected em {
+  background-color: #dbeafe;
+  color: #0f2f6b;
+}
+
+.dutyRotations-reportEmpty {
+  margin: 0;
+  border: 1px dashed var(--border);
+  border-radius: 7px;
+  color: var(--color-gray-text);
+  font-size: var(--size-paragraph);
+  font-weight: 700;
+  padding: 0.85rem;
+  text-align: center;
+}
+
+.dutyRotations-clickableRow {
+  cursor: pointer;
+}
+
+.dutyRotations-exportReport {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+  --background: #ffffff;
+  --border: #d8dee8;
+  --color-border: #d8dee8;
+  --secondary: #0f2f6b;
+  --color-secondary: #0f2f6b;
+  --muted: #eef3f8;
+  --color-muted: #eef3f8;
+  --color-gray-text: #5b6472;
+  border: 1px solid #d8dee8;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(6, 95, 70, 0.08), transparent 34%),
+    linear-gradient(315deg, rgba(37, 99, 235, 0.07), transparent 38%), #ffffff;
+  padding: 1.15rem;
+}
+
+.dutyRotations-exportReport > * {
+  min-width: 0;
+}
+
+.dutyRotations-reportHero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid #d8dee8;
+  padding-bottom: 1rem;
+}
+
+.dutyRotations-reportEyebrow,
+.dutyRotations-reportStamp span,
+.dutyRotations-reportStats span {
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.dutyRotations-reportHero h2 {
+  margin: 0.25rem 0;
+  color: var(--color-secondary);
+  font-size: 1.45rem;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.dutyRotations-reportHero p {
+  margin: 0;
+  color: var(--color-gray-text);
+  font-size: var(--size-paragraph);
+  font-weight: 700;
+}
+
+.dutyRotations-reportFilterChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.45rem;
+  max-width: 64rem;
+}
+
+.dutyRotations-reportFilterChips span {
+  display: inline-flex;
+  max-width: min(100%, 27rem);
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 1.65rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 16%, #d8dee8);
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.72);
+  padding: 0.18rem 0.58rem;
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  font-weight: 800;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dutyRotations-reportFilterChips strong {
+  color: var(--color-secondary);
+  font-size: var(--size-label);
+  font-weight: 900;
+}
+
+.dutyRotations-reportStamp {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  justify-items: start;
+  gap: 0.1rem 0.45rem;
+  min-width: 13rem;
+  border: 1px solid #d8dee8;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.74);
+  padding: 0.55rem 0.75rem;
+}
+
+.dutyRotations-reportStamp svg {
+  grid-row: span 2;
+  color: var(--color-primary);
+}
+
+.dutyRotations-reportStamp strong {
+  color: var(--color-secondary);
+  font-size: var(--size-label);
+  font-weight: 900;
+}
+
+.dutyRotations-reportStats {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(7.25rem, 1fr));
+  gap: 0.65rem;
+}
+
+.dutyRotations-reportStats article {
+  position: relative;
+  display: grid;
+  gap: 0.3rem;
+  overflow: hidden;
+  border: 1px solid #d8dee8;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.82);
+  padding: 0.75rem;
+}
+
+.dutyRotations-reportStats article::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0.25rem;
+  background-color: #94a3b8;
+  content: '';
+}
+
+.dutyRotations-reportStats strong {
+  color: var(--color-secondary);
+  font-size: 1.35rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.dutyRotations-reportStats small {
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  font-weight: 800;
+}
+
+.dutyRotations-reportInsight {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #fff1f2, #ffffff 72%);
+  padding: 0.75rem 0.9rem;
+}
+
+.dutyRotations-reportInsight strong {
+  flex: 0 0 auto;
+  color: #991b1b;
+  font-size: var(--size-paragraph);
+  font-weight: 900;
+}
+
+.dutyRotations-reportInsight span {
+  color: #7f1d1d;
+  font-size: var(--size-paragraph);
+  font-weight: 700;
+}
+
+.dutyRotations-reportStat-total::before,
+.dutyRotations-reportStat-neutral::before {
+  background-color: #64748b;
+}
+
+.dutyRotations-reportStat-pending {
+  background-color: color-mix(in srgb, #facc15 10%, white) !important;
+}
+
+.dutyRotations-reportStat-pending::before {
+  background-color: #eab308;
+}
+
+.dutyRotations-reportStat-completed {
+  background-color: color-mix(in srgb, #22c55e 9%, white) !important;
+}
+
+.dutyRotations-reportStat-completed::before {
+  background-color: #22c55e;
+}
+
+.dutyRotations-reportStat-openPool {
+  background-color: color-mix(in srgb, #3b82f6 9%, white) !important;
+}
+
+.dutyRotations-reportStat-openPool::before {
+  background-color: #3b82f6;
+}
+
+.dutyRotations-reportStat-noShow {
+  background-color: color-mix(in srgb, #ef4444 9%, white) !important;
+}
+
+.dutyRotations-reportStat-noShow::before {
+  background-color: #ef4444;
+}
+
+.dutyRotations-exportReport [data-slot='table-container'] {
+  background-color: #ffffff;
+}
+
+.dutyRotations-exportReport [data-slot='table'] {
+  border-collapse: separate;
+  border-spacing: 0;
+  color: #1f2937;
+}
+
+.dutyRotations-exportReport [data-slot='table-header'] tr {
+  border-bottom: 1px solid #cfd7e3;
+}
+
+.dutyRotations-exportReport [data-slot='table-row'] {
+  border-bottom: 1px solid #e3e8ef;
+  background-color: #ffffff;
+  transition: background-color 120ms ease;
+}
+
+.dutyRotations-exportReport
+  [data-slot='table-body']
+  [data-slot='table-row']:hover {
+  background-color: #f8fbff;
+}
+
+.dutyRotations-exportReport [data-slot='table-head'] {
+  background-color: #f4f7fb;
+  color: #0f2f6b;
+  font-weight: 900;
+}
+
+.dutyRotations-exportReport [data-slot='table-cell'] {
+  color: #1f2937;
+}
+
+.dutyRotations-exportReport .dutyRotations-status {
+  border: 1px solid #cbd5e1;
+  background-color: #eef3f8;
+  color: #334155;
+}
+
+.dutyRotations-exportReport .dutyRotations-status-PENDING {
+  border-color: #facc15;
+  background-color: #fef9c3;
+  color: #854d0e;
+}
+
+.dutyRotations-exportReport .dutyRotations-status-COMPLETED {
+  border-color: #86efac;
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.dutyRotations-exportReport .dutyRotations-status-NO_SHOW {
+  border-color: #fca5a5;
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.dutyRotations-exportReport .dutyRotations-status-OPEN_POOL {
+  border-color: #93c5fd;
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.dutyRotations-monthTableWrap {
+  max-height: 26rem;
+  overflow: auto;
+}
+
+.dutyRotations-exportReport .dutyRotations-monthTableWrap {
+  max-height: none;
+  overflow: visible;
+}
+
+.dutyRotations-reportTable {
+  min-width: 72rem;
+  table-layout: fixed;
+}
+
+.dutyRotations-reportTable th,
+.dutyRotations-reportTable td {
+  vertical-align: top;
+}
+
+.dutyRotations-monthTableWrap thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--background);
+}
+
+.dutyRotations-exportReport .dutyRotations-monthTableWrap thead th {
+  position: static;
+  background-color: #f4f7fb;
+}
+
+.dutyRotations-reportIndex {
+  width: 3.25rem;
+  min-width: 3.25rem;
+  text-align: center;
+}
+
+.dutyRotations-reportDate {
+  width: 8rem;
+}
+
+.dutyRotations-reportSlot {
+  width: 10rem;
+}
+
+.dutyRotations-reportDuty {
+  width: 30%;
+}
+
+.dutyRotations-reportUser {
+  width: 22%;
+}
+
+.dutyRotations-reportStatus {
+  width: 10rem;
+}
+
+.dutyRotations-reportDate > span,
+.dutyRotations-reportSlot > span,
+.dutyRotations-reportDuty > span,
+.dutyRotations-reportUser > span {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.dutyRotations-reportDate > span {
+  -webkit-line-clamp: 1;
+  white-space: nowrap;
+}
+
+.dutyRotations-reportSlot > small {
+  display: -webkit-box;
+  margin-top: 0.2rem;
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: 0.68rem;
+  line-height: 1.3;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.dutyRotations-reportEmptyValue {
+  color: var(--color-gray-text);
+  font-style: italic;
+  font-weight: 700;
+}
+
+.dutyRotations-status {
+  display: inline-flex;
+  min-width: 5.4rem;
+  justify-content: center;
+  border-radius: 8px;
+  padding: 0.25rem 0.55rem;
+  background-color: var(--color-bg-asigned);
+  color: var(--color-asigned);
+  font-size: var(--size-label);
+  font-weight: 800;
+}
+
+.dutyRotations-status-PENDING {
+  background-color: var(--color-bg-asigned);
+  color: var(--color-asigned);
+}
+
+.dutyRotations-status-COMPLETED {
+  background-color: var(--color-bg-done);
+  color: var(--color-done);
+}
+
+.dutyRotations-status-NO_SHOW {
+  background-color: var(--color-bg-unresolved);
+  color: var(--color-unresolved);
+}
+
+.dutyRotations-status-OPEN_POOL {
+  background-color: var(--color-bg-correction);
+  color: var(--color-correction);
+}
+
+.dutyRotations-dialogGrid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.dutyRotations-reviewSummary {
+  display: grid;
+  gap: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 18%, var(--border));
+  border-radius: 8px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-primary) 5%, #fff),
+    #fff 54%
+  );
+  padding: 0.9rem;
+}
+
+.dutyRotations-reviewSummaryHero {
+  display: grid;
+  gap: 0.18rem;
+  min-width: 0;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--color-primary) 14%, var(--border));
+}
+
+.dutyRotations-reviewSummaryHero span,
+.dutyRotations-reviewList dt {
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.dutyRotations-reviewSummaryHero strong {
+  min-width: 0;
+  color: var(--color-secondary);
+  font-size: 1.15rem;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.dutyRotations-reviewSummaryHero small {
+  color: var(--color-gray-text);
+  font-size: var(--size-small);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.dutyRotations-reviewList {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.42fr) minmax(0, 1fr);
+  margin: 0;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 10%, var(--border));
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.dutyRotations-reviewList div {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.dutyRotations-reviewList dt,
+.dutyRotations-reviewList dd {
+  min-width: 0;
+  margin: 0;
+  padding: 0.68rem 0.78rem;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--color-primary) 10%, var(--border));
+}
+
+.dutyRotations-reviewList div:last-child dt,
+.dutyRotations-reviewList div:last-child dd {
+  border-bottom: 0;
+}
+
+.dutyRotations-reviewList dt {
+  background-color: color-mix(in srgb, var(--color-primary) 6%, #fff);
+}
+
+.dutyRotations-reviewList dd {
+  color: var(--color-secondary);
+  font-size: var(--size-small);
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.dutyRotations-reviewNotice {
+  border-radius: 8px;
+  background-color: color-mix(in srgb, var(--color-primary) 8%, #fff);
+  color: var(--color-secondary);
+  padding: 0.65rem 0.8rem;
+  font-size: var(--size-small);
+  font-weight: 800;
+}
+
+.dutyRotations-reviewNoticeWarning {
+  border: 1px solid color-mix(in srgb, var(--color-warning) 32%, var(--border));
+  background-color: color-mix(in srgb, var(--color-warning) 9%, #fff);
+}
+
+.dutyRotations-formGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.9rem;
+}
+
+.dutyRotations-formField,
+.dutyRotations-dialogGrid label {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  font-weight: 700;
+}
+
+.dutyRotations-dutyForm textarea {
+  min-height: 4.7rem;
+}
+
+.dutyRotations-fieldHint {
+  margin: -0.1rem 0 0.15rem;
+  color: var(--muted-foreground);
+  font-size: var(--size-small);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.dutyRotations-operationalHint {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 25%, white);
+  border-radius: 8px;
+  background-color: color-mix(in srgb, var(--color-primary) 7%, white);
+  padding: 0.75rem 0.85rem;
+  color: var(--color-secondary);
+}
+
+.dutyRotations-operationalHint svg {
+  flex: 0 0 auto;
+  color: var(--color-primary);
+  margin-top: 0.05rem;
+}
+
+.dutyRotations-operationalHint div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.dutyRotations-operationalHint strong {
+  font-size: var(--size-paragraph);
+  font-weight: 900;
+}
+
+.dutyRotations-operationalHint span {
+  color: var(--color-gray-text);
+  font-size: var(--size-paragraph);
+  font-weight: 600;
+}
+
+.dutyRotations-dayPicker,
+.dutyRotations-rolePicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.dutyRotations-dayPicker button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 0;
+  border-radius: 999px;
+  background-color: #eef0f4;
+  color: var(--color-gray-text);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.dutyRotations-dayPicker button.is-selected {
+  background-color: color-mix(in srgb, var(--color-primary) 16%, white);
+  color: var(--color-secondary);
+}
+
+.dutyRotations-rolePicker button {
+  min-height: 2.25rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background-color: var(--background);
+  padding: 0 0.85rem;
+  color: var(--foreground);
+  cursor: pointer;
+}
+
+.dutyRotations-rolePicker button.is-selected {
+  border-color: color-mix(in srgb, var(--color-primary) 50%, white);
+  background-color: color-mix(in srgb, var(--color-primary) 12%, white);
+  color: var(--color-secondary);
+  font-weight: 800;
+}
+
+.dutyRotations-previewList {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.dutyRotations-previewRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(10rem, auto);
+  align-items: center;
+  gap: 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  padding: 0.7rem 0.8rem;
+}
+
+.dutyRotations-previewRow > span {
+  display: grid;
+  min-width: 0;
+  color: var(--foreground);
+}
+
+.dutyRotations-previewRow > span:last-child {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 800;
+}
+
+.dutyRotations-previewRow small {
+  color: var(--muted-foreground);
+}
+
+.dutyRotations-previewInstructions {
+  display: block;
+  margin-top: 0.2rem;
+  line-height: 1.4;
+}
+
+.dutyRotations-distributionZone p {
+  margin: 0.2rem 0;
+  color: var(--muted-foreground);
+  font-size: var(--size-small);
+  line-height: 1.4;
+}
+
+.dutyRotations-slotInstructions {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 0.35rem;
+}
+
+.dutyRotations-slotInstructions label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.dutyRotations-slotInstructions label span,
+.dutyRotations-slotInstructions > small {
+  color: var(--muted-foreground);
+  font-size: var(--size-small);
+  font-weight: 500;
+}
+
+.dutyRotations-slotInstructions > small {
+  justify-self: end;
+}
+
+.dutyRotations-impactSummary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dutyRotations-impactSummary span {
+  border-radius: 999px;
+  background: var(--muted);
+  padding: 0.35rem 0.65rem;
+  color: var(--foreground);
+  font-size: var(--size-small);
+  font-weight: 800;
+}
+
+.dutyRotations-statusDialog {
+  display: grid;
+  gap: 1rem;
+}
+
+.dutyRotations-planningWorkspace {
+  gap: 1rem;
+}
+
+.dutyRotations-planningToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.85rem;
+}
+
+.dutyRotations-planningToolbar [data-slot='tabs-trigger'] > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: var(--background);
+  padding-inline: 0.3rem;
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.dutyRotations-activitySearch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: min(100%, 22rem);
+}
+
+.dutyRotations-activitySearch > svg {
+  position: absolute;
+  left: 0.75rem;
+  z-index: 1;
+  width: 1rem;
+  color: var(--muted-foreground);
+}
+
+.dutyRotations-activitySearch input {
+  padding-left: 2.25rem;
+}
+
+.dutyRotations-activityList,
+.dutyRotations-requestList {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.dutyRotations-activityRow {
+  display: grid;
+  grid-template-columns: minmax(13rem, 0.9fr) minmax(23rem, 1.45fr) auto;
+  align-items: center;
+  gap: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  padding: 1rem;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+
+.dutyRotations-activityRow.is-configuration-invalid {
+  border-color: color-mix(in srgb, var(--destructive) 40%, var(--border));
+}
+
+.dutyRotations-activityIdentity,
+.dutyRotations-activityIdentity > div,
+.dutyRotations-activityFacts > div {
+  min-width: 0;
+}
+
+.dutyRotations-activityIdentity > div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dutyRotations-activityIdentity > div > strong {
+  color: var(--foreground);
+  font-size: 1rem;
+}
+
+.dutyRotations-activityIdentity > p {
+  display: -webkit-box;
+  margin: 0.3rem 0 0;
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: var(--size-small);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.dutyRotations-activityIssue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+  color: var(--destructive);
+  font-size: var(--size-small);
+  font-weight: 750;
+}
+
+.dutyRotations-activityIssue svg {
+  width: 0.9rem;
+}
+
+.dutyRotations-activityFacts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+}
+
+.dutyRotations-activityFacts dt {
+  margin-bottom: 0.25rem;
+  color: var(--muted-foreground);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dutyRotations-activityFacts dd {
+  margin: 0;
+  color: var(--foreground);
+  font-size: var(--size-small);
+  line-height: 1.45;
+}
+
+.dutyRotations-activityActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  max-width: 25rem;
+}
+
+.dutyRotations-activityActions button svg {
+  width: 0.9rem;
+}
+
+.dutyRotations-requestRow {
+  display: grid;
+  grid-template-columns: minmax(14rem, 1fr) minmax(12rem, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  padding: 1rem;
+}
+
+.dutyRotations-requestRow p,
+.dutyRotations-requestRow small {
+  margin: 0.25rem 0 0;
+  color: var(--muted-foreground);
+}
+
+.dutyRotations-requestRow > div:last-child {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dutyRotations-planningSheet {
+  display: flex;
+  overflow-y: auto;
+}
+
+.dutyRotations-planningEyebrow {
+  color: var(--color-primary);
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.dutyRotations-planningSheet [data-slot='sheet-title'] {
+  padding-right: 2rem;
+  font-size: 1.35rem;
+}
+
+.dutyRotations-planningSheetActions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.dutyRotations-planningTabs {
+  min-height: 0;
+}
+
+.dutyRotations-planningOccurrences {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.dutyRotations-planningOccurrence {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--background);
+}
+
+.dutyRotations-planningOccurrence > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--muted) 55%, var(--background));
+  padding: 0.8rem 0.9rem;
+}
+
+.dutyRotations-planningOccurrence > header > div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.dutyRotations-planningOccurrence > header span,
+.dutyRotations-planningZoneHeading small {
+  color: var(--color-primary);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.dutyRotations-planningOccurrence > header small {
+  color: var(--muted-foreground);
+}
+
+.dutyRotations-planningZones {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.75rem;
+}
+
+.dutyRotations-planningZone {
+  border: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
+  border-radius: 9px;
+  padding: 0.75rem;
+}
+
+.dutyRotations-planningZoneHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dutyRotations-planningZoneHeading p {
+  margin: 0.25rem 0 0;
+  color: var(--muted-foreground);
+  font-size: var(--size-small);
+  line-height: 1.45;
+}
+
+.dutyRotations-planningZone ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.35rem 0.7rem;
+  margin: 0.65rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dutyRotations-planningZone li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+  border-radius: 7px;
+  background: var(--muted);
+  padding: 0.45rem 0.55rem;
+}
+
+.dutyRotations-planningZone li span {
+  overflow: hidden;
+  font-size: var(--size-small);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dutyRotations-planningZone li small {
+  flex: 0 0 auto;
+  color: var(--muted-foreground);
+  font-size: 0.68rem;
+}
+
+.dutyRotations-planningEmpty {
+  display: grid;
+  place-items: center;
+  min-height: 14rem;
+  gap: 0.35rem;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+.dutyRotations-planningEmpty strong {
+  color: var(--foreground);
+}
+
+.dutyRotations-shareDialog {
+  display: grid;
+  gap: 1rem;
+}
+
+.dutyRotations-shareIntro {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--color-primary) 7%, var(--background));
+  padding: 0.9rem;
+}
+
+.dutyRotations-shareIntro > svg {
+  flex: 0 0 auto;
+  color: var(--color-primary);
+}
+
+.dutyRotations-shareIntro p {
+  margin: 0.2rem 0 0;
+  color: var(--muted-foreground);
+}
+
+.dutyRotations-shareModes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.65rem;
+}
+
+.dutyRotations-shareModes > button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--background);
+  padding: 0.8rem;
+  color: var(--foreground);
+  text-align: left;
+  cursor: pointer;
+}
+
+.dutyRotations-shareModes > button.is-selected {
+  border-color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 6%, var(--background));
+  box-shadow: 0 0 0 1px
+    color-mix(in srgb, var(--color-primary) 20%, transparent);
+}
+
+.dutyRotations-shareModes > button > span {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.dutyRotations-shareModes small,
+.dutyRotations-shareSelectionSummary,
+.dutyRotations-shareState {
+  color: var(--muted-foreground);
+}
+
+.dutyRotations-shareOccurrenceList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  max-height: 15rem;
+  overflow-y: auto;
+}
+
+.dutyRotations-shareOccurrenceList label {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.65rem;
+}
+
+.dutyRotations-shareOccurrenceList label > span {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.dutyRotations-shareOccurrenceList small {
+  color: var(--muted-foreground);
+}
+
+.dutyRotations-shareSelectionSummary {
+  margin: 0;
+  font-size: var(--size-small);
+}
+
+.dutyRotations-shareState {
+  margin: 0;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.dutyRotations-shareState.is-error {
+  color: var(--destructive);
+}
+
+.dutyRotations-shareActions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.dutyRotations-shareCaptureRoot {
+  position: fixed;
+  top: 0;
+  left: -20000px;
+  z-index: -1;
+  width: 1080px;
+  pointer-events: none;
+}
+
+.dutyRotations-sharePage {
+  display: flex;
+  flex-direction: column;
+  width: 1080px;
+  min-height: 1350px;
+  background: #f8fafc;
+  padding: 64px;
+  color: #17202f;
+  font-family: Inter, Arial, sans-serif;
+}
+
+.dutyRotations-sharePage > header {
+  border-bottom: 5px solid #176b63;
+  padding-bottom: 28px;
+}
+
+.dutyRotations-sharePage > header span,
+.dutyRotations-sharePagePeriod > span {
+  color: #176b63;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.dutyRotations-sharePage > header h2 {
+  margin: 10px 0 6px;
+  color: #0f2438;
+  font-size: 46px;
+  line-height: 1.08;
+}
+
+.dutyRotations-sharePage > header p {
+  margin: 0;
+  color: #526273;
+  font-size: 22px;
+}
+
+.dutyRotations-sharePageJourneys {
+  display: grid;
+  gap: 30px;
+  padding-block: 34px;
+}
+
+.dutyRotations-sharePageJourneys > article {
+  overflow: hidden;
+  border: 2px solid #d9e2e8;
+  border-radius: 22px;
+  background: #fff;
+}
+
+.dutyRotations-sharePagePeriod {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 20px;
+  background: #e8f2f0;
+  padding: 24px 28px;
+}
+
+.dutyRotations-sharePagePeriod strong {
+  color: #0f2438;
+  font-size: 27px;
+}
+
+.dutyRotations-sharePagePeriod small {
+  color: #526273;
+  font-size: 17px;
+}
+
+.dutyRotations-sharePageZones {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  padding: 24px;
+}
+
+.dutyRotations-sharePageZones > section {
+  border: 2px solid #e6ebef;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.dutyRotations-sharePageZones > section > div > strong {
+  color: #0f2438;
+  font-size: 24px;
+}
+
+.dutyRotations-sharePageZones p {
+  margin: 7px 0 0;
+  color: #526273;
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+.dutyRotations-sharePageZones ol {
+  display: grid;
+  gap: 7px;
+  margin: 16px 0 0;
+  padding-left: 28px;
+}
+
+.dutyRotations-sharePageZones li {
+  padding-left: 5px;
+  color: #24364a;
+  font-size: 20px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.dutyRotations-sharePage > footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: auto;
+  border-top: 2px solid #d9e2e8;
+  padding-top: 22px;
+  color: #637282;
+  font-size: 16px;
+}
+
+.dutyRotations-invalidConfiguration,
+.dutyRotations-contractError {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--destructive) 35%, var(--border));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--destructive) 7%, var(--background));
+  padding: 0.8rem;
+  color: var(--foreground);
+}
+
+.dutyRotations-invalidConfiguration > svg,
+.dutyRotations-contractError > svg {
+  flex: 0 0 auto;
+  color: var(--destructive);
+}
+
+.dutyRotations-invalidConfiguration > div,
+.dutyRotations-contractError > div,
+.dutyRotations-emptyState {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.dutyRotations-invalidConfiguration ul {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding-left: 1.15rem;
+  color: var(--muted-foreground);
+  font-size: var(--size-small);
+}
+
+.dutyRotations-emptyState {
+  place-items: center;
+  min-height: 9rem;
+  padding: 1.5rem;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+.dutyRotations-emptyState strong {
+  color: var(--foreground);
+}
+
+.dutyRotations-dialogGrid {
+  gap: 0.85rem;
+}
+
+.dutyRotations-assignmentDialogContent {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.dutyRotations-assignmentSummary {
+  display: grid;
+  gap: 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 18%, var(--border));
+  border-radius: 8px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-primary) 7%, white),
+    white 58%
+  );
+  padding: 0.9rem;
+}
+
+.dutyRotations-assignmentSummary > div:first-child {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.dutyRotations-assignmentSummary > div:first-child span {
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.dutyRotations-assignmentSummary strong {
+  color: var(--color-secondary);
+  font-size: 1.05rem;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.dutyRotations-assignmentSummaryMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1rem;
+  border-top: 1px solid
+    color-mix(in srgb, var(--color-primary) 12%, var(--border));
+  padding-top: 0.7rem;
+}
+
+.dutyRotations-assignmentSummaryMeta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  color: var(--color-gray-text);
+  font-size: var(--size-paragraph);
+  font-weight: 700;
+}
+
+.dutyRotations-assignmentSummaryMeta svg,
+.dutyRotations-cardStateMessage svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+}
+
+.dutyRotations-dialogActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.dutyRotations-requiredLabel,
+.dutyRotations-optionalLabel {
+  margin-left: auto;
+  border-radius: 999px;
+  padding: 0.12rem 0.45rem;
+  font-size: var(--size-small);
+  font-weight: 800;
+}
+
+.dutyRotations-requiredLabel {
+  background-color: color-mix(in srgb, var(--color-correction) 10%, white);
+  color: var(--color-correction);
+}
+
+.dutyRotations-optionalLabel {
+  background-color: color-mix(in srgb, var(--color-primary) 8%, white);
+  color: var(--color-gray-text);
+}
+
+.dutyRotations-swapModeFieldset {
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.dutyRotations-swapModeFieldset legend {
+  margin: 0;
+  color: var(--color-secondary);
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.dutyRotations-swapChoices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+
+.dutyRotations-swapChoice {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.3rem 0.65rem;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--background);
+  padding: 0.85rem;
+  cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.dutyRotations-swapChoice:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 45%, var(--border));
+}
+
+.dutyRotations-swapChoice:has(input:focus-visible) {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.dutyRotations-swapChoice.is-selected {
+  border-color: var(--color-primary);
+  background-color: color-mix(in srgb, var(--color-primary) 6%, white);
+  box-shadow: 0 0 0 1px
+    color-mix(in srgb, var(--color-primary) 20%, transparent);
+}
+
+.dutyRotations-swapChoice:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.dutyRotations-swapChoice input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.dutyRotations-swapChoiceIcon {
+  display: inline-grid;
+  grid-row: 1 / span 2;
+  place-items: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 7px;
+  background-color: color-mix(in srgb, var(--color-primary) 10%, white);
+  color: var(--color-primary);
+}
+
+.dutyRotations-swapChoiceIcon svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.dutyRotations-swapChoice strong {
+  align-self: end;
+  color: var(--color-secondary);
+  font-size: var(--size-paragraph);
+  font-weight: 900;
+}
+
+.dutyRotations-swapChoice > span:last-child {
+  color: var(--color-gray-text);
+  font-size: var(--size-small);
+  line-height: 1.4;
+}
+
+.dutyRotations-swapTargetField,
+.dutyRotations-swapReasonField {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--color-gray-text);
+  font-size: var(--size-label);
+  font-weight: 700;
+}
+
+.dutyRotations-cardStateMessage {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 0.55rem 0.7rem;
+  color: var(--color-gray-text);
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.dutyRotations-cardStateMessage.is-pending {
+  border-color: color-mix(in srgb, var(--color-warning) 35%, var(--border));
+  background-color: color-mix(in srgb, var(--color-warning) 8%, white);
+}
+
+.dutyRotations-cardStateMessage.is-success {
+  border-color: color-mix(in srgb, var(--color-success) 30%, var(--border));
+  background-color: color-mix(in srgb, var(--color-success) 7%, white);
+  color: var(--color-success);
+}
+
+.dutyRotations-cardStateMessage.is-expired {
+  background-color: color-mix(in srgb, var(--color-gray-text) 6%, white);
+}
+
+.dutyRotations-cardStateMessage.is-info {
+  border-color: color-mix(in srgb, var(--color-primary) 28%, var(--border));
+  background-color: color-mix(in srgb, var(--color-primary) 6%, white);
+}
+
+.dutyRotations-evidenceField {
+  display: grid;
+  gap: 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem;
+}
+
+.dutyRotations-exclusionUsers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.45rem;
+  margin-top: 0.55rem;
+}
+
+.dutyRotations-exclusionUsers label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 0.5rem 0.6rem;
+  font-size: var(--size-small);
+}
+
+.dutyRotations-exclusionUsers label span {
+  display: grid;
+  min-width: 0;
+}
+
+.dutyRotations-exclusionUsers small {
+  color: var(--color-gray-text);
+}
+
+.dutyRotations-filePicker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: fit-content;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 0.65rem 0.8rem;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.dutyRotations-filePicker input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.dutyRotations-evidenceFile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.45rem;
+  font-size: var(--size-small);
+}
+
+@media (max-width: 1100px) {
+  .dutyRotations-activityRow {
+    grid-template-columns: minmax(14rem, 0.8fr) minmax(22rem, 1.2fr);
+  }
+
+  .dutyRotations-activityActions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    max-width: none;
+  }
+
+  .dutyRotations-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .dutyRotations-reportStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dutyRotations-personalSummary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dutyRotations-configActions.dutyRotations-reportActions {
+    grid-template-columns:
+      minmax(13rem, 14.5rem) minmax(18rem, 1fr)
+      minmax(12rem, 15rem);
+  }
+
+  .dutyRotations-reportActionGroup {
+    grid-column: 1 / -1;
+  }
+
+  .dutyRotations-reportActions > label,
+  .dutyRotations-reportFilter {
+    width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  .dutyRotations {
+    padding: 1rem;
+  }
+
+  .dutyRotations-helpBubble {
+    left: auto;
+    right: -0.4rem;
+    width: min(17rem, calc(100vw - 2rem));
+    transform: translateY(-0.25rem);
+  }
+
+  .dutyRotations-helpBubble::after {
+    left: auto;
+    right: 0.7rem;
+    transform: translateY(50%) rotate(45deg);
+  }
+
+  .dutyRotations-help:hover .dutyRotations-helpBubble,
+  .dutyRotations-help:focus-visible .dutyRotations-helpBubble {
+    transform: translateY(0);
+  }
+
+  .dutyRotations-swapChoices {
+    grid-template-columns: 1fr;
+  }
+
+  .dutyRotations-dialogActions {
+    flex-direction: column-reverse;
+  }
+
+  .dutyRotations-dialogActions button {
+    width: 100%;
+  }
+
+  .dutyRotations-assignmentSummaryMeta {
+    display: grid;
+  }
+
+  .dutyRotations-reviewList {
+    grid-template-columns: 1fr;
+  }
+
+  .dutyRotations-reviewList div {
+    display: block;
+  }
+
+  .dutyRotations-reviewList dt {
+    border-bottom: 0;
+    padding-bottom: 0.15rem;
+  }
+
+  .dutyRotations-reviewList dd {
+    padding-top: 0.15rem;
+  }
+
+  .dutyRotations-header,
+  .dutyRotations-configHeader,
+  .dutyRotations-shiftTitleRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dutyRotations-configActions {
+    justify-content: stretch;
+  }
+
+  .dutyRotations-configActions.dutyRotations-reportActions {
+    grid-template-columns: 1fr;
+  }
+
+  .dutyRotations-reportActionGroup {
+    justify-content: stretch;
+  }
+
+  .dutyRotations-reportActionGroup > button,
+  .dutyRotations-reportActionGroup .dutyRotations-exportMenu,
+  .dutyRotations-reportActionGroup .dutyRotations-exportMenu > button {
+    width: 100%;
+  }
+
+  .dutyRotations-configActions > *,
+  .dutyRotations-cardActions button,
+  .dutyRotations-poolCard button {
+    width: 100%;
+  }
+
+  .dutyRotations-personalSummary {
+    grid-template-columns: 1fr;
+  }
+
+  .dutyRotations-personalMetric {
+    min-height: auto;
+  }
+
+  .dutyRotations-reportFilterOptions {
+    left: 0;
+    right: auto;
+    width: 100%;
+  }
+
+  .dutyRotations-reportFilter-status .dutyRotations-reportFilterOptions {
+    width: 100%;
+  }
+
+  .dutyRotations-reportFilter-user .dutyRotations-reportFilterOptions {
+    width: 100%;
+  }
+
+  .dutyRotations-reportHero {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dutyRotations-reportFilterChips span {
+    max-width: 100%;
+  }
+
+  .dutyRotations-reportStamp {
+    justify-items: start;
+    min-width: 0;
+  }
+
+  .dutyRotations-formGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  .dutyRotations-exportReport {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .dutyRotations-exportReport .dutyRotations-monthTableWrap {
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+/* Activity planner dialog */
+.dutyRotations-dutyForm {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 0;
+  height: min(78vh, 56rem);
+  min-height: 34rem;
+  overflow: hidden;
+  color: var(--foreground);
+}
+
+.dutyRotations-dutyStepper {
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  padding: 0 0 0.85rem;
+  overflow-x: auto;
+}
+
+.dutyRotations-dutyStepper ol {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(9rem, 1fr));
+  gap: 0.45rem;
+  min-width: 42rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dutyRotations-dutyStepper li {
+  position: relative;
+}
+
+.dutyRotations-dutyStepper li:not(:last-child)::after {
+  position: absolute;
+  top: 1rem;
+  right: -0.45rem;
+  width: 0.45rem;
+  height: 1px;
+  background: var(--border);
+  content: '';
+}
+
+.dutyRotations-dutyStepper button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-items: center;
+  justify-content: initial;
+  gap: 0.05rem 0.55rem;
+  width: 100%;
+  min-width: 0;
+  min-height: 3.55rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  padding: 0.55rem 0.65rem;
+  color: var(--muted-foreground);
+  text-align: left;
+  cursor: pointer;
+}
+
+.dutyRotations-dutyStepper button > span {
+  display: inline-flex;
+  grid-row: 1 / span 2;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--background);
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.dutyRotations-dutyStepper button > span svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.dutyRotations-dutyStepper button strong {
+  overflow: hidden;
+  color: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dutyRotations-dutyStepper button small {
+  color: var(--muted-foreground);
+  font-size: 0.7rem;
+}
+
+.dutyRotations-dutyStepper button.is-current {
+  border-color: color-mix(in srgb, var(--primary) 42%, var(--border));
+  background: color-mix(in srgb, var(--primary) 9%, var(--background));
+  color: var(--foreground);
+  box-shadow: none;
+}
+
+.dutyRotations-dutyStepper button.is-current > span,
+.dutyRotations-dutyStepper button.is-complete > span {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.dutyRotations-dutyStepper button.is-complete {
+  background: transparent;
+  color: var(--foreground);
+}
+
+.dutyRotations-dutyStepper button:focus-visible,
+.dutyRotations-formChoice:focus-visible,
+.dutyRotations-dayPicker button:focus-visible,
+.dutyRotations-userResults button:focus-visible,
+.dutyRotations-dragHandle:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.dutyRotations-dutyStepper button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.dutyRotations-dutyFormBody {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.dutyRotations-dutyFormWorkspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 21rem);
+  align-items: start;
+  gap: 1.35rem;
+  padding: 1.15rem 0.3rem 1.4rem 0;
+}
+
+.dutyRotations-dutyFormMain {
+  min-width: 0;
+}
+
+.dutyRotations-formStepPanel {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.dutyRotations-formStepIntro {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.85rem;
+  padding: 0.15rem 0 0.25rem;
+}
+
+.dutyRotations-formStepIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.55rem;
+  height: 2.55rem;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--primary) 12%, var(--background));
+  color: var(--primary);
+}
+
+.dutyRotations-formStepIcon svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.dutyRotations-formStepIntro > div {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.dutyRotations-formStepEyebrow {
+  color: var(--primary);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dutyRotations-formStepIntro h2 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.dutyRotations-formStepIntro p {
+  max-width: 46rem;
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.dutyRotations-formSection {
+  display: grid;
+  gap: 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--card);
+  padding: 1rem;
+}
+
+.dutyRotations-formSectionHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dutyRotations-formSectionHeading > div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.dutyRotations-formSectionHeading h3 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.dutyRotations-formSectionHeading p {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.dutyRotations-formSectionHeading > span {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: var(--muted);
+  padding: 0.2rem 0.5rem;
+  color: var(--muted-foreground);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.dutyRotations-formChoiceGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.dutyRotations-formChoiceGrid.is-three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dutyRotations-formChoiceGrid.is-four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.dutyRotations-formChoice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.65rem;
+  min-width: 0;
+  min-height: 5.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--background);
+  padding: 0.75rem;
+  color: var(--foreground);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 140ms ease, background-color 140ms ease,
+    transform 140ms ease;
+}
+
+.dutyRotations-formChoice:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--primary) 48%, var(--border));
+  transform: translateY(-1px);
+}
+
+.dutyRotations-formChoice.is-selected {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 8%, var(--background));
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--primary) 22%, transparent);
+}
+
+.dutyRotations-formChoice:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.dutyRotations-formChoiceIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-md);
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+
+.dutyRotations-formChoiceIcon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.dutyRotations-formChoice.is-selected .dutyRotations-formChoiceIcon {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.dutyRotations-formChoiceCopy {
+  display: grid;
+  gap: 0.28rem;
+  min-width: 0;
+  color: var(--muted-foreground);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.dutyRotations-formChoiceTitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.dutyRotations-formChoiceTitle strong {
+  color: var(--foreground);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.dutyRotations-formChoiceTitle small {
+  border-radius: 999px;
+  background: var(--info-muted);
+  padding: 0.12rem 0.35rem;
+  color: var(--info);
+  font-size: 0.6rem;
+  font-weight: 800;
+}
+
+.dutyRotations-formFieldError {
+  margin: 0;
+  color: var(--danger);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.dutyRotations-formAdvanced,
+.dutyRotations-rosterDetails {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--card);
+  overflow: hidden;
+}
+
+.dutyRotations-formAdvanced > summary,
+.dutyRotations-rosterDetails > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  color: var(--foreground);
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  list-style: none;
+}
+
+.dutyRotations-formAdvanced > summary::-webkit-details-marker,
+.dutyRotations-rosterDetails > summary::-webkit-details-marker {
+  display: none;
+}
+
+.dutyRotations-formAdvanced > summary > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dutyRotations-formAdvanced > summary svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--primary);
+}
+
+.dutyRotations-formAdvanced > summary small {
+  color: var(--muted-foreground);
+  font-size: 0.68rem;
+}
+
+.dutyRotations-formAdvanced[open] > summary,
+.dutyRotations-rosterDetails[open] > summary {
+  border-bottom: 1px solid var(--border);
+  background: var(--muted);
+}
+
+.dutyRotations-formAdvancedContent {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+}
+
+.dutyRotations-formAdvancedContent > div:first-child,
+.dutyRotations-formAdvancedContent > p {
+  display: grid;
+  gap: 0.15rem;
+  margin: 0;
+}
+
+.dutyRotations-formAdvancedContent h3 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.dutyRotations-formAdvancedContent p {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.dutyRotations-formFieldset {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.dutyRotations-formFieldset legend {
+  margin-bottom: 0.45rem;
+  color: var(--foreground);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.dutyRotations-formFieldset > p {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 0.72rem;
+}
+
+.dutyRotations-dayPicker button {
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--muted-foreground);
+}
+
+.dutyRotations-dayPicker button.is-selected {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.dutyRotations-cycleHint {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  border-radius: var(--radius-lg);
+  background: var(--info-muted);
+  padding: 0.7rem 0.8rem;
+  color: var(--info);
+}
+
+.dutyRotations-cycleHint > svg {
+  flex: 0 0 auto;
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.08rem;
+}
+
+.dutyRotations-cycleHint > div {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.dutyRotations-cycleHint strong {
+  font-size: 0.78rem;
+}
+
+.dutyRotations-cycleHint span {
+  font-size: 0.7rem;
+}
+
+.dutyRotations-slotList {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.dutyRotations-slotConfig {
+  display: grid;
+  gap: 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--background);
+  padding: 0.75rem;
+}
+
+.dutyRotations-slotConfig > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 1.5rem;
+}
+
+.dutyRotations-slotConfig > header > span {
+  color: var(--muted-foreground);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.dutyRotations-slotFields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: end;
+  gap: 0.65rem;
+}
+
+.dutyRotations-slotConfig.is-distributed .dutyRotations-slotFields {
+  grid-template-columns: minmax(11rem, 1fr) minmax(9rem, 0.55fr) minmax(
+      8rem,
+      0.45fr
+    );
+}
+
+.dutyRotations-slotRemainder {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.25rem;
+  border-radius: var(--radius-md);
+  background: var(--success-muted);
+  padding: 0.45rem 0.6rem;
+  color: var(--success);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.dutyRotations-slotRemainder svg {
+  flex: 0 0 auto;
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.dutyRotations-formLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 4.5rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--muted-foreground);
+  font-size: 0.78rem;
+}
+
+.dutyRotations-formLoading svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.dutyRotations-rolePicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.dutyRotations-rolePicker > span {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+}
+
+.dutyRotations-participantGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 0.8rem;
+}
+
+.dutyRotations-participantPane {
+  display: grid;
+  align-content: start;
+  gap: 0.65rem;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--background);
+  padding: 0.75rem;
+}
+
+.dutyRotations-participantPane > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dutyRotations-participantPane > header > div {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.dutyRotations-participantPane > header strong {
+  color: var(--foreground);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.dutyRotations-participantPane > header span,
+.dutyRotations-participantPane > header > span {
+  color: var(--muted-foreground);
+  font-size: 0.68rem;
+}
+
+.dutyRotations-userResults,
+.dutyRotations-selectedParticipants {
+  display: grid;
+  gap: 0.4rem;
+  max-height: 18rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.dutyRotations-userResults button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  padding: 0.45rem 0.6rem;
+  color: var(--foreground);
+  text-align: left;
+  cursor: pointer;
+}
+
+.dutyRotations-userResults button:hover {
+  border-color: color-mix(in srgb, var(--primary) 48%, var(--border));
+  background: color-mix(in srgb, var(--primary) 5%, var(--background));
+}
+
+.dutyRotations-userResults button > span,
+.dutyRotations-userResults button p {
+  display: grid;
+  min-width: 0;
+  gap: 0.08rem;
+  margin: 0;
+}
+
+.dutyRotations-userResults button strong {
+  overflow: hidden;
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dutyRotations-userResults button small,
+.dutyRotations-userResults > p {
+  overflow: hidden;
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 0.66rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dutyRotations-userResults button > svg {
+  flex: 0 0 auto;
+  width: 0.95rem;
+  height: 0.95rem;
+  color: var(--primary);
+}
+
+.dutyRotations-participantOrderRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--border);
+  border-color: var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  padding: 0.45rem;
+}
+
+.dutyRotations-participantOrderRow > span {
+  display: grid;
+  min-width: 0;
+}
+
+.dutyRotations-participantOrderRow strong,
+.dutyRotations-participantOrderRow small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dutyRotations-participantOrderRow strong {
+  color: var(--foreground);
+  font-size: 0.74rem;
+}
+
+.dutyRotations-participantOrderRow small {
+  color: var(--muted-foreground);
+  font-size: 0.65rem;
+}
+
+.dutyRotations-dragHandle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  min-height: 1.75rem;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: grab;
+}
+
+.dutyRotations-formEmptyState {
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  min-height: 8rem;
+  align-content: center;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+.dutyRotations-formEmptyState svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-bottom: 0.25rem;
+  color: var(--primary);
+}
+
+.dutyRotations-formEmptyState strong {
+  color: var(--foreground);
+  font-size: 0.78rem;
+}
+
+.dutyRotations-formEmptyState span {
+  max-width: 24rem;
+  font-size: 0.7rem;
+}
+
+.dutyRotations-rosterSnapshot {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.dutyRotations-rosterSnapshotIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  background: var(--success-muted);
+  color: var(--success);
+}
+
+.dutyRotations-rosterSnapshotIcon svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.dutyRotations-rosterSnapshot > div {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.dutyRotations-rosterSnapshot strong {
+  color: var(--foreground);
+  font-size: 0.82rem;
+}
+
+.dutyRotations-rosterSnapshot p {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.dutyRotations-rosterList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  max-height: 18rem;
+  padding: 0.75rem;
+  overflow-y: auto;
+}
+
+.dutyRotations-rosterList > div {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.45rem 0.55rem;
+}
+
+.dutyRotations-rosterList > div > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: 999px;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  font-size: 0.64rem;
+  font-weight: 800;
+}
+
+.dutyRotations-rosterList p {
+  display: grid;
+  min-width: 0;
+  gap: 0.05rem;
+  margin: 0;
+}
+
+.dutyRotations-rosterList strong,
+.dutyRotations-rosterList small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dutyRotations-rosterList strong {
+  color: var(--foreground);
+  font-size: 0.72rem;
+}
+
+.dutyRotations-rosterList small {
+  color: var(--muted-foreground);
+  font-size: 0.64rem;
+}
+
+.dutyRotations-allocationBalance {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.dutyRotations-allocationBalance > div {
+  display: grid;
+  gap: 0.15rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--muted);
+  padding: 0.65rem;
+}
+
+.dutyRotations-allocationBalance span {
+  color: var(--muted-foreground);
+  font-size: 0.65rem;
+}
+
+.dutyRotations-allocationBalance strong {
+  color: var(--foreground);
+  font-size: 1.05rem;
+}
+
+.dutyRotations-eligibilityGroup {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem;
+}
+
+.dutyRotations-eligibilityGroup legend {
+  padding: 0 0.25rem;
+  color: var(--foreground);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.dutyRotations-eligibilityGroupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dutyRotations-eligibilityGroupHeader > span {
+  color: var(--muted-foreground);
+  font-size: 0.7rem;
+}
+
+.dutyRotations-eligibilityUsers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+  max-height: 14rem;
+  overflow-y: auto;
+}
+
+.dutyRotations-eligibilityUsers label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.45rem 0.55rem;
+  cursor: pointer;
+}
+
+.dutyRotations-eligibilityUsers label > span {
+  display: grid;
+  min-width: 0;
+}
+
+.dutyRotations-eligibilityUsers strong,
+.dutyRotations-eligibilityUsers small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dutyRotations-eligibilityUsers strong {
+  color: var(--foreground);
+  font-size: 0.7rem;
+}
+
+.dutyRotations-eligibilityUsers small {
+  color: var(--muted-foreground);
+  font-size: 0.62rem;
+}
+
+.dutyRotations-formSummary {
+  position: sticky;
+  top: 1rem;
+  display: grid;
+  gap: 0.8rem;
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--primary) 24%, var(--border));
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--primary) 4%, var(--card));
+  padding: 0.95rem;
+  box-shadow: var(--shadow-app-panel);
+}
+
+.dutyRotations-formSummary > header {
+  display: grid;
+  gap: 0.15rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.dutyRotations-formSummary > header > span,
+.dutyRotations-calendarRibbon > div > span {
+  color: var(--primary);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dutyRotations-formSummary > header > strong {
+  overflow-wrap: anywhere;
+  color: var(--foreground);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.dutyRotations-formSummary > header > p {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 0.69rem;
+  line-height: 1.35;
+}
+
+.dutyRotations-formSummaryFacts {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.dutyRotations-formSummaryFacts > div {
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1fr);
+  gap: 0.6rem;
+  padding: 0.48rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+}
+
+.dutyRotations-formSummaryFacts > div:last-child {
+  border-bottom: 0;
+}
+
+.dutyRotations-formSummaryFacts dt {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--muted-foreground);
+  font-size: 0.66rem;
+}
+
+.dutyRotations-formSummaryFacts dt svg {
+  flex: 0 0 auto;
+  width: 0.82rem;
+  height: 0.82rem;
+}
+
+.dutyRotations-formSummaryFacts dd {
+  margin: 0;
+  color: var(--foreground);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.dutyRotations-formSummaryMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.dutyRotations-formSummaryMeta span {
+  border-radius: 999px;
+  background: var(--muted);
+  padding: 0.22rem 0.45rem;
+  color: var(--muted-foreground);
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.dutyRotations-calendarRibbon {
+  display: grid;
+  gap: 0.65rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.8rem;
+}
+
+.dutyRotations-calendarRibbon > div {
+  display: grid;
+  gap: 0.08rem;
+}
+
+.dutyRotations-calendarRibbon > div > strong {
+  color: var(--foreground);
+  font-size: 0.78rem;
+}
+
+.dutyRotations-calendarRibbon > ol {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dutyRotations-calendarRibbon li {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.55rem;
+  min-width: 0;
+  padding-bottom: 0.65rem;
+}
+
+.dutyRotations-calendarRibbon li:not(:last-child)::before {
+  position: absolute;
+  top: 0.65rem;
+  bottom: 0;
+  left: 0.25rem;
+  width: 1px;
+  background: color-mix(in srgb, var(--primary) 35%, var(--border));
+  content: '';
+}
+
+.dutyRotations-calendarRibbon li > span {
+  z-index: 1;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-top: 0.2rem;
+  border: 2px solid var(--card);
+  border-radius: 999px;
+  background: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.dutyRotations-calendarRibbon li > p {
+  display: grid;
+  min-width: 0;
+  gap: 0.1rem;
+  margin: 0;
+}
+
+.dutyRotations-calendarRibbon li strong {
+  color: var(--foreground);
+  font-size: 0.67rem;
+}
+
+.dutyRotations-calendarRibbon li small {
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: 0.62rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dutyRotations-calendarRibbonState {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin: 0;
+  border-radius: var(--radius-md);
+  background: var(--muted);
+  padding: 0.55rem;
+  color: var(--muted-foreground);
+  font-size: 0.66rem;
+  line-height: 1.35;
+}
+
+.dutyRotations-calendarRibbonState svg {
+  flex: 0 0 auto;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-top: 0.05rem;
+}
+
+.dutyRotations-calendarRibbonState.is-error {
+  background: var(--danger-muted);
+  color: var(--danger);
+}
+
+.dutyRotations-dutyDialogFooter {
+  position: static;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--card);
+  padding: 0.85rem 0 0;
+}
+
+.dutyRotations-dutyDialogFooter > div:first-child {
+  display: grid;
+  gap: 0.05rem;
+}
+
+.dutyRotations-dutyDialogFooter > div:first-child span {
+  color: var(--muted-foreground);
+  font-size: 0.65rem;
+}
+
+.dutyRotations-dutyDialogFooter > div:first-child strong {
+  color: var(--foreground);
+  font-size: 0.75rem;
+}
+
+.dutyRotations-dutyDialogActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.dutyRotations-reviewSummary {
+  border-color: var(--border);
+  background: var(--card);
+}
+
+.dutyRotations-reviewSummaryHero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dutyRotations-reviewSummaryHero > div {
+  display: grid;
+  min-width: 0;
+  gap: 0.15rem;
+}
+
+.dutyRotations-reviewEditActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.45rem;
+}
+
+.dutyRotations-impactSummary span.is-preserved {
+  background: var(--success-muted);
+  color: var(--success);
+}
+
+.dutyRotations-impactSummary span.is-replaced {
+  background: var(--info-muted);
+  color: var(--info);
+}
+
+.dutyRotations-impactSummary span.is-conflict {
+  background: var(--warning-muted);
+  color: var(--warning);
+}
+
+.dutyRotations-previewDate {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--primary) 10%, var(--background));
+  color: var(--primary) !important;
+}
+
+.dutyRotations-previewDate svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.dutyRotations-dutyForm [data-slot='alert'] {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.dutyRotations-dutyForm [data-slot='alert'] > button {
+  width: fit-content;
+  margin-top: 0.4rem;
+}
+
+.dutyRotations-zoneRotationSummary [data-slot='alert-description'] {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.dutyRotations-zoneRotationSummary p {
+  margin: 0;
+}
+
+.dutyRotations-zoneRotationSummary ul {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dutyRotations-zoneRotationSummary li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--background) 55%, transparent);
+}
+
+.dutyRotations-zoneRotationSummary li span {
+  font-variant-numeric: tabular-nums;
+}
+
+.dutyRotations-zoneRotationSummary li strong {
+  text-align: right;
+  font-weight: 650;
+}
+
+.dutyRotations-distributionPreview {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.dutyRotations-distributionPreviewActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.dutyRotations-distributionJourneys {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.dutyRotations-distributionJourney {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+}
+
+.dutyRotations-distributionJourneyTrigger {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  width: 100%;
+  gap: 0.75rem;
+  border: 0;
+  background: transparent;
+  padding: 0.8rem;
+  color: var(--foreground);
+  text-align: left;
+  cursor: pointer;
+}
+
+.dutyRotations-distributionJourneyTrigger:hover {
+  background: var(--muted);
+}
+
+.dutyRotations-distributionJourneyTrigger:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+.dutyRotations-distributionJourneyTrigger > svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--muted-foreground);
+  transition: transform 160ms ease;
+}
+
+.dutyRotations-distributionJourneyTrigger > svg.is-expanded {
+  transform: rotate(180deg);
+}
+
+.dutyRotations-distributionJourneyIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--primary) 10%, var(--background));
+  color: var(--primary);
+}
+
+.dutyRotations-distributionJourneyIcon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.dutyRotations-distributionJourneyHeading {
+  display: grid;
+  min-width: 0;
+  gap: 0.1rem;
+}
+
+.dutyRotations-distributionJourneyHeading strong {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.dutyRotations-distributionJourneyHeading small {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+}
+
+.dutyRotations-distributionJourneyMeta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.dutyRotations-distributionJourneyMeta svg {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.dutyRotations-distributionJourneyContent {
+  border-top: 1px solid var(--border);
+  padding: 0.75rem;
+}
+
+.dutyRotations-distributionTable {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.dutyRotations-distributionTable th:first-child,
+.dutyRotations-distributionTable td:first-child {
+  width: 32%;
+}
+
+.dutyRotations-distributionZone {
+  vertical-align: top;
+}
+
+.dutyRotations-distributionZone strong,
+.dutyRotations-distributionZone small {
+  display: block;
+}
+
+.dutyRotations-distributionZone strong {
+  color: var(--foreground);
+  font-weight: 650;
+}
+
+.dutyRotations-distributionZone small {
+  margin-top: 0.15rem;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+}
+
+.dutyRotations-distributionPeople {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: 0.4rem 0.85rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dutyRotations-distributionPeople li {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.45rem;
+  color: var(--foreground);
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.dutyRotations-distributionPeople li > span {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  font-size: 0.68rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dutyRotations-formChoice {
+    transition: none;
+  }
+
+  .dutyRotations-distributionJourneyTrigger > svg {
+    transition: none;
+  }
+
+  .dutyRotations-formChoice:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .dutyRotations-dutyFormWorkspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dutyRotations-formSummary {
+    position: static;
+    grid-row: 1;
+  }
+
+  .dutyRotations-formSummaryFacts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1rem;
+  }
+
+  .dutyRotations-calendarRibbon > ol {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .dutyRotations-calendarRibbon li {
+    padding: 0;
+  }
+
+  .dutyRotations-calendarRibbon li::before {
+    display: none;
+  }
+}
+
+@media (max-width: 820px) {
+  .dutyRotations-planningToolbar,
+  .dutyRotations-requestRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dutyRotations-planningToolbar {
+    display: flex;
+  }
+
+  .dutyRotations-activitySearch {
+    width: 100%;
+  }
+
+  .dutyRotations-activityRow,
+  .dutyRotations-requestRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dutyRotations-activityFacts,
+  .dutyRotations-activityActions {
+    grid-column: auto;
+  }
+
+  .dutyRotations-requestRow > div:last-child {
+    justify-content: flex-start;
+  }
+
+  .dutyRotations-dutyForm {
+    height: min(80vh, 52rem);
+    min-height: 30rem;
+  }
+
+  .dutyRotations-formChoiceGrid.is-four,
+  .dutyRotations-formChoiceGrid.is-three,
+  .dutyRotations-participantGrid,
+  .dutyRotations-rosterList,
+  .dutyRotations-eligibilityUsers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dutyRotations-slotConfig.is-distributed .dutyRotations-slotFields {
+    grid-template-columns: minmax(0, 1fr) minmax(9rem, 0.6fr);
+  }
+
+  .dutyRotations-slotRemainder {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 620px) {
+  .dutyRotations-planningToolbar [data-slot='tabs-list'] {
+    width: 100%;
+  }
+
+  .dutyRotations-planningToolbar [data-slot='tabs-trigger'] {
+    flex: 1;
+  }
+
+  .dutyRotations-activityFacts,
+  .dutyRotations-shareOccurrenceList {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dutyRotations-activityActions button {
+    flex: 1 1 9rem;
+  }
+
+  .dutyRotations-planningOccurrence > header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dutyRotations-planningZone ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dutyRotations-shareActions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dutyRotations-shareActions button:first-child {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .dutyRotations-dutyForm {
+    height: calc(100vh - 9rem);
+    min-height: 26rem;
+  }
+
+  .dutyRotations-dutyStepper {
+    margin-inline: -0.15rem;
+  }
+
+  .dutyRotations-dutyStepper ol {
+    min-width: 24rem;
+  }
+
+  .dutyRotations-dutyStepper button {
+    min-height: 3rem;
+    padding: 0.45rem;
+  }
+
+  .dutyRotations-dutyStepper button strong {
+    display: none;
+  }
+
+  .dutyRotations-dutyStepper button small {
+    grid-row: 1 / span 2;
+    align-self: center;
+    color: inherit;
+    font-size: 0.66rem;
+    font-weight: 700;
+  }
+
+  .dutyRotations-dutyFormWorkspace {
+    gap: 1rem;
+    padding-top: 0.85rem;
+  }
+
+  .dutyRotations-formChoiceGrid,
+  .dutyRotations-formChoiceGrid.is-four,
+  .dutyRotations-formChoiceGrid.is-three,
+  .dutyRotations-participantGrid,
+  .dutyRotations-formSummaryFacts,
+  .dutyRotations-calendarRibbon > ol,
+  .dutyRotations-rosterList,
+  .dutyRotations-allocationBalance,
+  .dutyRotations-eligibilityUsers,
+  .dutyRotations-slotConfig.is-distributed .dutyRotations-slotFields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dutyRotations-formChoice {
+    min-height: 0;
+  }
+
+  .dutyRotations-formSummaryFacts > div {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .dutyRotations-rosterSnapshot {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .dutyRotations-rosterSnapshot > button {
+    grid-column: 1 / -1;
+  }
+
+  .dutyRotations-dutyDialogFooter {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dutyRotations-dutyDialogFooter > div:first-child {
+    display: none;
+  }
+
+  .dutyRotations-dutyDialogActions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dutyRotations-dutyDialogActions > button:first-child {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .dutyRotations-dutyDialogActions button {
+    width: 100%;
+  }
+
+  .dutyRotations-previewRow,
+  .dutyRotations-participantOrderRow {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .dutyRotations-previewRow > span:last-child,
+  .dutyRotations-participantOrderRow > button:not(.dutyRotations-dragHandle) {
+    grid-column: 2;
+  }
+
+  .dutyRotations-zoneRotationSummary li {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .dutyRotations-zoneRotationSummary li strong {
+    text-align: left;
+  }
+
+  .dutyRotations-distributionPreviewActions {
+    justify-content: stretch;
+  }
+
+  .dutyRotations-distributionPreviewActions button {
+    flex: 1;
+  }
+
+  .dutyRotations-distributionJourneyTrigger {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .dutyRotations-distributionJourneyMeta {
+    grid-column: 2 / -1;
+    grid-row: 2;
+    justify-content: flex-start;
+  }
+
+  .dutyRotations-distributionJourneyContent {
+    padding: 0.55rem;
+  }
+
+  .dutyRotations-distributionTable th:first-child,
+  .dutyRotations-distributionTable td:first-child {
+    width: 40%;
+  }
+
+  .dutyRotations-distributionPeople {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

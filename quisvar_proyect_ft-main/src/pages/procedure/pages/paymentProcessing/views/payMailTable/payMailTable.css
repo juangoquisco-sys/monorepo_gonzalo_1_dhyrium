@@ -1,0 +1,9 @@
+.PayMailTable-options {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 1.4rem;
+  padding: 0 0.5rem;
+  margin-top: 0.5rem;
+  gap: 1rem;
+}

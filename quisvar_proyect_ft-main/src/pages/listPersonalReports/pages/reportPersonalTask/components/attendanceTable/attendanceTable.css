@@ -1,0 +1,46 @@
+.attendanceTable {
+  padding: 0.5rem 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.attendanceTable-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+  text-transform: uppercase;
+}
+.attendanceTable-closebtn {
+  position: absolute;
+  top: 0rem;
+  right: 0rem;
+}
+.reportPersonalTaskView-btns {
+  display: flex;
+  gap: 1rem;
+}
+.attendanceTable-content {
+  font-weight: 800;
+}
+.attendanceTable-table-head {
+  background-color: red;
+}
+.attendanceTable-status-PUNTUAL {
+  color: var(--color-list-p);
+}
+.attendanceTable-status-SIMPLE {
+  color: var(--color-list-s);
+}
+.attendanceTable-status-TARDE {
+  color: var(--color-list-t);
+}
+.attendanceTable-status-GRAVE {
+  color: var(--color-list-g);
+}
+.attendanceTable-status-MUY_GRAVE {
+  color: var(--color-list-m);
+}
+.attendanceTable-status-LICENCIA {
+  color: var(--color-list-l);
+}

@@ -1,0 +1,1 @@
+sonar-scanner.bat -D"sonar.projectKey=Quisvar-Bk" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.login=admin" -D"sonar.password=Riboplasmatico1" -D"sonar.exclusions=android/**, ios/**, node_modules/**, .vscode/**, build/**, scripts/**

@@ -1,0 +1,76 @@
+.legend-container {
+  /* width: 35rem; */
+  max-width: 30rem;
+  height: 12rem;
+  /* background-color: rgba(195, 210, 214, 0.712); */
+  display: grid;
+}
+
+.legend-header {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 3.5fr 2fr 3fr;
+  width: 100%;
+  border: 0.1rem solid rgba(201, 193, 193, 0.329);
+  border-radius: 0.3rem;
+  font-size: 0.7rem;
+  color: var(--color-grey-text);
+  font-weight: 600;
+  background-color: #f3f6fc;
+  padding: 12px 10px;
+}
+
+.legend-list-text {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: baseline;
+}
+
+.legend-list-content {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 3.5fr 2fr 3fr;
+  width: 100%;
+  /* height: 3.7rem; */
+  background-color: #fff;
+  font-size: 0.7rem;
+  /* border-radius: 0.3rem; */
+  /* border-bottom: 0.15rem solid var(--color-quaternay);  */
+  padding: 0 10px;
+}
+
+.legend-col {
+  display: flex;
+  align-items: center;
+  justify-content: baseline;
+}
+
+.legend-place {
+  justify-content: center;
+}
+.legend-bg {
+  background-color: #f2f5fa;
+}
+.legend-margin {
+  margin-left: 1rem;
+}
+.legend-p {
+  background-color: var(--color-list-p);
+}
+.legend-t {
+  background-color: var(--color-list-t);
+}
+.legend-f {
+  background-color: var(--color-list-f);
+}
+.legend-g {
+  background-color: var(--color-list-g);
+}
+.legend-m {
+  background-color: var(--color-list-m);
+}
+.legend-l {
+  background-color: var(--color-list-l);
+}
+.legend-s {
+  background-color: var(--color-list-s);
+}

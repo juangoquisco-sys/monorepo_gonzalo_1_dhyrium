@@ -1,0 +1,260 @@
+.omo-page {
+  padding: 1.5rem;
+  color: var(--foreground);
+}
+
+.omo-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.omo-header h1 {
+  margin: 0;
+  color: var(--color-secondary);
+  font-size: 1.45rem;
+}
+
+.omo-header span,
+.omo-eyebrow {
+  color: var(--color-gray-text);
+  font-size: 0.78rem;
+}
+
+.omo-eyebrow {
+  margin: 0 0 0.2rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.omo-permissions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.omo-permissions b {
+  padding: 0.35rem 0.55rem;
+  border-radius: 0.35rem;
+  color: var(--color-primary);
+  background: var(--color-ligth-primary);
+  font-size: 0.68rem;
+}
+
+.omo-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.omo-metrics article {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 0.7rem;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  background: var(--card);
+  box-shadow: 0 1px 4px rgb(0 27 105 / 8%);
+}
+
+.omo-metrics svg {
+  color: var(--color-primary);
+  grid-row: span 2;
+}
+
+.omo-metrics span {
+  color: var(--color-gray-text);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.omo-metrics strong {
+  color: var(--color-secondary);
+  font-size: 1.4rem;
+}
+
+.omo-listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.65rem;
+}
+
+.omo-listHeader h2 {
+  margin: 0;
+  color: var(--color-secondary);
+  font-size: 1rem;
+}
+
+.omo-listHeader p {
+  margin: 0.2rem 0 0;
+  color: var(--color-gray-text);
+  font-size: 0.72rem;
+}
+
+.omo-typeFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.omo-typeFilters button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2rem;
+  border: 1px solid #dce7f3;
+  border-radius: 0.45rem;
+  background: #fff;
+  color: #536681;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.omo-typeFilters button.is-active {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: inset 0 0 0 1px var(--color-primary);
+}
+
+.omo-typeFilters b {
+  border-radius: 999px;
+  background: var(--color-primarylight);
+  color: inherit;
+  padding: 0.12rem 0.4rem;
+  font-size: 0.65rem;
+}
+
+.omo-search {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: min(23rem, 100%);
+  padding: 0 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  background: var(--card);
+  color: var(--color-gray-text);
+}
+
+.omo-search > div {
+  width: 100%;
+}
+
+.omo-search input {
+  box-shadow: none;
+}
+
+.omo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: 1rem;
+}
+
+.omo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 10rem;
+  padding: 1rem;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  background: var(--card);
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.omo-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 14px rgb(14 156 216 / 13%);
+}
+
+.omo-cardTitle {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.omo-cardTitle strong {
+  display: block;
+  color: var(--color-secondary);
+  font-size: 0.9rem;
+}
+
+.omo-cardTitle span,
+.omo-nextMeeting {
+  color: var(--color-gray-text);
+  font-size: 0.7rem;
+}
+
+.omo-health {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: fit-content;
+  padding: 0.3rem 0.45rem;
+  border-radius: 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.omo-health.is-healthy {
+  background: var(--color-bg-done);
+  color: var(--color-done);
+}
+
+.omo-health.is-watch {
+  background: var(--color-bg-asigned);
+  color: var(--color-asigned);
+}
+
+.omo-health.is-critical {
+  background: var(--color-bg-unresolved);
+  color: var(--color-unresolved);
+}
+
+.omo-cardMetrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.omo-cardMetrics span {
+  padding: 0.5rem;
+  border-radius: 0.35rem;
+  background: var(--color-primarylight);
+  color: var(--color-gray-text);
+  font-size: 0.68rem;
+}
+
+.omo-cardMetrics b {
+  display: block;
+  color: var(--color-secondary);
+  font-size: 1rem;
+}
+
+@media (max-width: 900px) {
+  .omo-header,
+  .omo-listHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .omo-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

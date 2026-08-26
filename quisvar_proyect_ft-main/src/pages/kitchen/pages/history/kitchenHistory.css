@@ -1,0 +1,422 @@
+.kitchenHistory {
+  padding: 1rem 1.25rem 1.35rem 1.25rem;
+  background: linear-gradient(180deg, var(--color-primarylight) 0%, #fff 42%),
+    #fff;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.kitchenHistory-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 0.58rem;
+  padding: 0.82rem 0.92rem 0.72rem;
+  border: 1px solid rgba(0, 27, 105, 0.08);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 42px rgba(0, 27, 105, 0.08);
+  flex: 0 0 auto;
+}
+
+.kitchenHistory-topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.kitchenHistory-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.kitchenHistory-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: stretch;
+  justify-content: flex-end;
+}
+
+.kitchenHistory-kicker {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12rem;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.kitchenHistory-title {
+  color: var(--color-secondary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.01875rem;
+}
+
+.kitchenHistory-description {
+  color: var(--color-gray-tertiary);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.kitchenHistory-activeFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.kitchenHistory-activeFilter {
+  padding: 0.28rem 0.56rem;
+  border-radius: 999px;
+  background: rgba(245, 248, 252, 0.9);
+  border: 1px solid rgba(24, 88, 180, 0.1);
+  color: var(--color-primary);
+  font-size: 0.66rem;
+  font-weight: 600;
+}
+
+.kitchenHistory-filterCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.55rem 0.66rem;
+  border-radius: 0.8rem;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef3f9 100%);
+  border: 1px solid rgba(0, 27, 105, 0.06);
+}
+
+.kitchenHistory-filterGrid {
+  display: grid;
+  grid-template-columns:
+    minmax(15rem, 1.45fr) repeat(3, minmax(10rem, 1fr))
+    minmax(16rem, 1.2fr);
+  gap: 0.48rem;
+}
+
+.kitchenHistory-filterField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.32rem;
+  padding: 0.4rem 0.5rem 0.44rem;
+  border-radius: 0.68rem;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(24, 88, 180, 0.08);
+  box-shadow: 0 8px 18px -18px rgba(13, 30, 76, 0.35);
+  min-height: 3.45rem;
+  justify-content: space-between;
+}
+
+.kitchenHistory-filterField--range {
+  grid-column: span 1;
+}
+
+.kitchenHistory-filterField--search {
+  min-width: 0;
+}
+
+.kitchenHistory-filterLabel {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-gray);
+}
+
+.kitchenHistory-filterFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.kitchenHistory-filterHint {
+  color: var(--color-gray);
+  font-size: 0.68rem;
+  line-height: 1.2;
+}
+
+.kitchenHistory-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(9rem, 1fr));
+  gap: 0.48rem;
+}
+
+.kitchenHistory-operationalNotice {
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.34rem 0.6rem;
+  border-radius: 999px;
+  background: #fff7db;
+  border: 1px solid rgba(154, 103, 0, 0.16);
+  color: #9a6700;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.kitchenHistory-highlightStat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.12rem;
+  padding: 0.52rem 0.72rem;
+  border-radius: 0.7rem;
+  background: #f5f8fc;
+  border: 1px solid rgba(0, 27, 105, 0.08);
+  min-height: 3.9rem;
+  box-shadow: 0 8px 18px rgba(0, 27, 105, 0.05);
+}
+
+.kitchenHistory-highlightLabel {
+  color: var(--color-gray-tertiary);
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04rem;
+  line-height: 1.2;
+}
+
+.kitchenHistory-highlightValue {
+  color: var(--color-secondary);
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+
+.kitchenHistory-highlightDescription {
+  margin: 0;
+  color: var(--color-gray-tertiary);
+  font-size: 0.68rem;
+  line-height: 1.15;
+}
+
+.kitchenHistory-resultsBody {
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  flex: 1 1 74%;
+  background-color: #fff;
+  padding: 0.82rem 0.92rem 0.72rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(0, 27, 105, 0.08);
+}
+
+.kitchenHistory-resultsBody-loading {
+  opacity: 0.58;
+  transform: translateY(4px);
+}
+
+.kitchenHistory-tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.kitchenHistory-exportActions {
+  justify-content: flex-end;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.kitchenHistory-exportArea {
+  width: 100%;
+}
+
+.kitchenHistory-tableTitle {
+  margin: 0;
+  color: var(--color-secondary);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.kitchenHistory-tableCount {
+  padding: 0.32rem 0.64rem;
+  border-radius: 999px;
+  background: rgba(245, 248, 252, 0.95);
+  border: 1px solid rgba(0, 27, 105, 0.08);
+  color: var(--color-primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.kitchenHistory-feedback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px dashed rgba(0, 27, 105, 0.12);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.kitchenHistory-userCell {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.3rem 0;
+}
+
+.kitchenHistory-userAvatar {
+  width: 2.35rem;
+  height: 2.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #1a5ec1 0%, #0c7a5a 100%);
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.kitchenHistory-userBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.kitchenHistory-userBody strong {
+  font-size: 0.8rem;
+  color: var(--color-secondary);
+}
+
+.kitchenHistory-userBody span {
+  color: var(--color-gray);
+  font-size: 0.68rem;
+}
+
+.kitchenHistory-userBody small {
+  color: #a86a16;
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.kitchenHistory-metric {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.25rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  font-weight: 700;
+}
+
+.kitchenHistory-metric--danger {
+  color: #b42336;
+}
+
+.kitchenHistory-metric--info {
+  color: #1858b4;
+}
+
+.kitchenHistory-metric--warning {
+  color: #a86a16;
+}
+
+.kitchenHistory-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 7rem;
+  padding: 0.36rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.kitchenHistory-chip--yes {
+  background: #dff3e4;
+  color: #0c7a2f;
+}
+
+.kitchenHistory-chip--no {
+  background: #fde7e9;
+  color: #b42336;
+}
+
+.kitchenHistory-chip--reserved {
+  background: #e8effc;
+  color: #1858b4;
+}
+
+.kitchenHistory-chip--pending {
+  background: #eef1f5;
+  color: #5f6c80;
+}
+
+.kitchenHistory-chip--noService {
+  background: #f3f0ff;
+  color: #6046a6;
+}
+
+.kitchenHistory-chip--missedClose {
+  background: #fff7db;
+  color: #9a6700;
+}
+
+.kitchenHistory-chip--open {
+  background: #e8effc;
+  color: var(--color-secondary);
+}
+
+@media (max-width: 1024px) {
+  .kitchenHistory-filterGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .kitchenHistory-filterField--range,
+  .kitchenHistory-filterField--search {
+    grid-column: 1 / -1;
+  }
+
+  .kitchenHistory-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .kitchenHistory-tableHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 720px) {
+  .kitchenHistory {
+    padding: 0.9rem;
+  }
+
+  .kitchenHistory-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .kitchenHistory-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .kitchenHistory-title {
+    font-size: 1.28rem;
+  }
+
+  .kitchenHistory-filterGrid,
+  .kitchenHistory-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kitchenHistory-filterFooter {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .kitchenHistory-userCell {
+    align-items: flex-start;
+  }
+}

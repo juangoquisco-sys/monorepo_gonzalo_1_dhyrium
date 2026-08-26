@@ -1,0 +1,169 @@
+.reportPersonalTaskView {
+  padding: 1rem 1.5rem;
+  background-color: #fff;
+  display: flex;
+  height: 100%;
+  /* flex-direction: column; */
+  gap: 1.5rem;
+  width: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.reportPersonalTaskView.is-technical-evidence {
+  height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.reportPersonalTaskView-content {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.reportPersonalTaskView-licenses {
+  min-width: 20vw;
+  border-left: 1px solid var(--color-gray-secondary);
+  /* height: 100%; */
+}
+
+.reportPersonalTaskView-title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reportPersonalTaskView-table {
+  overflow: auto;
+  height: 100%;
+}
+.reportPersonalTaskView-container {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.reportPersonalTaskView-container.is-technical-evidence {
+  flex: 0 0 auto;
+  overflow: visible;
+}
+.reportPersonalTaskView-btns {
+  display: flex;
+  gap: 1rem;
+}
+.reportPersonalTaskView-more-info {
+  width: 100%;
+  margin: 1rem 0;
+  flex-shrink: 0;
+}
+
+.reportPersonalTaskView-bridgeSummary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #dce4ea;
+  border-radius: 6px;
+  background: #f8fafb;
+}
+
+.reportPersonalTaskView-technicalEvidence {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  flex: 0 0 auto;
+  min-height: auto;
+  overflow: visible;
+  padding: 0 0.35rem 1rem 0;
+  overscroll-behavior: contain;
+}
+
+.reportPersonalTaskView-evidenceStage {
+  border: 1px solid #dce4ea;
+  border-radius: 6px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.reportPersonalTaskView-evidenceStage h2 {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  background: #eef6f5;
+  color: #00306e;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.reportPersonalTaskView-evidenceLevel {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #e7edf1;
+}
+
+.reportPersonalTaskView-evidenceLevel h3 {
+  margin: 0 0 0.55rem;
+  color: #486979;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.reportPersonalTaskView-evidenceRows {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #eef2f5;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.reportPersonalTaskView-evidenceTask {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) 9rem;
+  gap: 0.75rem;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0.45rem 0.65rem;
+  border-top: 1px solid #eef2f5;
+  font-size: 0.82rem;
+}
+
+.reportPersonalTaskView-evidenceTask:first-child {
+  border-top: 0;
+}
+
+.reportPersonalTaskView-evidenceTaskCode {
+  color: #00306e;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.reportPersonalTaskView-evidenceTaskName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reportPersonalTaskView-evidenceTaskMeta {
+  color: #607d8b;
+  font-size: 0.75rem;
+  text-align: right;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .reportPersonalTaskView-evidenceTask {
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+  }
+
+  .reportPersonalTaskView-evidenceTaskMeta {
+    grid-column: 2;
+    text-align: left;
+  }
+}

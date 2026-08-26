@@ -1,0 +1,45 @@
+.sidebarSpecialityAddLvl {
+  display: flex;
+  padding: 0.5rem 1rem;
+}
+.sidebarSpecialityAddLvl-add-content {
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sidebarSpecialityAddLvl-add-span {
+  font-size: 0.6rem;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+.sidebarSpecialityAddLvl-display-none {
+  display: none;
+}
+.sidebarSpecialityAddLvl-input {
+  flex-grow: 1;
+  height: 2rem;
+  padding: 0 0.5rem;
+  border-radius: var(--radius-input);
+  background-color: var(--color-menu);
+}
+.sidebarSpecialityAddLvl-menu-dots-option {
+  top: auto;
+  right: 3rem;
+}
+.sidebarSpecialityAddLvl-btn {
+  width: 0.6rem;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  transition: 0.1s ease;
+}
+.sidebarSpecialityAddLvl-inputs {
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+  box-shadow: 0px 1.5px 4px rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
+}

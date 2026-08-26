@@ -1,0 +1,40 @@
+.yesNoRadio {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.yesNoRadio-option {
+  display: flex;
+  gap: 0.5625rem;
+  color: var(--color-gray-tertiary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(0, 27, 105, 0.12);
+  padding: 0.85rem 1rem;
+  background: #fff;
+  min-width: 8rem;
+  justify-content: center;
+  transition: 160ms ease;
+}
+
+.yesNoRadio-option--yes {
+  background: var(--color-bg-done);
+  color: var(--color-done);
+  border-color: rgba(20, 128, 74, 0.25);
+}
+
+.yesNoRadio-option--no {
+  background: var(--color-bg-unresolved);
+  color: var(--color-unresolved);
+  border-color: rgba(255, 59, 59, 0.2);
+}
+
+@media (max-width: 640px) {
+  .yesNoRadio {
+    flex-direction: column;
+  }
+}

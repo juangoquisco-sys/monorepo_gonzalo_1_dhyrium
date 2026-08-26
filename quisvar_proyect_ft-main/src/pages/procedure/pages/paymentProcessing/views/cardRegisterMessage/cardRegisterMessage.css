@@ -1,0 +1,235 @@
+.inbox-send-container-main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  border-radius: var(--radius-input);
+  filter: drop-shadow(-3px -4px 4px rgb(0 0 0 / 0.15));
+  color: #6e6e6e;
+  background-color: #fff;
+  font-size: 14px;
+  border: 1px solid #6e6e6e39;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  overflow-y: hidden;
+  letter-spacing: 0.225px;
+}
+
+.imbox-container-options {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.imnbox-title {
+  display: flex;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: #000;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-ligth-primary);
+  padding: 0 0.5rem;
+}
+
+.imbox-data-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 0.5rem;
+  overflow-y: auto;
+}
+
+.imbox-close-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.inbox-resize-content {
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 100%;
+  /* cursor: col-resize; */
+  cursor: url('/svg/arrow-x-position.svg'), auto;
+}
+
+.imbox-container-title {
+  flex-grow: 1;
+  cursor: pointer;
+}
+
+.imbox-resize-icon {
+  width: 1.5rem;
+  background-color: transparent;
+  height: 1.5rem;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
+
+.inbox-copy-button {
+  border-radius: 0.75rem;
+  background: transparent;
+  border: 0;
+  color: #6e6e6e;
+  text-wrap: nowrap;
+}
+
+.imbox-receiver-container {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid #c4c4c4a2;
+}
+
+.imbox-receiver-container-copy {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.imbox-receiver-label {
+  text-wrap: nowrap;
+}
+
+.imbox-receiver-choice-dropdown {
+  border: none;
+  background-color: #fff;
+  width: 100%;
+}
+
+.messageRegister-options {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.messageRegister-check-container {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.messageRegister-figure {
+  width: 1.5rem;
+}
+
+.imbox-receiver-chip {
+  display: flex;
+  height: 1.2rem;
+  margin: 0.3rem 0;
+  font-size: 0.8rem;
+  align-items: center;
+  width: fit-content;
+  background-color: var(--color-menu);
+  gap: 0.3rem;
+  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07));
+  border-radius: var(--radius-input);
+  padding: 0 0.3rem;
+}
+
+.imbox-receiver-chip-name {
+  max-width: 9rem;
+  height: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.imbox-receiver-chip-icon-close {
+  width: 1rem;
+  height: 1rem;
+  transition: 0.5s ease;
+}
+
+.imbox-receiver-chip-icon-close:hover {
+  transform: rotate(45deg);
+  cursor: pointer;
+}
+
+.imbox-type-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.imbox-type-send {
+  display: flex;
+  width: 30%;
+  align-items: center;
+  color: #000;
+  gap: 0.4rem;
+}
+
+.imbox-input-radio:checked {
+  accent-color: #333;
+}
+
+.imbox-input-title {
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  border-bottom: 1px solid #c4c4c4a2;
+}
+
+.imbox-input-content {
+  width: 100%;
+  padding: 0.2rem;
+  font-weight: 500;
+  border-radius: var(--radius-input);
+}
+
+.imbox-input-content-title {
+  width: 100%;
+  text-align: center;
+  padding: 0.2rem;
+  font-size: 16px;
+  text-decoration: underline;
+  font-weight: 600;
+  border-radius: var(--radius-input);
+}
+
+.not-allowed {
+  cursor: not-allowed;
+}
+
+.imbox-text-area-description {
+  background-color: #fff;
+  border: 1px solid #c4c4c4a2;
+  border-radius: var(--radius-input);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.imbox-file-area {
+  border: 1px dashed #6e6e6e;
+  font-size: 14px;
+  color: #6e6e6e;
+}
+
+.imbox-container-file-list {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.imbox-btn-submit-container {
+  display: flex;
+  justify-content: end;
+  width: 100%;
+}
+
+.imbox-btn-submit {
+  background-color: var(--color-primary);
+  color: #fff;
+  padding: 0.5rem 2rem;
+  font-weight: 400;
+}

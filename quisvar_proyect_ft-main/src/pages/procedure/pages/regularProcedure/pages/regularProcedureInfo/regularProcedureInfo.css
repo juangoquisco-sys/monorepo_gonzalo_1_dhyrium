@@ -1,0 +1,17 @@
+.regularProcedureInfo {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 0 1rem 1rem 1rem;
+  border-radius: 0.2rem;
+  background: #fff;
+  box-shadow: -2px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  height: 100%;
+}
+.regularProcedureInfo-header {
+  position: relative;
+  margin-top: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}

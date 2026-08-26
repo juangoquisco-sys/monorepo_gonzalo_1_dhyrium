@@ -1,0 +1,36 @@
+.listPersonalTask {
+  padding: 1rem 2.5rem 2.5rem 2.5rem;
+  background-color: #fff;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  overflow: auto;
+}
+
+.listPersonalTask-table-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.listPersonalTask-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+.listPersonalTask-contain-principal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+.listPersonalTask-body {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}

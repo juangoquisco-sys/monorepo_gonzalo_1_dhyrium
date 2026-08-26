@@ -1,0 +1,117 @@
+/basic-resources/{unitId}/projects/{projectId}/stages/{stageId}:
+  get:
+    tags: [Basic resources]
+    summary: Lista recursos básicos de una etapa
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - $ref: '#/components/parameters/basicResourceUnitId'
+      - $ref: '#/components/parameters/basicResourceProjectId'
+      - $ref: '#/components/parameters/basicResourceStageId'
+      - name: q
+        in: query
+        schema: { type: string }
+    responses:
+      '200': { description: Inventario de recursos y permiso de gestión }
+      '403': { description: Sin acceso a la oficina o al recurso }
+  post:
+    tags: [Basic resources]
+    summary: Carga hasta 20 archivos básicos (máximo 2 GB por archivo) para uno o más niveles o tareas
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - $ref: '#/components/parameters/basicResourceUnitId'
+      - $ref: '#/components/parameters/basicResourceProjectId'
+      - $ref: '#/components/parameters/basicResourceStageId'
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            required: [files, targets]
+            properties:
+              files:
+                type: array
+                items: { type: string, format: binary }
+              targets:
+                type: string
+                description: >-
+                  JSON array con `{ levelId | subTaskId, includeDescendants? }`.
+                  Un destino de nivel con `includeDescendants: true` se muestra en
+                  ese nivel y sus descendientes. Los destinos descendientes
+                  redundantes se normalizan y no se persisten.
+              title: { type: string }
+              description: { type: string }
+    responses:
+      '201':
+        {
+          description: Recursos creados. Los recursos heredados se descargan desde los descendientes,
+          pero solo se eliminan desde su destino de origen.,
+        }
+      '403':
+        {
+          description: Solo la unidad Gerente de Laboratorio y Campo,
+          MOD o una excepción temporal puede gestionar recursos,
+        }
+/basic-resources/{unitId}/projects/{projectId}/stages/{stageId}/summary:
+  get:
+    tags: [Basic resources]
+    summary: Devuelve conteos por nivel y tarea para la pestaña Básicos
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - $ref: '#/components/parameters/basicResourceUnitId'
+      - $ref: '#/components/parameters/basicResourceProjectId'
+      - $ref: '#/components/parameters/basicResourceStageId'
+    responses:
+      '200': { description: Conteos directos de recursos por destino }
+/basic-resources/{unitId}/{resourceId}:
+  patch:
+    tags: [Basic resources]
+    summary: Edita metadatos o destinos de un recurso básico
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - $ref: '#/components/parameters/basicResourceUnitId'
+      - $ref: '#/components/parameters/basicResourceId'
+    responses:
+      '200': { description: Recurso actualizado }
+      '403': { description: Gestión no autorizada }
+  delete:
+    tags: [Basic resources]
+    summary: Elimina un recurso básico y su archivo físico
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - $ref: '#/components/parameters/basicResourceUnitId'
+      - $ref: '#/components/parameters/basicResourceId'
+    responses:
+      '200': { description: Recurso eliminado }
+/basic-resources/{unitId}/{resourceId}/download:
+  get:
+    tags: [Basic resources]
+    summary: Descarga un recurso básico autorizado
+    security: [{ bearerAuth: [] }]
+    parameters:
+      - $ref: '#/components/parameters/basicResourceUnitId'
+      - $ref: '#/components/parameters/basicResourceId'
+    responses:
+      '200': { description: Archivo binario }
+components:
+  parameters:
+    basicResourceUnitId:
+      name: unitId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    basicResourceProjectId:
+      name: projectId
+      in: path
+      required: true
+      schema: { type: integer }
+    basicResourceStageId:
+      name: stageId
+      in: path
+      required: true
+      schema: { type: integer }
+    basicResourceId:
+      name: resourceId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }

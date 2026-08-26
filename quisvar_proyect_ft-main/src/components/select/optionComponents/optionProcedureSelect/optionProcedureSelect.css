@@ -1,0 +1,43 @@
+.optionProcedureSelect {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  cursor: pointer;
+  overflow: auto;
+  min-width: 100%;
+}
+
+.controlUser {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.optionProcedureSelect-span {
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.optionProcedureSelect-span-small {
+  font-size: 0.6rem;
+  font-weight: 500;
+}
+.optionProcedureSelect-icon {
+  min-width: 1.5625rem;
+  min-height: 1.5625rem;
+  max-width: 1.5625rem;
+  max-height: 1.5625rem;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  display: flex;
+  padding: 0.3125rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.optionProcedureSelect-icon-small {
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  max-width: 1.5rem;
+  max-height: 1.5rem;
+}

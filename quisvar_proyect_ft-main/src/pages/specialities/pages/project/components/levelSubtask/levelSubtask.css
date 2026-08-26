@@ -1,0 +1,194 @@
+.levelSubtask {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pointer:hover {
+  background-color: rgba(142, 238, 255, 0.315);
+}
+
+.levelSubtask-content {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  width: 100%;
+  background-color: #fff;
+  font-size: 0.8rem;
+  transition: background-color 0.3s ease;
+}
+
+.levelSubtask-context-menu {
+  width: 100%;
+  height: 30px;
+}
+
+.levelSubtask-context-menu--with-files {
+  height: auto;
+  min-height: 60px;
+}
+.levelSubtask-drag {
+  width: 100%;
+  height: 30px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.levelSubtask-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2rem;
+}
+
+.levelSubtask-user-image {
+  display: flex;
+  gap: 0.1rem;
+}
+
+.levelSubtask-item--name {
+  justify-content: flex-start;
+  grid-column: 1/3;
+  padding-left: 1rem;
+}
+
+.levelSubtask-editable-files {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 1.75rem;
+  gap: 0.15rem;
+  padding: 0.25rem 1rem 0.25rem 3.5rem;
+  border-top: 1px solid #eef1f5;
+  background: #fff;
+}
+
+.levelSubtask-file-pair {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.levelSubtask-editable-file {
+  display: flex;
+  width: fit-content;
+  max-width: 18rem;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #1d4ed8;
+  font: inherit;
+  font-size: 0.64rem;
+  line-height: 1rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.levelSubtask-editable-file:hover {
+  text-decoration: underline;
+}
+
+.levelSubtask-editable-file:focus-visible {
+  border-radius: 0.2rem;
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+.levelSubtask-editable-file img {
+  width: 0.8rem;
+  flex: none;
+}
+
+.levelSubtask-editable-file span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.levelSubtask-pdf-file {
+  display: inline-flex;
+  width: 1.35rem;
+  height: 1.35rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border: 0;
+  border-radius: 0.2rem;
+  background: #ff4568;
+  cursor: pointer;
+}
+
+.levelSubtask-pdf-file:hover {
+  background: #e92f55;
+}
+
+.levelSubtask-pdf-file:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+.levelSubtask-pdf-file img {
+  width: 0.75rem;
+  filter: brightness(0) invert(1);
+}
+
+.levelSubtask-text-name {
+  margin-left: 1rem;
+}
+
+.levelSubtask-header {
+  align-items: center;
+  background-color: var(--color-primarylight);
+}
+
+.levelSubtask-header-title {
+  color: #171c26;
+  font-size: 0.6875rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1rem;
+  letter-spacing: 0.0275rem;
+}
+
+.levelSubtask-text {
+  white-space: nowrap;
+  color: #171c26;
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.25rem;
+  letter-spacing: 0.0175rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.levelSubtask-add {
+  cursor: pointer;
+  width: 100%;
+  color: var(--color-secondary);
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.25rem;
+  /* 142.857% */
+  letter-spacing: 0.0175rem;
+  text-align: left;
+}
+
+.levelSubtask-plus {
+  font-weight: 900;
+}
+
+.levelSubtask-btn {
+  border: none;
+  width: 1.7rem;
+}
+
+.levelSubtask-content-active {
+  background-color: rgba(142, 238, 255, 0.315);
+}

@@ -1,0 +1,150 @@
+# level:
+#   get:
+#     tags:
+#       - Downloads
+#       - Basic levels
+#     summary: Descargar Nivel por ID de nivel
+#     description: Descargar comprimido de archivos por nivel
+#     parameters:
+#       - $ref: '#/components/parameters/level-id'
+#       - $ref: '#/components/parameters/include-files'
+#       - $ref: '#/components/parameters/type-file'
+#       - $ref: '#/components/parameters/create-files'
+#       - $ref: '#/components/parameters/equal'
+#       - $ref: '#/components/parameters/ends-with'
+#     security:
+#       - bearerAuth: []
+#     responses:
+#       '200':
+#         $ref: './global.yaml#/components/responses/200'
+#       '201':
+#         $ref: './global.yaml#/components/responses/201'
+#       '400':
+#         $ref: './global.yaml#/components/responses/400'
+#       '404':
+#         $ref: './global.yaml#/components/responses/404'
+# stage:
+#   get:
+#     tags:
+#       - Downloads
+#     summary: Descargar Nivel por ID de etapa
+#     description: Descargar comprimido de archivos por nivel
+#     parameters:
+#       - $ref: '#/components/parameters/stage-id'
+#       - $ref: '#/components/parameters/include-files'
+#       - $ref: '#/components/parameters/type-file'
+#       - $ref: '#/components/parameters/equal'
+#       - $ref: '#/components/parameters/create-files'
+#       - $ref: '#/components/parameters/ends-with'
+#     security:
+#       - bearerAuth: []
+#     responses:
+#       '200':
+#         $ref: './global.yaml#/components/responses/200'
+#       '201':
+#         $ref: './global.yaml#/components/responses/201'
+#       '400':
+#         $ref: './global.yaml#/components/responses/400'
+#       '404':
+#         $ref: './global.yaml#/components/responses/404'
+# merge-pdf-stage:
+#   get:
+#     tags:
+#       - Downloads
+#     summary: Descargar documentos pdf unidos por etapa
+#     description: Descargar documentos pdf unidos por etapa
+#     parameters:
+#       - $ref: '#/components/parameters/stage-id'
+#       - $ref: '#/components/parameters/create-files'
+#       - $ref: '#/components/parameters/type-file'
+#       - $ref: '#/components/parameters/create-cover'
+#     security:
+#       - bearerAuth: []
+#     responses:
+#       '200':
+#         $ref: './global.yaml#/components/responses/200'
+#       '201':
+#         $ref: './global.yaml#/components/responses/201'
+#       '400':
+#         $ref: './global.yaml#/components/responses/400'
+#       '404':
+#         $ref: './global.yaml#/components/responses/404'
+# merge-pdf-level:
+#   get:
+#     tags:
+#       - Downloads
+#     summary: Descargar documentos pdf unidos por nivel
+#     description: Descargar documentos pdf unidos por nivel
+#     parameters:
+#       - $ref: '#/components/parameters/level-id'
+#       - $ref: '#/components/parameters/create-files'
+#       - $ref: '#/components/parameters/type-file'
+#       - $ref: '#/components/parameters/create-cover'
+#     security:
+#       - bearerAuth: []
+#     responses:
+#       '200':
+#         $ref: './global.yaml#/components/responses/200'
+#       '201':
+#         $ref: './global.yaml#/components/responses/201'
+#       '400':
+#         $ref: './global.yaml#/components/responses/400'
+#       '404':
+#         $ref: './global.yaml#/components/responses/404'
+
+# components:
+#   parameters:
+#     level-id:
+#       name: id
+#       in: path
+#       required: true
+#       schema:
+#         type: integer
+#       description: ID del nivel
+#     stage-id:
+#       name: id
+#       in: path
+#       required: true
+#       schema:
+#         type: integer
+#       description: ID de la etapa
+#     include-files:
+#       name: includeFiles
+#       in: query
+#       example: true
+#       schema:
+#         type: boolean
+#       description: Incluir archivos
+#     create-files:
+#       name: createFiles
+#       in: query
+#       schema:
+#         type: boolean
+#       example: true
+#       description: Crear archivos
+#     create-cover:
+#       name: createCover
+#       in: query
+#       schema:
+#         type: boolean
+#       description: Crear cover
+#     ends-with:
+#       name: endsWith
+#       in: query
+#       schema:
+#         type: boolean
+#       description: Crear caratulas
+#     equal:
+#       name: equal
+#       in: query
+#       schema:
+#         type: string
+#         example: .pdf
+#       description: Crear caratulas
+#     type-file:
+#       name: type
+#       in: query
+#       schema:
+#         type: string
+#         example: UPLOADS
+#       description: 'Usar <b>[MODEL,UPLOADS,EDITABLES]</b>'

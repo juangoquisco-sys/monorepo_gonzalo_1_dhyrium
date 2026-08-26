@@ -1,0 +1,17 @@
+.taskStatusFeedback-header-status {
+  color: #fff;
+  text-align: center;
+  font-size: 0.57694rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.25rem;
+
+  padding: 0rem 0.48075rem;
+  border-radius: 0.48075rem;
+}
+.taskStatusFeedback-REJECTED {
+  background: var(--color-unresolved);
+}
+.taskStatusFeedback-ACCEPTED {
+  background: var(--color-correction);
+}

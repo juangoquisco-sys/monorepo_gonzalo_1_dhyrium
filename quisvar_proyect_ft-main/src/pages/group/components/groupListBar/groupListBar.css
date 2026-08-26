@@ -1,0 +1,55 @@
+.gl-sidebar-data {
+  display: flex;
+  gap: 0.5rem;
+  cursor: pointer;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.3rem 1.5rem;
+  width: 100%;
+  height: 42px;
+}
+
+.gl-dragging {
+  border: 0.5px solid var(--color-primary);
+  background-color: white;
+  display: flex;
+  width: 100%;
+  height: 42px;
+}
+.contract-selected {
+  background-color: #d6e5ff;
+}
+
+.gl-sidebar-data:hover {
+  background-color: #d6e5ff79;
+}
+
+.gl-sidebar-figure {
+  width: 1rem;
+}
+
+.gl-sidebar-name {
+  overflow: hidden;
+  color: #000;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.gl-sidebar-cui {
+  color: #808080;
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 0.89288rem;
+  letter-spacing: 0.0625rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

@@ -1,0 +1,37 @@
+.userDetail-td {
+  padding: var(--radius-input);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-info {
+  display: flex;
+  gap: 1rem;
+}
+.icon {
+  width: 2rem;
+  height: 2rem;
+}
+.list-name {
+  font-size: 1rem;
+  color: black;
+  font-weight: 400;
+}
+.name-container {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+}
+.list-status {
+  font-weight: 600;
+}
+.user-active {
+  color: var(--color-done);
+}
+.user-inactive {
+  color: var(--color-unresolved);
+}
+.edit-btn {
+  display: flex;
+  gap: 1rem;
+}

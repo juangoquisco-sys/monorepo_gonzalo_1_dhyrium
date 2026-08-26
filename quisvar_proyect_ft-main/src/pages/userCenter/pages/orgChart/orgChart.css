@@ -1,0 +1,2108 @@
+.orgChart {
+  width: 100%;
+  min-height: calc(100vh - 7.5rem);
+  color: #0f172a;
+}
+
+.orgChart-error {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #f2b8b5;
+  border-radius: 0.5rem;
+  color: #8a1f11;
+  background: #fff7f6;
+}
+
+.orgChart-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(21rem, 25rem);
+  gap: 0;
+  align-items: start;
+  min-height: calc(100vh - 8rem);
+  border: 1px solid #e2e8f0;
+  border-radius: 0.55rem;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.orgChart-canvasPanel,
+.orgChart-inspector {
+  min-width: 0;
+  border: none;
+  border-radius: 0;
+  background: #ffffff;
+}
+
+.orgChart-canvasPanel {
+  overflow: hidden;
+}
+
+.orgChart-inspector {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: calc(100vh - 8rem);
+  padding: 1.2rem;
+  border-left: 1px solid #e2e8f0;
+  overflow: auto;
+}
+
+.orgChart-toolbar,
+.orgChart-inspectorHeader,
+.orgChart-inspectorActions,
+.orgChart-sectionTitle,
+.orgChart-membersHeader,
+.orgChart-actions,
+.orgChart-rowActions,
+.orgChart-dateFilter,
+.orgChart-check,
+.orgChart-selectedUser,
+.orgChart-nodeMeta {
+  display: flex;
+  align-items: center;
+}
+
+.orgChart-toolbar {
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 4.55rem;
+  padding: 0.9rem 1.45rem;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 0.25rem 0.75rem rgb(15 23 42 / 4%);
+}
+
+.orgChart-toolbar h1,
+.orgChart-inspectorHeader h2,
+.orgChart-sectionTitle h3 {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.orgChart-toolbar h1 {
+  font-size: 1.05rem;
+  color: #0f172a;
+}
+
+.orgChart-toolbar p,
+.orgChart-inspectorHeader p,
+.orgChart-eyebrow {
+  margin: 0.25rem 0 0;
+  color: #52637a;
+  font-size: 0.74rem;
+}
+
+.orgChart-toolbarActions,
+.orgChart-inspectorActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.orgChart-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border-bottom: 1px solid #edf2f7;
+  background: #fbfdff;
+}
+
+.orgChart-metrics div {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+  padding: 0.55rem 1.45rem;
+  border-right: 1px solid #edf2f7;
+}
+
+.orgChart-metrics div:last-child {
+  border-right: none;
+}
+
+.orgChart-metrics strong {
+  color: #0f3f84;
+  font-size: 0.95rem;
+}
+
+.orgChart-metrics span {
+  overflow: hidden;
+  color: #64748b;
+  font-size: 0.66rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orgChart-diagramViewport {
+  min-height: calc(100vh - 13.2rem);
+  overflow: auto;
+  padding: 3.8rem 16rem 4.5rem 2.5rem;
+  background-image: radial-gradient(#cfe0f1 1.05px, transparent 1.05px);
+  background-color: #f8fbff;
+  background-size: 20px 20px;
+}
+
+.orgChart-diagramRoot,
+.orgChart-diagramChildren {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1.25rem;
+  min-width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.orgChart-diagramItem {
+  position: relative;
+  display: grid;
+  align-items: start;
+  align-content: start;
+  justify-items: center;
+  gap: 1.35rem;
+}
+
+.orgChart-diagramChildren {
+  position: relative;
+  padding-top: 1.35rem;
+}
+
+.orgChart-diagramChildren::before {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 1.35rem;
+  background: #c6d5e2;
+  content: '';
+}
+
+.orgChart-diagramChildren .orgChart-diagramItem::before {
+  position: absolute;
+  top: -1.35rem;
+  left: 50%;
+  width: 1px;
+  height: 1.35rem;
+  background: #c6d5e2;
+  content: '';
+}
+
+.orgChart-nodeShell {
+  position: relative;
+  display: grid;
+  justify-items: center;
+}
+
+.orgChart-nodeCluster {
+  position: relative;
+  display: grid;
+  justify-items: center;
+}
+
+.orgChart-node {
+  display: grid;
+  align-self: start;
+  grid-template-rows: auto minmax(2.2rem, auto) auto;
+  gap: 0.48rem;
+  width: 15.9rem;
+  height: auto;
+  min-height: 6.75rem;
+  padding: 1rem 1.05rem 0.85rem;
+  border: 1px solid #dbe5ef;
+  border-radius: 0.5rem;
+  color: #0f172a;
+  background: #ffffff;
+  box-shadow: 0 0.35rem 0.8rem rgb(15 23 42 / 8%);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease,
+    background-color 160ms ease;
+}
+
+.orgChart-node:hover,
+.orgChart-node.is-selected {
+  border-color: #2f75ff;
+  background: #ffffff;
+  box-shadow: 0 0.6rem 1.15rem rgb(47 117 255 / 13%);
+}
+
+.orgChart-node:hover {
+  transform: translateY(-1px);
+}
+
+.orgChart-node.is-selected {
+  border-width: 2px;
+  box-shadow: 0 0 0 1px rgb(47 117 255 / 12%),
+    0 0.75rem 1.35rem rgb(47 117 255 / 16%);
+}
+
+.orgChart-node.is-inactive {
+  opacity: 0.55;
+}
+
+.orgChart-nodeType {
+  justify-self: center;
+  max-width: 100%;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.25rem;
+  color: #0756e6;
+  background: #eaf2ff;
+  font-size: 0.71rem;
+  font-weight: 800;
+  line-height: 1;
+  overflow-wrap: anywhere;
+}
+
+.orgChart-nodeType.is-grupo {
+  color: #14452f;
+  background: #e1f5ea;
+}
+
+.orgChart-nodeType.is-especialidad {
+  color: #5a3d12;
+  background: #fff4d8;
+}
+
+.orgChart-nodeType.is-comite_temporal {
+  color: #5b2731;
+  background: #fde7ec;
+}
+
+.orgChart-node strong {
+  display: -webkit-box;
+  overflow: hidden;
+  align-self: center;
+  min-height: 2.15rem;
+  color: #0f172a;
+  font-size: 0.9rem;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.orgChart-nodeFooter {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.orgChart-node small {
+  overflow: hidden;
+  color: #526987;
+  font-size: 0.72rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orgChart-nodeMeta {
+  justify-content: flex-end;
+  gap: 0.3rem;
+  color: #536a89;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.orgChart-nodeAdd {
+  position: absolute;
+  z-index: 2;
+  bottom: -0.9rem;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border: none;
+  border-radius: 999px;
+  color: #ffffff;
+  background: #2f64ea;
+  box-shadow: 0 0.35rem 0.75rem rgb(47 100 234 / 28%);
+  cursor: pointer;
+  opacity: 0;
+  transform: translate(-50%, 0.25rem) scale(0.92);
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease,
+    background-color 150ms ease;
+}
+
+.orgChart-nodeShell:hover .orgChart-nodeAdd,
+.orgChart-nodeShell:focus-within .orgChart-nodeAdd {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}
+
+.orgChart-nodeAdd:hover,
+.orgChart-nodeAdd:focus-visible {
+  background: #1f55da;
+  outline: none;
+}
+
+.orgChart-attachedRail {
+  position: absolute;
+  top: 0.05rem;
+  left: calc(100% + 1.4rem);
+  display: grid;
+  gap: 0.45rem;
+  width: 12.25rem;
+  padding-left: 1rem;
+}
+
+.orgChart-attachedRail::before {
+  position: absolute;
+  top: 3.15rem;
+  left: 0;
+  width: 1rem;
+  height: 1px;
+  background: #c7d5e3;
+  content: '';
+}
+
+.orgChart-attachedRailTitle {
+  justify-self: start;
+  padding: 0.22rem 0.5rem;
+  border: 1px solid #d9e4ef;
+  border-radius: 999px;
+  color: #64748b;
+  background: rgb(255 255 255 / 92%);
+  font-size: 0.6rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.orgChart-attachedRailList {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.orgChart-attachedShell {
+  position: relative;
+  display: grid;
+}
+
+.orgChart-attachedNode {
+  display: grid;
+  grid-template-rows: auto minmax(1.7rem, auto) auto;
+  gap: 0.32rem;
+  width: 11.25rem;
+  min-height: 4.95rem;
+  padding: 0.58rem 0.65rem;
+  border: 1px solid #dce7f0;
+  border-radius: 0.45rem;
+  color: #0f172a;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 0.25rem 0.6rem rgb(15 23 42 / 7%);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.orgChart-attachedNode:hover,
+.orgChart-attachedNode.is-selected {
+  border-color: #8b5cf6;
+  box-shadow: 0 0.45rem 0.9rem rgb(139 92 246 / 13%);
+}
+
+.orgChart-attachedNode:hover {
+  transform: translateY(-1px);
+}
+
+.orgChart-attachedNode.is-selected {
+  border-width: 2px;
+}
+
+.orgChart-attachedNode.is-inactive {
+  opacity: 0.55;
+}
+
+.orgChart-attachedNode .orgChart-nodeType {
+  justify-self: start;
+  padding: 0.22rem 0.4rem;
+  color: #7e22ce;
+  background: #f3e8ff;
+  font-size: 0.58rem;
+}
+
+.orgChart-attachedNode strong {
+  display: -webkit-box;
+  overflow: hidden;
+  color: #111827;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-transform: uppercase;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.orgChart-attachedNode small,
+.orgChart-attachedNode .orgChart-nodeMeta {
+  font-size: 0.58rem;
+}
+
+.orgChart-attachedAdd {
+  position: absolute;
+  right: -0.45rem;
+  bottom: -0.45rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: none;
+  border-radius: 999px;
+  color: #ffffff;
+  background: #8b5cf6;
+  box-shadow: 0 0.25rem 0.55rem rgb(139 92 246 / 24%);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(0.15rem) scale(0.92);
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease,
+    background-color 150ms ease;
+}
+
+.orgChart-attachedShell:hover .orgChart-attachedAdd,
+.orgChart-attachedShell:focus-within .orgChart-attachedAdd {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.orgChart-attachedAdd:hover,
+.orgChart-attachedAdd:focus-visible {
+  background: #7c3aed;
+  outline: none;
+}
+
+.orgChart-inspectorHeader {
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5edf2;
+}
+
+.orgChart-inspectorHeader h2 {
+  display: -webkit-box;
+  overflow: hidden;
+  color: #0f172a;
+  font-size: 1.08rem;
+  text-transform: uppercase;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.orgChart-eyebrow {
+  display: block;
+  margin: 0 0 0.25rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.orgChart-status {
+  flex: 0 0 auto;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.63rem;
+  font-weight: 800;
+}
+
+.orgChart-status.is-active {
+  color: #0f5132;
+  background: #dff3e8;
+}
+
+.orgChart-status.is-inactive {
+  color: #7f1d1d;
+  background: #fee2e2;
+}
+
+.orgChart-inspectorActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5edf2;
+}
+
+.orgChart-inspectorSection {
+  display: grid;
+  gap: 0.75rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid #e5edf2;
+}
+
+.orgChart-inspectorSection:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.orgChart-sectionTitle {
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: #234858;
+}
+
+.orgChart-sectionTitle > div,
+.orgChart-sectionTitle:not(.orgChart-membersHeader) {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.orgChart-sectionTitle h3 {
+  font-size: 0.86rem;
+}
+
+.orgChart-unitForm,
+.orgChart-memberForm {
+  display: grid;
+  gap: 0.72rem;
+}
+
+.orgChart-formContext {
+  margin: -0.2rem 0 0;
+  color: #64748b;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.orgChart-formError {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid #fecaca;
+  border-radius: 0.45rem;
+  color: #991b1b;
+  background: #fff7f7;
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.orgChart-formError svg {
+  flex: 0 0 auto;
+  margin-top: 0.05rem;
+}
+
+.orgChart-check {
+  gap: 0.5rem;
+  font-size: 0.76rem;
+  color: #374151;
+}
+
+.orgChart-check input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #0f766e;
+}
+
+.orgChart-actions {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.orgChart-userSearch {
+  position: relative;
+}
+
+.orgChart-userOptions {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 0.3rem);
+  right: 0;
+  left: 0;
+  overflow: auto;
+  max-height: 13rem;
+  border: 1px solid #d8e2e8;
+  border-radius: 0.45rem;
+  background: #ffffff;
+  box-shadow: 0 0.7rem 1.4rem rgb(17 24 39 / 12%);
+}
+
+.orgChart-userOptions button {
+  display: grid;
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: none;
+  border-bottom: 1px solid #eef2f5;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.orgChart-userOptions button:hover {
+  background: #f2f8fa;
+}
+
+.orgChart-userOptions strong {
+  overflow: hidden;
+  color: #243447;
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orgChart-userOptions span {
+  color: #6b7280;
+  font-size: 0.68rem;
+}
+
+.orgChart-selectedUser {
+  gap: 0.45rem;
+  min-height: 2rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid #dbe7ed;
+  border-radius: 0.4rem;
+  color: #204d5d;
+  background: #f5fbfd;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.orgChart-selectedUser span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orgChart-memberList {
+  display: grid;
+  gap: 0.5rem;
+  min-height: 8rem;
+}
+
+.orgChart-userOptionEmpty {
+  padding: 0.85rem 1rem;
+  color: var(--muted-foreground);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.orgChart-memberListHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #425466;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.orgChart-memberListHeader strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  color: #1f4f61;
+  background: #e7f4f8;
+  font-size: 0.68rem;
+}
+
+.orgChart-memberRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 3.1rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #e2eaf0;
+  border-radius: 0.45rem;
+  background: #ffffff;
+}
+
+.orgChart-memberRow > div:first-child {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+}
+
+.orgChart-memberRow strong {
+  overflow: hidden;
+  color: #172a3a;
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orgChart-memberRow span {
+  overflow: hidden;
+  color: #64748b;
+  font-size: 0.66rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orgChart-rowActions {
+  gap: 0.35rem;
+}
+
+.orgChart-rowActions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid #d6e2e8;
+  border-radius: 0.35rem;
+  color: #24596b;
+  background: #f8fbfc;
+  cursor: pointer;
+}
+
+.orgChart-rowActions button.is-danger {
+  color: #9f241b;
+  border-color: #f1c2be;
+  background: #fff8f7;
+}
+
+.orgChart-badge {
+  padding: 0.22rem 0.45rem;
+  border-radius: 999px;
+  color: #0f5132;
+  background: #dff3e8;
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+
+.orgChart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 8rem;
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+.orgChart-empty.is-small {
+  min-height: 5rem;
+  border: 1px dashed #d4e0e7;
+  border-radius: 0.45rem;
+  background: #fbfdff;
+}
+
+@media (max-width: 1180px) {
+  .orgChart-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .orgChart-inspector {
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .orgChart-toolbar,
+  .orgChart-inspectorHeader,
+  .orgChart-membersHeader,
+  .orgChart-memberRow {
+    align-items: stretch;
+    grid-template-columns: 1fr;
+  }
+
+  .orgChart-toolbar,
+  .orgChart-inspectorHeader,
+  .orgChart-membersHeader {
+    flex-direction: column;
+  }
+
+  .orgChart-metrics,
+  .orgChart-dateGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .orgChart-metrics div {
+    border-right: none;
+    border-bottom: 1px solid #e5edf2;
+  }
+
+  .orgChart-metrics div:last-child {
+    border-bottom: none;
+  }
+
+  .orgChart-toolbarActions,
+  .orgChart-inspectorActions,
+  .orgChart-actions,
+  .orgChart-rowActions {
+    justify-content: flex-start;
+  }
+
+  .orgChart-diagramViewport {
+    padding: 1rem;
+  }
+
+  .orgChart-attachedRail {
+    position: static;
+    width: min(100%, 15.9rem);
+    margin-top: 0.8rem;
+    padding-left: 0;
+  }
+
+  .orgChart-attachedRail::before {
+    display: none;
+  }
+
+  .orgChart-attachedNode {
+    width: 100%;
+  }
+}
+
+.orgChart-badge.is-lead {
+  color: #7c4500;
+  background: #fff0d6;
+}
+
+/* Presentación jerárquica basada en el organigrama corporativo aprobado. */
+.orgChart-zoomControls {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  height: 2.25rem;
+  border: 1px solid #d6e0ea;
+  border-radius: 0.42rem;
+  background: #fff;
+}
+
+.orgChart-zoomControls button,
+.orgChart-zoomControls output {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-width: 2.3rem;
+  padding: 0 0.62rem;
+  border: 0;
+  border-right: 1px solid #e2e8f0;
+  color: #1e3a5f;
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.orgChart-viewModes {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  height: 2.25rem;
+  border: 1px solid #cbd9e6;
+  border-radius: 0.48rem;
+  background: #edf3f8;
+}
+
+.orgChart-viewModes button {
+  height: 100%;
+  padding: 0 0.78rem;
+  border: 0;
+  color: #38526e;
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.orgChart-viewModes button.is-active {
+  color: #fff;
+  background: #1d5e9d;
+  box-shadow: inset 0 -2px 0 rgb(7 49 88 / 26%);
+}
+
+.orgChart-viewModes button:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid #0d75c8;
+  outline-offset: -2px;
+}
+
+.orgChart-zoomControls button:last-child {
+  border-right: 0;
+}
+
+.orgChart-zoomControls button:hover,
+.orgChart-zoomControls button:focus-visible {
+  background: #eef5fb;
+  outline: none;
+}
+
+.orgChart-diagramViewport:has(.orgChart-pptSheet) {
+  height: calc(100vh - 13.2rem);
+  min-height: 39rem;
+  padding: 1.5rem 1.75rem 2.25rem;
+  overflow: auto;
+  background: #eef3f8;
+  scrollbar-gutter: stable both-edges;
+  scrollbar-color: #7c9ab7 #dfe8f1;
+  scrollbar-width: auto;
+}
+
+.orgChart-diagramViewport:focus-visible {
+  outline: 3px solid #2f75ff;
+  outline-offset: -3px;
+}
+
+.orgChart-diagramViewport::-webkit-scrollbar {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.orgChart-diagramViewport::-webkit-scrollbar-track {
+  background: #dfe8f1;
+}
+
+.orgChart-diagramViewport::-webkit-scrollbar-thumb {
+  border: 0.2rem solid #dfe8f1;
+  border-radius: 999px;
+  background: #7c9ab7;
+}
+
+.orgChart-pptSheet {
+  position: relative;
+  width: max-content;
+  min-width: 150rem;
+  min-height: 64rem;
+  margin: 0 auto;
+  padding: 2.25rem 2.5rem 2.7rem;
+  border-top: 0.36rem solid #1d3f67;
+  color: #172033;
+  background: #f7f9fc;
+  box-shadow: 0 0.45rem 1.4rem rgb(18 38 63 / 10%);
+  transform: scale(var(--org-chart-zoom));
+  transform-origin: top center;
+}
+
+.orgChart-pptHeading {
+  display: grid;
+  gap: 0.3rem;
+  margin-bottom: 1.6rem;
+}
+
+.orgChart-pptHeading span {
+  color: #8f4800;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.orgChart-pptHeading h2,
+.orgChart-pptHeading p {
+  margin: 0;
+}
+
+.orgChart-pptHeading h2 {
+  color: #19395f;
+  font-size: 1.8rem;
+  line-height: 1.1;
+}
+
+.orgChart-pptHeading p {
+  color: #667085;
+  font-size: 0.95rem;
+}
+
+.orgChart-pptRoot {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.orgChart-pptNodeShell {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.orgChart-pptNode {
+  display: grid;
+  grid-template-rows: auto minmax(3.2rem, auto) auto;
+  align-content: center;
+  gap: 0.46rem;
+  width: 17rem;
+  min-height: 8.15rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid #274a72;
+  border-radius: 0.42rem;
+  color: #172033;
+  background: #d9e9f6;
+  box-shadow: 0.28rem 0.34rem 0 rgb(31 54 79 / 8%);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease, outline-color 150ms ease;
+}
+
+.orgChart-pptNode:hover {
+  transform: translateY(-2px);
+  box-shadow: 0.35rem 0.48rem 0 rgb(31 54 79 / 10%);
+}
+
+.orgChart-pptNode.is-selected {
+  outline: 0.2rem solid #2f75ff;
+  outline-offset: 0.16rem;
+}
+
+.orgChart-pptNodeCode {
+  justify-self: start;
+  color: currentColor;
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.015em;
+  opacity: 0.7;
+}
+
+.orgChart-pptNode strong {
+  align-self: center;
+  display: block;
+  overflow: visible;
+  font-size: 0.96rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.orgChart-pptNodeResponsible {
+  align-self: end;
+  display: block;
+  overflow: visible;
+  font-size: 0.78rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.orgChart-pptNodeResponsible.is-vacant {
+  font-style: italic;
+  font-weight: 700;
+}
+
+.orgChart-pptNode.is-root {
+  width: 38rem;
+  min-height: 7.25rem;
+  border-color: #934800;
+  color: #fff;
+  background: #934800;
+}
+
+.orgChart-pptNode.is-root strong {
+  font-size: 1.28rem;
+}
+
+.orgChart-pptNode.is-support {
+  width: 22.7rem;
+  min-height: 8.1rem;
+  border-color: #f2a06f;
+  background: linear-gradient(#f4ac7e 0 1.9rem, #fee8dc 1.9rem 100%);
+}
+
+.orgChart-pptNode.is-management {
+  width: 36rem;
+  min-height: 7.4rem;
+  border-color: #355f25;
+  color: #fff;
+  background: #355f25;
+}
+
+.orgChart-pptNode.is-management strong {
+  font-size: 1.12rem;
+}
+
+.orgChart-pptNode.is-office {
+  width: 17rem;
+  min-height: 8.15rem;
+  background: linear-gradient(#284a72 0 2rem, #d9e9f6 2rem 100%);
+}
+
+.orgChart-pptNode.is-office .orgChart-pptNodeCode,
+.orgChart-pptNode.is-office strong {
+  color: #fff;
+}
+
+.orgChart-pptNode.is-office strong {
+  padding-top: 0.9rem;
+  color: #172033;
+}
+
+.orgChart-pptNode.is-unit {
+  width: 14.5rem;
+  min-height: 7.35rem;
+  border-color: #77a7c6;
+  background: #d9edf8;
+}
+
+.orgChart-pptNodeAdd {
+  position: absolute;
+  z-index: 3;
+  right: -0.55rem;
+  bottom: -0.55rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.45rem;
+  height: 1.45rem;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: #1f64b3;
+  box-shadow: 0 0.22rem 0.45rem rgb(20 50 88 / 24%);
+  opacity: 0;
+  cursor: pointer;
+  transform: scale(0.88);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.orgChart-pptNodeShell:hover .orgChart-pptNodeAdd,
+.orgChart-pptNodeShell:focus-within .orgChart-pptNodeAdd {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.orgChart-pptTier {
+  position: relative;
+  z-index: 1;
+  margin-top: 3.25rem;
+  padding-top: 1.55rem;
+}
+
+.orgChart-pptTier::before {
+  position: absolute;
+  top: -3.25rem;
+  left: 50%;
+  width: 1px;
+  height: 4.8rem;
+  background: #9ca9b8;
+  content: '';
+}
+
+.orgChart-pptTierLabel {
+  position: relative;
+  z-index: 2;
+  display: table;
+  margin: 0 auto 0.95rem;
+  padding: 0.3rem 0.82rem;
+  border-radius: 999px;
+  color: #5f6f82;
+  background: #edf2f7;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.orgChart-pptTierGrid,
+.orgChart-pptManagementGrid,
+.orgChart-pptChildren {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.orgChart-pptTierGrid {
+  width: max-content;
+  margin: 0 auto;
+  padding-top: 1rem;
+}
+
+.orgChart-pptTierGrid::before,
+.orgChart-pptManagementGrid::before,
+.orgChart-pptChildren::after {
+  position: absolute;
+  top: 0;
+  right: 10.7rem;
+  left: 10.7rem;
+  height: 1px;
+  background: #9ca9b8;
+  content: '';
+}
+
+.orgChart-pptTierItem,
+.orgChart-pptChild {
+  position: relative;
+  flex: 0 0 auto;
+  padding-top: 1rem;
+}
+
+.orgChart-pptTierItem::before,
+.orgChart-pptChild::before {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 1rem;
+  background: #9ca9b8;
+  content: '';
+}
+
+.orgChart-pptManagementGrid {
+  width: max-content;
+  margin: 0 auto;
+  gap: 5rem;
+  padding-top: 1rem;
+}
+
+.orgChart-pptManagementGrid::before {
+  right: 34rem;
+  left: 34rem;
+}
+
+.orgChart-pptTreeItem {
+  display: grid;
+  width: max-content;
+  justify-items: center;
+}
+
+.orgChart-pptChildren {
+  width: max-content;
+  gap: 0.9rem;
+  margin-top: 0;
+  padding-top: 1.8rem;
+}
+
+.orgChart-pptChildren::before {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 0.9rem;
+  background: #9ca9b8;
+  content: '';
+}
+
+.orgChart-pptChildren::after {
+  top: 0.9rem;
+  right: 6.8rem;
+  left: 6.8rem;
+}
+
+.orgChart-pptChild {
+  padding-top: 0;
+}
+
+.orgChart-pptChild::before {
+  top: -0.9rem;
+  height: 0.9rem;
+}
+
+.orgChart-pptChild .orgChart-pptChildren {
+  display: flex;
+  width: max-content;
+  gap: 0.65rem;
+}
+
+.orgChart-pptNote {
+  margin: 2.6rem 1rem 0;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid #d8aa2e;
+  border-radius: 0.42rem;
+  color: #805b05;
+  background: #fff2c8;
+  font-size: 0.85rem;
+}
+
+/* Vista ejecutiva del Anexo 02: junta, gerencia, tres areas y dependencias. */
+.orgChart-pptSheet {
+  min-width: 78rem;
+  min-height: 58rem;
+  padding: 1.7rem 1.8rem 2.2rem;
+  border: 1px solid #b8d3ea;
+  border-radius: 1rem;
+  background: #f9fcff;
+  box-shadow: none;
+}
+
+.orgChart-governanceNode {
+  position: relative;
+  display: grid;
+  gap: 0.32rem;
+  width: 39rem;
+  margin: 0 auto 3rem;
+  padding: 0.82rem 1.4rem;
+  border: 1px solid #7caed5;
+  border-radius: 0.78rem;
+  color: #123f70;
+  background: #eef6fc;
+  text-align: center;
+}
+
+.orgChart-governanceNode::after {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 1px;
+  height: 3rem;
+  background: #7eb6dc;
+  content: '';
+}
+
+.orgChart-governanceNode strong {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1rem;
+}
+
+.orgChart-governanceNode span {
+  color: #4f7194;
+  font-size: 0.7rem;
+}
+
+.orgChart-pptNode {
+  display: grid;
+  grid-template-rows: none;
+  align-content: center;
+  gap: 0;
+  width: 16.5rem;
+  min-height: 6.8rem;
+  padding: 0.78rem 0.9rem;
+  border-color: #c5d8e8;
+  border-radius: 0.65rem;
+  color: #234c75;
+  background: #ffffff;
+  box-shadow: 0 0.35rem 0.9rem rgb(35 76 117 / 5%);
+  text-align: left;
+}
+
+.orgChart-pptNodeContent {
+  display: grid;
+  align-content: center;
+  gap: 0.34rem;
+  min-width: 0;
+}
+
+.orgChart-pptNodeCode {
+  justify-self: start;
+  color: #4586ba;
+  font-size: 0.62rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.orgChart-pptNode strong {
+  color: #174a78;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.22;
+  text-transform: none;
+}
+
+.orgChart-pptNodeResponsible {
+  color: #5d7e9d;
+  font-size: 0.66rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.orgChart-pptNode.is-root {
+  grid-template-columns: 3.5rem minmax(0, 1fr) 11rem;
+  align-items: center;
+  gap: 1rem;
+  width: 54rem;
+  min-height: 7rem;
+  padding: 1rem 1.45rem;
+  border-color: #0788c8;
+  color: #123f70;
+  background: #eaf7ff;
+}
+
+.orgChart-pptNode.is-root strong,
+.orgChart-pptNode.is-management strong {
+  color: #174a78;
+}
+
+.orgChart-pptNode.is-root .orgChart-pptNodeContent > strong {
+  font-size: 1.16rem;
+}
+
+.orgChart-pptNodeIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.72rem;
+  color: #ffffff;
+  background: #128ec3;
+}
+
+.orgChart-pptNodeSummary {
+  display: grid;
+  justify-items: end;
+  gap: 0.7rem;
+  color: #174a78;
+  font-size: 0.62rem;
+}
+
+.orgChart-pptNodeSummary strong {
+  font-family: inherit;
+  font-size: 0.68rem;
+}
+
+.orgChart-pptTier.is-managementTier {
+  margin-top: 4rem;
+  padding-top: 1.6rem;
+}
+
+.orgChart-pptTier.is-managementTier::before {
+  top: -4rem;
+  height: 5.65rem;
+  background: #7eb6dc;
+}
+
+.orgChart-pptManagementGrid {
+  gap: 1.35rem;
+  padding-top: 1rem;
+}
+
+.orgChart-pptManagementGrid::before {
+  right: 10rem;
+  left: 10rem;
+  background: #7eb6dc;
+}
+
+.orgChart-pptNode.is-management {
+  grid-template-rows: minmax(0, 1fr) auto;
+  width: 19rem;
+  min-height: 12rem;
+  padding: 1.15rem 1.15rem 0;
+  border-color: #9bc3df;
+  color: #234c75;
+  background: #f6fbff;
+}
+
+.orgChart-pptNode.is-management .orgChart-pptNodeContent {
+  align-content: start;
+  gap: 0.48rem;
+}
+
+.orgChart-pptNode.is-management .orgChart-pptNodeContent > strong {
+  min-height: 3rem;
+  color: #345f86;
+  font-size: 1rem;
+}
+
+.orgChart-pptNode.is-management .orgChart-pptNodeSummary {
+  display: none;
+}
+
+.orgChart-pptNodeFooter {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.9rem -1.15rem 0;
+  padding: 0.72rem 1.15rem;
+  border-top: 1px solid #dbe8f2;
+  color: #6d88a0;
+  font-size: 0.62rem;
+}
+
+.orgChart-pptTreeItem {
+  width: 19rem;
+}
+
+.orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptChildren {
+  display: grid;
+  width: 100%;
+  gap: 0.55rem;
+  padding-top: 3.1rem;
+}
+
+.orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptChildren::before {
+  top: 0;
+  left: 50%;
+  height: 2.2rem;
+  background: #8ab9da;
+}
+
+.orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptChildren::after {
+  top: 2.2rem;
+  right: 0.6rem;
+  left: 0.6rem;
+  height: 1px;
+  background: #b2cfe3;
+}
+
+.orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptChildren::after {
+  content: 'DEPENDENCIAS';
+  color: #3977a7;
+  background: linear-gradient(
+    to right,
+    #b2cfe3 0 31%,
+    transparent 31% 69%,
+    #b2cfe3 69% 100%
+  );
+  font-size: 0.58rem;
+  line-height: 1px;
+  text-align: center;
+}
+
+.orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptChildren > .orgChart-pptChild {
+  width: 100%;
+  padding: 0 0 0 1.25rem;
+}
+
+.orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptChildren > .orgChart-pptChild::before {
+  top: -0.3rem;
+  left: 0.25rem;
+  width: 1rem;
+  height: calc(100% + 0.9rem);
+  border-bottom: 1px solid #b2cfe3;
+  border-left: 1px solid #b2cfe3;
+  background: transparent;
+}
+
+.orgChart-pptNode.is-office {
+  grid-template-columns: minmax(0, 1fr);
+  width: 17.75rem;
+  min-height: 6.35rem;
+  padding: 0.82rem 0.95rem;
+  border-color: #d2e1ec;
+  background: #ffffff;
+}
+
+.orgChart-pptNode.is-office .orgChart-pptNodeCode,
+.orgChart-pptNode.is-office strong {
+  color: inherit;
+}
+
+.orgChart-pptNode.is-office strong {
+  padding-top: 0;
+}
+
+.orgChart-pptNode.is-unit {
+  width: 16rem;
+  min-height: 5.8rem;
+  background: #f5faff;
+}
+
+.orgChart-pptNote {
+  margin: 2rem auto 0;
+  padding: 0;
+  border: 0;
+  color: #7890a5;
+  background: transparent;
+  font-size: 0.67rem;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .orgChart-viewModes,
+  .orgChart-zoomControls {
+    width: 100%;
+  }
+
+  .orgChart-viewModes button,
+  .orgChart-zoomControls button,
+  .orgChart-zoomControls output {
+    flex: 1;
+  }
+
+  .orgChart-pptHeading h2 {
+    font-size: 1.45rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orgChart-pptNode,
+  .orgChart-pptNodeAdd {
+    transition: none;
+  }
+}
+
+/* Organigrama oficial del Anexo 01: franja jerárquica reproducida del Word. */
+.orgChart-pptSheet {
+  min-width: 78rem;
+  min-height: 30rem;
+  padding: 3rem 2rem 4rem;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+}
+
+.orgChart-governanceNode {
+  width: 100%;
+  margin: 0 auto 1.55rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #555;
+  border-radius: 0;
+  color: #111;
+  background: #e7e7e7;
+  text-transform: uppercase;
+}
+
+.orgChart-governanceNode::after {
+  height: 1.55rem;
+  background: #333;
+}
+
+.orgChart-governanceNode strong {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.12rem;
+}
+
+.orgChart-pptNode,
+.orgChart-pptNode.is-root,
+.orgChart-pptNode.is-management {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.18rem;
+  width: 100%;
+  min-height: 4.25rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid #555;
+  border-radius: 0;
+  color: #111;
+  box-shadow: none;
+  text-align: center;
+}
+
+.orgChart-pptRoot,
+.orgChart-pptRoot .orgChart-pptNodeShell {
+  width: 100%;
+}
+
+.orgChart-pptNode.is-root {
+  background: #d9e3f3;
+}
+
+.orgChart-pptNodeIcon,
+.orgChart-pptNodeCode,
+.orgChart-pptNodeSummary,
+.orgChart-pptNodeFooter {
+  display: none;
+}
+
+.orgChart-pptNodeContent,
+.orgChart-pptNode.is-management .orgChart-pptNodeContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.18rem;
+}
+
+.orgChart-pptNode strong,
+.orgChart-pptNode.is-root strong,
+.orgChart-pptNode.is-management strong,
+.orgChart-pptNode.is-root .orgChart-pptNodeContent > strong,
+.orgChart-pptNode.is-management .orgChart-pptNodeContent > strong {
+  min-height: 0;
+  color: #111;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.03rem;
+  font-weight: 700;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.orgChart-pptNodeResponsible,
+.orgChart-pptNodeResponsible.is-vacant {
+  color: #111;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.orgChart-pptTier.is-managementTier {
+  margin-top: 1.55rem;
+  padding-top: 0;
+}
+
+.orgChart-pptTier.is-managementTier::before {
+  top: -1.55rem;
+  height: 1.55rem;
+  background: #333;
+}
+
+.orgChart-pptManagementGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  gap: 0;
+  padding-top: 0;
+}
+
+.orgChart-pptManagementGrid::before {
+  display: none;
+}
+
+.orgChart-pptManagementGrid > .orgChart-pptNodeShell {
+  width: 100%;
+}
+
+.orgChart-pptNode.is-management {
+  min-height: 5.1rem;
+  background: #dcebf7;
+}
+
+.orgChart-pptManagementGrid > .orgChart-pptNodeShell:nth-child(2) .orgChart-pptNode {
+  background: #e5f0d8;
+}
+
+.orgChart-pptManagementGrid > .orgChart-pptNodeShell:nth-child(3) .orgChart-pptNode {
+  background: #fbe3d3;
+}
+
+.orgChart-pptNode:hover {
+  transform: none;
+  box-shadow: inset 0 0 0 2px rgb(47 117 255 / 18%);
+}
+
+/* El Anexo 01 muestra cada coordinaciÃ³n con sus unidades y especialidades. */
+.orgChart-pptManagementGrid > .orgChart-pptTreeItem {
+  width: 100%;
+  min-width: 0;
+}
+
+.orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptNodeShell,
+.orgChart-pptChild .orgChart-pptNodeShell,
+.orgChart-pptChild .orgChart-pptNode {
+  width: 100%;
+}
+
+.orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptChildren {
+  display: grid;
+  width: 100%;
+  gap: 0;
+  padding-top: 1.55rem;
+}
+
+.orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptChildren::before {
+  top: 0;
+  height: 1.55rem;
+  background: #333;
+}
+
+.orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptChildren::after,
+.orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptChildren > .orgChart-pptChild::before,
+.orgChart-pptChild .orgChart-pptChildren::before,
+.orgChart-pptChild .orgChart-pptChildren::after,
+.orgChart-pptChild .orgChart-pptChildren > .orgChart-pptChild::before {
+  display: none;
+}
+
+.orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptChildren > .orgChart-pptChild {
+  width: 100%;
+  padding: 0;
+}
+
+.orgChart-pptNode.is-office,
+.orgChart-pptNode.is-unit {
+  min-height: 4.9rem;
+  border-top: 0;
+  border-color: #777;
+  border-radius: 0;
+  background: #fff;
+}
+
+.orgChart-pptNode.is-unit {
+  background: #f5f5f5;
+}
+
+.orgChart-pptChild .orgChart-pptChildren {
+  display: grid;
+  width: 100%;
+  gap: 0;
+  padding-top: 0;
+}
+
+/* Maqueta oficial: una sola jerarquía legible, alineada con el organigrama fuente. */
+.orgChart-officialSheet {
+  --official-line: #64748b;
+  --official-border: #94a3b8;
+  --official-blue: #dcebf7;
+  --official-green: #e5f0d8;
+  --official-orange: #fbe3d3;
+  display: block;
+  min-width: 76rem;
+  padding: 2.25rem 2rem 3rem;
+  background: #fff;
+}
+
+.orgChart-officialSheet .orgChart-governanceNode {
+  margin-bottom: 1.5rem;
+  border-color: #64748b;
+  background: #e5e7eb;
+}
+
+.orgChart-officialSheet .orgChart-pptRoot {
+  position: relative;
+}
+
+.orgChart-officialSheet .orgChart-pptRoot::after {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 1px;
+  height: 2rem;
+  content: '';
+  background: var(--official-line);
+}
+
+.orgChart-officialSheet .orgChart-pptNode {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 4.65rem;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--official-border);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.orgChart-officialSheet .orgChart-pptNode strong {
+  font-size: 0.93rem;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.orgChart-officialSheet .orgChart-pptNodeResponsible {
+  margin-top: 0.18rem;
+  font-size: 0.76rem;
+  line-height: 1.25;
+}
+
+.orgChart-officialSheet .orgChart-pptNode.is-root {
+  min-height: 4.75rem;
+  background: #d9e3f3;
+}
+
+.orgChart-officialSheet .orgChart-pptTier.is-managementTier {
+  position: relative;
+  margin-top: 2rem;
+  padding-top: 1.55rem;
+}
+
+.orgChart-officialSheet .orgChart-pptTier.is-managementTier::before {
+  top: 0;
+  left: 16.666%;
+  width: 66.668%;
+  height: 1px;
+  background: var(--official-line);
+}
+
+.orgChart-officialSheet .orgChart-pptManagementGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 1rem;
+  width: 100%;
+}
+
+.orgChart-officialSheet .orgChart-pptManagementGrid > .orgChart-pptTreeItem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.orgChart-officialSheet .orgChart-pptManagementGrid > .orgChart-pptTreeItem::before {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: 1px;
+  height: 1.55rem;
+  content: '';
+  background: var(--official-line);
+}
+
+.orgChart-officialSheet .orgChart-pptManagementGrid > .orgChart-pptTreeItem:nth-child(1) > .orgChart-pptNodeShell .orgChart-pptNode.is-management {
+  background: var(--official-blue);
+}
+
+.orgChart-officialSheet .orgChart-pptManagementGrid > .orgChart-pptTreeItem:nth-child(2) > .orgChart-pptNodeShell .orgChart-pptNode.is-management {
+  background: var(--official-green);
+}
+
+.orgChart-officialSheet .orgChart-pptManagementGrid > .orgChart-pptTreeItem:nth-child(3) > .orgChart-pptNodeShell .orgChart-pptNode.is-management {
+  background: var(--official-orange);
+}
+
+.orgChart-officialSheet .orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptChildren {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1.35rem 0 0;
+}
+
+.orgChart-officialSheet .orgChart-pptManagementGrid > .orgChart-pptTreeItem:nth-child(2) > .orgChart-pptChildren {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.orgChart-officialSheet .orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptChildren::before {
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 1.35rem;
+  background: var(--official-line);
+}
+
+.orgChart-officialSheet .orgChart-pptManagementGrid > .orgChart-pptTreeItem > .orgChart-pptChildren::after,
+.orgChart-officialSheet .orgChart-pptChild::before {
+  display: none;
+}
+
+.orgChart-officialSheet .orgChart-pptChild {
+  width: 100%;
+  padding: 0;
+}
+
+.orgChart-officialSheet .orgChart-pptNode.is-office {
+  min-height: 4.55rem;
+  border: 1px solid var(--official-border);
+  background: #fff;
+}
+
+.orgChart-officialSheet .orgChart-pptNode.is-unit {
+  min-height: 6.8rem;
+  border: 2px solid #202d68;
+  border-radius: 0.55rem;
+  background: #eaf0fb;
+}
+
+.orgChart-officialSheet .orgChart-pptChild .orgChart-pptChildren {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  padding: 0.55rem 0 0 1.15rem;
+  border-left: 2px solid #cbd5e1;
+}
+
+.orgChart-officialSheet .orgChart-pptChild .orgChart-pptChildren::before,
+.orgChart-officialSheet .orgChart-pptChild .orgChart-pptChildren::after {
+  display: none;
+}
+
+.orgChart-officialSheet .orgChart-pptChild .orgChart-pptChildren .orgChart-pptNode {
+  min-height: 3.6rem;
+  background: #f1f5f9;
+}
+
+.orgChart-officialSheet .orgChart-pptNodeAdd {
+  z-index: 3;
+}
+
+/* Atlas operativo: réplica de la maqueta de referencia aprobada. */
+.orgChart-diagramViewport:has(.orgAtlas-map) {
+  align-items: flex-start;
+  padding: 1rem;
+  background: #f4f7fc;
+}
+
+.orgAtlas-map {
+  box-sizing: border-box;
+  width: max(100%, 74rem);
+  min-height: 44rem;
+  padding: 1.5rem 1.25rem 2rem;
+  border: 1px solid #cad9e8;
+  border-radius: 0.75rem;
+  background: #f8fbfe;
+  color: #173e66;
+  transform: scale(var(--org-chart-zoom));
+  transform-origin: top left;
+}
+
+.orgAtlas-junta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: min(32.5rem, 100%);
+  min-height: 3.5rem;
+  margin: 0 auto;
+  padding: 0.7rem 1rem;
+  border: 1px solid #94abc2;
+  border-radius: 0.65rem;
+  background: #eef3f8;
+  text-align: center;
+}
+
+.orgAtlas-junta strong { font-size: 0.82rem; }
+.orgAtlas-junta small { margin-top: 0.18rem; color: #647c94; font-size: 0.64rem; }
+.orgAtlas-down { width: 2px; height: 2.1rem; margin: 0 auto; background: #9fc2d7; }
+
+.orgAtlas-gerencia {
+  display: grid;
+  grid-template-columns: 3.4rem minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  width: min(45rem, 100%);
+  min-height: 7rem;
+  margin: 0 auto;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid #0d74aa;
+  border-radius: 0.7rem;
+  background: #eaf7fd;
+  color: #073d70;
+  text-align: left;
+  box-shadow: 0 0.5rem 1.25rem rgb(10 86 128 / 10%);
+}
+
+.orgAtlas-gerenciaIcon { display: grid; place-items: center; width: 3.4rem; height: 3.4rem; border-radius: 0.75rem; background: #0d83bd; color: #fff; }
+.orgAtlas-gerenciaCopy > span { display: block; margin-bottom: 0.25rem; color: #33779b; font-size: 0.64rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.orgAtlas-gerenciaCopy strong { display: block; font-size: 1.15rem; }
+.orgAtlas-gerenciaCopy small { display: block; margin-top: 0.35rem; color: #5d7791; font-size: 0.7rem; }
+.orgAtlas-gerenciaScope { display: grid; gap: 0.3rem; justify-items: end; color: #276b8f; font-size: 0.64rem; white-space: nowrap; }
+
+.orgAtlas-areas { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.1rem; padding-top: 1.9rem; }
+.orgAtlas-areas::before { position: absolute; top: 0; right: 16.66%; left: 16.66%; border-top: 2px solid #9fc2d7; content: ''; }
+.orgAtlas-areaWrap { position: relative; min-width: 0; }
+.orgAtlas-areaWrap::before { position: absolute; top: -1.9rem; left: 50%; height: 1.9rem; border-left: 2px solid #9fc2d7; content: ''; }
+
+.orgAtlas-areaCard { display: grid; grid-template-rows: auto 1fr auto; gap: 0.8rem; width: 100%; min-height: 11.9rem; padding: 1rem; border: 1px solid #d0dce9; border-radius: 0.75rem; background: #fff; color: #183d66; text-align: left; }
+.orgAtlas-areaCard.is-production { border-color: #7db6d3; background: #f1f9fd; }
+.orgAtlas-areaCode { color: #197aa6; font-size: 0.64rem; }
+.orgAtlas-areaCard strong { display: block; font-size: 0.95rem; line-height: 1.3; }
+.orgAtlas-areaCard small { display: block; margin-top: 0.45rem; color: #667d94; font-size: 0.68rem; }
+.orgAtlas-person { display: block; margin-top: 0.28rem; color: #236d94; font-size: 0.64rem; }
+.orgAtlas-areaFoot { display: flex; justify-content: space-between; gap: 0.5rem; padding-top: 0.75rem; border-top: 1px solid #e1e8f0; color: #4f6d88; font-size: 0.64rem; }
+
+.orgAtlas-unitTree { position: relative; margin: 0 0.5rem; padding-top: 1.9rem; }
+.orgAtlas-unitTree::before { position: absolute; top: 0; left: 50%; height: 1.9rem; border-left: 2px solid #9fc2d7; content: ''; }
+.orgAtlas-dependencies { display: flex; align-items: center; gap: 0.45rem; margin-bottom: 0.5rem; color: #397394; font-size: 0.58rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.orgAtlas-dependencies::before, .orgAtlas-dependencies::after { height: 1px; flex: 1; background: #c8d9e7; content: ''; }
+.orgAtlas-treeNode { position: relative; padding: 0 0 0.4rem 1.1rem; }
+.orgAtlas-treeNode::before { position: absolute; top: 0; bottom: 0; left: 0.3rem; border-left: 1px solid #aac8da; content: ''; }
+.orgAtlas-treeNode::after { position: absolute; top: 1.1rem; left: 0.3rem; width: 0.8rem; border-top: 1px solid #aac8da; content: ''; }
+.orgAtlas-treeNode:last-child::before { bottom: auto; height: 1.1rem; }
+.orgAtlas-nodeLine { display: flex; align-items: center; gap: 0.3rem; }
+.orgAtlas-unitCard { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.5rem; align-items: center; width: 100%; min-height: 3.7rem; padding: 0.45rem 0.5rem; border: 1px solid #d1deea; border-radius: 0.5rem; background: #fff; color: #173e66; text-align: left; }
+.orgAtlas-unitCard.is-position { background: #f8fbfd; }
+.orgAtlas-code { display: inline-flex; align-items: center; justify-content: center; min-width: 2.4rem; min-height: 1.6rem; padding: 0.2rem 0.3rem; border-radius: 0.4rem; background: #e6f5fb; color: #087aa6; font-size: 0.56rem; }
+.orgAtlas-unitCopy { min-width: 0; }
+.orgAtlas-unitCopy strong { display: block; font-size: 0.64rem; line-height: 1.3; }
+.orgAtlas-unitCopy small { display: block; margin-top: 0.12rem; color: #71859a; font-size: 0.54rem; line-height: 1.25; }
+.orgAtlas-editPill { padding: 0.2rem 0.4rem; border-radius: 999px; background: #dff4e9; color: #14724f; font-size: 0.5rem; font-weight: 700; white-space: nowrap; }
+.orgAtlas-toggle { display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; flex: 0 0 auto; border: 1px solid #b7d0e0; border-radius: 0.4rem; background: #f4f9fc; color: #557b94; }
+.orgAtlas-toggle svg { transition: transform 160ms ease; }
+.orgAtlas-toggle[aria-expanded='true'] svg { transform: rotate(180deg); }
+.orgAtlas-children { margin: 0.4rem 0 0 0.85rem; padding-top: 0.05rem; }
+
+@media (max-width: 900px) {
+  .orgAtlas-map { width: 100%; min-width: 0; }
+  .orgAtlas-areas { grid-template-columns: 1fr; padding-top: 0; }
+  .orgAtlas-areas::before, .orgAtlas-areaWrap::before { display: none; }
+  .orgAtlas-areaWrap + .orgAtlas-areaWrap { margin-top: 1rem; }
+  .orgAtlas-gerencia { grid-template-columns: 2.7rem minmax(0, 1fr); }
+  .orgAtlas-gerenciaScope { grid-column: 2; justify-items: start; }
+}

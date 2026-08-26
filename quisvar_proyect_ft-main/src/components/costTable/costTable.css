@@ -1,0 +1,40 @@
+.costTable {
+  width: 100%;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.costTable-header {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: #def0f5;
+  padding: 0.625rem;
+  text-align: center;
+
+  color: #000;
+  font-family: Montserrat;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.costTable-content {
+  display: grid;
+
+  grid-template-columns: 1.9fr 1fr 0.8fr;
+  padding: 0.625rem 0.4rem;
+}
+.costTable-content-text {
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.text-title {
+  font-weight: 600;
+}
+.costTable-content-text-main {
+  color: var(--color-secondary);
+  font-weight: 700;
+}

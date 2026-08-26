@@ -1,0 +1,14 @@
+.contractRowPay-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 3fr 0.7fr 0.5fr;
+  gap: 0.2rem;
+  position: relative;
+  padding: 0.3rem;
+  align-items: center;
+}
+
+.contractRowPay-input-percentage {
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+}

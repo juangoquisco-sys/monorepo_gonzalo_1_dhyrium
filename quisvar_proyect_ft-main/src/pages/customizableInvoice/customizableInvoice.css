@@ -1,0 +1,71 @@
+.customizableInvoice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  gap: 3rem;
+  padding: 3rem;
+}
+
+.customizableInvoice-file-container {
+  display: grid;
+  gap: 0.8rem;
+  max-width: 35rem;
+  width: 100%;
+}
+
+.customizableInvoice-title {
+  color: var(--color-secondary);
+  text-align: center;
+  font-size: 2.63rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+}
+.customizableInvoice-color-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.customizableInvoice-subtitle {
+  color: var(--color-secondary);
+  text-align: center;
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.customizableInvoice-text {
+  color: #3d3d3d;
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.customizableInvoice-figure {
+  cursor: pointer;
+  width: 1rem;
+  aspect-ratio: 1;
+}
+
+.customizableInvoice-btn-send {
+  cursor: pointer;
+  padding: 1.5rem 3rem;
+  border-radius: 0.45rem;
+  background-color: var(--color-primary);
+  color: #fff;
+  text-align: center;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.25rem;
+}
+.customizableInvoice-btn-send:disabled {
+  cursor: no-drop;
+  background-color: var(--color-gray);
+}

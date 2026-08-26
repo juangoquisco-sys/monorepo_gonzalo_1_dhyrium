@@ -1,0 +1,21 @@
+.taskSumValues {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.taskSumValues-values {
+  color: var(--color-gray);
+  text-align: right;
+  font-size: 0.625rem;
+  font-weight: 300;
+  line-height: 1.14288rem; /* 182.857% */
+  letter-spacing: 0.0125rem;
+}
+.taskSumValues-total {
+  color: var(--color-done);
+  text-align: right;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.125rem;
+  letter-spacing: 0.0175rem;
+}

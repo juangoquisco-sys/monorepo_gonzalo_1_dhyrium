@@ -1,0 +1,14 @@
+.inputErrorInfo {
+  position: absolute;
+  color: #df0000;
+  display: flex;
+  align-items: center;
+  bottom: -1.23rem;
+  left: 1px;
+  font-size: 0.6rem;
+  font-weight: 500;
+}
+.inputErrorInfo-icon {
+  width: 1rem;
+  height: 1rem;
+}

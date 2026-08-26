@@ -1,0 +1,23 @@
+.modal-main {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  background-color: #00000062;
+  z-index: var(--z-modal);
+}
+
+.modal-children {
+  margin: 0;
+  position: relative;
+  isolation: isolate;
+  align-items: center;
+  border-radius: var(--radius-input);
+  box-shadow: 3px 5.5px 4px rgba(0, 0, 0, 0.2);
+  max-width: 80%;
+}

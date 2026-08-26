@@ -1,0 +1,21 @@
+.listProfessionals {
+  padding: 0 1rem 1rem 0;
+  position: relative;
+}
+.listProfessionals-loader {
+  position: absolute;
+  top: 5px;
+  right: 2rem;
+}
+.listProfessionals-header {
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.listProfessionals-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

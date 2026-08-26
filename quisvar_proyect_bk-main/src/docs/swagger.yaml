@@ -1,0 +1,2794 @@
+openapi: 3.0.3
+info:
+  title: DHYRIUM API
+  description: |-
+    `Welcome to DHYRIUM API Documentation`.
+  version: 1.0.0
+externalDocs:
+  description: Repository
+  url: https://github.com/juancotrado/quisvar_proyect_bk
+servers:
+  - url: http://localhost:8081/api/v1
+  - url: http://localhost:8082/api/v1
+tags:
+  - name: auth
+    description: Authentication and security
+  - name: user
+    description: Operations about user
+  - name: mail
+    description: mail (group or personal)
+  - name: Basic resources
+    description: Recursos de Laboratorio y Campo vinculados a niveles y tareas técnicas
+  - name: Document composer
+    description: Artefactos PDF temporales y composición ordenada de páginas
+  - name: Contract documents
+    description: Consulta y publicación versionada de PDFs contractuales
+paths:
+  # /testing:
+  #   $ref: '.schemas/task.ts#/duplicate'
+  /document-composer/sources/pdf:
+    post:
+      tags: [Document composer]
+      summary: Registrar un PDF fuente sin modificarlo
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                name:
+                  type: string
+                idempotencyKey:
+                  type: string
+      responses:
+        '201':
+          description: Artefacto temporal válido por 24 horas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  artifact:
+                    $ref: '#/components/schemas/DocumentArtifact'
+        '415':
+          $ref: '#/components/responses/DocumentError'
+  /document-composer/artifacts:
+    post:
+      tags: [Document composer]
+      summary: Crear un PDF desde un manifiesto explícitamente ordenado
+      description: |-
+        `manifest` usa versión 1. Cada elemento es `image` con `fileKey`, o
+        `pdfPage` con `sourceArtifactId` y `pageNumber`. `order` debe ser
+        continuo y comenzar en 1. El orden implícito del multipart no se usa.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [name, manifest]
+              properties:
+                name:
+                  type: string
+                idempotencyKey:
+                  type: string
+                manifest:
+                  type: string
+                  description: JSON serializado de DocumentManifest
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '201':
+          description: PDF generado y validado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  artifact:
+                    $ref: '#/components/schemas/DocumentArtifact'
+        '400':
+          $ref: '#/components/responses/DocumentError'
+        '413':
+          $ref: '#/components/responses/DocumentError'
+        '422':
+          $ref: '#/components/responses/DocumentError'
+  /document-composer/artifacts/{artifactId}:
+    parameters:
+      - $ref: '#/components/parameters/artifactId'
+    get:
+      tags: [Document composer]
+      summary: Obtener metadata de un artefacto propio
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Metadata del artefacto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  artifact:
+                    $ref: '#/components/schemas/DocumentArtifact'
+        '404':
+          $ref: '#/components/responses/DocumentError'
+    delete:
+      tags: [Document composer]
+      summary: Eliminar un artefacto temporal propio
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Artefacto eliminado
+        '409':
+          $ref: '#/components/responses/DocumentError'
+  /document-composer/artifacts/{artifactId}/download:
+    get:
+      tags: [Document composer]
+      summary: Descargar un artefacto propio
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/artifactId'
+      responses:
+        '200':
+          description: Archivo PDF
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+  /document-composer/artifacts/{artifactId}/pages/{pageNumber}/thumbnail:
+    get:
+      tags: [Document composer]
+      summary: Obtener o iniciar la miniatura de una página de un PDF propio
+      description: |-
+        La página se numera desde 1. Una ausencia de caché inicia una única
+        generación bajo demanda y responde 202; el cliente debe reintentar
+        después del intervalo indicado por `Retry-After`.
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/artifactId'
+        - name: pageNumber
+          in: path
+          required: true
+          schema: { type: integer, minimum: 1 }
+      responses:
+        '200':
+          description: Miniatura JPEG binaria
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        '202':
+          description: Miniatura en generación
+          headers:
+            Retry-After:
+              description: Segundos antes del próximo intento
+              schema: { type: string, example: '1' }
+        '401':
+          $ref: '#/components/responses/DocumentError'
+        '403':
+          $ref: '#/components/responses/DocumentError'
+        '404':
+          $ref: '#/components/responses/DocumentError'
+  /contract-documents/scopes:
+    get:
+      tags: [Contract documents]
+      summary: Listar empresas y consorcios permitidos
+      description: Requiere permiso MOD sobre indice-general.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Contextos disponibles con cantidad de contratos
+  /contract-documents/contracts:
+    get:
+      tags: [Contract documents]
+      summary: Listar contratos con búsqueda, filtros y progreso documental
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: search
+          in: query
+          schema: { type: string }
+        - name: companyId
+          in: query
+          schema: { type: integer }
+        - name: consortiumId
+          in: query
+          schema: { type: integer }
+        - name: dueSoon
+          in: query
+          schema: { type: boolean }
+        - name: pendingDocuments
+          in: query
+          schema: { type: boolean }
+        - name: statuses
+          in: query
+          description: Estados separados por coma
+          schema: { type: string }
+        - name: period
+          in: query
+          schema: { type: integer }
+        - name: instrumentType
+          in: query
+          schema:
+            type: string
+            enum: [CONTRATO, ORDEN_DE_SERVICIO, CONTRATACION_DIRECTA]
+      responses:
+        '200':
+          description: Lista paginada de contratos
+  /contract-documents/contracts/count:
+    get:
+      tags: [Contract documents]
+      summary: Contar coincidencias para los filtros actuales
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Cantidad estimada exacta
+  /contract-documents/contracts/{contractId}:
+    get:
+      tags: [Contract documents]
+      summary: Obtener el resumen de un contrato
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/contractId'
+      responses:
+        '200':
+          description: Resumen y progreso
+        '404':
+          $ref: '#/components/responses/DocumentError'
+  /contract-documents/contracts/{contractId}/tree:
+    get:
+      tags: [Contract documents]
+      summary: Obtener la jerarquía documental con asociaciones actuales
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/contractId'
+      responses:
+        '200':
+          description: Árbol de hasta tres niveles
+  /contract-documents/contracts/{contractId}/nodes/{levelCode}/attachments:
+    post:
+      tags: [Contract documents]
+      summary: Asociar idempotentemente un artefacto al nivel
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/contractId'
+        - $ref: '#/components/parameters/levelCode'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [artifactId]
+              properties:
+                artifactId: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Asociación publicada
+        '409':
+          $ref: '#/components/responses/DocumentError'
+        '422':
+          $ref: '#/components/responses/DocumentError'
+  /contract-documents/contracts/{contractId}/nodes/{levelCode}/edit-source:
+    post:
+      tags: [Contract documents]
+      summary: Preparar una copia temporal autorizada para edición
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/contractId'
+        - $ref: '#/components/parameters/levelCode'
+      responses:
+        '200':
+          description: Fuente temporal y versión actual
+  /contract-documents/contracts/{contractId}/nodes/{levelCode}/replacements:
+    post:
+      tags: [Contract documents]
+      summary: Publicar una nueva versión con control de concurrencia
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/contractId'
+        - $ref: '#/components/parameters/levelCode'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [artifactId, expectedCurrentVersionId]
+              properties:
+                artifactId: { type: string, format: uuid }
+                expectedCurrentVersionId: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Nueva versión publicada atómicamente
+        '409':
+          $ref: '#/components/responses/DocumentError'
+  /contract-documents/contracts/{contractId}/nodes/{levelCode}/download:
+    get:
+      tags: [Contract documents]
+      summary: Descargar la versión contractual actual
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/contractId'
+        - $ref: '#/components/parameters/levelCode'
+      responses:
+        '200':
+          description: Archivo PDF autorizado
+          content:
+            application/pdf:
+              schema: { type: string, format: binary }
+  /contract-documents/contracts/{contractId}/nodes/{levelCode}/attachments/current:
+    delete:
+      tags: [Contract documents]
+      summary: Quitar la referencia actual conservando el historial
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/contractId'
+        - $ref: '#/components/parameters/levelCode'
+        - name: currentVersionId
+          in: query
+          schema: { type: string, format: uuid }
+      responses:
+        '204':
+          description: Referencia actual eliminada
+        '409':
+          $ref: '#/components/responses/DocumentError'
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Login with a valid account
+      description: |-
+        Para poder iniciar sesión la cuenta debe estar creada previamente. Además
+        debe de tener validado el correo y el número de celular
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '200':
+          description: Token generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        '400':
+          description: |-
+            The invalid messages can be:
+            - For validation of inputs
+            - Email  is incorrect
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Phone  is incorrect o Email is incorrect'
+        '401':
+          description: |-
+            The invalid messages can be:
+
+            - Invalid Password
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid Password'
+        '500':
+          description: Validation exception
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Error de servidor'
+  /users/menupoints:
+    get:
+      tags:
+        - user
+      summary: Show users By office
+      parameters:
+        - name: menuId
+          in: query
+          description: Id de Menu
+          schema:
+            type: number
+        - name: subMenuId
+          in: query
+          description: Id de SubMenu
+          schema:
+            type: number
+        - name: includeUser
+          in: query
+          description: Añadir mismo usuario
+          schema:
+            type: boolean
+        - name: typeRol
+          in: query
+          description: Puede Usar <b>["MEMBER","USER","MOD","VIEWER"]</b>
+          # required: false
+          schema:
+            type: string
+        - name: subTypeRol
+          in: query
+          description: Puede Usar <b>["MEMBER","USER","MOD","VIEWER"]</b>
+          # required: false
+          schema:
+            type: string
+      description: |-
+        Ver la lista de contratos por empresa
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Contrato Existe
+        '404':
+          description: No se pudo encontrar el contrato
+          content:
+            application/json:
+              example:
+                error: No se pudo encontrar el contrato
+  /projects:
+    post:
+      tags:
+        - project
+      summary: Create New Project
+      description: |-
+        Ingresar Los campos requeridos para crear un Proyecto
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Proyecto Creado
+        '404':
+          description: No se pudo crear el Proyecto
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el Proyecto
+  /stages/{id}:
+    get:
+      tags:
+        - Stages
+      summary: Show stages
+      parameters:
+        - name: id
+          in: path
+          description: ID de la etapa
+          required: true
+          schema:
+            type: number
+            example: 30
+        - name: status
+          in: query
+          description: Status de tareas, puede usar todos los estados de las tareas <b>[  UNRESOLVED, PROCESS, INREVIEW, DENIED, DONE, LIQUIDATION] </b>
+          # required: false
+          schema:
+            type: string
+            example: DONE
+        - name: typecost
+          in: query
+          description: Tipo de Pago, puede usar <b> [professional, bachelor, intern, graduate]</b>
+          # required: false
+          schema:
+            type: string
+            example: bachelor
+
+      description: |-
+        Ver la lista de contratos por empresa
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Operación exitosa
+        '404':
+          description: No se pudo encontrar la etapa
+          content:
+            application/json:
+              example:
+                error: No se pudo encontrar la etapa
+  /stages/:
+    $ref: './schemas/stages.swagger.yaml#/stages'
+  # /duplicates/stages/{id}:
+  #   $ref: './schemas/stages.swagger.yaml#/duplicate'
+  # /duplicates/level/{id}:
+  #   $ref: './src/docs/level.swagger.yaml#/duplicate'
+  /stages/basics/{id}:
+    get:
+      tags:
+        - Stages
+        - Basic levels
+      summary: Ver Niveles de Basicos por ID de Etapa
+      parameters:
+        - $ref: '#/components/parameters/levelId'
+        - $ref: '#/components/parameters/typeCostFilter'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite creado exitosamente
+        '404':
+          description: Error en operación
+          content:
+            application/json:
+              example:
+                error: Error en operación
+  /stages/details/{id}:
+    get:
+      tags:
+        - Stages
+      summary: Show stages details
+      parameters:
+        - name: id
+          in: path
+          description: ID de la etapa
+          required: true
+          schema:
+            type: number
+            example: 30
+      description: |-
+        Ver detalles de la etapa
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Operación exitosa
+        '404':
+          description: No se pudo encontrar la etapa
+          content:
+            application/json:
+              example:
+                error: No se pudo encontrar la etapa
+    patch:
+      tags:
+        - stages
+      summary: Update stages details
+      parameters:
+        - name: id
+          in: path
+          description: ID de la etapa
+          required: true
+          schema:
+            type: number
+            example: 30
+      description: |-
+        Editar detalles de etapa
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StagesDetails'
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Operación exitosa
+        '404':
+          description: No se pudo actualizar la etapa
+          content:
+            application/json:
+              example:
+                error: No se pudo actualizar la etapa
+  /levels/{id}:
+    post:
+      tags:
+        - Levels
+      parameters:
+        - $ref: '#/components/parameters/levelId'
+        - $ref: '#/components/parameters/typeUpperorLower'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpperOrLowerLevel'
+      responses:
+        '201':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Operación exitosa
+        '404':
+          description: No se pudo crear el nivel
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el nivel
+  /level/updates-covers:
+    patch:
+      tags:
+        - Levels
+      summary: Actualizar caratulas en niveles
+      # parameters:
+      #   - $ref: '#/components/parameters/levelId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                required:
+                  - id
+                  - cover
+                properties:
+                  id:
+                    type: integer
+                  cover:
+                    type: boolean
+              example: [{ id: 1, cover: false }, { id: 2, cover: true }]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite creado exitosamente
+        '404':
+          description: No se pudo crear el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el mensaje
+  /levels/updates-days:
+    patch:
+      tags:
+        - Levels
+      summary:
+        Actualizar dias en tareas por lista
+        # parameters:
+      #   - $ref: '#/components/parameters/levelId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                required:
+                  - id
+                  - cover
+                properties:
+                  id:
+                    type: integer
+                  days:
+                    type: number
+              example: [{ id: 1, days: 2.4 }, { id: 2, days: 0.3 }]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite creado exitosamente
+        '404':
+          description: No se pudo crear el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el mensaje
+  /subtasks/approved/{id}:
+    post:
+      tags:
+        - Subtasks
+      summary: Aprobar niveles
+      parameters:
+        - $ref: '#/components/parameters/levelId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Operación exitosa
+        '404':
+          description: No se pudo crear el nivel
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el nivel
+  /subtasks/{id}/{stageId}:
+    post:
+      tags:
+        - Subtasks
+      parameters:
+        - $ref: '#/components/parameters/stageId'
+        - $ref: '#/components/parameters/subtaskId'
+        - $ref: '#/components/parameters/typeUpperorLower'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpperOrLower'
+      responses:
+        '201':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Operación exitosa
+        '404':
+          description: No se pudo crear la tarea
+          content:
+            application/json:
+              example:
+                error: No se pudo crear la tarea
+  /duplicates/subtask/{id}:
+    post:
+      tags:
+        - Subtasks
+      summary: Duplicate Subtask
+      description: |-
+        Duplicar tareas de nivel
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/subtaskId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DuplicatesRequestBody'
+
+      responses:
+        '201':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Operación exitosa
+        '404':
+          description: No se pudo duplicar la tarea
+          content:
+            application/json:
+              example:
+                error: No se pudo duplicar la tarea
+  /basiclevels:
+    post:
+      tags:
+        - Basic levels
+      summary: Crear Nivel
+      description: crear niveles
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Basiclevel-form'
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite creado exitosamente
+        '404':
+          description: No se pudo crear el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el mensaje
+  /basiclevels/{id}:
+    get:
+      tags:
+        - Basic levels
+      summary: Ver Niveles por ID de nivel
+      parameters:
+        - $ref: '#/components/parameters/levelId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite creado exitosamente
+        '404':
+          description: No se pudo crear el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el mensaje
+    post:
+      tags:
+        - Basic levels
+      summary: Añadir niveles upper or lower
+      parameters:
+        - $ref: '#/components/parameters/levelId'
+        - $ref: '#/components/parameters/typeUpperorLower'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpperOrLowerLevel'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite creado exitosamente
+        '404':
+          description: No se pudo crear el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el mensaje
+    put:
+      tags:
+        - Basic levels
+      summary: Actualizar nivel
+      parameters:
+        - $ref: '#/components/parameters/levelId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpperOrLowerLevel'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite creado exitosamente
+        '404':
+          description: No se pudo crear el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el mensaje
+    delete:
+      tags:
+        - Basic levels
+      summary: Eliminar nivel
+      parameters:
+        - $ref: '#/components/parameters/levelId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite creado exitosamente
+        '404':
+          description: No se pudo crear el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el mensaje
+  /basiclevels/updates-covers:
+    patch:
+      tags:
+        - Basic levels
+      summary: Actualizar caratulas en niveles
+      # parameters:
+      #   - $ref: '#/components/parameters/levelId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                required:
+                  - id
+                  - cover
+                properties:
+                  id:
+                    type: integer
+                  cover:
+                    type: boolean
+              example: [{ id: 1, cover: false }, { id: 2, cover: true }]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite creado exitosamente
+        '404':
+          description: No se pudo crear el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el mensaje
+  /basiclevels/updates-days:
+    patch:
+      tags:
+        - Basic levels
+      summary: Actualizar dias en tareas por lista
+      # parameters:
+      #   - $ref: '#/components/parameters/levelId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                required:
+                  - id
+                  - cover
+                properties:
+                  id:
+                    type: integer
+                  days:
+                    type: number
+              example: [{ id: 1, days: 2.4 }, { id: 2, days: 0.3 }]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite creado exitosamente
+        '404':
+          description: No se pudo crear el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el mensaje
+  /duplicates/basic-level/{id}:
+    post:
+      tags:
+        - Basic levels
+      summary: Duplicar nivel
+      parameters:
+        - $ref: '#/components/parameters/levelId'
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DuplicatesRequestBody'
+      responses:
+        '201':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Operación exitosa
+        '404':
+          description: No se pudo crear la tarea
+          content:
+            application/json:
+              example:
+                error: No se pudo crear la tarea
+    # /basictasks/:
+    #   $ref: './src/docs/basictask.swagger.yaml#/paths/~1testing'
+    # $ref: '/schemas/basictask.swagger.yaml#/task'
+  # /basictasks/{id}:
+  #   $ref: './src/docs/basictask.swagger.yaml#/task-with-param'
+  # /basictasks/add-user:
+  #   $ref: './src/docs/basictask.swagger.yaml#/add-user'
+  # /basictasks/report-user/{id}:
+  #   $ref: './src/docs/basictask.swagger.yaml#/report-user-id'
+  # /basictasks/remove-user/{id}:
+  #   $ref: './src/docs/basictask.swagger.yaml#/remove-user-id'
+  # /basictasks/groups-users/{id}:
+  #   $ref: './src/docs/basictask.swagger.yaml#/groups-users-id'
+  # /basictasks/add-colabs/{id}:
+  #   $ref: './src/docs/basictask.swagger.yaml#/add-colabs-id'
+  # /basictasks/user-status:
+  #   $ref: './src/docs/basictask.swagger.yaml#/user-status'
+  /files/basics/{id}:
+    post:
+      tags:
+        - Basictasks
+      summary: Add new files on basics
+      parameters:
+        - $ref: '#/components/parameters/subtaskId'
+        - $ref: '#/components/parameters/typeFileTask'
+      description: |-
+        Ingresar Los campos requeridos para añadir un archivo
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Basic_File'
+      responses:
+        '201':
+          description: Contrato creado exitosamente
+        '400':
+          description: Datos no válidos
+    delete:
+      tags:
+        - Basictasks
+      summary: Add new files
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del contrato
+          schema:
+            type: integer
+        - name: filename
+          in: query
+          description: Nombre del archivo
+          required: true
+          schema:
+            type: string
+      description: |-
+        Ingresar Los campos requeridos para añadir un archivo
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Contrato creado exitosamente
+        '400':
+          description: Datos no válidos
+  /feedbacks/basic-task/{id}:
+    get:
+      tags:
+        - Basictasks
+        - Feedbacks
+      summary: Add new files on basics
+      parameters:
+        - $ref: '#/components/parameters/subtaskId'
+      description: |-
+        Ingresar Los campos requeridos para añadir un archivo
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación Exitosa
+        '400':
+          description: Datos no válidos
+    post:
+      tags:
+        - Basictasks
+        - Feedbacks
+      summary: Create a new feedback
+      parameters:
+        - $ref: '#/components/parameters/subtaskId'
+      description: |-
+        Ingresar Los campos requeridos para añadir un archivo
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Feedback_Files'
+      responses:
+        '201':
+          description: Operación Exitosa
+        '400':
+          description: Datos no válidos
+    patch:
+      tags:
+        - Basictasks
+        - Feedbacks
+      summary: Review feedbacks
+      parameters:
+        - $ref: '#/components/parameters/feedbackId'
+      description: |-
+        Ingresar Los campos requeridos para añadir un archivo
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Feedback_Review'
+      responses:
+        '201':
+          description: Operación Exitosa
+        '400':
+          description: Datos no válidos
+  # /download/level/{id}:
+  #   $ref: './src/docs/download.swagger.yaml#/level'
+  # /download/basic-level/{id}:
+  #   $ref: './src/docs/download.swagger.yaml#/level'
+  # /download/stage/{id}:
+  #   $ref: './src/docs/download.swagger.yaml#/stage'
+  # /download/basic-stage/{id}:
+  #   $ref: './src/docs/download.swagger.yaml#/stage'
+  # /download/merge-stage/{id}:
+  #   $ref: './src/docs/download.swagger.yaml#/merge-pdf-stage'
+  # /download/merge-basic-stage/{id}:
+  #   $ref: './src/docs/download.swagger.yaml#/merge-pdf-stage'
+  # /download/merge-level/{id}:
+  #   $ref: './src/docs/download.swagger.yaml#/merge-pdf-level'
+  # /download/merge-basic-level/{id}:
+  #   $ref: './src/docs/download.swagger.yaml#/merge-pdf-level'
+  /paymail:
+    get:
+      tags:
+        - paymail
+      summary: show mail
+      description: Ver tramites en mesa de partes
+      parameters:
+        - $ref: '#/components/parameters/officeIdQuery'
+        - $ref: '#/components/parameters/typeUserMail'
+        - $ref: '#/components/parameters/searchNameMail'
+        - $ref: '#/components/parameters/statusMail'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite creado exitosamente
+        '404':
+          description: No se pudo crear el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el mensaje
+  /paymail/holding:
+    get:
+      tags:
+        - paymail
+      summary: show mail
+      description: Ver tramites en mesa de partes
+      parameters:
+        - $ref: '#/components/parameters/onHolding'
+        - $ref: '#/components/parameters/officeIdQuery'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/page'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite creado exitosamente
+        '404':
+          description: No se pudo crear el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el mensaje
+    put:
+      tags:
+        - paymail
+      summary: edit mail
+      description: Aceptar trámites
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/onHolding-paymail-form'
+      responses:
+        '200':
+          description: Operación exitosa
+  /paymail/decline:
+    put:
+      tags:
+        - paymail
+      summary: rechazar tramites
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/onHolding-paymail-form'
+      responses:
+        '200':
+          description: Operación exitosa
+  /paymail/done/{id}:
+    patch:
+      tags:
+        - paymail
+      summary: finalizar tramites
+      parameters:
+        - $ref: '#/components/parameters/mailId'
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Operación exitosa
+  /paymail/payment-pdf/{id}:
+    patch:
+      tags:
+        - paymail
+      summary: Actualizar formulario para generar orden de servicio
+      parameters:
+        - $ref: '#/components/parameters/mailId'
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/payment-pdf-paymail-form'
+      responses:
+        '201':
+          description: Operación exitosa
+  /paymail/payment-files/{id}:
+    post:
+      tags:
+        - paymail
+      summary: Subir archivos de pago en trámite
+      parameters:
+        - $ref: '#/components/parameters/mailId'
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/payment-files-paymail-form'
+      responses:
+        '201':
+          description: Operación exitosa
+  /mail:
+    post:
+      tags:
+        - mail
+      summary: create mail
+      description: Crear tramites regulares y unilaterales
+      parameters:
+        - $ref: '#/components/parameters/mailCategory'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/mail_form'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite creado exitosamente
+        '404':
+          description: No se pudo crear el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el mensaje
+    get:
+      tags:
+        - mail
+      summary: show mail
+      description: Ver tramites regulares y unilaterales
+      parameters:
+        - $ref: '#/components/parameters/mailCategory'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite creado exitosamente
+        '404':
+          description: No se pudo crear el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo crear el mensaje
+  /mail/{id}:
+    get:
+      tags:
+        - mail
+      summary: show mail
+      description: Ver tramites regulares y unilaterales
+      parameters:
+        - $ref: '#/components/parameters/mailId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite Existe
+        '404':
+          description: No se pudo encontrar el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo encontrar el mensaje
+    put:
+      tags:
+        - mail
+      summary: edit mail
+      description: Editar trámites rechazados
+      parameters:
+        - $ref: '#/components/parameters/mailId'
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/mail_form_reply'
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite Existe
+        '404':
+          description: No se pudo encontrar el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo encontrar el mensaje
+  /mail/{id}/reply:
+    post:
+      tags:
+        - mail
+      summary: create mail reply
+      description: Crear trámites de respuesta
+      parameters:
+        - $ref: '#/components/parameters/mailId'
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/mail_form_reply'
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite Existe
+        '404':
+          description: No se pudo encontrar el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo encontrar el mensaje
+  /mail/{id}/archived:
+    patch:
+      tags:
+        - mail
+      summary: create mail reply
+      description: Crear trámites de respuesta
+      parameters:
+        - $ref: '#/components/parameters/mailId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite Existe
+        '404':
+          description: No se pudo encontrar el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo encontrar el mensaje
+  /mail/{id}/done:
+    patch:
+      tags:
+        - mail
+      summary: create mail reply
+      description: Crear trámites de respuesta
+      parameters:
+        - $ref: '#/components/parameters/mailId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Trámite Existe
+        '404':
+          description: No se pudo encontrar el mensaje
+          content:
+            application/json:
+              example:
+                error: No se pudo encontrar el mensaje
+  /contract:
+    get:
+      tags:
+        - contract
+      summary: Show Contracts
+      parameters:
+        - name: cui
+          in: query
+          description: Nombre o codigo con que empieza el cui
+          # required: false
+          schema:
+            type: string
+        - name: companyId
+          in: query
+          description: codigo de Empresa
+          # required: false
+          schema:
+            type: number
+        - name: date
+          in: query
+          description: fecha
+          # required: false
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: tipo de contrato usar <b>[ CONTRATO,ORDEN_DE_SERVICIO,CONTRATACION_DIRECTA]</b>
+          # required: false
+          schema:
+            type: string
+        - name: consortiumId
+          in: query
+          description: codigo de Consorcio
+          # required: false
+          schema:
+            type: number
+      description: |-
+        Ver la lista de contratos por empresa
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Contrato Existe
+        '404':
+          description: No se pudo encontrar el contrato
+          content:
+            application/json:
+              example:
+                error: No se pudo encontrar el contrato
+    post:
+      tags:
+        - contract
+      summary: Create New Contract
+      description: |-
+        Ingresar Los campos requeridos para crear un contrato
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contract'
+      responses:
+        '200':
+          description: Token generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+  /contract/{id}:
+    get:
+      tags:
+        - contract
+      summary: Show Contract
+      description: |-
+        Ver contrato con detalles
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del contrato
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Contrato Existe
+        '404':
+          description: No se pudo encontrar el contrato
+          content:
+            application/json:
+              example:
+                error: No se pudo encontrar el contrato
+    patch:
+      tags:
+        - contract
+      summary: Edit Contract
+      description: |-
+        Ingresar Los campos requeridos para crear un contrato
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del contrato
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contract'
+      responses:
+        '200':
+          description: Token generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+    delete:
+      tags:
+        - contract
+      summary: Delete Contract
+      description: |-
+        Ingresar Los campos requeridos para eliminar un contrato
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del contrato
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Contrato Eliminado
+        '400':
+          description: No se pudo encontrar el contrato
+          content:
+            application/json:
+              example:
+                error: No se pudo eliminar el contrato
+  /contract/{id}/files:
+    post:
+      tags:
+        - file contract
+      summary: Add new files
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del contrato
+          schema:
+            type: integer
+      description: |-
+        Ingresar Los campos requeridos para añadir un archivo
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Contract_File'
+      responses:
+        '201':
+          description: Contrato creado exitosamente
+        '400':
+          description: Datos no válidos
+    delete:
+      tags:
+        - file contract
+      summary: Add new files
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del contrato
+          schema:
+            type: integer
+        - name: filename
+          in: query
+          description: Nombre del archivo
+          required: true
+          schema:
+            type: string
+      description: |-
+        Ingresar Los campos requeridos para añadir un archivo
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Contrato creado exitosamente
+        '400':
+          description: Datos no válidos
+  /contract/{id}/index:
+    put:
+      tags:
+        - contract
+      summary: add or update index contract
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del contrato
+          schema:
+            type: integer
+      description: |-
+        Ingresar un json parseado en string
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                indexContract:
+                  type: string
+                  example: "{'indexName':'nombre_del_indice','fields':{'fieldName1':1,'fieldName2':1},'unique':true,'sparse':true}"
+      responses:
+        '201':
+          description: Indice creado o actualizado exitosamente
+        '400':
+          description: Datos no válidos
+  /contract/{id}/details:
+    put:
+      tags:
+        - contract
+      summary: add or update details contract
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del contrato
+          schema:
+            type: integer
+      description: |-
+        Ingresar un json parseado en string
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                details:
+                  type: string
+                  example: "{'indexName':'nombre_del_indice','fields':{'fieldName1':1,'fieldName2':1},'unique':true,'sparse':true}"
+      responses:
+        '201':
+          description: Detalles creado o actualizado exitosamente
+        '400':
+          description: Datos no válidos
+  /consortium/all:
+    get:
+      tags:
+        - consortium
+      summary: Show Consortiums
+      description: |-
+        Ver la lista de consorcios
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de todos los consorcios
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Consortium'
+        '404':
+          description: No se encontraron consorcios
+          content:
+            application/json:
+              example:
+                error: No se pudo encontrar consorcios
+  /consortium/both:
+    get:
+      tags:
+        - consortium
+      summary: Show consortiums and companies
+      description: |-
+        Ver la lista de consorcios y empresas
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de consorcion y empresas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Consortium-both'
+  /consortium/{id}:
+    patch:
+      tags:
+        - consortium
+      summary: Create New Contract
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del consorcio
+          schema:
+            type: integer
+      description: |-
+        Ingresar Los campos requeridos para actualizar datos de consorcio
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Consortium-id-body'
+      responses:
+        '201':
+          description: Actualizar consorcio
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Consortium-id-res'
+        '400':
+          description: Datos no válidos
+  /companies/img/{id}:
+    patch:
+      tags:
+        - company
+      summary: Add new files
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del contrato
+          schema:
+            type: integer
+      description: |-
+        Ingresar Los campos requeridos para añadir un archivo
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CompanyImage'
+      responses:
+        '201':
+          description: Imagen actualizada exitosamente
+        '400':
+          description: Datos no válidos
+    delete:
+      tags:
+        - company
+      summary: Delete company image
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la empresa
+          schema:
+            type: integer
+      description: |-
+        Ingresar Los campos requeridos para eliminar un archivo
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Imagen eliminada exitosamente
+        '400':
+          description: Datos no válidos
+  /reports/user/{id}:
+    get:
+      tags:
+        - reports
+      summary: Show Report By User
+      description: |-
+        Ver detalles para reporte
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: integer
+        - name: status
+          in: query
+          required: true
+          description: Ingresar los estados de <b>[DONE,LIQUIDATION]</b>
+          example: DONE
+          schema:
+            type: string
+        - name: initial
+          in: query
+          required: true
+          description: Ingresar fecha inicial de reporte
+          schema:
+            type: string
+        - name: until
+          in: query
+          required: true
+          description: Ingresar fecha final de reporte
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Reporte Existente
+        '404':
+          description: No se pudo encontrar el reporte del usuario
+          content:
+            application/json:
+              example:
+                error: No se pudo encontrar el reporte
+  /office:
+    get:
+      tags:
+        - office
+      summary: Show users By office
+      parameters:
+        - name: menuId
+          in: query
+          description: Id de Menu
+          schema:
+            type: number
+        - name: subMenuId
+          in: query
+          description: Id de SubMenu
+          schema:
+            type: number
+        - $ref: '#/components/parameters/includeSelf'
+        - $ref: '#/components/parameters/includeUsers'
+        - $ref: '#/components/parameters/typeRol'
+        - $ref: '#/components/parameters/subTypeRol'
+      description: |-
+        Ver la lista de contratos por empresa
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Contrato Existe
+        '404':
+          description: No se pudo encontrar el contrato
+          content:
+            application/json:
+              example:
+                error: No se pudo encontrar el contrato
+    post:
+      tags:
+        - office
+      summary: create office
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Office-form'
+      responses:
+        '201':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Operación exitosa
+  /office/{id}:
+    put:
+      tags:
+        - office
+      summary: update office
+      parameters:
+        - $ref: '#/components/parameters/officeId'
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Office-form'
+      responses:
+        '201':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Operación exitosa
+    delete:
+      tags:
+        - office
+      summary: delete office
+      parameters:
+        - $ref: '#/components/parameters/officeId'
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Operación exitosa
+          content:
+            application/json:
+              example:
+                message: Operación exitosa
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    artifactId:
+      name: artifactId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    contractId:
+      name: contractId
+      in: path
+      required: true
+      schema: { type: integer }
+    levelCode:
+      name: levelCode
+      in: path
+      required: true
+      schema: { type: string, example: '3.4.1' }
+    stageId:
+      name: stageId
+      in: path
+      description: Ingresar id de etapa
+      required: true
+      schema:
+        type: integer
+    subtaskId:
+      name: id
+      in: path
+      description: Ingresar id de tarea
+      required: true
+      schema:
+        type: integer
+    feedbackId:
+      name: id
+      in: path
+      description: Ingresar id del feedback
+      required: true
+      schema:
+        type: integer
+    feedbackUserId:
+      name: id
+      in: path
+      description: Ingresar id del usuario en la lista feedback
+      required: true
+      schema:
+        type: integer
+    withUserFilter:
+      name: users
+      in: query
+      description: Traer consulta con o sin usuarios
+      required: false
+      schema:
+        type: boolean
+    officeId:
+      name: id
+      in: path
+      description: Ingresar id de la oficina
+      required: true
+      schema:
+        type: integer
+    typeFileTask:
+      name: status
+      in: query
+      description: 'Usar <b>[MODEL,UPLOADS,EDITABLES]</b>'
+      example: UPLOADS
+      schema:
+        type: string
+    typeFile:
+      name: type
+      in: query
+      description: 'Usar <b>[MODEL,UPLOADS,EDITABLES]</b>'
+      example: UPLOADS
+      schema:
+        type: string
+    levelId:
+      name: id
+      in: path
+      description: Ingresar id de tarea
+      required: true
+      schema:
+        type: integer
+    typeUpperorLower:
+      name: type
+      in: query
+      description: Usar las siguientes variables <b>[upper,lower]</b>
+      required: true
+      schema:
+        type: string
+    mailId:
+      name: id
+      in: path
+      description: Ingresar Id del trámite
+      required: true
+      schema:
+        type: integer
+    mailCategory:
+      name: category
+      in: query
+      description: Usar las siguientes variables <b>[GLOBAL, DIRECT]</b>
+      required: true
+      schema:
+        type: string
+        enum:
+          - GLOBAL
+          - DIRECT
+    onHolding:
+      name: onHolding
+      in: query
+      description: Tramites que estan en mesa de partes
+      schema:
+        type: boolean
+    typeUserMail:
+      name: type
+      in: query
+      description: Emisor o Receptor <b>[SENDER, RECEIVER]</b>
+      schema:
+        type: string
+        example: SENDER
+    searchNameMail:
+      name: search
+      in: query
+      description: Buscar nombre o asunto
+      schema:
+        type: string
+        example: admin
+    statusMail:
+      name: status
+      in: query
+      description: Estado del tramite ejm FINALIZADO
+      schema:
+        type: string
+    officeIdQuery:
+      name: officeId
+      in: query
+      description: Tramites filtrados por oficina
+      schema:
+        type: number
+    limit:
+      name: limit
+      in: query
+      description: Cantidad de registros
+      schema:
+        type: number
+    offset:
+      name: offset
+      in: query
+      description: Saltos de registros
+      schema:
+        type: number
+    page:
+      name: page
+      in: query
+      description: Numero de pagina
+      schema:
+        type: number
+    initialDate:
+      name: initialDate
+      in: query
+      description: Ingresar fecha inicial de reporte
+      schema:
+        type: string
+    untilDate:
+      name: untilDate
+      in: query
+      description: Ingresar fecha final de reporte
+      schema:
+        type: string
+    stageIdQuery:
+      name: stageId
+      in: query
+      description: Tramites filtrados por etapa
+      schema:
+        type: number
+    projectIdQuery:
+      name: projectId
+      in: query
+      description: Tramites filtrados por proyecto
+      schema:
+        type: number
+    statusTaskQuery:
+      name: status
+      in: query
+      description: Traer tramites filtrados por estado <b>[IN_PROCESS, UNRESOLVED, DONE, REVIEWED]</b>
+      schema:
+        type: string
+    salaryAdvance:
+      name: salaryAdvance
+      in: query
+      description: Traer tramites filtrados por <b>[APPROVED, REVIEWED]</b>
+      schema:
+        type: boolean
+    includeSelf:
+      name: includeSelf
+      in: query
+      description: Añadir mismo usuario
+      schema:
+        type: boolean
+    includeUsers:
+      name: includeUsers
+      in: query
+      description: Añadir usuarios, por defectro esta en true
+      schema:
+        type: boolean
+        example: true
+    typeRol:
+      name: typeRol
+      in: query
+      description: Puede Usar <b>["MEMBER","USER","MOD","VIEWER"]</b>
+      schema:
+        type: string
+    subTypeRol:
+      name: subTypeRol
+      in: query
+      description: Puede Usar <b>["MEMBER","USER","MOD","VIEWER"]</b>
+      schema:
+        type: string
+    typeCostFilter:
+      name: typecost
+      in: query
+      description: Tipo de Pago, puede usar <b> [professional, bachelor, intern, graduate]</b>
+      schema:
+        type: string
+        example: bachelor
+  responses:
+    DocumentError:
+      description: Error estable del flujo documental
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DocumentError'
+  schemas:
+    DocumentArtifact:
+      type: object
+      required:
+        [id, name, status, type, mimeType, sizeBytes, pageCount, downloadUrl]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        originalName: { type: string, nullable: true }
+        status:
+          type: string
+          enum: [PROCESSING, TEMPORARY, PUBLISHED, FAILED, EXPIRED]
+        type:
+          type: string
+          enum: [ORIGINAL_PDF, COMPOSED_PDF, LEGACY_PDF]
+        mimeType: { type: string, example: application/pdf }
+        sizeBytes: { type: integer }
+        pageCount: { type: integer }
+        createdAt: { type: string, format: date-time }
+        expiresAt: { type: string, format: date-time, nullable: true }
+        downloadUrl: { type: string }
+    DocumentManifest:
+      type: object
+      required: [version, items]
+      properties:
+        version: { type: integer, enum: [1] }
+        items:
+          type: array
+          maxItems: 200
+          items:
+            oneOf:
+              - type: object
+                required: [id, kind, fileKey, order]
+                properties:
+                  id: { type: string }
+                  kind: { type: string, enum: [image] }
+                  fileKey: { type: string }
+                  order: { type: integer, minimum: 1 }
+              - type: object
+                required: [id, kind, sourceArtifactId, pageNumber, order]
+                properties:
+                  id: { type: string }
+                  kind: { type: string, enum: [pdfPage] }
+                  sourceArtifactId: { type: string, format: uuid }
+                  pageNumber: { type: integer, minimum: 1 }
+                  order: { type: integer, minimum: 1 }
+    DocumentError:
+      type: object
+      required: [status, message, code]
+      properties:
+        status: { type: string, example: error }
+        message: { type: string }
+        code:
+          type: string
+          description: |-
+            Códigos principales: DOCUMENT_PDF_INVALID, DOCUMENT_PDF_CORRUPT,
+            DOCUMENT_PAGE_NOT_FOUND, DOCUMENT_ORDER_INVALID,
+            DOCUMENT_ARTIFACT_EXPIRED, DOCUMENT_ARTIFACT_FORBIDDEN,
+            CONTRACT_DOCUMENT_LEVEL_INVALID, CONTRACT_NOT_FOUND,
+            DOCUMENT_GENERATION_FAILED, CONTRACT_DOCUMENT_VERSION_CONFLICT.
+    Login:
+      required:
+        - dni
+        - password
+      type: object
+      properties:
+        dni:
+          type: string
+          example: '00000001'
+          # oneOf:
+          #   - type: string
+          #     example: "johndoe@gmail.com"
+        password:
+          type: string
+          example: 123456
+    JwtResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJkOTM1MjBiZC0zOWUzLTQ0NWItYTBmMC00ZWI0YWMxNTUyMzEiLCJpYXQiOjE2NjA2MzAyODksImV4cCI6MTY2MDYzMTE4OX0.MvCJf0cvKrOG0QIFB-QkGjT0_pjVe4dihpxS_w_6XsU'
+        refreshToken:
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJkOTM1MjBiZC0zOWUzLTQ0NWItYTBmMC00ZWI0YWMxNTUyMzEiLCJpYXQiOjE2NjA2MzAyODksImV4cCI6MTY2MDYzMTE4OX0.MvCJf0cvKrOG0QIFB-QkGjT0_pjVe4dihpxS_w_6XsU'
+        expiresIn:
+          type: integer
+          example: 900
+    Contract:
+      required:
+        - cui
+        - name
+        - projectName
+        - department
+        - province
+        - district
+        - indexContract
+        - shortName
+        - amount
+        # - companyId
+        # - consortiumId
+        - difficulty
+      type: object
+      properties:
+        cui:
+          type: string
+          example: '123213'
+        name:
+          type: string
+          example: 'Proyecto de Mejora Continua'
+        projectName:
+          type: string
+          example: 'Proyecto de Mejora Continua'
+        department:
+          type: string
+          example: 'Puno'
+        amount:
+          type: number
+          example: 123.2
+        province:
+          type: string
+          example: 'Puno'
+        district:
+          type: string
+          example: 'Puno'
+        companyId:
+          type: number
+          example: 1
+        consortiumId:
+          type: number
+          example: null
+        shortName:
+          type: string
+          example: 'Proyecto de Mejora Continua'
+        difficulty:
+          type: integer
+          example: 1
+        indexContract:
+          type: string
+          example: "[{'id':'1','name':'CONFORMIDAD','nivel':1,'nextLevel':[{'id':'1.1','name':'CONFORMIDAD','nivel':2,'hasFile':'no'},{'id':'1.2','name':'CARTA DE SOLICITUD DE CONFORMIDAD','nivel':2,'hasFile':'no'}]},{'id':'2','name':'EJECUCIÓN CONTRACTUAL','nivel':1,'nextLevel':[{'id':'2.1','name':'CARTA DEL NÚMERO DE PAGOS','nivel':2,'hasFile':'no'},{'id':'2.2','name':'CARTAS ENTREGABLES','nivel':2,'hasFile':'no'},{'id':'2.3','name':'PROGRAMA DE PLAZOS DE ENTREGA SEGÚN CONTRATO','nivel':2,'hasFile':'no'},{'id':'2.4','name':'LISTA DE PROFESIONALES SEGÚN CONTRATO ','nivel':2,'hasFile':'no'}]},{'id':'3','name':'PERFECCIONAMIENTO DE CONTRATO','nivel':1,'nextLevel':[{'id':'3.1','name':'CONTRATOS','nivel':2,'hasFile':'no'},{'id':'3.2','name':'SUBSANACIÓN DE OBSERVACIONES DEL PERFECCIONAMIENTO DE CONTRATO','nivel':2,'hasFile':'no'},{'id':'3.3','name':'CARTA DE ENTREGA DEL PERFECCIONAMIENTO DE CONTRATO','nivel':2,'hasFile':'no'},{'id':'3.4','name':'EXPEDIENTE PERFECCIONAMIENTO DE CONTRATO','nivel':2,'nextLevel':[{'id':'3.4.1','name':'Garantía de fiel cumplimiento del contrato.','nivel':3,'hasFile':'no'},{'id':'3.4.2','name':'Garantía de fiel cumplimiento por prestaciones accesorias, de ser el caso.','nivel':3,'hasFile':'no'},{'id':'3.4.3','name':'Contrato de consorcio con firmas legalizadas ante Notario de cada uno de los integrantes, de ser el caso.','nivel':3,'hasFile':'no'},{'id':'3.4.4','name':'Código de cuenta interbancaria (CCI) o, en el caso de proveedores no domiciliados, el número de su cuenta bancaria y la entidad bancaria en el exterior','nivel':3,'hasFile':'no'},{'id':'3.4.5','name':'Copia de la vigencia del poder del representante legal de la empresa que acredite que cuenta con facultades para perfeccionar el contrato, cuando corresponda.','nivel':3,'hasFile':'no'},{'id':'3.4.6','name':'Copia de DNI del postor en caso de persona natural, o de su representante legal en caso de persona jurídica.','nivel':3,'hasFile':'no'},{'id':'3.4.7','name':'Domicilio para efectos de la notificación durante la ejecución del contrato.','nivel':3,'hasFile':'no'},{'id':'3.4.8','name':'Autorización de notificación de la decisión de la Entidad sobre la solicitud de ampliación de plazo mediante medios electrónicos de comunicación','nivel':3,'hasFile':'no'},{'id':'3.4.9','name':'Detalle de los precios unitarios de la oferta económica','nivel':3,'hasFile':'no'},{'id':'3.4.10','name':'Estructura de costos de la oferta económica.','nivel':3,'hasFile':'no'},{'id':'3.4.11','name':'Detalle del monto de la oferta económica de cada uno de los servicios de consultoría de obra que conforman el paquete','nivel':3,'hasFile':'no'},{'id':'3.4.12','name':'Promesa de consorcio con firmas legalizadas','nivel':3,'hasFile':'no'},{'id':'3.4.13','name':'Copia de los diplomas que acrediten la formación académica requerida del personal clave','nivel':3,'hasFile':'no'},{'id':'3.4.14','name':'a) Copia de (i) contratos y su respectiva conformidad o (ii) constancias o (iii) certificados o (iv) cualquier otra documentación que, de manera fehaciente demuestre la experiencia del personal clave.','nivel':3,'hasFile':'no'}]}]},{'id':'4','name':'PRESENTACIÓN DE OFERTAS','nivel':1,'nextLevel':[{'id':'4.1','name':'SUBSANACIÓN DE OFERTAS','nivel':2,'hasFile':'no'},{'id':'4.2','name':'OFERTA ECONÓMICA','nivel':2,'hasFile':'no'},{'id':'4.3','name':'OFERTA TÉCNICA','nivel':2,'nextLevel':[{'id':'4.3.1','name':'Declaración jurada de datos del postor','nivel':3,'hasFile':'no'},{'id':'4.3.2','name':'Documento que acredite la representación de quien suscribe la oferta','nivel':3,'hasFile':'no'},{'id':'4.3.3','name':'Declaración jurada de acuerdo con el literal b) del artículo 52 del Reglamento','nivel':3,'hasFile':'no'},{'id':'4.3.4','name':'Declaración jurada de cumplimiento de los Términos de Referencia contenidos en el numeral 3.1 del Capítulo III de la presente sección','nivel':3,'hasFile':'no'},{'id':'4.3.5','name':'Declaración jurada de plazo de prestación del servicio de consultoría de obra','nivel':3,'hasFile':'no'},{'id':'4.3.6','name':'Promesa de consorcio con firmas legalizadas','nivel':3,'hasFile':'no'}]}]},{'id':'5','name':'BASES INTEGRADAS','nivel':1,'nextLevel':[{'id':'5.1','name':'BASES INTEGRADAS','nivel':2,'hasFile':'no'},{'id':'5.2','name':'Observación de bases administrativas','nivel':2,'hasFile':'no'}]}]"
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-12-31T12:00:00Z'
+    Contract_File:
+      required:
+        - fileContract
+        - fileName
+      type: object
+      properties:
+        fileContract:
+          type: string
+          format: binary
+          example: [archivo_binario]
+        fileName:
+          type: string
+          example: 'nombre_del_archivo'
+    Basic_File:
+      required:
+        - files
+      type: object
+      properties:
+        files:
+          type: array
+          items:
+            type: string
+            format: binary
+    Feedback_Files:
+      required:
+        - files
+        - percentage
+      type: object
+      properties:
+        percentage:
+          type: number
+          example: 40
+        files:
+          type: array
+          items:
+            type: string
+            format: binary
+    Feedback_Review:
+      required:
+        - percentage
+        - comment
+        - type
+        - userIdTask
+      type: object
+      properties:
+        percentage:
+          type: number
+          example: 20
+        userIdTask:
+          type: number
+          example: 2
+        comment:
+          type: string
+          example: 'johndoe Lorem'
+        type:
+          type: string
+          description: user <b>[ACCEPTED,REJECTED] </b>
+          example: 'ACCEPTED'
+    CompanyImage:
+      required:
+        - img
+      type: object
+      properties:
+        img:
+          type: string
+          format: binary
+          example: [archivo_binario]
+    Project:
+      required:
+        - name
+        - typeSpecialityId
+        - contractId,
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Proyecto De Mejora Continua'
+        typeSpecialityId:
+          type: integer
+          example: 1
+        contractId:
+          type: integer
+          example: 2
+    StagesDetails:
+      required:
+        - bachelorCost
+        - professionalCost
+        - graduateCost
+        - internCost
+        - groupId
+      type: object
+      properties:
+        bachelorCost:
+          type: integer
+          example: 34000
+        professionalCost:
+          type: integer
+          example: 24000
+        graduateCost:
+          type: integer
+          example: 14000
+        internCost:
+          type: integer
+          example: 4000
+        groupId:
+          type: integer
+          example: 2
+    CreateUpperOrLower:
+      required:
+        - name
+        - days
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'nueva_tarea_creada'
+        days:
+          type: integer
+          example: 2
+        description:
+          type: string
+          example: 'Lorem ipsum'
+    CreateUpperOrLowerBasic:
+      required:
+        - name
+        - days
+        - stageId
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'nueva_tarea_creada'
+        days:
+          type: integer
+          example: 2
+        stageId:
+          type: integer
+          example: 29
+        levels_Id:
+          type: integer
+          example: 10
+    CreateUpperOrLowerLevel:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'nuevo_nivel_creada'
+        userId:
+          type: integer
+          example: undefined
+    DuplicatesRequestBody:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'nombre_de_tarea_duplicada'
+    AddedUserTask:
+      required:
+        - taskId
+        - userId
+      properties:
+        taskId:
+          type: number
+          example: 1
+        userId:
+          type: number
+          example: 1
+    mail_form:
+      required:
+        - data
+        - fileMail
+        - category
+      type: object
+      properties:
+        fileMail:
+          type: string
+          format: binary
+          example: [archivo_binario]
+        data:
+          type: string
+          example: '<p style="text-align: justify;">Por medio del presente documento me dirijo a usted con la finalidad de hacerle llegar un cordial saludo, y al mismo tiempo comunicarle lo siguiente:</p><p>asdasd</p>'
+        category:
+          type: string
+          description: 'valores permitidos: <b>[GLOBAL, DIRECT]</b>'
+          example: 'GLOBAL'
+    mail_form_reply:
+      required:
+        - data
+        - fileMail
+      type: object
+      properties:
+        fileMail:
+          type: string
+          format: binary
+          example: [archivo_binario]
+        data:
+          type: string
+          example: '<p style="text-align: justify;">Por medio del presente documento me dirijo a usted con la finalidad de hacerle llegar un cordial saludo, y al mismo tiempo comunicarle lo siguiente:</p><p>asdasd</p>'
+    Consortium:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          companies:
+            type: array
+            items: {}
+            example: []
+          name:
+            type: string
+            example: Dhyrium
+          manager:
+            type: string
+            example: Juan Gonzalo
+          img:
+            type: string
+            format: uri
+            example: 'https://media.tenor.com/Qb7l9m4NF2sAAAAe/te-la-creiste-we-xd-te-la-kreiste-we-xd.png'
+      example:
+        - id: 1
+          companies: []
+          name: Dhyrium
+          manager: Juan Gonzalo
+          img: 'https://media.tenor.com/Qb7l9m4NF2sAAAAe/te-la-creiste-we-xd-te-la-kreiste-we-xd.png'
+        - id: 2
+          companies: []
+          name: Another Consortium
+          manager: Maria Sanchez
+          img: 'https://example.com/another-image.png'
+    Consortium-both:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: Dhyrium
+          img:
+            type: string
+            format: uri
+            example: https://example.com/another-image.png
+          type:
+            type: string
+            example: consortiumId
+          newId:
+            type: string
+            example: consortiumId-1
+          uriImg:
+            type: string
+            format: uri
+            example: 'http://localhost:8081/images/img/consortium/another-image.png'
+      example:
+        - id: 1
+          name: Consorcio 1
+          img: https://example.com/another-image.png
+          type: consortiumId
+          newId: consortiumId-1
+          uriImg: 'http://localhost:8081/images/img/consortium/another-image.png'
+        - id: 2
+          name: Empresa 1
+          img: https://example.com/another-image.png
+          type: companyId
+          newId: companyId-1
+          uriImg: 'http://localhost:8081/images/img/consortium/another-image.png'
+    Consortium-id-body:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Consorcio 1
+        manager:
+          type: string
+          example: Juan Gonzalo
+      example:
+        name: Consorcio 1
+        manager: Juan Gonzalo
+    Consortium-id-res:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Consorcio 1
+        manager:
+          type: string
+          example: Juan Gonzalo
+        image:
+          type: string
+          format: uri
+          example: https://example.com/another-image.png
+        projectId:
+          type: integer
+          example: 1
+      example:
+        id: 1
+        name: Consorcio 1
+        manager: Juan Gonzalo
+        image: https://example.com/another-image.png
+        projectId: 1
+    Basiclevel-form:
+      type: object
+      properties:
+        rootId:
+          type: number
+          example: 0
+        stagesId:
+          type: number
+          example: 12
+        userId:
+          type: number
+          example: 21
+        name:
+          type: string
+          example: nuevo nivel en basicos
+        typeItem:
+          type: string
+          description: ingresar <b>[ABC,ROM,NUM]</b>
+          example: NUM
+    Office-form:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'GERENCIA DE GERENCIAS'
+    onHolding-paymail-form:
+      type: object
+      properties:
+        ids:
+          type: string
+          example: [1, 2, 3]
+    payment-pdf-paymail-form:
+      type: object
+      properties:
+        paymentPdfData:
+          type: string
+        ordenNumber:
+          type: number
+          example: 23
+        companyId:
+          type: number
+          example: 1
+    payment-files-paymail-form:
+      type: object
+      required:
+        - fileMail
+      properties:
+        fileMail:
+          type: string
+          format: binary
+          example: [archivo_binario]
+    feedback-change-status-form:
+      type: array
+      items:
+        type: number
+      example: [1, 4, 5]
+    feedback-colabs-form:
+      type: array
+      items:
+        type: object
+        required:
+          - userId
+          - percentage
+        properties:
+          id:
+            type: integer
+          percentage:
+            type: integer
+      example:
+        - userId: 1
+          percentage: 70
+        - userId: 2
+          percentage: 30

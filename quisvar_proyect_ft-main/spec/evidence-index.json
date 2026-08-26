@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "goalId": "H00-A",
+  "updatedAt": "2026-08-10T02:50:57-05:00",
+  "items": [
+    {
+      "id": "REF-ENV-001",
+      "kind": "environment-audit",
+      "scope": "local-secondary-reference",
+      "status": "verified-local-ineligible-primary",
+      "artifact": ".agent-local/evidence/h00/REF-ENV-001.json",
+      "mediaType": "application/json",
+      "sha256": "0035A650AE8FE615A4CE9752C7EE354EC9DA96520C7224DE725F3382C7F89E20",
+      "capturedAt": "2026-08-10T02:50:30.6004611-05:00",
+      "assertions": [
+        "La PC local ejecuta Word LTSC 2021 Volume x64.",
+        "WINWORD.EXE es 16.0.14334.20806.",
+        "La resolución primaria es 1920x1080 a 96 DPI y 100 %.",
+        "Nitro PDF Pro y Acrobat PDFMaker están configurados para carga."
+      ],
+      "limitations": [
+        "No certifica Word para Microsoft 365 2607.",
+        "El JSON bruto no certifica visualmente el tema de Word ni la posición de la barra de acceso rápido."
+      ]
+    },
+    {
+      "id": "REF-OFFICIAL-M365-2607-001",
+      "kind": "official-release-metadata",
+      "scope": "primary-target-release",
+      "status": "verified-release-metadata-only",
+      "artifact": "https://learn.microsoft.com/en-us/officeupdates/update-history-microsoft365-apps-by-date",
+      "mediaType": "text/html",
+      "assertions": [
+        "Microsoft publica Current Channel versión 2607 build 20228.20158 con fecha 4 de agosto de 2026."
+      ],
+      "limitations": [
+        "No prueba edición, arquitectura, licencia, cuenta, configuración ni acceso a una máquina de captura."
+      ]
+    },
+    {
+      "id": "REF-ENV-LTSC2021-SUPPLEMENT-001",
+      "kind": "environment-audit-supplement",
+      "scope": "local-secondary-reference",
+      "status": "verified-local-ineligible-primary",
+      "artifact": "spec/word-reference.json#/localSecondaryReference",
+      "mediaType": "application/json",
+      "capturedAt": "2026-08-10T02:50:57-05:00",
+      "sourceMethods": [
+        "Registro Click-to-Run y propiedades de WINWORD.EXE.",
+        "OSPP.VBS /dstatus con material de clave omitido.",
+        "Registro de identidades de Office sin leer ni almacenar PII.",
+        "Sonda COM sobre un documento temporal vacío.",
+        "Windows Forms Screen API, DPI del sistema y registro de fuentes."
+      ],
+      "assertions": [
+        "La edición local de Word es Office21Word2021VL_KMS_Client_AE, canal VOLUME_KMSCLIENT, con estado LICENSED.",
+        "No se detectaron identidades de cuenta Office y no se almacenó PII.",
+        "La UI local es es-ES y el idioma de edición preferido es es-PE.",
+        "La cinta local estaba expandida/no minimizada.",
+        "El estilo Normal resolvió +Cuerpo como Calibri 11.",
+        "Segoe UI Variable y Calibri están disponibles; Aptos y Carlito no fueron detectadas como fuentes instaladas.",
+        "Existen dos pantallas de 1920x1080 a 96 DPI y 100 %."
+      ],
+      "limitations": [
+        "El tema exacto de Word y la posición de la barra de acceso rápido siguen sin evidencia visual elegible.",
+        "Los valores solo describen Word LTSC 2021 local y no certifican la referencia 2607."
+      ]
+    },
+    {
+      "id": "REF-TARGET-M365-2607-MISSING",
+      "kind": "missing-external-evidence",
+      "scope": "primary-target-environment",
+      "status": "blocked-external",
+      "artifact": null,
+      "requiredArtifacts": [
+        "JSON de entorno elegible con producto, edición, canal, build, arquitectura, licencia y cuenta redactada.",
+        "Captura de Acerca de Word con versión/build y edición.",
+        "Captura completa 1920x1080 a 96 DPI, escala 100 %, tema Blanco y cinta completa.",
+        "Inventario que confirme complementos desactivados y personalización restablecida.",
+        "Registro de fuente predeterminada efectiva, fuentes cargadas y sustituciones.",
+        "Checksums SHA-256 de JSON, PNG y fixtures."
+      ],
+      "unblocks": [
+        "Aprobación de la referencia primaria de H00-A.",
+        "Capturas comparables de H00-C.",
+        "Promoción de baseline.word.2607 a verificado."
+      ]
+    }
+  ]
+}

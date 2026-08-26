@@ -1,0 +1,106 @@
+.kitchenSummaryStat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.9rem;
+  background: #f5f8fc;
+  border: 1px solid rgba(0, 27, 105, 0.08);
+  min-height: 5.3rem;
+}
+
+.kitchenSummaryStat-label {
+  color: var(--color-gray-tertiary);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04rem;
+  line-height: 1.2;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.kitchenSummaryStat-value {
+  color: var(--color-secondary);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.kitchenSummaryStat--primary {
+  min-height: 5.8rem;
+  padding: 0.85rem 1rem;
+  box-shadow: 0 10px 24px rgba(0, 27, 105, 0.06);
+}
+
+.kitchenSummaryStat--primary .kitchenSummaryStat-label {
+  font-size: 0.74rem;
+}
+
+.kitchenSummaryStat--primary .kitchenSummaryStat-value {
+  font-size: 1.65rem;
+}
+
+.kitchenSummaryStat--secondary {
+  min-height: 5.2rem;
+}
+
+.kitchenSummaryStat--secondary .kitchenSummaryStat-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.03rem;
+}
+
+.kitchenSummaryStat--secondary .kitchenSummaryStat-value {
+  font-size: 1.05rem;
+}
+
+.kitchenSummaryStat--neutral {
+  background: #f5f8fc;
+  border-color: rgba(0, 27, 105, 0.08);
+}
+
+.kitchenSummaryStat--success {
+  background: var(--color-bg-done);
+  border-color: rgba(20, 128, 74, 0.12);
+}
+
+.kitchenSummaryStat--success .kitchenSummaryStat-value {
+  color: var(--color-done);
+}
+
+.kitchenSummaryStat--warning {
+  background: #fff1e6;
+  border-color: rgba(199, 106, 18, 0.16);
+}
+
+.kitchenSummaryStat--warning .kitchenSummaryStat-value {
+  color: #c76a12;
+}
+
+.kitchenSummaryStat--danger {
+  background: var(--color-bg-unresolved);
+  border-color: rgba(209, 41, 83, 0.14);
+}
+
+.kitchenSummaryStat--danger .kitchenSummaryStat-value {
+  color: var(--color-unresolved);
+}
+
+.kitchenSummaryStat--info {
+  background: var(--color-primarylight);
+  border-color: rgba(14, 156, 216, 0.12);
+}
+
+@media (max-width: 640px) {
+  .kitchenSummaryStat {
+    min-height: 4.6rem;
+    padding: 0.7rem 0.8rem;
+  }
+
+  .kitchenSummaryStat--primary {
+    min-height: 5rem;
+  }
+
+  .kitchenSummaryStat--primary .kitchenSummaryStat-value {
+    font-size: 1.4rem;
+  }
+}

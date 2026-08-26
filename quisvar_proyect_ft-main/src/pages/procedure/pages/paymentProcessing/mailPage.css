@@ -1,0 +1,228 @@
+.mail-main-options-title-filter {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.mail-mail-options-title-filter-img {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.mail-main-options-container {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  width: fit-content;
+}
+
+.message-header-option {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .mail-main-options-container {
+    flex-wrap: wrap;
+  }
+}
+
+.message-container-header-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.5rem;
+}
+
+.mail-main-options-btn {
+  background-color: var(--color-menu);
+  border: 0;
+  border-radius: 0;
+  height: 2.75rem;
+  font-size: 12px;
+  text-align: left;
+  text-transform: uppercase;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  max-width: 9rem;
+}
+
+.mail-main-update-btn {
+  position: absolute;
+  right: 0;
+  top: 4rem;
+  z-index: 2;
+  border: 0;
+  border-radius: 0;
+  height: 2.75rem;
+  text-align: left;
+  text-transform: uppercase;
+  min-width: 3rem;
+  max-width: 9rem;
+}
+
+.options-main-selected {
+  border-bottom: 3px solid var(--color-quaternay);
+}
+
+.mail-main-master-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  position: relative;
+  background-color: #fff;
+  padding: 1.875rem;
+  transition: 0.3s left ease;
+  filter: drop-shadow(0px 4px 3px rgb(0 0 0 / 0.3));
+  height: 100%;
+}
+
+.mail-messages-container {
+  /* overflow-y: auto; */
+  margin: 0 0.3rem;
+  height: 100%;
+}
+
+.mail-grid {
+  width: 100%;
+  background-color: #fff;
+  font-size: 0.8rem;
+}
+
+.message-container-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.message-options-filter {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap-reverse;
+}
+
+.mail-option-select {
+  margin: 0 0.3rem;
+  border: 0;
+  max-width: 10rem;
+  font-size: 14px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.status-mail-header-true {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.mail-m-size-true {
+  /* background-color: #fff; */
+  flex-grow: 1;
+  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.3));
+  /* border: 1px solid #ccccccb6; */
+  border-end-end-radius: var(--radius-button);
+  border-start-end-radius: var(--radius-button);
+  border-end-start-radius: var(--radius-button);
+}
+
+.mail-m-size-false {
+  width: 0;
+  max-width: 70vw;
+}
+
+.mail-footer-section {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.mail-pagination-title {
+  font-size: 15px;
+}
+
+.mail-previus-btn-pagination {
+  display: flex;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+.mail-previus-btn-pagination img {
+  transform: rotate(90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.mail-next-btn-pagination img {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.mail-next-btn-pagination {
+  display: flex;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+.mail-license {
+  color: var(--color-primary);
+  cursor: pointer;
+  height: auto;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.mail-license:hover {
+  text-decoration: underline;
+}
+
+.mail-grid-container {
+  overflow-y: auto;
+  height: 80%;
+}
+
+.mail-page-layout {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 992px) {
+  .mail-page-layout [data-panel-group-direction='horizontal'] {
+    flex-direction: column !important;
+  }
+
+  .mail-page-layout [data-panel] {
+    min-width: 0;
+  }
+
+  .mail-page-layout [data-panel-resize-handle-id] {
+    width: 100% !important;
+    height: 4px !important;
+  }
+
+  .message-container-header-options,
+  .message-options-filter,
+  .PayMailTable-options {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .mail-main-master-container {
+    padding: 1rem;
+  }
+}

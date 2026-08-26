@@ -1,0 +1,15 @@
+.kt-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+.kt-table {
+  display: flex;
+  padding: 0.5rem;
+  height: 100%;
+  width: 100%;
+  /* overflow-x: auto; */
+  gap: 1rem;
+  background-color: white;
+}

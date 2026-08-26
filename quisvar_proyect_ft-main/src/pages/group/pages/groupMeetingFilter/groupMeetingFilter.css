@@ -1,0 +1,124 @@
+.gmf-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 1rem;
+  height: 100%;
+  min-width: 0;
+}
+.gmf-information {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+}
+.gmf-filters {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-evenly; */
+  align-items: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.gmf-table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.gmf-header {
+  display: grid;
+  grid-template-columns: 0.5fr 2fr 2fr 4fr 0.5fr;
+  background-color: var(--color-primarylight);
+  padding: 0.5rem 0.4rem;
+}
+.gmf-title {
+  color: var(--color-gray-text);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 15px;
+  letter-spacing: 0.04em;
+}
+.gmf-body {
+  display: grid;
+  grid-template-columns: 0.5fr 2fr 2fr 4fr 0.5fr;
+  background-color: white;
+  padding: 0.5rem 0.4rem;
+  overflow-y: auto;
+}
+.gmf-body:hover {
+  background-color: #d0f8ffbb;
+}
+.gmf-item {
+  color: black;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 15px;
+  letter-spacing: 0.04em;
+}
+.gmf-res-content {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+.gmf-input {
+  width: 200px;
+}
+.gmf-btn {
+  border: 1px solid var(--color-secondary);
+  background-color: var(--color-primarylight);
+}
+.gmf-doc {
+  width: 15px;
+  height: 15px;
+}
+.gmf-data {
+  width: 100%;
+  height: 80%;
+  display: flex;
+  min-width: 0;
+}
+.gmf-items {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: auto;
+}
+.gmf-details {
+  width: calc(100% * 2 / 3);
+  height: 100%;
+}
+.gmf-color {
+  background-color: #d0f8ff;
+}
+
+@media (max-width: 992px) {
+  .gmf-filters {
+    height: auto;
+  }
+
+  .gmf-data {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .gmf-header,
+  .gmf-body {
+    min-width: 40rem;
+  }
+
+  .gmf-details {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .gmf-content {
+    padding: 1rem 0.75rem;
+  }
+}

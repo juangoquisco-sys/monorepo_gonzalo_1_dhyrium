@@ -1,0 +1,68 @@
+.dg-main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.dg-division {
+  width: 100%;
+}
+
+.dg-name {
+  display: flex;
+  padding: 0.5rem 0.8rem;
+  gap: 0.5rem;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dg-text {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.dg-list-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.gr-select {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dg-add-group-area {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dg-add-group-area h3 {
+  color: var(--color-primary);
+}
+
+.projectAddLevel-select {
+  width: 200px;
+}
+
+.dg-icon-leader {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dg-button-leader {
+  display: flex;
+  cursor: pointer;
+}

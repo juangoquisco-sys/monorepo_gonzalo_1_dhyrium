@@ -1,0 +1,35 @@
+.cdl-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 2rem;
+}
+
+.cdl-space {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.cdl-user-name {
+  font-family: Montserrat;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 12.19px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.cdl-leader-asigned {
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: 0.015em;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}

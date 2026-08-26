@@ -1,0 +1,36 @@
+.taskCardSelect {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.taskCardSelect-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.taskCardSelect-info {
+  display: flex;
+  flex-direction: column;
+}
+.taskCardSelect-info-item {
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.075rem;
+}
+.taskCardSelect-info-name {
+  color: var(--color-gray-tertiary);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+.taskCardSelect-price {
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.075rem;
+}
+.taskCardSelect-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

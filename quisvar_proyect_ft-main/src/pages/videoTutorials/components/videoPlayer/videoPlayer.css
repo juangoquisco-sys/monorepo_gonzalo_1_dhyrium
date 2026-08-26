@@ -1,0 +1,26 @@
+.videoPlayer-container {
+  width: 100%;
+  height: calc(100vh - 5rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.videoPlayer-close {
+  z-index: 2;
+  position: absolute;
+  cursor: pointer;
+  right: 0;
+}
+.videoPlayer-main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100vh - 5rem);
+}
+
+.videoPlayer-element {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  object-fit: contain;
+}

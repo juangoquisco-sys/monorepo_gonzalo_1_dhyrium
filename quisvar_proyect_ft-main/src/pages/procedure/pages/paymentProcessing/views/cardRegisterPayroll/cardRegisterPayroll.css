@@ -1,0 +1,33 @@
+.cardRegisterPayroll {
+  position: relative;
+  display: flex;
+  width: 20.5rem;
+  height: 26.5625rem;
+  padding: 0.9375rem 0.625rem;
+  flex-direction: column;
+  gap: 0.9375rem;
+  width: 100%;
+
+  border-radius: 0.625rem;
+  background: #f4f7fc;
+  box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.cardRegisterPayroll-title {
+  color: var(--color-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: 0.01313rem;
+}
+.cardRegisterPayroll-title-number {
+  font-weight: 700;
+}
+.cardRegisterPayroll-items {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+}

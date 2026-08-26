@@ -1,0 +1,5394 @@
+.metrado-page {
+  min-height: calc(100vh - var(--header-height));
+  max-width: 100%;
+  overflow-x: hidden;
+  background: #f4f7fb;
+  color: #0d1f4f;
+  padding: 1.25rem;
+}
+
+.metrado-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid #d8e2f3;
+  padding-bottom: 1rem;
+}
+
+.metrado-kicker {
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.metrado-header h1,
+.metrado-denied h1 {
+  margin: 0.2rem 0;
+  color: var(--color-tertiary);
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.metrado-header p,
+.metrado-denied p,
+.metrado-section-head p,
+.metrado-audit p {
+  color: #46566f;
+  font-size: 0.85rem;
+}
+
+.metrado-primary-btn,
+.metrado-section-head button,
+.metrado-tabs button,
+.metrado-blocks button {
+  border: 1px solid var(--color-primary);
+  border-radius: 0.35rem;
+  background: #fff;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.metrado-primary-btn {
+  min-width: 10rem;
+  padding: 0.65rem 1rem;
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.metrado-primary-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.metrado-outline-btn {
+  border: 1px solid #b8c6da;
+  border-radius: 0.3rem;
+  background: #fff;
+  color: #002070;
+  cursor: pointer;
+  font-weight: 800;
+  padding: 0.55rem 0.85rem;
+}
+
+.metrado-danger-btn {
+  border: 1px solid #cf2b2b;
+  border-radius: 0.3rem;
+  background: #d92a2a;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 900;
+  padding: 0.55rem 0.85rem;
+}
+
+.metrado-danger-btn:hover {
+  border-color: #a91515;
+  background: #b91f1f;
+}
+
+.metrado-file-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1rem 0;
+  border: 1px solid #d8e2f3;
+  background: #fff;
+  padding: 0.75rem;
+}
+
+.metrado-file-strip div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.metrado-file-strip strong {
+  color: var(--color-tertiary);
+  font-size: 0.85rem;
+}
+
+.metrado-file-strip span {
+  color: #46566f;
+  font-size: 0.76rem;
+}
+
+.metrado-file-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 9rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 0.35rem;
+  background: #fff;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 0.55rem 0.8rem;
+}
+
+.metrado-file-button input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.metrado-summary-band {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.metrado-summary-band label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: #42516a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.metrado-summary-band input,
+.metrado-table input,
+.metrado-table select,
+.metrado-config-panel input,
+.metrado-config-panel select,
+.metrado-inline-control input {
+  width: 100%;
+  min-width: 6rem;
+  border: 1px solid #cbd8ee;
+  border-radius: 0.3rem;
+  background: #fff;
+  color: #0d1f4f;
+  font-size: 0.78rem;
+  padding: 0.45rem;
+}
+
+.metrado-tabs,
+.metrado-blocks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.metrado-tabs button,
+.metrado-blocks button {
+  padding: 0.5rem 0.8rem;
+}
+
+.metrado-tabs button.is-active,
+.metrado-blocks button.is-active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.metrado-table-wrap {
+  max-width: 100%;
+  overflow: auto;
+  border: 1px solid #d8e2f3;
+  background: #fff;
+  scrollbar-gutter: stable both-edges;
+}
+
+.metrado-table {
+  width: 100%;
+  min-width: 58rem;
+  border-collapse: collapse;
+}
+
+.metrado-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #0b2b76;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: left;
+}
+
+.metrado-table th,
+.metrado-table td {
+  border-bottom: 1px solid #e5ecf8;
+  padding: 0.55rem;
+  vertical-align: middle;
+}
+
+.metrado-table td {
+  color: #17233c;
+  font-size: 0.78rem;
+}
+
+.metrado-table .is-heading td {
+  background: #edf4ff;
+  color: var(--color-tertiary);
+  font-weight: 800;
+}
+
+.metrado-editable td {
+  min-width: 7rem;
+}
+
+.metrado-workspace,
+.metrado-audit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.metrado-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.metrado-section-head h2,
+.metrado-audit h2 {
+  color: var(--color-tertiary);
+  font-size: 1.2rem;
+}
+
+.metrado-section-head button {
+  padding: 0.5rem 0.85rem;
+}
+
+.metrado-audit-list {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.metrado-audit-list article {
+  border-left: 3px solid var(--color-primary);
+  background: #fff;
+  padding: 0.7rem 0.9rem;
+}
+
+.metrado-audit-list span {
+  color: #65748c;
+  font-size: 0.72rem;
+}
+
+.metrado-audit-list strong {
+  display: block;
+  color: var(--color-tertiary);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+}
+
+.metrado-inline-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #42516a;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.metrado-inline-control input {
+  max-width: 5rem;
+}
+
+.metrado-config-grid {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.8fr) minmax(22rem, 1.2fr);
+  gap: 1rem;
+}
+
+.metrado-config-panel {
+  border: 1px solid #d8e2f3;
+  background: #fff;
+  padding: 0.8rem;
+}
+
+.metrado-config-panel h3,
+.metrado-audit-list h3 {
+  color: var(--color-tertiary);
+  font-size: 0.95rem;
+  margin-bottom: 0.7rem;
+}
+
+.metrado-config-row {
+  display: grid;
+  grid-template-columns: 6rem minmax(10rem, 1fr) 5rem;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.55rem;
+}
+
+.metrado-config-row-items {
+  grid-template-columns: 8rem minmax(14rem, 1fr) 5rem 8rem;
+}
+
+.metrado-config-row label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #42516a;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.metrado-config-row input[type='checkbox'] {
+  min-width: 1rem;
+  width: 1rem;
+}
+
+.metrado-diameter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.45rem;
+}
+
+.metrado-diameter-grid span {
+  border: 1px solid #d8e2f3;
+  border-radius: 0.3rem;
+  background: #f8fbff;
+  color: #17233c;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.5rem;
+}
+
+.metrado-issue-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 0.8rem;
+}
+
+.metrado-issue {
+  border: 1px solid #d8e2f3;
+  border-left: 4px solid #9aa9bd;
+  background: #fff;
+  padding: 0.8rem;
+}
+
+.metrado-issue.pendiente {
+  border-left-color: #d9822b;
+}
+
+.metrado-issue.corregible {
+  border-left-color: var(--color-primary);
+}
+
+.metrado-issue.resuelto {
+  border-left-color: #08773d;
+}
+
+.metrado-issue header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.metrado-issue header strong,
+.metrado-issue h3 {
+  color: var(--color-tertiary);
+  font-size: 0.85rem;
+}
+
+.metrado-issue header span {
+  color: #65748c;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.metrado-issue code {
+  display: block;
+  overflow-wrap: anywhere;
+  border-radius: 0.25rem;
+  background: #eef4ff;
+  color: #17233c;
+  font-size: 0.75rem;
+  margin: 0.5rem 0;
+  padding: 0.45rem;
+}
+
+.metrado-issue p {
+  color: #46566f;
+  font-size: 0.8rem;
+}
+
+.metrado-issue button {
+  margin-top: 0.65rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 0.3rem;
+  background: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.45rem 0.65rem;
+}
+
+.metrado-history-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.metrado-denied {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metrado-denied section {
+  max-width: 34rem;
+  background: #fff;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(7, 32, 84, 0.12);
+}
+
+@media (max-width: 900px) {
+  .metrado-header,
+  .metrado-section-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .metrado-summary-band {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .metrado-file-strip,
+  .metrado-config-grid,
+  .metrado-history-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metrado-file-strip {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .metrado-config-row,
+  .metrado-config-row-items {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .metrado-page {
+    padding: 0.8rem;
+  }
+
+  .metrado-summary-band {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metrado-page {
+  background: #b9bcc2;
+  padding: 0.8rem;
+}
+
+.metrado-header {
+  align-items: center;
+  background: #f4f6f8;
+  border: 1px solid #9aa4b3;
+  border-left: 4px solid #0b42c0;
+  padding: 0.7rem 1rem;
+}
+
+.metrado-header h1,
+.metrado-denied h1 {
+  font-size: 1.7rem;
+}
+
+.metrado-section-head h2,
+.metrado-audit h2,
+.metrado-file-strip strong,
+.metrado-pane-title strong,
+.metrado-current-item strong,
+.metrado-label-title,
+.metrado-blocks-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.metrado-header h1 {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+}
+
+.metrado-info-hint {
+  position: relative;
+  z-index: 8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 0.82rem;
+  height: 0.82rem;
+  border: 1px solid rgba(70, 86, 111, 0.45);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  color: #52637c;
+  cursor: help;
+  font-size: 0.52rem;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0.68;
+  text-transform: none;
+  transform: translateY(-0.03rem);
+  transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease,
+    opacity 0.14s ease;
+}
+
+.metrado-info-hint > span {
+  position: absolute;
+  right: 50%;
+  bottom: calc(100% + 0.45rem);
+  visibility: hidden;
+  width: min(18rem, 72vw);
+  border: 1px solid #cbd6e5;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.12);
+  color: #27364d;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.35;
+  opacity: 0;
+  padding: 0.55rem 0.65rem;
+  pointer-events: none;
+  text-align: left;
+  text-transform: none;
+  transform: translateX(50%) translateY(0.2rem);
+  transition: opacity 0.14s ease, transform 0.14s ease, visibility 0.14s ease;
+  white-space: normal;
+  z-index: 40;
+}
+
+.metrado-info-hint > span::after {
+  position: absolute;
+  right: 50%;
+  bottom: -0.38rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  background: #fff;
+  border-right: 1px solid #cbd6e5;
+  border-bottom: 1px solid #cbd6e5;
+  content: '';
+  transform: translateX(50%) rotate(45deg);
+}
+
+.metrado-info-hint:hover {
+  border-color: #5d6f89;
+  background: #fff;
+  color: #0b2b76;
+  opacity: 1;
+}
+
+.metrado-info-hint:hover > span {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(50%) translateY(0);
+}
+
+.metrado-primary-btn .metrado-info-hint,
+.metrado-file-button .metrado-info-hint,
+.metrado-section-head button .metrado-info-hint,
+.metrado-tabs button .metrado-info-hint {
+  border-color: currentColor;
+  background: rgba(255, 255, 255, 0.5);
+  color: inherit;
+  margin-left: 0.25rem;
+}
+
+.metrado-primary-btn .metrado-info-hint,
+.metrado-file-button .metrado-info-hint {
+  border-color: rgba(255, 255, 255, 0.7);
+  color: inherit;
+  opacity: 0.75;
+}
+
+.metrado-tabs button .metrado-info-hint {
+  width: 0;
+  margin-left: 0;
+  border: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.metrado-tabs button:hover .metrado-info-hint,
+.metrado-tabs button:focus-visible .metrado-info-hint,
+.metrado-tabs button.is-active:hover .metrado-info-hint {
+  width: 0.82rem;
+  margin-left: 0.25rem;
+  border: 1px solid currentColor;
+  opacity: 0.8;
+  overflow: visible;
+}
+
+.metrado-header p {
+  margin: 0;
+}
+
+.metrado-file-strip,
+.metrado-summary-band {
+  margin: 0.45rem 0;
+}
+
+.metrado-file-strip {
+  border-color: #9fb2cc;
+}
+
+.metrado-summary-band {
+  gap: 0.55rem;
+}
+
+.metrado-summary-band label {
+  gap: 0.25rem;
+}
+
+.metrado-label-title {
+  color: #42516a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.metrado-summary-band input,
+.metrado-table input,
+.metrado-table select,
+.metrado-config-panel input,
+.metrado-config-panel select,
+.metrado-inline-control input,
+.metrado-search {
+  border-radius: 0;
+  font-size: 0.76rem;
+  padding: 0.35rem 0.45rem;
+}
+
+.metrado-shell {
+  display: grid;
+  grid-template-columns: minmax(16rem, 18rem) minmax(0, 1fr);
+  gap: 0.75rem;
+  min-height: calc(100vh - 12.6rem);
+  transition: grid-template-columns 0.18s ease;
+}
+
+.metrado-shell.is-nav-collapsed {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.metrado-shell.is-nav-collapsed .metrado-nav-pane {
+  display: none;
+}
+
+.metrado-nav-pane,
+.metrado-main-pane {
+  min-width: 0;
+  border: 1px solid #2f5bff;
+  background: #fff;
+}
+
+.metrado-nav-pane {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 12.6rem);
+}
+
+.metrado-pane-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+  border-bottom: 1px solid #c9d3e2;
+  background: #d7dce4;
+  color: #17233c;
+  padding: 0.45rem 0.55rem;
+}
+
+.metrado-pane-action,
+.metrado-floating-action,
+.metrado-view-toggle {
+  border: 1px solid #b9c6d8;
+  border-radius: 0.15rem;
+  background: #fff;
+  color: #0b2b76;
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.28rem 0.45rem;
+  white-space: nowrap;
+}
+
+.metrado-pane-action:hover,
+.metrado-floating-action:hover,
+.metrado-view-toggle:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.metrado-floating-action {
+  margin-bottom: 0.5rem;
+}
+
+.metrado-pane-title strong {
+  min-width: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.metrado-pane-title span {
+  margin-left: auto;
+  color: #46566f;
+  font-size: 0.7rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.metrado-search {
+  width: calc(100% - 0.8rem);
+  margin: 0.4rem;
+}
+
+.metrado-item-tools {
+  border-bottom: 1px solid #c9d3e2;
+  background: #f9fbfe;
+}
+
+.metrado-item-tools-hint {
+  border-bottom: 1px solid #dbe3ee;
+  background: #eef4fb;
+  color: #5a6a82;
+  font-size: 0.66rem;
+  font-weight: 800;
+  line-height: 1.25;
+  padding: 0.38rem 0.45rem;
+}
+
+.metrado-project-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.28rem;
+  border-bottom: 1px solid #dbe3ee;
+  background: #f9fbfe;
+  padding: 0.38rem;
+}
+
+.metrado-project-actions button {
+  min-height: 1.75rem;
+  border: 1px solid #9eb0c9;
+  background: #ffffff;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.2rem 0.3rem;
+}
+
+.metrado-project-actions button:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  background: #eaf7ff;
+  color: var(--color-primary);
+}
+
+.metrado-project-actions button.is-danger {
+  border-color: #d8a8a8;
+  color: #b21717;
+}
+
+.metrado-project-actions button.is-danger:hover:not(:disabled) {
+  border-color: #d92a2a;
+  background: #fff1f1;
+  color: #d92a2a;
+}
+
+.metrado-project-actions button:disabled {
+  border-color: #d5dde8;
+  background: #f3f6fa;
+  color: #9aa8ba;
+  cursor: not-allowed;
+}
+
+.metrado-project-list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.35rem;
+  overflow: auto;
+  padding: 0.4rem;
+}
+
+.metrado-project-list > button {
+  display: grid;
+  gap: 0.18rem;
+  border: 1px solid #c8d4e4;
+  border-left: 4px solid #9eb0c9;
+  background: #ffffff;
+  color: #17233c;
+  cursor: pointer;
+  padding: 0.42rem 0.5rem;
+  text-align: left;
+}
+
+.metrado-project-list > button:hover {
+  border-color: #0d9cd4;
+  border-left-color: #0d9cd4;
+  background: #f3fbff;
+}
+
+.metrado-project-list > button.is-active {
+  border-color: #0b2b76;
+  border-left-color: #00a86b;
+  background: #e8f1fb;
+  box-shadow: inset 0 0 0 1px rgba(0, 32, 112, 0.08);
+}
+
+.metrado-project-list > button > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: #0b2b76;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.metrado-project-list em {
+  color: #5d6b83;
+  font-size: 0.64rem;
+  font-style: normal;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.metrado-project-list strong {
+  overflow: hidden;
+  color: #001c62;
+  font-size: 0.74rem;
+  font-weight: 900;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metrado-project-list small {
+  overflow: hidden;
+  color: #56657d;
+  font-size: 0.64rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metrado-project-empty {
+  border: 1px dashed #b8c7da;
+  background: #f8fbff;
+  color: #5d6b83;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.metrado-item-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.22rem;
+  padding: 0.32rem;
+}
+
+.metrado-item-actions button {
+  min-height: 1.55rem;
+  border: 1px solid #9eb0c9;
+  background: #ffffff;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.66rem;
+  font-weight: 900;
+  padding: 0.16rem 0.22rem;
+}
+
+.metrado-item-actions button:hover:not(:disabled) {
+  border-color: #0d9cd4;
+  background: #eaf7ff;
+}
+
+.metrado-item-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.metrado-item-actions button.is-danger {
+  border-color: #e2a4a4;
+  color: #a71919;
+}
+
+.metrado-item-actions button.is-danger:hover:not(:disabled) {
+  border-color: #d92525;
+  background: #fff1f1;
+}
+
+.metrado-item-editor {
+  display: grid;
+  grid-template-columns: 5.6rem minmax(0, 1fr) 3.7rem;
+  gap: 0.25rem;
+  border-top: 1px solid #dde6f2;
+  padding: 0.34rem;
+}
+
+.metrado-item-editor label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.metrado-item-editor label:nth-child(2),
+.metrado-item-editor label:nth-child(4) {
+  grid-column: span 2;
+}
+
+.metrado-item-editor span {
+  color: #3f4d66;
+  font-size: 0.58rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.metrado-item-editor input,
+.metrado-item-editor select {
+  width: 100%;
+  min-width: 0;
+  height: 1.45rem;
+  border: 1px solid #c7d3e4;
+  background: #fff;
+  color: #002070;
+  font-size: 0.68rem;
+  padding: 0.12rem 0.24rem;
+}
+
+.metrado-item-editor input:focus,
+.metrado-item-editor select:focus {
+  border-color: var(--color-primary);
+  outline: 2px solid rgba(20, 158, 216, 0.16);
+}
+
+.metrado-item-editor .metrado-item-check {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+  color: #002070;
+  font-size: 0.66rem;
+  font-weight: 900;
+}
+
+.metrado-item-editor .metrado-item-check input {
+  width: 0.9rem;
+  height: 0.9rem;
+  accent-color: #0b2b76;
+}
+
+.metrado-item-editor small {
+  align-self: center;
+  color: #56657d;
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+
+.metrado-tree {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: auto;
+  padding-bottom: 0.3rem;
+}
+
+.metrado-tree button {
+  display: grid;
+  grid-template-columns: 5.7rem minmax(0, 1fr);
+  gap: 0.4rem;
+  align-items: center;
+  border: 0;
+  border-bottom: 1px solid #d8dce2;
+  background: #fff;
+  color: #17233c;
+  cursor: pointer;
+  min-height: 1.65rem;
+  padding: 0.25rem 0.45rem;
+  text-align: left;
+}
+
+.metrado-tree button:hover,
+.metrado-tree button.is-active {
+  background: #001c62;
+  color: #fff;
+}
+
+.metrado-tree button.is-heading {
+  background: #e8f1fb;
+  color: #0b2b76;
+  font-weight: 800;
+}
+
+.metrado-tree button.is-heading:hover,
+.metrado-tree button.is-heading.is-active {
+  background: #0b2b76;
+  color: #fff;
+}
+
+.metrado-tree span {
+  color: inherit;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.metrado-tree strong {
+  overflow: hidden;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metrado-context-menu {
+  position: fixed;
+  z-index: 70;
+  display: grid;
+  width: min(42rem, calc(100vw - 1rem));
+  border: 1px solid #68758a;
+  background: #eceff3;
+  box-shadow: 0 0.6rem 1.4rem rgba(7, 20, 44, 0.2);
+  padding: 0;
+}
+
+.metrado-catalog-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f6f7f9;
+  border-bottom: 1px solid #b7c0ce;
+  color: #333;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.28rem 0.45rem;
+  cursor: move;
+  user-select: none;
+}
+
+.metrado-catalog-titlebar button {
+  width: 1.35rem;
+  height: 1.25rem;
+  border: 1px solid #b6becb;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.metrado-catalog-menubar,
+.metrado-catalog-toolbar,
+.metrado-catalog-search {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-bottom: 1px solid #c4ccd7;
+  background: #f2f4f7;
+  padding: 0.26rem 0.42rem;
+}
+
+.metrado-catalog-menubar {
+  color: #1d2a3f;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.metrado-catalog-toolbar button {
+  border: 1px solid #9faabb;
+  background: #fff;
+  color: #10224a;
+  cursor: pointer;
+  font-size: 0.64rem;
+  font-weight: 900;
+  min-height: 1.35rem;
+  padding: 0.16rem 0.34rem;
+}
+
+.metrado-catalog-toolbar button:hover {
+  border-color: var(--color-primary);
+  background: #e9f7ff;
+}
+
+.metrado-catalog-toolbar button.is-danger {
+  border-color: #d9aaa7;
+  color: #a71919;
+}
+
+.metrado-catalog-search input {
+  flex: 1;
+  min-width: 0;
+  height: 1.45rem;
+  border: 1px solid #aab5c4;
+  background: #fff;
+  color: #10224a;
+  font-size: 0.7rem;
+  padding: 0.14rem 0.35rem;
+}
+
+.metrado-catalog-search span {
+  color: #8b1f1f;
+  font-size: 0.66rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.metrado-catalog-body {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  min-height: 14rem;
+  max-height: 18rem;
+  border-bottom: 1px solid #b7c0ce;
+}
+
+.metrado-catalog-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  overflow: auto;
+  border-right: 1px solid #b7c0ce;
+  background: #f8f9fb;
+  padding: 0.35rem;
+}
+
+.metrado-catalog-tree button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.35rem;
+  align-items: center;
+  border: 0;
+  background: transparent;
+  color: #25324b;
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.24rem 0.3rem;
+  text-align: left;
+}
+
+.metrado-catalog-tree button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metrado-catalog-tree button em {
+  color: #5f6c82;
+  font-size: 0.62rem;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.metrado-catalog-tree button:hover,
+.metrado-catalog-tree button.is-active {
+  background: #dbe6f7;
+  color: #002070;
+}
+
+.metrado-catalog-tree button.is-active em {
+  color: #002070;
+}
+
+.metrado-catalog-grid {
+  overflow: auto;
+  background: #fff;
+}
+
+.metrado-catalog-grid table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.metrado-catalog-grid th,
+.metrado-catalog-grid td {
+  border-right: 1px solid #9da8b8;
+  border-bottom: 1px solid #c5cbd4;
+  color: #111;
+  font-size: 0.66rem;
+  padding: 0.18rem 0.32rem;
+}
+
+.metrado-catalog-grid th {
+  position: sticky;
+  top: 0;
+  background: #e4e4e4;
+  font-weight: 900;
+  text-align: left;
+}
+
+.metrado-catalog-grid tr {
+  cursor: pointer;
+}
+
+.metrado-catalog-grid tr:hover td {
+  background: #eef5ff;
+}
+
+.metrado-catalog-grid tr.is-active td {
+  background: #777;
+  color: #fff;
+}
+
+.metrado-catalog-grid .metrado-catalog-empty-row td {
+  height: 6rem;
+  background: #f8fbff;
+  color: #526179;
+  cursor: default;
+  font-weight: 800;
+  text-align: center;
+}
+
+.metrado-catalog-grid tr.level-1:not(.is-active) td,
+.metrado-catalog-grid tr.level-1:not(.is-active) td:first-child {
+  color: #ff0000;
+  font-weight: 900;
+}
+
+.metrado-catalog-grid tr.level-2:not(.is-active) td,
+.metrado-catalog-grid tr.level-2:not(.is-active) td:first-child {
+  color: #009688;
+  font-weight: 900;
+}
+
+.metrado-catalog-grid tr.level-3:not(.is-active) td,
+.metrado-catalog-grid tr.level-3:not(.is-active) td:first-child {
+  color: #0068ff;
+  font-weight: 900;
+}
+
+.metrado-catalog-grid tr.level-4:not(.is-active) td,
+.metrado-catalog-grid tr.level-4:not(.is-active) td:first-child {
+  color: #ff00ff;
+  font-weight: 900;
+}
+
+.metrado-catalog-grid tr.level-5:not(.is-active) td:first-child,
+.metrado-catalog-grid tr.level-6:not(.is-active) td:first-child {
+  color: #002070;
+  font-weight: 800;
+}
+
+.metrado-context-editor {
+  display: grid;
+  grid-template-columns: 5.4rem minmax(0, 1fr) 4rem;
+  gap: 0.28rem;
+  border-bottom: 1px solid #b7c0ce;
+  background: #f5f7fa;
+  padding: 0.4rem;
+}
+
+.metrado-context-editor label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.metrado-context-editor label:nth-child(2),
+.metrado-context-editor label:nth-child(4) {
+  grid-column: span 2;
+}
+
+.metrado-context-editor span {
+  color: #4c5b72;
+  font-size: 0.58rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.metrado-context-editor input,
+.metrado-context-editor select {
+  width: 100%;
+  min-width: 0;
+  height: 1.45rem;
+  border: 1px solid #c7d3e4;
+  background: #fff;
+  color: #002070;
+  font-size: 0.68rem;
+  padding: 0.12rem 0.24rem;
+}
+
+.metrado-context-editor input:focus,
+.metrado-context-editor select:focus {
+  border-color: var(--color-primary);
+  outline: 2px solid rgba(20, 158, 216, 0.16);
+}
+
+.metrado-context-editor .metrado-context-check {
+  flex-direction: row;
+  align-items: center;
+  color: #002070;
+  font-size: 0.66rem;
+  font-weight: 900;
+}
+
+.metrado-context-editor .metrado-context-check input {
+  width: 0.9rem;
+  height: 0.9rem;
+  accent-color: #0b2b76;
+}
+
+.metrado-context-editor small {
+  align-self: center;
+  color: #56657d;
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+
+.metrado-context-actions {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  padding-top: 0.08rem;
+}
+
+.metrado-context-actions button {
+  min-width: 5.5rem;
+  height: 1.55rem;
+  border: 1px solid #9fb0c8;
+  background: #fff;
+  color: #002070;
+  font-size: 0.66rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.metrado-context-actions button.is-primary {
+  border-color: #149ed8;
+  background: #149ed8;
+  color: #fff;
+}
+
+.metrado-context-actions button:disabled {
+  border-color: #d5dce8;
+  background: #edf1f7;
+  color: #8794aa;
+  cursor: default;
+}
+
+.metrado-catalog-status {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  align-items: center;
+  background: #eef1f5;
+  border-top: 1px solid #fff;
+  color: #27354d;
+  font-size: 0.66rem;
+  padding: 0.28rem 0.45rem;
+}
+
+.metrado-catalog-status strong {
+  overflow: hidden;
+  color: #0b2b76;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metrado-catalog-row-menu {
+  position: fixed;
+  z-index: 80;
+  display: grid;
+  min-width: 11rem;
+  border: 1px solid #6f7480;
+  background: #f7f7f7;
+  box-shadow: 0 0.6rem 1.4rem rgba(0, 0, 0, 0.22);
+  padding: 0.18rem;
+}
+
+.metrado-catalog-row-menu button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.8rem;
+  align-items: center;
+  border: 0;
+  background: transparent;
+  color: #17233c;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+  min-height: 1.35rem;
+  padding: 0.24rem 0.35rem;
+  text-align: left;
+}
+
+.metrado-catalog-row-menu button:hover {
+  background: #dce9fb;
+  color: #002070;
+}
+
+.metrado-catalog-row-menu button.is-danger {
+  color: #a71919;
+}
+
+.metrado-catalog-row-menu button.is-danger:hover {
+  background: #fff1f1;
+  color: #d92525;
+}
+
+.metrado-catalog-row-menu kbd {
+  border: 0;
+  background: transparent;
+  color: #5c6675;
+  font-family: inherit;
+  font-size: 0.66rem;
+  font-weight: 800;
+}
+
+.metrado-tree .level-2 strong {
+  padding-left: 0.45rem;
+}
+
+.metrado-tree .level-3 strong {
+  padding-left: 0.9rem;
+}
+
+.metrado-tree .level-4 strong {
+  padding-left: 1.35rem;
+}
+
+.metrado-tree .level-5 strong {
+  padding-left: 1.8rem;
+}
+
+.metrado-main-pane {
+  position: relative;
+  overflow: visible;
+  padding: 0.45rem;
+}
+
+.metrado-excel-header {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  margin-bottom: 0.45rem;
+  border: 2px solid #0029d1;
+  border-bottom: 0;
+  background: #fff;
+  color: #000;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.metrado-excel-header .excel-header-image {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.45rem;
+  z-index: 2;
+  width: 3.9rem;
+  height: 4.9rem;
+  border: 1px solid #0029d1;
+  background: #fff;
+  object-fit: contain;
+  padding: 0.12rem;
+}
+
+.metrado-excel-header > div {
+  display: grid;
+  align-items: center;
+  min-height: 1.25rem;
+  border-right: 1px dotted #111;
+  border-bottom: 1px dotted #111;
+  padding: 0.12rem 0.35rem;
+}
+
+.metrado-excel-header .excel-title {
+  grid-column: 1 / -1;
+  min-height: 2.1rem;
+  background: #e7d7f7;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.metrado-excel-header .excel-unit {
+  grid-column: 1 / -1;
+  background: #d8fbff;
+}
+
+.metrado-excel-header .excel-codes,
+.metrado-excel-header .excel-location {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 0;
+}
+
+.metrado-excel-header .excel-location {
+  grid-template-columns: 2fr 1fr;
+}
+
+.metrado-excel-header .excel-codes span,
+.metrado-excel-header .excel-location span {
+  min-height: 1.25rem;
+  border-right: 1px dotted #111;
+  padding: 0.12rem 0.35rem;
+}
+
+.metrado-excel-header .excel-codes span:last-child,
+.metrado-excel-header .excel-location span:last-child {
+  border-right: 0;
+}
+
+.metrado-excel-header .excel-block-title {
+  grid-column: 1 / -1;
+  background: #d9f9d3;
+}
+
+.metrado-project-editor-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 115;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 18, 32, 0.22);
+  padding: 1rem;
+}
+
+.metrado-project-editor-dialog {
+  width: min(38rem, 96vw);
+  border: 1px solid #7d8ca3;
+  background: #f7faff;
+  box-shadow: 0 1.2rem 2.4rem rgba(10, 27, 58, 0.24);
+  color: #002070;
+}
+
+.metrado-project-editor-dialog header,
+.metrado-project-editor-dialog footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid #c7d2e2;
+  background: #e5ebf4;
+  padding: 0.45rem 0.6rem;
+}
+
+.metrado-project-editor-dialog footer {
+  border-top: 1px solid #c7d2e2;
+  border-bottom: 0;
+}
+
+.metrado-project-editor-dialog header div {
+  display: grid;
+  gap: 0.08rem;
+}
+
+.metrado-project-editor-dialog header strong {
+  font-size: 0.82rem;
+}
+
+.metrado-project-editor-dialog header span,
+.metrado-project-editor-dialog footer span {
+  color: #56677e;
+  font-size: 0.66rem;
+  font-weight: 800;
+}
+
+.metrado-project-editor-dialog header button,
+.metrado-project-editor-dialog footer button {
+  border: 1px solid #aeb9c9;
+  background: #fff;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 0.22rem 0.55rem;
+}
+
+.metrado-project-editor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
+  padding: 0.65rem;
+}
+
+.metrado-project-editor-grid label {
+  display: grid;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.metrado-project-editor-grid label:first-child {
+  grid-column: 1 / -1;
+}
+
+.metrado-import-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 160;
+  display: grid;
+  place-items: center;
+  background: rgba(7, 16, 38, 0.38);
+  padding: 1rem;
+}
+
+.metrado-import-modal {
+  width: min(44rem, 96vw);
+  border: 1px solid #7d8ca3;
+  background: #f8fbff;
+  box-shadow: 0 1rem 2.6rem rgba(0, 17, 64, 0.28);
+  color: #002070;
+}
+
+.metrado-import-modal header,
+.metrado-import-modal footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: #e8eef7;
+  border-bottom: 1px solid #c7d2e2;
+  padding: 0.65rem 0.8rem;
+}
+
+.metrado-import-modal footer {
+  justify-content: flex-end;
+  border-top: 1px solid #c7d2e2;
+  border-bottom: 0;
+  background: #f3f6fb;
+}
+
+.metrado-import-modal header span {
+  color: var(--color-primary);
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.metrado-import-modal h2 {
+  margin: 0.1rem 0 0;
+  color: var(--color-tertiary);
+  font-size: 1.15rem;
+}
+
+.metrado-import-modal header button {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid #b8c6da;
+  background: #fff;
+  color: #002070;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.metrado-import-modal-body {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.85rem;
+}
+
+.metrado-import-modal-body dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.metrado-import-modal-body dl div {
+  min-width: 0;
+  border: 1px solid #d3deed;
+  background: #fff;
+  padding: 0.5rem;
+}
+
+.metrado-import-modal-body dt {
+  color: #56677e;
+  font-size: 0.65rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.metrado-import-modal-body dd {
+  margin: 0.18rem 0 0;
+  overflow: hidden;
+  color: #002070;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metrado-import-modal-body p {
+  margin: 0;
+  border-left: 0.2rem solid var(--color-primary);
+  background: #edf7ff;
+  color: #31435e;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.55rem 0.7rem;
+}
+
+.metrado-delete-modal .metrado-import-modal-body p {
+  border-left-color: #d92a2a;
+  background: #fff3f3;
+  color: #5b2730;
+}
+
+.metrado-project-editor-grid span {
+  color: #42516a;
+  font-size: 0.66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.metrado-project-editor-grid input {
+  width: 100%;
+  border: 1px solid #c5d0df;
+  border-radius: 0;
+  background: #fff;
+  color: #002070;
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 0.35rem 0.45rem;
+}
+
+.metrado-project-editor-grid input:focus {
+  border-color: var(--color-primary);
+  outline: 2px solid rgba(20, 158, 216, 0.18);
+}
+
+.metrado-statusbar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid #9aa4b3;
+  background: #e8edf4;
+  margin-bottom: 0.55rem;
+}
+
+.metrado-statusbar > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-right: 1px solid #d9e0ea;
+  color: #46566f;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.45rem 0.55rem;
+  text-transform: uppercase;
+}
+
+.metrado-statusbar > span:last-child {
+  border-right: 0;
+}
+
+.metrado-status-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.metrado-statusbar strong {
+  color: #0b2b76;
+  font-variant-numeric: tabular-nums;
+}
+
+.metrado-workbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.45rem;
+  align-items: stretch;
+  margin-bottom: 0.55rem;
+}
+
+.metrado-current-item {
+  display: grid;
+  grid-template-columns: 3.2rem minmax(0, 1fr) auto auto;
+  gap: 0.65rem;
+  align-items: center;
+  border: 1px solid #9aa4b3;
+  border-left: 4px solid #009e73;
+  background: #fff;
+  margin-bottom: 0;
+  padding: 0.45rem 0.55rem;
+}
+
+.metrado-current-item > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.8rem;
+  background: #002070;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.metrado-current-item strong {
+  color: #0b2b76;
+  font-size: 0.82rem;
+}
+
+.metrado-current-item p {
+  overflow: hidden;
+  margin: 0.12rem 0 0;
+  color: #17233c;
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metrado-current-item em {
+  color: #17a36b;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.metrado-statusbar,
+.metrado-workbar,
+.metrado-tabs,
+.metrado-blocks {
+  display: none;
+}
+
+.metrado-compact-nav {
+  display: grid;
+  grid-template-columns: 8.6rem minmax(0, 1fr);
+  align-items: stretch;
+  border: 2px solid #0029d1;
+  border-bottom: 0;
+  background: #757a82;
+  min-height: 2.1rem;
+}
+
+.metrado-compact-nav button {
+  border: 1px solid #6d788a;
+  border-bottom: 0;
+  background: #dfe6f2;
+  color: #003a8c;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.metrado-compact-nav button:hover {
+  background: #f5fbff;
+  color: #009cde;
+}
+
+.metrado-compact-nav button.is-active {
+  background: #fff;
+  color: #009cde;
+}
+
+.metrado-compact-nav .is-summary {
+  min-width: 8.6rem;
+  font-size: 0.95rem;
+  color: #003a8c;
+}
+
+.metrado-compact-blocks {
+  display: flex;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+.metrado-compact-block-tab {
+  display: grid;
+  grid-template-columns: minmax(7.8rem, 1fr) 3.4rem;
+  flex: 0 0 13rem;
+  border-right: 1px solid #6d788a;
+}
+
+.metrado-compact-block-tab.is-active .metrado-compact-block-main {
+  background: #fff;
+  color: #002070;
+}
+
+.metrado-compact-block-main {
+  display: grid;
+  grid-template-columns: 1.8rem minmax(0, 1fr);
+  gap: 0.25rem;
+  align-items: center;
+  padding: 0.15rem 0.35rem;
+  text-align: left;
+}
+
+.metrado-compact-block-main strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.25rem;
+  background: #1d60d6;
+  color: #fff;
+  font-size: 0.68rem;
+}
+
+.metrado-compact-block-main span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.metrado-compact-block-mode {
+  border-left: 1px solid #9facbf;
+  background: #eef3fb;
+  color: #0b2b76;
+  font-size: 0.64rem;
+}
+
+.metrado-compact-block-mode.is-active {
+  background: #0b2b76;
+  color: #fff;
+}
+
+.metrado-add-block-tab {
+  flex: 0 0 2.6rem;
+  font-size: 1.2rem !important;
+}
+
+.metrado-platformado-tab {
+  position: sticky;
+  right: 0;
+  z-index: 3;
+  flex: 0 0 7.4rem;
+  border-left: 1px solid #6d788a !important;
+}
+
+.metrado-workbook-nav-row th {
+  position: sticky !important;
+  top: 0;
+  z-index: 70 !important;
+  padding: 0 !important;
+  border-bottom: 1px solid #69717d !important;
+  background: #737982 !important;
+  box-shadow: 0 2px 0 #0029d1;
+}
+
+.metrado-table thead tr:nth-child(2) th {
+  top: 2.05rem;
+  z-index: 28;
+}
+
+.metrado-table thead tr:nth-child(3) th {
+  top: 4.1rem;
+  z-index: 26;
+}
+
+.metrado-summary-grid thead .metrado-summary-title-row th {
+  top: 0;
+  z-index: 28;
+}
+
+.metrado-summary-grid thead tr:nth-child(2) th {
+  top: 2.05rem;
+  z-index: 26;
+}
+
+.metrado-workbook-tabs {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 8.4rem minmax(18rem, 1fr) auto;
+  align-items: stretch;
+  width: min(100%, calc(100vw - 6rem));
+  min-width: 0;
+  max-width: calc(100vw - 6rem);
+  height: 2.05rem;
+  overflow: hidden;
+  background: #737982;
+  color: #002070;
+  text-transform: none;
+}
+
+.metrado-workbook-tabs.is-detail-compact {
+  grid-template-columns: 8.4rem minmax(0, 1fr) auto;
+  width: min(100%, calc(100vw - 6rem));
+  max-width: calc(100vw - 6rem);
+  background: #eef3fb;
+}
+
+.metrado-workbook-context-only {
+  display: grid;
+  grid-template-columns: 1.9rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  border-right: 1px solid #8b98aa;
+  border-left: 1px solid #8b98aa;
+  background: #eef3fb;
+  color: #002070;
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.12rem 0.5rem;
+}
+
+.metrado-workbook-context-only strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.2rem;
+  background: var(--metrado-mode-color, #1d60d6);
+  color: #fff;
+  font-size: 0.68rem;
+}
+
+.metrado-workbook-context-only span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.metrado-workbook-mode-strip {
+  display: grid;
+  grid-template-columns: minmax(10rem, 1fr) auto auto;
+  align-items: stretch;
+  min-width: 0;
+  overflow: hidden;
+  border-right: 1px solid #687384;
+  border-left: 1px solid #687384;
+  background: #737982;
+}
+
+.metrado-workbook-active-block {
+  display: grid;
+  grid-template-columns: 1.9rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 0;
+  border-right: 1px solid #8b98aa;
+  background: #eef3fb;
+  color: #002070;
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.12rem 0.45rem;
+}
+
+.metrado-workbook-active-block strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.2rem;
+  background: #1d60d6;
+  color: #fff;
+  font-size: 0.68rem;
+}
+
+.metrado-workbook-active-block span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.metrado-workbook-mode-strip > button {
+  min-width: 5.8rem;
+  padding: 0 0.6rem;
+}
+
+.metrado-workbook-tabs .metrado-workbook-add-block,
+.metrado-workbook-mode-strip > .metrado-workbook-add-block {
+  min-width: 5.2rem;
+  border-left: 1px solid #8b98aa;
+  background: #149ed8;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.metrado-workbook-tabs .metrado-workbook-add-block:hover,
+.metrado-workbook-mode-strip > .metrado-workbook-add-block:hover {
+  background: #087fb6;
+  color: #ffffff;
+}
+
+.metrado-workbook-mode-strip > button.is-general-mode.is-active {
+  background: #008f67;
+  color: #ffffff;
+  box-shadow: inset 0 -3px 0 #83e4c4;
+}
+
+.metrado-workbook-mode-strip > button.is-acero-mode.is-active {
+  background: #0b2b76;
+  color: #ffffff;
+  box-shadow: inset 0 -3px 0 #56a8ff;
+}
+
+.metrado-workbook-tabs button {
+  border: 0;
+  border-right: 1px solid #9aa7ba;
+  background: #dfe6f2;
+  color: #003a8c;
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.metrado-workbook-tabs button:hover {
+  background: #f7fbff;
+  color: #149ed8;
+}
+
+.metrado-workbook-tabs button.is-active,
+.metrado-workbook-block-tab.is-active .metrado-workbook-block-main {
+  background: #fff;
+  color: #009cde;
+}
+
+.metrado-workbook-block-tab.is-general-mode
+  .metrado-workbook-block-main.is-active {
+  border-left: 3px solid #008f67;
+  background: #e7fff7;
+  color: #006e52;
+  box-shadow: inset 0 -3px 0 #008f67;
+}
+
+.metrado-workbook-block-tab.is-general-mode
+  .metrado-workbook-block-main.is-active
+  strong {
+  background: #008f67;
+  color: #fff;
+}
+
+.metrado-workbook-block-tab.is-acero-mode .metrado-workbook-block-main {
+  background: #eef4ff;
+  color: #0b2b76;
+}
+
+.metrado-workbook-block-tab.is-acero-mode .metrado-workbook-block-main strong {
+  background: #0b2b76;
+}
+
+.metrado-workbook-summary {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  font-size: 1rem !important;
+  justify-content: flex-start;
+}
+
+.metrado-workbook-block-strip {
+  display: grid;
+  grid-template-columns: 1.65rem minmax(0, 1fr) 1.65rem;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  border-right: 1px solid #687384;
+  border-left: 1px solid #687384;
+}
+
+.metrado-workbook-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.65rem;
+  border-right: 1px solid #8b98aa !important;
+  border-left: 1px solid #8b98aa !important;
+  background: #eef3fb !important;
+  color: #002070 !important;
+  font-size: 0.92rem !important;
+  line-height: 1 !important;
+}
+
+.metrado-workbook-arrow:hover {
+  background: #fff !important;
+  color: #009cde !important;
+}
+
+.metrado-workbook-blocks {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.metrado-workbook-blocks::-webkit-scrollbar {
+  display: none;
+}
+
+.metrado-workbook-block-tab {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) 3.25rem;
+  flex: 0 0 12.6rem;
+  min-width: 0;
+  border-right: 1px solid #718097;
+}
+
+.metrado-workbook-block-tab.is-active {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  box-shadow: 2px 0 0 #fff, 3px 0 0 #687384;
+}
+
+.metrado-workbook-block-main {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: 0.25rem;
+  align-items: center;
+  padding: 0.12rem 0.35rem;
+  text-align: left;
+}
+
+.metrado-workbook-block-main strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.2rem;
+  background: #1d60d6;
+  color: #fff;
+  font-size: 0.68rem;
+}
+
+.metrado-workbook-block-main span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.metrado-workbook-block-mode {
+  background: #eef3fb !important;
+  color: #0b2b76 !important;
+}
+
+.metrado-workbook-block-mode.is-active {
+  background: #0b2b76 !important;
+  color: #fff !important;
+  box-shadow: inset 0 -3px 0 #56a8ff;
+}
+
+.metrado-workbook-add-block {
+  flex: 0 0 2.4rem;
+  font-size: 1.15rem !important;
+  color: #0b2b76 !important;
+}
+
+.metrado-workbook-platformado {
+  position: sticky;
+  right: 0;
+  z-index: 4;
+  flex: 0 0 7.2rem;
+  border-left: 1px solid #718097 !important;
+}
+
+.metrado-workbook-tools {
+  display: flex;
+  align-items: stretch;
+  flex: 0 0 auto;
+  border-left: 1px solid #687384;
+  background: #737982;
+}
+
+.metrado-workbook-block-actions {
+  min-width: max-content;
+}
+
+.metrado-workbook-filter-menu {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.metrado-workbook-tools button {
+  min-width: 4.8rem;
+  background: #eef3fb;
+  color: #24405f;
+}
+
+.metrado-workbook-tools button.is-active {
+  background: #fff;
+  color: #0b2b76;
+}
+
+.metrado-workbook-tools .metrado-workbook-add-block {
+  flex: 0 0 auto;
+  min-width: 5.3rem;
+  background: #149ed8 !important;
+  color: #ffffff !important;
+  font-size: 0.68rem !important;
+}
+
+.metrado-workbook-tools .metrado-workbook-add-block:hover {
+  background: #087fb6 !important;
+  color: #ffffff !important;
+}
+
+.metrado-workbook-tools .metrado-workbook-delete-block {
+  min-width: 4.9rem;
+  background: #fff5f5;
+  color: #b31313;
+}
+
+.metrado-workbook-tools .metrado-workbook-delete-block:hover:not(:disabled) {
+  background: #ffe1e1;
+  color: #8f0f0f;
+}
+
+.metrado-workbook-tools .metrado-workbook-delete-block:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.metrado-workbook-filter-menu .metrado-block-filter-panel {
+  top: calc(100% + 0.18rem);
+  right: 0;
+  width: min(34rem, calc(100vw - 7rem));
+  color: #002070;
+  text-align: left;
+}
+
+.metrado-workbook-standalone {
+  border: 2px solid #0029d1;
+  border-bottom: 0;
+  overflow: hidden;
+}
+
+.metrado-detail-context-row th {
+  background: #f8fbff !important;
+  color: #0b2b76 !important;
+  font-size: 0.72rem !important;
+  text-align: left !important;
+  text-transform: none !important;
+  padding: 0.32rem 0.5rem !important;
+}
+
+.metrado-workspace.is-general-mode {
+  --metrado-mode-color: #008f67;
+  --metrado-mode-bg: #ecfff8;
+  --metrado-mode-soft: #d7f7ea;
+  --metrado-mode-border: #00a878;
+}
+
+.metrado-workspace.is-acero-mode {
+  --metrado-mode-color: #0b2b76;
+  --metrado-mode-bg: #eef4ff;
+  --metrado-mode-soft: #dceaff;
+  --metrado-mode-border: #1d60d6;
+}
+
+.metrado-workspace.is-general-mode,
+.metrado-workspace.is-acero-mode {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 0;
+  height: clamp(28rem, calc(100vh - 15rem), 52rem);
+  min-height: 0;
+  overflow: hidden;
+}
+
+.metrado-workspace.is-acero-mode .metrado-detail-context-row th,
+.metrado-workspace.is-general-mode .metrado-detail-context-row th {
+  background: var(--metrado-mode-bg) !important;
+}
+
+.metrado-detail-fixed-commandbar {
+  position: relative;
+  z-index: 32;
+  margin: 0;
+  border: 2px solid #0029d1;
+  border-bottom: 0;
+  background: var(--metrado-mode-bg, #f8fbff);
+}
+
+.metrado-detail-fixed-commandbar .metrado-detail-dynamic-header {
+  padding: 0.35rem 0.45rem;
+}
+
+.metrado-detail-scroll-rail {
+  position: sticky;
+  bottom: 0;
+  z-index: 36;
+  height: 1.05rem;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-top: 1px solid #b8c6da;
+  border-right: 2px solid #0029d1;
+  border-bottom: 2px solid #0029d1;
+  border-left: 2px solid #0029d1;
+  background: linear-gradient(180deg, #f7fbff 0%, #e7eef8 100%);
+  scrollbar-color: #7b8592 #e7edf6;
+  scrollbar-width: thin;
+}
+
+.metrado-detail-scroll-rail > div {
+  height: 1px;
+}
+
+.metrado-detail-scroll-rail::-webkit-scrollbar {
+  height: 0.75rem;
+}
+
+.metrado-detail-scroll-rail::-webkit-scrollbar-track {
+  background: #e7edf6;
+}
+
+.metrado-detail-scroll-rail::-webkit-scrollbar-thumb {
+  border: 2px solid #e7edf6;
+  border-radius: 999px;
+  background: #7b8592;
+}
+
+.metrado-detail-scrollpane {
+  border-bottom: 0;
+  max-height: none;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.metrado-detail-grid thead tr:nth-child(3) th {
+  top: 5.25rem;
+}
+
+.metrado-detail-dynamic-header {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.82fr) minmax(36rem, 1.9fr);
+  gap: 0.45rem;
+  align-items: stretch;
+  min-height: 3rem;
+  border-left: 0.35rem solid var(--metrado-mode-border, #149ed8);
+  border-bottom: 1px solid #bfd0e5;
+  background: linear-gradient(
+    90deg,
+    var(--metrado-mode-bg, #f8fbff) 0%,
+    #fff 72%
+  );
+  padding: 0.28rem 0.45rem;
+}
+
+.metrado-detail-dynamic-title {
+  display: grid;
+  align-content: center;
+  gap: 0.08rem;
+  min-width: 0;
+}
+
+.metrado-detail-dynamic-title strong {
+  color: var(--metrado-mode-color, #008f67);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.metrado-detail-mode-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 1.35rem;
+  border: 1px solid var(--metrado-mode-border, #149ed8);
+  background: var(--metrado-mode-color, #008f67);
+  color: #fff !important;
+  letter-spacing: 0;
+  padding: 0.12rem 0.45rem;
+  box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.22);
+}
+
+.metrado-detail-dynamic-title span {
+  overflow: hidden;
+  color: #002070;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.metrado-detail-dynamic-title em {
+  color: var(--metrado-mode-color, #52647e);
+  font-size: 0.68rem;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.metrado-detail-dynamic-controls {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  gap: 0.34rem;
+  min-width: 0;
+}
+
+.metrado-detail-control-group {
+  display: inline-flex;
+  align-items: stretch;
+  min-width: 0;
+  border: 1px solid #b6c5d8;
+  background: #ffffff;
+}
+
+.metrado-detail-control-group > button,
+.metrado-detail-control-group > select {
+  border: 0 !important;
+  border-right: 1px solid #b6c5d8 !important;
+}
+
+.metrado-detail-control-group > button:last-child,
+.metrado-detail-control-group > select:last-child {
+  border-right: 0 !important;
+}
+
+.metrado-detail-nav-group {
+  flex: 1 1 28rem;
+}
+
+.metrado-detail-view-group {
+  flex: 0 0 auto;
+}
+
+.metrado-detail-dynamic-controls button,
+.metrado-detail-dynamic-controls select {
+  min-height: 1.85rem;
+  border: 1px solid #aebbd0;
+  background: #fff;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.18rem 0.45rem;
+}
+
+.metrado-detail-dynamic-controls select {
+  flex: 1 1 18rem;
+  min-width: 10rem;
+  cursor: pointer;
+  background: #ffffff;
+}
+
+.metrado-detail-dynamic-controls button:hover,
+.metrado-detail-dynamic-controls select:hover {
+  border-color: var(--color-primary);
+  background: #e9f7ff;
+  color: var(--color-primary);
+}
+
+.metrado-detail-dynamic-controls button.is-active {
+  border-color: var(--metrado-mode-border, #002070);
+  background: var(--metrado-mode-color, #002070);
+  color: #fff;
+  box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.26);
+}
+
+.metrado-detail-dynamic-controls .is-primary-action {
+  flex: 0 0 auto;
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
+  min-width: 6.5rem;
+}
+
+.metrado-detail-dynamic-controls .is-primary-action:hover {
+  border-color: #007fb8;
+  background: #007fb8;
+  color: #fff;
+}
+
+.metrado-detail-dynamic-controls .is-danger-action {
+  flex: 0 0 auto;
+  min-width: 6.5rem;
+  border-color: #e7a8a8;
+  background: #fff7f7;
+  color: #b51d1d;
+}
+
+.metrado-detail-dynamic-controls .is-danger-action:hover:not(:disabled) {
+  border-color: #d92a2a;
+  background: #ffe9e9;
+  color: #9f1414;
+}
+
+.metrado-detail-dynamic-controls .is-danger-action:disabled {
+  border-color: #d7dee9;
+  background: #f3f6fb;
+  color: #8b98ab;
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.metrado-detail-filter-menu {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+}
+
+.metrado-detail-filter-menu .metrado-block-filter-panel {
+  top: calc(100% + 0.2rem);
+  right: 0;
+  width: min(34rem, calc(100vw - 7rem));
+}
+
+.metrado-sheet-command {
+  display: none;
+}
+
+.metrado-block-creator {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 24, 38, 0.22);
+}
+
+.metrado-block-creator-card {
+  width: min(24rem, calc(100vw - 2rem));
+  border: 1px solid #8f9bad;
+  background: #f7f9fc;
+  box-shadow: 0 1rem 2rem rgba(15, 24, 38, 0.22);
+}
+
+.metrado-block-creator-card header,
+.metrado-block-creator-card footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: center;
+  border-bottom: 1px solid #c6d1df;
+  padding: 0.45rem 0.55rem;
+}
+
+.metrado-block-creator-card footer {
+  border-top: 1px solid #c6d1df;
+  border-bottom: 0;
+  justify-content: flex-end;
+}
+
+.metrado-block-creator-card strong {
+  color: #002070;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+}
+
+.metrado-block-creator-card label {
+  display: grid;
+  gap: 0.2rem;
+  color: #34445f;
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.55rem;
+  text-transform: uppercase;
+}
+
+.metrado-block-creator-card input[type='text'],
+.metrado-block-creator-card input:not([type]) {
+  height: 1.8rem;
+  border: 1px solid #b7c3d5;
+  color: #002070;
+  font-weight: 800;
+  padding: 0.25rem 0.45rem;
+}
+
+.metrado-block-creator-checks {
+  display: flex;
+  gap: 0.8rem;
+  padding: 0 0.55rem 0.55rem;
+}
+
+.metrado-block-creator-checks label {
+  display: inline-flex;
+  grid-template-columns: none;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0;
+  text-transform: none;
+}
+
+.metrado-block-creator-card button {
+  border: 1px solid #9fb0c8;
+  background: #fff;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 900;
+  min-height: 1.6rem;
+  padding: 0.2rem 0.55rem;
+}
+
+.metrado-block-creator-card footer button:first-child {
+  border-color: #149ed8;
+  background: #149ed8;
+  color: #fff;
+}
+
+.metrado-tabs {
+  gap: 0;
+  overflow: visible;
+  border: 0;
+  border-bottom: 0;
+  margin: 0.2rem 0 0;
+  align-items: flex-end;
+  background: #757a82;
+  padding: 0.18rem 0.2rem 0;
+}
+
+.metrado-tabs {
+  scrollbar-width: thin;
+}
+
+.metrado-tabs button {
+  border: 1px solid #6d788a;
+  border-bottom: 0;
+  border-radius: 0.15rem 0.15rem 0 0;
+  min-width: 6.7rem;
+  background: #dfe6f2;
+  color: #003a8c;
+  padding: 0.42rem 0.65rem;
+}
+
+.metrado-tabs button.is-active {
+  background: #fff;
+  color: #009cde;
+  transform: translateY(1px);
+}
+
+.metrado-tabs button.is-secondary {
+  background: #edf1f6;
+  color: #24405f;
+}
+
+.metrado-tabs button.is-secondary.is-active {
+  background: #fff;
+  color: #0b2b76;
+}
+
+.metrado-blocks {
+  display: grid;
+  grid-template-columns: minmax(18rem, 1fr);
+  gap: 0.25rem;
+  border: 1px solid #9aa4b3;
+  background: #e9edf2;
+  margin: 0 0 0.45rem;
+  padding: 0.32rem;
+}
+
+.metrado-blocks-label {
+  min-height: 1.8rem;
+  color: #42516a;
+  font-size: 0.72rem;
+  font-weight: 900;
+  padding: 0 0.3rem;
+  text-transform: uppercase;
+}
+
+.metrado-block-selector {
+  display: grid;
+  grid-template-columns: auto auto minmax(12rem, 1fr) auto;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.metrado-block-selector select {
+  width: 100%;
+  min-width: 0;
+  height: 1.9rem;
+  border: 1px solid #8f9bad;
+  background: #fff;
+  color: #002070;
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 0.22rem 0.45rem;
+}
+
+.metrado-blocks .metrado-block-step {
+  border: 1px solid #8f9bad;
+  border-radius: 0;
+  background: #fff;
+  color: #0b2b76;
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 900;
+  min-height: 1.9rem;
+  padding: 0.22rem 0.55rem;
+  white-space: nowrap;
+}
+
+.metrado-blocks .metrado-block-step:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  background: #e9f7ff;
+  color: var(--color-primary);
+}
+
+.metrado-blocks .metrado-block-step:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.metrado-block-shortcuts {
+  display: flex;
+  gap: 0.22rem;
+  overflow-x: auto;
+  padding-bottom: 0.1rem;
+  scrollbar-width: thin;
+}
+
+.metrado-block-shortcuts button {
+  flex: 0 0 auto;
+  min-width: 2.35rem;
+  min-height: 1.55rem;
+  border: 1px solid #a7b2c3;
+  border-radius: 0;
+  background: #fff;
+  color: #0b2b76;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 900;
+  padding: 0.18rem 0.35rem;
+}
+
+.metrado-block-shortcuts button:hover {
+  border-color: var(--color-primary);
+  background: #f5fbff;
+}
+
+.metrado-block-shortcuts button.is-active {
+  border-color: #0b2b76;
+  background: #0b2b76;
+  color: #fff;
+}
+
+.metrado-table-wrap {
+  border: 2px solid #0029d1;
+  border-top: 2px solid #0029d1;
+  max-height: calc(100vh - 11.9rem);
+  background: #fff;
+}
+
+.metrado-table {
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.metrado-table th {
+  background: #e7e7e7;
+  border-bottom: 1px solid #111;
+  color: #000;
+  font-size: 0.68rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.metrado-summary-title-row th {
+  border-top: 0;
+  background: #e2e7ef;
+  color: #002070;
+  font-size: 0.9rem;
+  height: 2.1rem;
+  padding: 0;
+  text-transform: none;
+}
+
+.metrado-summary-title-row th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 38 !important;
+  width: 25rem;
+  min-width: 25rem;
+  background: #e2e7ef;
+  box-shadow: 1px 0 0 #111;
+  color: #009cde;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.metrado-summary-title-row th:nth-child(2) {
+  background: #d7dde7;
+  color: #002070;
+  letter-spacing: 0;
+}
+
+.metrado-summary-block-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  height: 2.1rem;
+  min-width: 0;
+  padding: 0 0.55rem;
+  overflow: visible;
+  position: relative;
+}
+
+.metrado-summary-block-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: max-content;
+}
+
+.metrado-summary-block-title strong {
+  flex: 0 0 auto;
+  color: #003a8c;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.metrado-summary-block-title span {
+  flex: 0 0 auto;
+  border: 1px solid #8d98aa;
+  background: #eef3fb;
+  color: #002070;
+  font-size: 0.66rem;
+  font-weight: 900;
+  line-height: 1;
+  padding: 0.28rem 0.5rem;
+  text-transform: uppercase;
+}
+
+.metrado-summary-block-toolbar button {
+  flex: 0 0 auto;
+  min-height: 1.45rem;
+  border: 1px solid #aebbd0;
+  background: #ffffff;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.66rem;
+  font-weight: 900;
+  padding: 0.22rem 0.5rem;
+  white-space: nowrap;
+}
+
+.metrado-summary-block-toolbar button:hover {
+  border-color: #149ed8;
+  background: #e9f7ff;
+  color: #0075b8;
+}
+
+.metrado-summary-fixed-tools {
+  position: sticky !important;
+  right: 0;
+  z-index: 36 !important;
+  width: 8.4rem;
+  min-width: 8.4rem;
+  overflow: visible;
+  background: #d7dde7 !important;
+  box-shadow: -1px 0 0 #111;
+  padding: 0 !important;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.metrado-summary-fixed-tools-empty {
+  color: #002070;
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.metrado-summary-fixed-tools .metrado-summary-filter-menu {
+  display: inline-flex;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.metrado-summary-fixed-actions {
+  position: absolute;
+  top: 50%;
+  right: 0.35rem;
+  z-index: 46;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  flex: 0 0 auto;
+  min-width: max-content;
+  width: auto;
+  min-height: 1.58rem;
+  height: 1.58rem;
+  padding: 0.12rem;
+  background: #eef2f7;
+  border: 1px solid #9aa7b8;
+  box-shadow: -0.85rem 0 0.75rem rgba(215, 221, 231, 0.96);
+  transform: translateY(-50%);
+}
+
+.metrado-summary-mode-group,
+.metrado-summary-block-group {
+  display: inline-flex;
+  align-items: center;
+  height: 1.5rem;
+  min-width: 0;
+  border: 1px solid #98a6ba;
+  background: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.metrado-summary-filter-menu {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.metrado-summary-fixed-actions button {
+  flex: 0 0 auto;
+  height: 1.38rem;
+  min-height: 1.38rem;
+  border: 0;
+  border-left: 0;
+  background: transparent;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.61rem;
+  font-weight: 900;
+  line-height: 1;
+  padding: 0.18rem 0.52rem;
+  white-space: nowrap;
+}
+
+.metrado-summary-mode-group button + button,
+.metrado-summary-block-group > button,
+.metrado-summary-block-group .metrado-summary-filter-menu + button {
+  border-left: 1px solid #98a6ba;
+}
+
+.metrado-summary-fixed-actions .metrado-summary-open-general,
+.metrado-summary-fixed-actions .metrado-summary-open-acero {
+  min-width: 4.15rem;
+}
+
+.metrado-summary-fixed-actions button:hover:not(:disabled) {
+  border-color: #149ed8;
+  background: #e9f7ff;
+  color: #0075b8;
+}
+
+.metrado-summary-fixed-actions .metrado-summary-add-block {
+  background: #149ed8;
+  color: #ffffff;
+  min-width: 4.6rem;
+}
+
+.metrado-summary-fixed-actions .metrado-summary-open-general {
+  background: #008f67;
+  color: #ffffff;
+}
+
+.metrado-summary-fixed-actions .metrado-summary-open-general:hover {
+  background: #007351;
+  color: #ffffff;
+}
+
+.metrado-summary-fixed-actions .metrado-summary-open-acero {
+  background: transparent;
+  color: #0b2b76;
+}
+
+.metrado-summary-fixed-actions .metrado-summary-open-acero:hover {
+  background: #dceaff;
+  color: #0b2b76;
+}
+
+.metrado-summary-fixed-actions .metrado-summary-add-block:hover {
+  background: #087fb6;
+  color: #ffffff;
+}
+
+.metrado-summary-fixed-actions .metrado-summary-delete-block {
+  background: #fff6f6;
+  color: #b31313;
+  min-width: 4.15rem;
+}
+
+.metrado-summary-fixed-actions
+  .metrado-summary-delete-block:hover:not(:disabled) {
+  background: #ffe1e1;
+  color: #8f0f0f;
+}
+
+.metrado-summary-fixed-actions .metrado-summary-delete-block:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.metrado-summary-filter-trigger {
+  flex: 0 0 auto;
+  height: 1.38rem;
+  border: 0;
+  border-left: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.61rem;
+  font-weight: 900;
+  padding: 0 1.35rem 0 0.52rem;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.metrado-summary-fixed-actions .metrado-summary-filter-trigger {
+  min-width: 6.35rem;
+}
+
+.metrado-summary-filter-trigger::after {
+  content: '';
+  position: absolute;
+  right: 0.48rem;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-left: 0.22rem solid transparent;
+  border-right: 0.22rem solid transparent;
+  border-top: 0.3rem solid #002070;
+  transform: translateY(-35%);
+}
+
+.metrado-summary-filter-trigger:hover {
+  border-color: #149ed8;
+  background: #fff;
+  color: #149ed8;
+}
+
+.metrado-summary-filter-menu .metrado-block-filter-panel {
+  top: calc(100% + 0.18rem);
+  right: 0;
+  width: min(34rem, calc(100vw - 7rem));
+  color: #002070;
+  text-align: left;
+}
+
+.metrado-summary-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-summary-title-row)
+  th:last-child,
+.metrado-summary-grid tbody td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 8;
+  box-shadow: -1px 0 0 #111;
+}
+
+.metrado-summary-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-summary-title-row)
+  th:last-child {
+  z-index: 30;
+}
+
+.metrado-summary-title-row th:first-child > button {
+  width: 100%;
+  height: 2.1rem;
+  border: 0;
+  background: transparent;
+  color: #009cde;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 900;
+  text-align: left;
+  padding: 0 1.05rem;
+}
+
+.metrado-summary-title-row th:first-child > button.is-active {
+  color: #003a8c;
+}
+
+.metrado-summary-block-nav {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  height: 2.1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+.metrado-summary-block-tab {
+  display: grid;
+  grid-template-columns: minmax(6.4rem, 1fr) 3.25rem;
+  flex: 0 0 12.2rem;
+  border-right: 1px solid #6d788a;
+}
+
+.metrado-summary-block-tab > button,
+.metrado-summary-add-block,
+.metrado-summary-platformado {
+  border: 0;
+  border-left: 1px solid #9facbf;
+  background: #dfe6f2;
+  color: #003a8c;
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+
+.metrado-summary-block-tab > button:first-child {
+  display: grid;
+  grid-template-columns: 1.7rem minmax(0, 1fr);
+  gap: 0.24rem;
+  align-items: center;
+  padding: 0.18rem 0.35rem;
+  text-align: left;
+}
+
+.metrado-summary-block-tab strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.25rem;
+  background: #1d60d6;
+  color: #fff;
+  font-size: 0.68rem;
+}
+
+.metrado-summary-block-tab span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.metrado-summary-block-tab.is-active > button:first-child,
+.metrado-summary-block-tab > button:hover,
+.metrado-summary-add-block:hover,
+.metrado-summary-platformado:hover {
+  background: #fff;
+  color: #009cde;
+}
+
+.metrado-summary-block-tab .is-acero {
+  background: #eef3fb;
+  color: #0b2b76;
+}
+
+.metrado-summary-block-tab .is-acero.is-active {
+  background: #0b2b76;
+  color: #fff;
+}
+
+.metrado-summary-add-block {
+  flex: 0 0 2.5rem;
+  font-size: 1.15rem;
+}
+
+.metrado-summary-platformado {
+  position: sticky;
+  right: 0;
+  z-index: 5;
+  flex: 0 0 7.3rem;
+  border-left: 1px solid #6d788a;
+}
+
+.metrado-summary-platformado.is-active {
+  background: #fff;
+  color: #009cde;
+}
+
+.metrado-table th,
+.metrado-table td {
+  border-right: 1px dotted #111;
+  border-bottom: 1px dotted #111;
+  padding: 0.28rem 0.35rem;
+  line-height: 1.15;
+}
+
+.metrado-shell.is-comfortable .metrado-table th,
+.metrado-shell.is-comfortable .metrado-table td {
+  padding: 0.45rem 0.5rem;
+}
+
+.metrado-shell.is-comfortable .metrado-table td {
+  font-size: 0.78rem;
+}
+
+.metrado-shell.is-comfortable .metrado-table-wrap {
+  max-height: calc(100vh - 22rem);
+}
+
+.metrado-table td {
+  background: #fff;
+  color: #001f58;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.7rem;
+}
+
+.metrado-summary-grid {
+  width: max(72rem, calc(33.4rem + (var(--metrado-block-count, 12) * 8.6rem)));
+  min-width: max(
+    72rem,
+    calc(33.4rem + (var(--metrado-block-count, 12) * 8.6rem))
+  );
+}
+
+.metrado-summary-grid .metrado-col-item {
+  width: 6.2rem;
+}
+
+.metrado-summary-grid .metrado-col-description {
+  width: 15rem;
+}
+
+.metrado-summary-grid .metrado-col-unit {
+  width: 3.8rem;
+}
+
+.metrado-summary-grid .metrado-col-block {
+  width: 8.6rem;
+}
+
+.metrado-summary-grid .metrado-col-total {
+  width: 8.4rem;
+}
+
+.metrado-summary-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-summary-title-row)
+  th:nth-child(1),
+.metrado-summary-grid tbody td:nth-child(1) {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  width: 6.2rem;
+  min-width: 6.2rem;
+}
+
+.metrado-summary-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-summary-title-row)
+  th:nth-child(2),
+.metrado-summary-grid tbody td:nth-child(2) {
+  position: sticky;
+  left: 6.2rem;
+  z-index: 4;
+  width: 15rem;
+  min-width: 15rem;
+}
+
+.metrado-summary-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-summary-title-row)
+  th:nth-child(3),
+.metrado-summary-grid tbody td:nth-child(3) {
+  position: sticky;
+  left: 21.2rem;
+  z-index: 4;
+  width: 3.8rem;
+  min-width: 3.8rem;
+}
+
+.metrado-summary-grid tbody td:nth-child(1),
+.metrado-summary-grid tbody td:nth-child(2),
+.metrado-summary-grid tbody td:nth-child(3) {
+  background: #fff;
+  box-shadow: 1px 0 0 #111;
+}
+
+.metrado-summary-grid tbody tr.is-heading td:nth-child(1),
+.metrado-summary-grid tbody tr.is-heading td:nth-child(2),
+.metrado-summary-grid tbody tr.is-heading td:nth-child(3) {
+  background: #ddebfa;
+}
+
+.metrado-summary-grid tbody tr.level-4:not(.is-heading) td:nth-child(1),
+.metrado-summary-grid tbody tr.level-4:not(.is-heading) td:nth-child(2),
+.metrado-summary-grid tbody tr.level-4:not(.is-heading) td:nth-child(3) {
+  background: #fff4c9;
+}
+
+.metrado-summary-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-summary-title-row)
+  th:nth-child(1),
+.metrado-summary-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-summary-title-row)
+  th:nth-child(2),
+.metrado-summary-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-summary-title-row)
+  th:nth-child(3) {
+  z-index: 37 !important;
+  background: #e6e6e6;
+  box-shadow: 1px 0 0 #111;
+}
+
+.metrado-detail-grid {
+  width: 112rem;
+  min-width: 112rem;
+}
+
+.metrado-general-grid {
+  width: 120rem;
+  min-width: 120rem;
+}
+
+.metrado-detail-grid .metrado-detail-col-item {
+  width: 7.2rem;
+}
+
+.metrado-detail-grid .metrado-detail-col-description {
+  width: 20rem;
+}
+
+.metrado-detail-grid .metrado-detail-col-small {
+  width: 6rem;
+}
+
+.metrado-detail-grid .metrado-detail-col-medium {
+  width: 7.3rem;
+}
+
+.metrado-detail-grid .metrado-detail-col-status {
+  width: 8rem;
+}
+
+.metrado-detail-grid .metrado-detail-col-observation {
+  width: 10rem;
+}
+
+.metrado-detail-grid .metrado-detail-col-action {
+  width: 8.5rem;
+}
+
+.metrado-detail-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-detail-context-row)
+  th:nth-child(1),
+.metrado-detail-grid tbody tr.metrado-line-row td:nth-child(1),
+.metrado-detail-grid tbody tr.metrado-sheet-item-row td:nth-child(1),
+.metrado-detail-grid tbody tr.metrado-attachment-row td:nth-child(1) {
+  position: sticky;
+  left: 0;
+  z-index: 22;
+  width: 7.2rem;
+  min-width: 7.2rem;
+  background: #fff;
+  background-clip: padding-box;
+}
+
+.metrado-detail-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-detail-context-row)
+  th:nth-child(2),
+.metrado-detail-grid tbody tr.metrado-line-row td:nth-child(2),
+.metrado-detail-grid tbody tr.metrado-sheet-item-row td:nth-child(2) {
+  position: sticky;
+  left: 7.2rem;
+  z-index: 22;
+  width: 20rem;
+  min-width: 20rem;
+  background: #fff;
+  background-clip: padding-box;
+}
+
+.metrado-general-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-detail-context-row)
+  th:nth-child(3),
+.metrado-general-grid tbody tr.metrado-line-row td:nth-child(3),
+.metrado-general-grid tbody tr.metrado-sheet-item-row td:nth-child(3) {
+  position: sticky;
+  left: 27.2rem;
+  z-index: 22;
+  width: 6rem;
+  min-width: 6rem;
+  background: #fff;
+  background-clip: padding-box;
+}
+
+.metrado-detail-grid tbody tr.metrado-line-row td:nth-child(1),
+.metrado-detail-grid tbody tr.metrado-line-row td:nth-child(2),
+.metrado-detail-grid tbody tr.metrado-sheet-item-row td:nth-child(1),
+.metrado-detail-grid tbody tr.metrado-sheet-item-row td:nth-child(2),
+.metrado-general-grid tbody tr.metrado-line-row td:nth-child(3),
+.metrado-general-grid tbody tr.metrado-sheet-item-row td:nth-child(3),
+.metrado-detail-grid tbody tr.metrado-attachment-row td:nth-child(1) {
+  box-shadow: 1px 0 0 #111;
+}
+
+.metrado-detail-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-detail-context-row)
+  th:nth-child(1),
+.metrado-detail-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-detail-context-row)
+  th:nth-child(2),
+.metrado-general-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-detail-context-row)
+  th:nth-child(3) {
+  z-index: 48 !important;
+  background: #e6e6e6 !important;
+  background-clip: padding-box;
+}
+
+.metrado-detail-grid tbody tr.metrado-line-row td:nth-child(1),
+.metrado-detail-grid tbody tr.metrado-line-row td:nth-child(2),
+.metrado-general-grid tbody tr.metrado-line-row td:nth-child(3) {
+  background: #fff !important;
+}
+
+.metrado-detail-grid tbody tr.metrado-line-row:hover td:nth-child(1),
+.metrado-detail-grid tbody tr.metrado-line-row:hover td:nth-child(2),
+.metrado-general-grid tbody tr.metrado-line-row:hover td:nth-child(3),
+.metrado-detail-grid tbody tr.metrado-line-row.is-selected td:nth-child(1),
+.metrado-detail-grid tbody tr.metrado-line-row.is-selected td:nth-child(2),
+.metrado-general-grid tbody tr.metrado-line-row.is-selected td:nth-child(3) {
+  background: #fff5c8 !important;
+}
+
+.metrado-table tbody tr:hover td,
+.metrado-table tbody tr.is-selected td {
+  background: #fff5c8;
+}
+
+.metrado-table tbody tr.is-insertion-target td {
+  background: #fff0b8 !important;
+  box-shadow: inset 0 2px 0 #009c70, inset 0 -2px 0 #009c70;
+}
+
+.metrado-table tbody tr.is-insertion-target td:first-child {
+  box-shadow: inset 0.28rem 0 0 #009c70, inset 0 2px 0 #009c70,
+    inset 0 -2px 0 #009c70;
+}
+
+.metrado-table .is-heading td {
+  background: #ddebfa;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.metrado-table .is-heading.level-1 td {
+  color: #ff0000;
+}
+
+.metrado-table .is-heading.level-2 td {
+  color: #009688;
+}
+
+.metrado-table .is-heading.level-3 td {
+  color: #0068ff;
+}
+
+.metrado-table .is-heading.level-4 td {
+  color: #ff00ff;
+}
+
+.metrado-table .is-heading.level-5 td,
+.metrado-table .is-heading.level-6 td {
+  color: #111827;
+}
+
+.metrado-sheet-item-row td {
+  background: #ddebfa !important;
+  color: #0068ff;
+  cursor: pointer;
+  font-weight: 900;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: normal;
+}
+
+.metrado-sheet-item-row.is-selected td,
+.metrado-sheet-item-row.is-selected td:nth-child(1),
+.metrado-sheet-item-row.is-selected td:nth-child(2),
+.metrado-general-grid .metrado-sheet-item-row.is-selected td:nth-child(3) {
+  background: #fff1b8 !important;
+  box-shadow: inset 0 0 0 2px #149ed8;
+}
+
+.metrado-sheet-item-row td:nth-child(1),
+.metrado-sheet-item-row td:nth-child(2),
+.metrado-general-grid .metrado-sheet-item-row td:nth-child(3) {
+  z-index: 24;
+  background: #ddebfa !important;
+}
+
+.metrado-sheet-item-row td:nth-child(1),
+.metrado-sheet-item-row td:nth-child(2) {
+  padding-left: 0.55rem;
+}
+
+.metrado-sheet-item-row.level-1 td {
+  color: #ff0000;
+}
+
+.metrado-sheet-item-row.level-2 td {
+  color: #009688;
+}
+
+.metrado-sheet-item-row.level-3 td {
+  color: #0068ff;
+}
+
+.metrado-sheet-item-row.level-4 td {
+  color: #ff00ff;
+}
+
+.metrado-sheet-item-row td:nth-child(2) {
+  text-align: left;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.metrado-detail-grid tbody tr:not(.metrado-sheet-item-row) td:nth-child(1),
+.metrado-detail-grid tbody tr:not(.metrado-sheet-item-row) td:nth-child(2) {
+  text-align: left;
+}
+
+.metrado-summary-grid tbody tr:not(.is-heading) td {
+  height: 2.25rem;
+}
+
+.metrado-summary-grid tbody tr:not(.is-heading) td:nth-child(2) {
+  text-align: left;
+  white-space: normal;
+}
+
+.metrado-summary-grid tbody tr:not(.is-heading) td:nth-child(n + 4) {
+  color: #001b74;
+}
+
+.metrado-summary-grid tbody tr.level-4:not(.is-heading) td {
+  background: #fff4c9;
+}
+
+.metrado-summary-grid tbody tr.level-1 td:nth-child(1),
+.metrado-summary-grid tbody tr.level-1 td:nth-child(2),
+.metrado-summary-grid tbody tr.level-1 td:nth-child(3) {
+  color: #ff0000;
+  font-weight: 900;
+}
+
+.metrado-summary-grid tbody tr.level-2 td:nth-child(1),
+.metrado-summary-grid tbody tr.level-2 td:nth-child(2),
+.metrado-summary-grid tbody tr.level-2 td:nth-child(3) {
+  color: #009688;
+  font-weight: 900;
+}
+
+.metrado-summary-grid tbody tr.level-3 td:nth-child(1),
+.metrado-summary-grid tbody tr.level-3 td:nth-child(2),
+.metrado-summary-grid tbody tr.level-3 td:nth-child(3) {
+  color: #0068ff;
+  font-weight: 900;
+}
+
+.metrado-summary-grid tbody tr.level-4 td:nth-child(1),
+.metrado-summary-grid tbody tr.level-4 td:nth-child(2),
+.metrado-summary-grid tbody tr.level-4 td:nth-child(3) {
+  color: #ff00ff;
+  font-weight: 900;
+}
+
+.metrado-summary-grid tbody tr.level-5:not(.is-heading) td,
+.metrado-summary-grid tbody tr.level-6:not(.is-heading) td {
+  background: #fff;
+}
+
+.metrado-table td:nth-child(n + 4),
+.metrado-table th:nth-child(n + 4) {
+  text-align: center;
+}
+
+.metrado-table td:last-child {
+  color: #001b74;
+  font-weight: 900;
+}
+
+.metrado-table tbody td,
+.metrado-table tbody td input,
+.metrado-table tbody td select,
+.metrado-config-panel input,
+.metrado-config-panel select {
+  text-align: left;
+}
+
+.metrado-summary-grid tbody td:nth-child(n + 4),
+.metrado-summary-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-summary-title-row)
+  th:nth-child(n + 4) {
+  text-align: center;
+}
+
+.metrado-summary-grid tbody td:nth-child(1),
+.metrado-summary-grid tbody td:nth-child(2),
+.metrado-summary-grid tbody td:nth-child(3) {
+  text-align: left;
+}
+
+.metrado-detail-grid tbody td:nth-child(n + 3):nth-child(-n + 10),
+.metrado-detail-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-detail-context-row)
+  th:nth-child(n + 3):nth-child(-n + 10) {
+  text-align: center;
+}
+
+.metrado-detail-grid tbody td:nth-child(11),
+.metrado-detail-grid tbody td:nth-child(12),
+.metrado-detail-grid tbody td:nth-child(11) select,
+.metrado-detail-grid tbody td:nth-child(12) input {
+  text-align: left;
+}
+
+.metrado-general-grid tbody td:nth-child(11),
+.metrado-general-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-detail-context-row)
+  th:nth-child(11) {
+  text-align: center;
+}
+
+.metrado-general-grid tbody td:nth-child(12),
+.metrado-general-grid tbody td:nth-child(13),
+.metrado-general-grid tbody td:nth-child(12) select,
+.metrado-general-grid tbody td:nth-child(13) input {
+  text-align: left;
+}
+
+.metrado-general-grid tbody td:nth-child(14),
+.metrado-general-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-detail-context-row)
+  th:nth-child(14) {
+  text-align: center;
+}
+
+.metrado-detail-grid tbody td:nth-child(13),
+.metrado-detail-grid
+  thead
+  tr:not(.metrado-workbook-nav-row):not(.metrado-detail-context-row)
+  th:nth-child(13) {
+  text-align: center;
+}
+
+.metrado-rebar-grid tbody td:nth-child(3),
+.metrado-rebar-grid tbody td:nth-child(4),
+.metrado-rebar-grid tbody td:nth-child(3) input,
+.metrado-rebar-grid tbody td:nth-child(4) select {
+  text-align: left;
+}
+
+.metrado-sheet-item-row td:nth-child(1),
+.metrado-sheet-item-row td:nth-child(2) {
+  text-align: left;
+}
+
+.metrado-sheet-item-row td:nth-child(n + 3) {
+  text-align: center;
+}
+
+.metrado-table input,
+.metrado-table select {
+  width: 100%;
+  min-width: 0;
+  border-color: #c7c7c7;
+  background: #fff;
+  border-radius: 0;
+  color: #001f58;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.68rem;
+  min-height: 1.45rem;
+  padding: 0.16rem 0.28rem;
+}
+
+.metrado-table input:focus,
+.metrado-table select:focus,
+.metrado-search:focus {
+  border-color: var(--color-primary);
+  outline: 2px solid rgba(20, 158, 216, 0.18);
+}
+
+.metrado-line-partida {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.18rem;
+  align-items: start;
+}
+
+.metrado-line-partida-code,
+.metrado-line-partida-action {
+  border-radius: 0;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.metrado-line-partida-code {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: #002070;
+  font-size: 0.7rem;
+  font-weight: 900;
+  overflow: hidden;
+  padding: 0;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metrado-line-partida-code:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 0.12rem;
+}
+
+.metrado-line-partida-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.18rem;
+}
+
+.metrado-line-partida-action {
+  width: fit-content;
+  border: 1px solid #c8d4e4;
+  background: #f8fbff;
+  color: #455772;
+  font-size: 0.58rem;
+  font-weight: 800;
+  padding: 0.08rem 0.3rem;
+}
+
+.metrado-line-partida-action:hover {
+  border-color: #149ed8;
+  background: #e9f7ff;
+  color: #007bbb;
+}
+
+.metrado-line-partida-action.is-danger {
+  border-color: #efb8b8;
+  background: #fff5f5;
+  color: #c51f1f;
+}
+
+.metrado-line-partida-action.is-danger:hover {
+  border-color: #d92a2a;
+  background: #ffe8e8;
+  color: #a51515;
+}
+
+.metrado-assignment-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 18, 32, 0.22);
+  padding: 1rem;
+}
+
+.metrado-assignment-dialog {
+  width: min(44rem, 96vw);
+  max-height: min(34rem, 88vh);
+  display: grid;
+  grid-template-rows: auto auto auto minmax(8rem, 1fr) auto;
+  border: 1px solid #7d8ca3;
+  background: #f7faff;
+  box-shadow: 0 1.2rem 2.4rem rgba(10, 27, 58, 0.26);
+  color: #002070;
+}
+
+.metrado-assignment-dialog header,
+.metrado-assignment-dialog footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid #c7d2e2;
+  background: #e5ebf4;
+  padding: 0.45rem 0.6rem;
+}
+
+.metrado-assignment-dialog header div {
+  display: grid;
+  gap: 0.08rem;
+}
+
+.metrado-assignment-dialog header strong {
+  font-size: 0.82rem;
+}
+
+.metrado-assignment-dialog header span,
+.metrado-assignment-dialog footer span {
+  color: #56677e;
+  font-size: 0.66rem;
+  font-weight: 800;
+}
+
+.metrado-assignment-dialog header button,
+.metrado-assignment-dialog footer button {
+  border: 1px solid #aeb9c9;
+  background: #fff;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 0.2rem 0.5rem;
+}
+
+.metrado-assignment-current {
+  display: grid;
+  gap: 0.1rem;
+  border-bottom: 1px solid #d8e1ee;
+  background: #fff;
+  padding: 0.45rem 0.6rem;
+}
+
+.metrado-assignment-current span {
+  color: #6a7688;
+  font-size: 0.62rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.metrado-assignment-current strong {
+  overflow: hidden;
+  font-size: 0.74rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metrado-assignment-search {
+  border: 0;
+  border-bottom: 1px solid #c7d2e2;
+  background: #fff;
+  color: #002070;
+  font-size: 0.74rem;
+  font-weight: 700;
+  outline: 0;
+  padding: 0.5rem 0.6rem;
+}
+
+.metrado-assignment-search:focus {
+  box-shadow: inset 0 -2px 0 #149ed8;
+}
+
+.metrado-assignment-list {
+  overflow: auto;
+  padding: 0.45rem;
+}
+
+.metrado-assignment-list button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) 4rem;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #cbd6e4;
+  background: #fff;
+  color: #001f58;
+  cursor: pointer;
+  font-size: 0.68rem;
+  margin-bottom: 0.25rem;
+  padding: 0.34rem 0.45rem;
+  text-align: left;
+}
+
+.metrado-assignment-list button:hover,
+.metrado-assignment-list button.is-current {
+  border-color: #149ed8;
+  background: #e9f7ff;
+}
+
+.metrado-assignment-list button strong {
+  color: #002070;
+  font-weight: 900;
+}
+
+.metrado-assignment-list button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metrado-assignment-list button em {
+  color: #56677e;
+  font-style: normal;
+  font-weight: 800;
+  text-align: right;
+}
+
+.metrado-assignment-empty {
+  color: #56677e;
+  font-size: 0.72rem;
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+}
+
+.metrado-row-actions {
+  display: inline-flex;
+  gap: 0.22rem;
+  justify-content: center;
+  min-width: 7.8rem;
+}
+
+.metrado-row-actions button,
+.metrado-row-file-action {
+  border: 1px solid #b8c5d8;
+  background: #fff;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.64rem;
+  font-weight: 900;
+  padding: 0.22rem 0.34rem;
+  white-space: nowrap;
+}
+
+.metrado-row-file-action {
+  display: inline-flex;
+  align-items: center;
+}
+
+.metrado-row-file-action input {
+  display: none;
+}
+
+.metrado-row-actions button:hover,
+.metrado-row-file-action:hover {
+  border-color: var(--color-primary);
+  background: #e9f7ff;
+  color: var(--color-primary);
+}
+
+.metrado-row-actions button.is-danger {
+  border-color: #e4b2b2;
+  color: #a71919;
+}
+
+.metrado-row-actions button.is-danger:hover {
+  border-color: #d92525;
+  background: #fff1f1;
+  color: #d92525;
+}
+
+.metrado-attachment-row td {
+  background: #fff !important;
+  padding: 0.25rem 0.35rem;
+}
+
+.metrado-attachment-excel {
+  display: grid;
+  grid-template-columns: minmax(18rem, 42rem) minmax(10rem, 1fr);
+  gap: 0.55rem;
+  align-items: stretch;
+  margin: 0;
+  min-height: var(--attachment-height, 180px);
+}
+
+.metrado-attachment-excel a {
+  border: 1px solid #c9d4e3;
+  background: #f7f9fc;
+  display: block;
+  min-height: var(--attachment-height, 180px);
+}
+
+.metrado-attachment-excel img {
+  display: block;
+  height: var(--attachment-height, 180px);
+  object-fit: contain;
+  width: 100%;
+}
+
+.metrado-attachment-excel figcaption {
+  align-content: center;
+  color: #001f67;
+  display: grid;
+  gap: 0.2rem;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  padding: 0.35rem;
+}
+
+.metrado-attachment-excel figcaption strong {
+  font-weight: 900;
+}
+
+.metrado-attachment-excel figcaption span {
+  color: #5c6c82;
+  font-weight: 700;
+}
+
+.metrado-attachment-remove {
+  border: 1px solid #e4b2b2;
+  background: #fff;
+  color: #a71919;
+  cursor: pointer;
+  font-size: 0.64rem;
+  font-weight: 900;
+  padding: 0.24rem 0.38rem;
+}
+
+.metrado-section-head {
+  border: 1px solid #c9d3e2;
+  border-top: 0;
+  background: #f9fbfe;
+  margin-bottom: 0;
+  padding: 0.55rem 0.65rem;
+}
+
+.metrado-section-head h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.metrado-section-head p {
+  margin: 0.15rem 0 0;
+}
+
+.metrado-unit-badge {
+  border: 1px solid #c8d2e1;
+  background: #eef3f8;
+  color: #0b2b76;
+  font-size: 0.62rem;
+  font-weight: 900;
+  line-height: 1;
+  padding: 0.18rem 0.35rem;
+  text-transform: uppercase;
+}
+
+.metrado-empty-row td {
+  background: #fbfdff !important;
+  text-align: left !important;
+}
+
+.metrado-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 4rem;
+  color: #33435f;
+  text-align: center;
+}
+
+.metrado-empty-state strong {
+  color: #0b2b76;
+  font-size: 0.78rem;
+}
+
+.metrado-empty-state span {
+  color: #5a6a82;
+  font-size: 0.72rem;
+}
+
+.metrado-empty-state div {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+
+.metrado-empty-state button {
+  border: 1px solid var(--color-primary);
+  background: #fff;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.28rem 0.55rem;
+  white-space: nowrap;
+}
+
+.metrado-empty-state button:hover {
+  background: #e9f7ff;
+}
+
+@media (max-width: 1100px) {
+  .metrado-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .metrado-nav-pane {
+    max-height: 16rem;
+  }
+
+  .metrado-shell.is-nav-collapsed .metrado-nav-pane {
+    display: none;
+  }
+
+  .metrado-tabs {
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+
+  .metrado-tabs button {
+    flex: 0 0 auto;
+  }
+
+  .metrado-table-wrap {
+    max-height: 62vh;
+  }
+}
+
+@media (max-width: 760px) {
+  .metrado-page {
+    padding: 0.45rem;
+  }
+
+  .metrado-header {
+    gap: 0.75rem;
+  }
+
+  .metrado-header h1 {
+    font-size: 1.35rem;
+    line-height: 1.15;
+  }
+
+  .metrado-primary-btn {
+    width: 100%;
+  }
+
+  .metrado-file-strip {
+    align-items: stretch;
+  }
+
+  .metrado-file-button {
+    width: 100%;
+  }
+
+  .metrado-statusbar,
+  .metrado-current-item {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .metrado-workbar {
+    grid-template-columns: 1fr;
+  }
+
+  .metrado-block-filter,
+  .metrado-block-filter-trigger {
+    width: 100%;
+  }
+
+  .metrado-statusbar > span {
+    border-right: 0;
+    border-bottom: 1px solid #d9e0ea;
+  }
+
+  .metrado-header {
+    align-items: stretch;
+  }
+
+  .metrado-current-item > span {
+    grid-row: span 2;
+    min-height: 100%;
+  }
+
+  .metrado-current-item > div {
+    grid-column: span 1;
+  }
+
+  .metrado-current-item em,
+  .metrado-view-toggle {
+    justify-self: stretch;
+    text-align: center;
+  }
+
+  .metrado-attachment-excel {
+    grid-template-columns: 1fr;
+  }
+
+  .metrado-attachment-excel a,
+  .metrado-attachment-excel img {
+    min-height: 12rem;
+    height: 12rem;
+  }
+
+  .metrado-blocks {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .metrado-block-selector {
+    grid-template-columns: 1fr;
+  }
+
+  .metrado-blocks .metrado-block-step,
+  .metrado-block-selector select {
+    width: 100%;
+  }
+
+  .metrado-table {
+    min-width: 52rem;
+  }
+
+  .metrado-table-wrap {
+    max-height: 58vh;
+  }
+
+  .metrado-summary-block-toolbar {
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .metrado-summary-block-toolbar select {
+    flex-basis: 12rem;
+  }
+
+  .metrado-excel-header .excel-header-image {
+    width: 3rem;
+    height: 3.8rem;
+    opacity: 0.92;
+  }
+}
+
+@media (max-width: 620px) {
+  .metrado-summary-band {
+    grid-template-columns: 1fr;
+  }
+
+  .metrado-statusbar,
+  .metrado-current-item {
+    grid-template-columns: 1fr;
+  }
+
+  .metrado-current-item {
+    gap: 0.45rem;
+  }
+
+  .metrado-workbar {
+    gap: 0.35rem;
+  }
+
+  .metrado-current-item > span {
+    width: 3rem;
+    min-height: 1.8rem;
+  }
+
+  .metrado-current-item p {
+    white-space: normal;
+  }
+
+  .metrado-nav-pane {
+    max-height: 13rem;
+  }
+
+  .metrado-tree button {
+    grid-template-columns: 5.2rem minmax(0, 1fr);
+  }
+
+  .metrado-tabs button {
+    min-width: 6.7rem;
+    padding: 0.42rem 0.55rem;
+  }
+
+  .metrado-section-head {
+    gap: 0.55rem;
+  }
+
+  .metrado-section-head button,
+  .metrado-inline-control {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.metrado-header-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.metrado-header-actions .metrado-file-button,
+.metrado-header-actions .metrado-primary-btn {
+  min-height: 2.15rem;
+}
+
+.metrado-header-actions .metrado-file-button {
+  margin: 0;
+}
+
+.metrado-standard-toolbar {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.15rem;
+  border: 1px solid #9fb0c8;
+  background: #eef3fb;
+  box-shadow: inset 0 1px 0 #fff;
+}
+
+.metrado-standard-toolbar button {
+  display: inline-grid;
+  place-items: center;
+  width: 2.05rem;
+  min-width: 2.05rem;
+  height: 2.05rem;
+  border: 0;
+  border-right: 1px solid #b9c5d6;
+  background: #f8fbff;
+  color: #0b2b76;
+  cursor: pointer;
+  padding: 0;
+}
+
+.metrado-standard-toolbar button:nth-of-type(2) {
+  border-right-color: #7f8fa6;
+}
+
+.metrado-standard-toolbar button:hover:not(:disabled) {
+  background: #dff3ff;
+  color: var(--color-primary);
+}
+
+.metrado-standard-toolbar button:disabled {
+  color: #9ba8ba;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.metrado-standard-toolbar span {
+  max-width: 8.5rem;
+  overflow: hidden;
+  color: #002070;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 0 0.55rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metrado-secondary-btn {
+  border: 1px solid #9fb2cc;
+  border-radius: 0;
+  background: #fff;
+  color: #0b2b76;
+  cursor: pointer;
+  font-size: 0.76rem;
+  font-weight: 900;
+  padding: 0.55rem 0.8rem;
+}
+
+.metrado-secondary-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.metrado-secondary-btn.is-active {
+  border-color: #0b2b76;
+  background: #eef3fb;
+  color: #0b2b76;
+}
+
+.metrado-tools-menu {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.metrado-tools-panel {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  right: 0;
+  z-index: 120;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(10rem, 1fr));
+  gap: 0;
+  width: min(44rem, calc(100vw - 7rem));
+  border: 1px solid #8fa1bb;
+  background: #f8fbff;
+  box-shadow: 0 0.9rem 1.8rem rgba(10, 27, 58, 0.18);
+  text-align: left;
+}
+
+.metrado-tools-panel section {
+  display: grid;
+  align-content: start;
+  gap: 0.18rem;
+  border-right: 1px solid #d2dbea;
+  padding: 0.55rem;
+}
+
+.metrado-tools-panel section:last-child {
+  border-right: 0;
+}
+
+.metrado-tools-panel strong {
+  color: #43516a;
+  font-size: 0.66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.metrado-tools-panel button {
+  display: grid;
+  gap: 0.1rem;
+  width: 100%;
+  border: 1px solid transparent;
+  background: #fff;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 900;
+  padding: 0.38rem 0.45rem;
+  text-align: left;
+}
+
+.metrado-tools-panel button:hover {
+  border-color: #9fc8e6;
+  background: #eef8ff;
+}
+
+.metrado-tools-panel button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metrado-tools-panel button small {
+  color: #526179;
+  font-size: 0.64rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.metrado-page.is-header-condensed {
+  padding-top: 0.45rem;
+}
+
+.metrado-page.is-header-condensed .metrado-header {
+  padding: 0.35rem 0.7rem;
+}
+
+.metrado-page.is-header-condensed .metrado-kicker {
+  font-size: 0.66rem;
+}
+
+.metrado-page.is-header-condensed .metrado-header h1 {
+  margin: 0.04rem 0;
+  font-size: 1.28rem;
+  line-height: 1.1;
+}
+
+.metrado-page.is-header-condensed .metrado-header p,
+.metrado-page.is-header-condensed .metrado-file-strip span {
+  display: none;
+}
+
+.metrado-page.is-header-condensed .metrado-primary-btn,
+.metrado-page.is-header-condensed .metrado-secondary-btn,
+.metrado-page.is-header-condensed .metrado-file-button {
+  min-width: auto;
+  padding: 0.38rem 0.7rem;
+}
+
+.metrado-page.is-header-condensed .metrado-file-strip {
+  margin: 0.28rem 0;
+  padding: 0.36rem 0.55rem;
+}
+
+.metrado-page.is-header-condensed .metrado-file-strip strong {
+  font-size: 0.78rem;
+}
+
+.metrado-page.is-header-condensed .metrado-summary-band {
+  margin: 0.2rem 0 0.32rem;
+  gap: 0.3rem;
+}
+
+.metrado-page.is-header-condensed .metrado-summary-band input {
+  height: 1.55rem;
+  padding: 0.18rem 0.35rem;
+}
+
+.metrado-page.is-header-condensed .metrado-label-title {
+  font-size: 0.64rem;
+}
+
+.metrado-page.is-header-condensed .metrado-shell {
+  min-height: calc(100vh - 8.7rem);
+}
+
+.metrado-page.is-header-condensed .metrado-excel-header {
+  margin-bottom: 0.22rem;
+}
+
+.metrado-page.is-header-condensed .metrado-excel-header .excel-title {
+  min-height: 1.3rem;
+  font-size: 0.78rem;
+}
+
+.metrado-page.is-header-condensed .metrado-excel-header .excel-unit,
+.metrado-page.is-header-condensed .metrado-excel-header .excel-codes,
+.metrado-page.is-header-condensed .metrado-excel-header .excel-location,
+.metrado-page.is-header-condensed .metrado-excel-header .excel-block-title {
+  min-height: 0.92rem;
+  font-size: 0.66rem;
+}
+
+.metrado-page.is-header-condensed .metrado-excel-header .excel-codes span,
+.metrado-page.is-header-condensed .metrado-excel-header .excel-location span {
+  min-height: 0.92rem;
+  padding: 0.04rem 0.22rem;
+}
+
+.metrado-page.is-header-condensed .metrado-statusbar {
+  margin-bottom: 0.22rem;
+}
+
+.metrado-page.is-header-condensed .metrado-statusbar > span {
+  padding: 0.22rem 0.42rem;
+}
+
+.metrado-page.is-header-condensed .metrado-current-item {
+  margin-bottom: 0.22rem;
+  padding: 0.24rem 0.42rem;
+}
+
+.metrado-page.is-header-condensed .metrado-current-item > span {
+  min-height: 1.35rem;
+}
+
+.metrado-page.is-header-condensed .metrado-current-item p {
+  display: none;
+}
+
+.metrado-page.is-header-condensed .metrado-tabs {
+  margin-top: 0.12rem;
+  padding-top: 0.12rem;
+}
+
+.metrado-page.is-header-condensed .metrado-tabs button {
+  padding: 0.3rem 0.55rem;
+}
+
+.metrado-page.is-header-condensed .metrado-table-wrap {
+  max-height: calc(100vh - 13.4rem);
+}
+
+.metrado-page.is-header-condensed .metrado-config-panel {
+  padding: 0.55rem;
+}
+
+.metrado-page.is-header-condensed .metrado-section-head {
+  padding: 0.36rem 0.55rem;
+}
+
+.metrado-page.is-header-condensed .metrado-section-head h2 {
+  font-size: 0.92rem;
+}
+
+.metrado-page.is-header-condensed .metrado-section-head p {
+  display: none;
+}
+
+.metrado-summary-cell {
+  position: relative;
+}
+
+.metrado-summary-total {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: inherit;
+  padding: 0;
+}
+
+.metrado-summary-cell:hover {
+  background: #fff1b8 !important;
+}
+
+.metrado-summary-cell:hover .metrado-summary-total {
+  color: #003a8c;
+  text-decoration: underline;
+  text-underline-offset: 0.12rem;
+}
+
+.metrado-block-filter {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  margin: 0;
+}
+
+.metrado-block-filter-trigger {
+  border: 1px solid #7d8ca3;
+  background: #ffffff;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 800;
+  min-height: 100%;
+  padding: 0.28rem 0.65rem;
+  white-space: nowrap;
+}
+
+.metrado-block-filter-trigger:hover {
+  background: #fff6cf;
+  border-color: #4d6489;
+}
+
+.metrado-block-filter-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.25rem);
+  z-index: 45;
+  width: min(45rem, calc(100vw - 8rem));
+  border: 1px solid #7d8ca3;
+  background: #ffffff;
+  box-shadow: 0 0.7rem 1.8rem rgba(10, 27, 58, 0.18);
+  padding: 0.5rem;
+}
+
+.metrado-block-filter-panel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid #d9e2ef;
+  margin-bottom: 0.45rem;
+  padding-bottom: 0.35rem;
+}
+
+.metrado-block-filter-panel header strong {
+  color: #002070;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+}
+
+.metrado-block-filter-panel header span {
+  color: #596980;
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+
+.metrado-block-filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  margin-bottom: 0.45rem;
+}
+
+.metrado-block-filter-actions button {
+  border: 1px solid #b8c5d8;
+  background: #f5f8fc;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.24rem 0.5rem;
+}
+
+.metrado-block-filter-actions button:hover {
+  border-color: var(--color-primary);
+  background: #e9f7ff;
+}
+
+.metrado-block-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.28rem 0.4rem;
+  max-height: 15rem;
+  overflow: auto;
+}
+
+.metrado-block-filter-grid label {
+  display: grid;
+  grid-template-columns: 1rem 2rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid #d1dbe8;
+  background: #fbfdff;
+  cursor: pointer;
+  font-size: 0.68rem;
+  line-height: 1.2;
+  padding: 0.28rem 0.35rem;
+}
+
+.metrado-block-filter-grid label:hover {
+  background: #fff7d8;
+  border-color: #9fb0c8;
+}
+
+.metrado-block-filter-grid input {
+  accent-color: #0b2b76;
+}
+
+.metrado-block-filter-grid strong {
+  color: #002070;
+  font-size: 0.72rem;
+}
+
+.metrado-block-filter-grid span {
+  color: #1e2f55;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metrado-block-filter-trigger,
+.metrado-workbook-tools .metrado-block-filter-trigger,
+.metrado-detail-dynamic-controls .metrado-block-filter-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.34rem;
+  min-width: 6rem;
+  min-height: 1.75rem;
+  border: 1px solid #9aabc2;
+  background: #ffffff;
+  color: #002070;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1;
+  padding: 0.24rem 1.3rem 0.24rem 0.58rem;
+  white-space: nowrap;
+}
+
+.metrado-block-filter-trigger::after {
+  content: '';
+  position: absolute;
+  right: 0.46rem;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-left: 0.22rem solid transparent;
+  border-right: 0.22rem solid transparent;
+  border-top: 0.3rem solid currentColor;
+  transform: translateY(-35%);
+}
+
+.metrado-block-filter-trigger span {
+  font-weight: 900;
+}
+
+.metrado-block-filter-trigger strong {
+  color: inherit;
+  font-size: 0.7rem;
+}
+
+.metrado-block-filter-trigger:hover,
+.metrado-workbook-tools .metrado-block-filter-trigger:hover,
+.metrado-detail-dynamic-controls .metrado-block-filter-trigger:hover {
+  border-color: #149ed8;
+  background: #f4fbff;
+  color: #0075b8;
+}
+
+.metrado-block-filter-trigger.is-active,
+.metrado-workbook-tools .metrado-block-filter-trigger.is-active,
+.metrado-detail-dynamic-controls .metrado-block-filter-trigger.is-active {
+  border-color: #0b2b76;
+  background: #0b2b76;
+  color: #ffffff;
+}
+
+.metrado-block-filter-trigger.has-filter:not(.is-active),
+.metrado-workbook-tools
+  .metrado-block-filter-trigger.has-filter:not(.is-active),
+.metrado-detail-dynamic-controls
+  .metrado-block-filter-trigger.has-filter:not(.is-active) {
+  border-color: #009c70;
+  background: #eefbf6;
+  color: #007a58;
+}
+
+.metrado-block-filter-panel,
+.metrado-workbook-filter-menu .metrado-block-filter-panel,
+.metrado-detail-filter-menu .metrado-block-filter-panel,
+.metrado-summary-filter-menu .metrado-block-filter-panel {
+  width: min(35rem, calc(100vw - 7rem));
+  padding: 0;
+  overflow: hidden;
+  border-color: #90a2bb;
+  box-shadow: 0 0.9rem 2.1rem rgba(10, 27, 58, 0.2);
+}
+
+.metrado-block-filter-panel button {
+  min-width: 0;
+}
+
+.metrado-block-filter-panel header {
+  align-items: start;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.5rem 0.56rem;
+  border-bottom: 1px solid #d7e0ec;
+  background: #f4f7fb;
+}
+
+.metrado-block-filter-panel header > div {
+  display: grid;
+  gap: 0.08rem;
+  min-width: 0;
+}
+
+.metrado-block-filter-panel header strong {
+  color: #002070;
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.metrado-block-filter-panel header small {
+  color: #5a6980;
+  font-size: 0.66rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.metrado-block-filter-panel header span {
+  align-self: center;
+  color: #344965;
+  font-size: 0.68rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.metrado-block-filter-close,
+.metrado-block-filter-panel .metrado-block-filter-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 1px solid #aab8ca;
+  background: #ffffff;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 900;
+  line-height: 1;
+  padding: 0;
+}
+
+.metrado-block-filter-close:hover {
+  border-color: #e12626;
+  color: #e12626;
+}
+
+.metrado-block-filter-actions {
+  justify-content: flex-end;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0.45rem 0.55rem;
+  border-bottom: 1px solid #e2e9f2;
+  background: #ffffff;
+}
+
+.metrado-block-filter-actions button {
+  border-color: #b6c4d8;
+  background: #f7f9fc;
+  color: #002070;
+  font-size: 0.66rem;
+  font-weight: 900;
+  padding: 0.28rem 0.55rem;
+}
+
+.metrado-block-filter-actions button:hover {
+  border-color: #149ed8;
+  background: #eaf7ff;
+}
+
+.metrado-block-filter-grid {
+  grid-template-columns: repeat(auto-fit, minmax(13.4rem, 1fr));
+  gap: 0.32rem;
+  max-height: min(16.5rem, 45vh);
+  padding: 0.55rem;
+}
+
+.metrado-block-filter-grid label {
+  grid-template-columns: 1rem 1.6rem minmax(0, 1fr) auto;
+  min-height: 1.85rem;
+  gap: 0.35rem;
+  border-color: #d2dce9;
+  background: #fbfdff;
+  padding: 0.26rem 0.34rem;
+}
+
+.metrado-block-filter-grid label.is-visible {
+  border-color: #b9cce5;
+  background: #f8fbff;
+}
+
+.metrado-block-filter-grid label.is-current {
+  border-color: #009c70;
+  box-shadow: inset 0.22rem 0 0 #009c70;
+}
+
+.metrado-block-filter-grid label.is-hidden {
+  opacity: 0.68;
+  background: #f4f6f9;
+}
+
+.metrado-block-filter-grid label.is-locked {
+  cursor: not-allowed;
+}
+
+.metrado-block-filter-grid label.is-locked input {
+  cursor: not-allowed;
+}
+
+.metrado-block-filter-grid label:hover {
+  background: #fff8dc;
+  border-color: #8fa2bd;
+}
+
+.metrado-block-filter-grid strong {
+  color: #002070;
+  font-size: 0.7rem;
+}
+
+.metrado-block-filter-grid span {
+  color: #253a5c;
+  font-size: 0.66rem;
+}
+
+.metrado-block-filter-grid em {
+  border: 1px solid #009c70;
+  background: #eafbf4;
+  color: #007a58;
+  font-size: 0.58rem;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 1;
+  padding: 0.18rem 0.28rem;
+  text-transform: uppercase;
+}
+
+.metrado-block-filter-note {
+  margin: 0;
+  padding: 0.42rem 0.55rem;
+  border-top: 1px solid #e2e9f2;
+  background: #fbfcfe;
+  color: #596980;
+  font-size: 0.64rem;
+  font-weight: 700;
+}
+
+.metrado-summary-block-heading {
+  position: relative;
+  cursor: pointer;
+}
+
+.metrado-summary-block-heading:hover {
+  background: #fff1b8 !important;
+}
+
+.metrado-summary-block-heading > button {
+  display: grid;
+  place-items: center;
+  gap: 0.12rem;
+  width: 100%;
+  min-width: 6.2rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  line-height: 1.15;
+  padding: 0.1rem 0.12rem;
+  text-transform: uppercase;
+}
+
+.metrado-summary-block-heading > button strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.2rem;
+  background: #2b65d9;
+  color: #ffffff;
+  font-size: 0.68rem;
+  line-height: 1;
+  padding: 0.12rem 0.22rem;
+}
+
+.metrado-summary-block-heading > button span {
+  color: #00194d;
+  font-size: 0.68rem;
+}
+
+.metrado-summary-quicknav-header {
+  top: calc(100% + 0.15rem);
+  min-width: 9.5rem;
+}
+
+.metrado-summary-quicknav {
+  position: absolute;
+  top: calc(100% + 0.2rem);
+  left: 50%;
+  z-index: 35;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 0.25rem;
+  align-items: center;
+  min-width: 15rem;
+  border: 1px solid #6f7b8d;
+  background: #fff;
+  box-shadow: 0 12px 24px rgba(17, 24, 39, 0.14);
+  padding: 0.3rem;
+  transform: translateX(-50%);
+}
+
+.metrado-summary-quicknav strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 1.55rem;
+  background: #002070;
+  color: #fff;
+  font-size: 0.72rem;
+}
+
+.metrado-summary-quicknav button {
+  border: 1px solid #b9c6d8;
+  background: #f8fbff;
+  color: #002070;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 900;
+  padding: 0.34rem 0.5rem;
+  white-space: nowrap;
+}
+
+.metrado-summary-quicknav button:hover {
+  border-color: var(--color-primary);
+  background: #e9f7ff;
+  color: var(--color-primary);
+}
+
+@media (max-width: 760px) {
+  .metrado-header-actions {
+    justify-content: stretch;
+  }
+
+  .metrado-header-actions button {
+    flex: 1 1 9rem;
+  }
+
+  .metrado-header-actions .metrado-standard-toolbar {
+    flex: 1 1 100%;
+  }
+
+  .metrado-header-actions .metrado-standard-toolbar button {
+    flex: 0 0 2.15rem;
+  }
+
+  .metrado-standard-toolbar span {
+    flex: 1 1 auto;
+  }
+
+  .metrado-tools-menu {
+    flex: 1 1 9rem;
+  }
+
+  .metrado-tools-menu > button {
+    width: 100%;
+  }
+
+  .metrado-tools-panel {
+    left: 0;
+    right: auto;
+    grid-template-columns: 1fr;
+    width: min(28rem, calc(100vw - 1.5rem));
+  }
+
+  .metrado-tools-panel section {
+    border-right: 0;
+    border-bottom: 1px solid #d2dbea;
+  }
+
+  .metrado-tools-panel section:last-child {
+    border-bottom: 0;
+  }
+
+  .metrado-header-actions .metrado-tools-panel button {
+    flex: none;
+  }
+
+  .metrado-page.is-header-condensed .metrado-table-wrap {
+    max-height: 60vh;
+  }
+
+  .metrado-summary-quicknav {
+    left: 0;
+    grid-template-columns: 1fr;
+    min-width: 10rem;
+    transform: none;
+  }
+
+  .metrado-block-filter {
+    justify-content: flex-start;
+  }
+
+  .metrado-block-filter-panel {
+    left: 0;
+    right: auto;
+    width: min(26rem, calc(100vw - 1.5rem));
+  }
+
+  .metrado-block-filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metrado-assignment-overlay {
+    align-items: end;
+    padding: 0.5rem;
+  }
+
+  .metrado-assignment-dialog {
+    width: 100%;
+    max-height: 82vh;
+  }
+
+  .metrado-assignment-list button {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+
+  .metrado-assignment-list button em {
+    text-align: left;
+  }
+
+  .metrado-project-editor-overlay {
+    align-items: end;
+    padding: 0.5rem;
+  }
+
+  .metrado-project-editor-dialog {
+    width: 100%;
+  }
+
+  .metrado-project-editor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metrado-detail-dynamic-header {
+    grid-template-columns: 1fr;
+  }
+
+  .metrado-detail-dynamic-controls {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 0.15rem;
+    scrollbar-width: thin;
+  }
+
+  .metrado-detail-dynamic-controls button,
+  .metrado-detail-dynamic-controls select {
+    flex: 0 0 auto;
+  }
+
+  .metrado-detail-filter-menu .metrado-block-filter-panel {
+    left: 0;
+    right: auto;
+    width: min(26rem, calc(100vw - 1.5rem));
+  }
+
+  .metrado-import-modal-backdrop {
+    align-items: end;
+    padding: 0.5rem;
+  }
+
+  .metrado-import-modal {
+    width: 100%;
+  }
+
+  .metrado-import-modal header,
+  .metrado-import-modal footer {
+    align-items: stretch;
+  }
+
+  .metrado-import-modal footer {
+    flex-direction: column-reverse;
+  }
+
+  .metrado-import-modal footer button {
+    width: 100%;
+  }
+
+  .metrado-import-modal-body dl {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metrado-page .metrado-statusbar,
+.metrado-page .metrado-workbar,
+.metrado-page .metrado-tabs,
+.metrado-page .metrado-blocks,
+.metrado-page.is-header-condensed .metrado-statusbar,
+.metrado-page.is-header-condensed .metrado-workbar,
+.metrado-page.is-header-condensed .metrado-tabs,
+.metrado-page.is-header-condensed .metrado-blocks {
+  display: none;
+}
+
+.metrado-page .metrado-workspace.is-general-mode,
+.metrado-page .metrado-workspace.is-acero-mode {
+  height: clamp(28rem, calc(100vh - 15rem), 52rem);
+}
+
+.metrado-page.is-header-condensed .metrado-workspace.is-general-mode,
+.metrado-page.is-header-condensed .metrado-workspace.is-acero-mode {
+  height: clamp(29rem, calc(100vh - 10.6rem), 56rem);
+}
+
+.metrado-page .metrado-detail-scrollpane,
+.metrado-page.is-header-condensed .metrado-detail-scrollpane {
+  max-height: none;
+  min-height: 0;
+}
+
+@media (max-width: 900px) {
+  .metrado-compact-nav {
+    grid-template-columns: 6.6rem minmax(0, 1fr);
+  }
+
+  .metrado-compact-nav .is-summary {
+    min-width: 6.6rem;
+    font-size: 0.82rem;
+  }
+
+  .metrado-compact-block-tab {
+    flex-basis: 11rem;
+    grid-template-columns: minmax(6.2rem, 1fr) 3rem;
+  }
+
+  .metrado-table-wrap {
+    max-height: calc(100vh - 12.5rem);
+  }
+
+  .metrado-page .metrado-workspace.is-general-mode,
+  .metrado-page .metrado-workspace.is-acero-mode,
+  .metrado-page.is-header-condensed .metrado-workspace.is-general-mode,
+  .metrado-page.is-header-condensed .metrado-workspace.is-acero-mode {
+    height: min(68vh, 42rem);
+    min-height: 25rem;
+  }
+
+  .metrado-page .metrado-detail-scrollpane,
+  .metrado-page.is-header-condensed .metrado-detail-scrollpane {
+    max-height: none;
+  }
+}

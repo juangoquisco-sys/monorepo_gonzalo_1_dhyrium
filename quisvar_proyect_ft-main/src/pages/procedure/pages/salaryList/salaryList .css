@@ -1,0 +1,22 @@
+.salaryList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  height: 100%;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 1rem 1.35rem 1rem 1.35rem;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.salaryList-content {
+  display: flex;
+  flex: 1 1 auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}

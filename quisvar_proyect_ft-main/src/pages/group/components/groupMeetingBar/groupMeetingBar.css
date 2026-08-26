@@ -1,0 +1,81 @@
+.gmb-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0 0.65rem;
+}
+
+.gmb-sidebar-data {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid transparent;
+  border-radius: 0.45rem;
+  color: #4c5d7a;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+
+.gmb-sidebar-data:hover {
+  background-color: #f4f8ff;
+  color: var(--color-secondary);
+}
+
+.gmb-sidebar-data.contract-selected {
+  border-color: #cfeeff;
+  background-color: #eaf8ff;
+  color: var(--color-primary);
+  box-shadow: inset 3px 0 0 var(--color-primary);
+}
+
+.gmb-sidebar-figure {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 2rem;
+  aspect-ratio: 1;
+  border-radius: 0.4rem;
+  background: #eef4fb;
+  color: inherit;
+}
+
+.gmb-sidebar-copy {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.gmb-sidebar-name {
+  overflow: hidden;
+  margin: 0;
+  color: inherit;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+}
+
+.gmb-sidebar-description {
+  overflow: hidden;
+  color: #73839d;
+  font-size: 0.66rem;
+  font-style: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gmb-sidebar-badge {
+  border-radius: 999px;
+  background: var(--color-ligth-primary);
+  color: var(--color-primary);
+  padding: 0.2rem 0.4rem;
+  font-size: 0.6rem;
+  font-weight: 800;
+}

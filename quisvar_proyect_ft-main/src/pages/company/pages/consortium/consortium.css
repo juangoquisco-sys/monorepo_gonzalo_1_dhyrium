@@ -1,0 +1,54 @@
+.consortium-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.consortium-header {
+  display: grid;
+  grid-template-columns: 0.5fr 4.5fr 2fr 1fr;
+  background-color: #d7e2ed;
+  padding: 0.5rem 0.4rem;
+}
+
+.consortium-member {
+  font-size: 0.6875rem;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.consortium-company-members {
+  display: grid;
+  grid-template-columns: 0.5fr 4.5fr 2fr 1fr;
+  padding: 0rem 0.625rem;
+  align-items: center;
+}
+
+.consortium-company-name {
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+.consortium-company-link {
+  text-decoration: none;
+  color: var(--color-primary);
+}
+.consortium-main-img {
+  width: 6.5rem;
+  height: 6.5rem;
+  background-color: gray;
+  border-radius: 50%;
+}
+
+.consortium-img-size {
+  width: 6.5rem;
+  height: 6.5rem;
+  border-radius: 50%;
+}
+.consortium-info-name {
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.0225rem;
+  line-height: 150%;
+  padding: 0.3rem;
+}

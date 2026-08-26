@@ -1,0 +1,170 @@
+.input-main-style-2 {
+  width: 100%;
+  padding: 0.3125rem;
+  border-radius: 0.25rem;
+  border: 0.5px solid rgba(0, 0, 0, 0.2);
+  background: #fff;
+  height: auto;
+  font-size: 0.8rem;
+  line-height: 1.5rem;
+}
+
+.input-main-style-2_1 {
+  width: 100%;
+  padding: 0.3125rem;
+  border-radius: 0.25rem;
+  border: 0.5px solid rgba(0, 0, 0, 0.2);
+  background: #fff;
+  height: auto;
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.input-main {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+}
+
+.input-col {
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.input-primary {
+  height: 1.8rem;
+  width: 100%;
+  background-color: var(--color-menu);
+  font-weight: 500;
+  box-shadow: 0px 2px 0px 0px var(--color-secondary);
+  padding: 0 0.3rem;
+  font-size: var(--size-input);
+}
+
+.input-primary[type='radio'] {
+  box-shadow: none;
+}
+
+.input-primary[type='radio']:checked:disabled:before {
+  accent-color: #312f2b;
+  content: '';
+  width: 10px;
+  height: 10px;
+  background-color: #312f2b;
+  border-radius: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.input-primary-error {
+  border-color: #df0000;
+}
+
+.input-main-style-2:focus {
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 2px var(--color-primary);
+}
+
+.input-label-col {
+  display: flex;
+  align-items: center;
+  width: 30%;
+  height: 3rem;
+  font-weight: 500;
+  color: var(--color-quaternay);
+  font-size: calc(var(--size-label) - 0.1rem);
+  text-align: left;
+}
+
+.input-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  position: absolute;
+  margin-right: 0.4rem;
+  cursor: pointer;
+  right: 0;
+}
+
+.input-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.input-option-col {
+  width: 75%;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.input-pading-right {
+  padding-right: 2.5rem;
+}
+.input-pading-left {
+  padding-right: 2.5rem;
+}
+
+.input-modern {
+  width: 100%;
+  display: flex;
+  padding: 6px 12px;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  align-self: stretch;
+  border-radius: 6px;
+  background: white;
+  outline: 1px solid gainsboro;
+  outline-offset: 0px;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.06),
+    0px 0px 0px 1px rgba(104, 113, 130, 0.16);
+}
+
+.input-modern:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+  border: 0px;
+}
+.input-icon-left {
+  position: absolute;
+  display: flex;
+  left: 0.4rem;
+}
+.input-icon-right {
+  position: absolute;
+  display: flex;
+  right: 0.4rem;
+}
+
+.inputPercentage-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.inputPercentage-input {
+  padding-right: 1.9rem;
+  color: #000;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: 0.01125rem;
+}
+
+.inputPercentage-icon {
+  position: absolute;
+  right: 0.5rem;
+}
+.input-icon-money {
+  color: #000;
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.125rem;
+  letter-spacing: 0.016rem;
+}

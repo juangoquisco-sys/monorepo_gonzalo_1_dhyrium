@@ -1,0 +1,26 @@
+.tasksSelectView-total {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.tasksSelectView-total-label {
+  color: var(--color-gray-tertiary);
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 300;
+  letter-spacing: 0.0125rem;
+}
+.tasksSelectView-total-label-hover:hover {
+  text-decoration: underline;
+  /* color: var(--color-secondary); */
+  font-weight: 700;
+  cursor: pointer;
+}
+.tasksSelectView-total-cost {
+  color: var(--color-secondary);
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.016rem;
+}

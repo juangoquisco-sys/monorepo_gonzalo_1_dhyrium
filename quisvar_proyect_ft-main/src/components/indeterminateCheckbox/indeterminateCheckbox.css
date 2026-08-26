@@ -1,0 +1,15 @@
+.indeterminateCheckbox {
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+}
+.indeterminateCheckboxAll {
+  display: flex;
+  align-self: flex-start;
+  gap: 1rem;
+  color: var(--color-gray-text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.14288rem;
+  letter-spacing: 0.016rem;
+}

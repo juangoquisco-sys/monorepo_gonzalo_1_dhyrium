@@ -1,0 +1,27 @@
+.headerOptionBtn-header-btn {
+  cursor: pointer;
+  display: flex;
+  height: 2.75rem;
+  padding: 0.625rem;
+  align-items: center;
+  gap: 1.5rem;
+  border-radius: 1px;
+  border: none;
+  border-bottom: 0.5px solid var(--color-gray);
+  color: black;
+}
+.headerOptionBtn-header-btn:hover {
+  background-color: var(--color-gray-ligth);
+}
+.headerOptionBtn-header-btn-selected {
+  border-bottom: 2px solid var(--color-secondary);
+  color: var(--color-secondary);
+}
+.headerOptionBtn-img-icon {
+  width: 20px;
+  height: 20px;
+}
+.headerOptionBtn-span-text {
+  font-size: var(--size-paragraph);
+  font-weight: 600;
+}

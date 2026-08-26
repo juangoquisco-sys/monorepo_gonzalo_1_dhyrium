@@ -1,0 +1,77 @@
+.subtask-container-main {
+  width: 100%;
+  border-left: 2rem solid var(--color-secondary);
+  border-radius: var(--radius-button);
+  box-shadow: 0px 1.5px 4px rgba(0, 0, 0, 0.2);
+}
+.subtask-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  border-radius: var(--radius-button);
+  padding: 0.7rem 1rem;
+}
+
+.subtask-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.subtask-details-content {
+  text-transform: uppercase;
+  font-weight: 600;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.subtask-area {
+  text-decoration: underline;
+  color: var(--color-secondary);
+}
+
+.subtask-project {
+  font-weight: 500;
+}
+
+.subtask-details-content h4 {
+  font-weight: 800;
+  font-size: 1.3rem;
+}
+
+.subtask-detail-user {
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.subtask-detail-user span {
+  font-weight: 700;
+  color: var(--color-secondary);
+}
+
+.subtask-detail-user h4 {
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.subtask-icon {
+  width: 2rem;
+  height: 2rem;
+  transition: ease 0.3s;
+  cursor: pointer;
+}
+
+.subtask-icon:hover {
+  transform: rotate(180deg);
+  scale: 1.1;
+}
+
+.subtask-icon:active {
+  scale: 0.9;
+}

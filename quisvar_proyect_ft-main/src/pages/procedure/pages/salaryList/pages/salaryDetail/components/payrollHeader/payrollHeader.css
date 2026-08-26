@@ -1,0 +1,53 @@
+.salaryDetail-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.salaryDetail-title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.salaryDetail-buttons {
+  display: flex;
+  gap: 1.8rem;
+  align-items: center;
+}
+.salaryDetail-total-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+.salaryDetail-total-label {
+  color: var(--color-gray-tertiary);
+  font-size: 0.625rem;
+  font-weight: 300;
+}
+.salaryDetail-total-cost {
+  color: var(--color-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.salaryDetail-period {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-right: auto;
+  padding-left: 0.75rem;
+  border-left: 1px solid #dbe5ec;
+}
+.salaryDetail-period span {
+  color: var(--color-gray-tertiary);
+  font-size: 0.625rem;
+  font-weight: 300;
+}
+.salaryDetail-period strong {
+  color: var(--color-secondary);
+  font-size: 0.78rem;
+}
+.salaryDetail-header-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

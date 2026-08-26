@@ -1,0 +1,11 @@
+.personalSelectOffice {
+  position: fixed;
+  right: 1rem;
+  z-index: 3;
+  max-width: 13rem;
+}
+.personalSelectOffice-relative {
+  position: relative;
+  right: 0;
+  z-index: 0;
+}

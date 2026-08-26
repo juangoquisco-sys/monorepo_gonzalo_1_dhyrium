@@ -1,0 +1,1471 @@
+/duty-rotations/duties:
+  get:
+    tags: [Duty rotations]
+    summary: Listar actividades de rotación
+    parameters:
+      - in: query
+        name: includeInactive
+        schema: { type: boolean }
+    responses:
+      '200':
+        description: Actividades con participantes explícitos y configuración vigente
+        content:
+          application/json:
+            schema:
+              type: array
+              items: { $ref: '#/components/schemas/DutyRotation' }
+    security: [{ bearerAuth: [] }]
+  post:
+    tags: [Duty rotations]
+    summary: Crear una actividad y generar automáticamente su horizonte inicial
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [draft, requestKey]
+            properties:
+              draft: { $ref: '#/components/schemas/DutyDraft' }
+              requestKey: { type: string, format: uuid }
+    responses:
+      '201':
+        description: Actividad creada y reconciliada hasta hoy más 60 días
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DutyMutationResult' }
+      '400': { description: Regla, participantes o vigencia inválidos }
+      '409': { description: Conflicto concurrente }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/duties/preview:
+  post:
+    tags: [Duty rotations]
+    summary: Previsualizar una actividad nueva
+    description: Devuelve las próximas ocurrencias, responsables y ajustes de vigencia sin escribir datos.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/DutyDraft' }
+    responses:
+      '200':
+        description: Próximas ocurrencias deterministas
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DutyPreview' }
+      '400': { description: Borrador inválido o participante no elegible }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/duties/{id}/edit-preview:
+  post:
+    tags: [Duty rotations]
+    summary: Previsualizar el impacto de editar una actividad
+    parameters: [{ $ref: '#/components/parameters/DutyId' }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/DutyEditRequest' }
+    responses:
+      '200':
+        description: Conservados, eliminables, conflictos y calendario resultante
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DutyImpact' }
+      '409': { description: Versión obsoleta o fecha de aplicación inválida }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/duties/{id}:
+  patch:
+    tags: [Duty rotations]
+    summary: Confirmar edición y reconciliar una actividad
+    parameters: [{ $ref: '#/components/parameters/DutyId' }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/DutyEditRequest' }
+    responses:
+      '200':
+        description: Actividad actualizada; históricos y turnos protegidos conservados
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DutyUpdateResult' }
+      '409': { description: Previsualización obsoleta o conflicto concurrente }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/duties/{id}/status-preview:
+  post:
+    tags: [Duty rotations]
+    summary: Previsualizar activación o desactivación
+    parameters: [{ $ref: '#/components/parameters/DutyId' }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [isActive, expectedVersion]
+            properties:
+              isActive: { type: boolean }
+              expectedVersion: { type: integer, minimum: 1 }
+    responses:
+      '200':
+        description: Turnos eliminables y conflictos protegidos
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DutyStatusPreview' }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/duties/{id}/status:
+  patch:
+    tags: [Duty rotations]
+    summary: Confirmar activación o desactivación controlada
+    parameters: [{ $ref: '#/components/parameters/DutyId' }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [isActive, expectedVersion, requestKey]
+            properties:
+              isActive: { type: boolean }
+              expectedVersion: { type: integer, minimum: 1 }
+              requestKey: { type: string, format: uuid }
+    responses:
+      '200':
+        description: Estado aplicado de manera idempotente
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DutyStatusMutationResult' }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/duties/{id}/reconcile:
+  post:
+    tags: [Duty rotations]
+    summary: Reparar próximos turnos de una actividad
+    description: Ejecuta el mismo reconciliador usado por el cron diario.
+    parameters: [{ $ref: '#/components/parameters/DutyId' }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema: { type: object, additionalProperties: false }
+    responses:
+      '200':
+        description: Creados, conservados, eliminados y conflictos
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DutyReconciliationResult' }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/duties/{id}/roster-sync-preview:
+  post:
+    tags: [Duty rotations]
+    summary: Previsualizar la sincronización controlada del personal activo presencial
+    parameters: [{ $ref: '#/components/parameters/DutyId' }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/DutyRosterSyncPreviewRequest' }
+    responses:
+      '200':
+        description: Ingresos, bajas, conservados e impacto futuro
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DutyRosterSyncPreviewResult' }
+      '409': { description: Padrón o versión obsoletos }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/duties/{id}/roster-sync:
+  post:
+    tags: [Duty rotations]
+    summary: Confirmar la sincronización controlada del personal
+    parameters: [{ $ref: '#/components/parameters/DutyId' }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/DutyRosterSyncRequest' }
+    responses:
+      '200':
+        description: Padrón versionado y asignaciones futuras reconciliadas
+        content:
+          application/json:
+            schema:
+              { $ref: '#/components/schemas/DutyRosterSyncMutationResult' }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/duties/{id}/occurrences/{occurrenceKey}:
+  get:
+    tags: [Duty rotations]
+    summary: Inspeccionar la distribución persistida y prevista de una ocurrencia
+    parameters:
+      - { $ref: '#/components/parameters/DutyId' }
+      - { $ref: '#/components/parameters/OccurrenceKey' }
+    responses:
+      '200':
+        description: Distribución, ausencias y conflictos de la ocurrencia
+        content:
+          application/json:
+            schema:
+              { $ref: '#/components/schemas/DutyOccurrenceExclusionResult' }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/duties/{id}/occurrences/{occurrenceKey}/exclusions-preview:
+  post:
+    tags: [Duty rotations]
+    summary: Previsualizar ausencias y redistribución de una ocurrencia futura
+    parameters:
+      - { $ref: '#/components/parameters/DutyId' }
+      - { $ref: '#/components/parameters/OccurrenceKey' }
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            {
+              $ref: '#/components/schemas/DutyOccurrenceExclusionPreviewRequest',
+            }
+    responses:
+      '200':
+        description: Distribución determinista sin escrituras
+        content:
+          application/json:
+            schema:
+              { $ref: '#/components/schemas/DutyOccurrenceExclusionResult' }
+      '409': { description: Distribución imposible o versión obsoleta }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/duties/{id}/occurrences/{occurrenceKey}/exclusions:
+  put:
+    tags: [Duty rotations]
+    summary: Confirmar ausencias y redistribuir una ocurrencia futura segura
+    parameters:
+      - { $ref: '#/components/parameters/DutyId' }
+      - { $ref: '#/components/parameters/OccurrenceKey' }
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            { $ref: '#/components/schemas/DutyOccurrenceExclusionRequest' }
+    responses:
+      '200':
+        description: Ausencias persistidas y tareas reconciliadas
+        content:
+          application/json:
+            schema:
+              { $ref: '#/components/schemas/DutyOccurrenceExclusionResult' }
+      '409':
+        {
+          description: Existen asignaciones protegidas o la vista previa venció,
+        }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/assignments:
+  get:
+    tags: [Duty rotations]
+    summary: Consultar turnos por superposición de periodo
+    description: Un turno coincide cuando periodStart es menor o igual al fin y periodEnd es mayor o igual al inicio.
+    parameters:
+      - { in: query, name: dateFrom, schema: { type: string, format: date } }
+      - { in: query, name: dateTo, schema: { type: string, format: date } }
+      - { in: query, name: dutyId, schema: { type: string, format: uuid } }
+      - { in: query, name: userId, schema: { type: integer, minimum: 1 } }
+      - in: query
+        name: status
+        schema: { $ref: '#/components/schemas/DutyAssignmentStatus' }
+    responses:
+      '200':
+        description: Turnos con periodos persistidos
+        content:
+          application/json:
+            schema:
+              type: array
+              items: { $ref: '#/components/schemas/DutyRotationAssignment' }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/assignments/my-upcoming:
+  get:
+    tags: [Duty rotations]
+    summary: Consultar mis turnos vigentes y futuros
+    description: Incluye turnos cuyo periodEnd todavía no terminó.
+    responses:
+      '200':
+        description: Turnos vigentes y futuros
+        content:
+          application/json:
+            schema:
+              type: array
+              items: { $ref: '#/components/schemas/DutyRotationAssignment' }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/users:
+  get:
+    tags: [Duty rotations]
+    summary: Buscar participantes elegibles para Rotaciones
+    description: Lookup contextual; devuelve usuarios activos y excluye REMOTO.
+    responses:
+      '200': { description: Opciones de usuario }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/eligible-roster:
+  get:
+    tags: [Duty rotations]
+    summary: Consultar la fotografía actual del personal activo y presencial elegible
+    responses:
+      '200':
+        description: Participantes elegibles y huella de concurrencia
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DutyEligibleRosterResult' }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/entitlements/my:
+  get:
+    tags: [Duty rotations]
+    summary: Consultar mis capacidades temporales vigentes
+    parameters:
+      - { in: query, name: capabilityKey, schema: { type: string } }
+    responses:
+      '200': { description: Capacidades calculadas desde periodos persistidos }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/assignments/{id}/complete:
+  patch:
+    tags: [Duty rotations]
+    summary: Completar un turno propio dentro de su periodo
+    parameters: [{ $ref: '#/components/parameters/AssignmentId' }]
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [requestKey]
+            properties:
+              executedByUserId: { type: integer, minimum: 1 }
+              resolutionNotes: { type: string, maxLength: 1000 }
+              requestKey: { type: string, format: uuid }
+              evidence:
+                type: array
+                maxItems: 3
+                items: { type: string, format: binary }
+    responses:
+      '200':
+        description: Turno completado y protegido
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DutyRotationAssignment' }
+      '403': { description: El turno pertenece a otro usuario }
+      '409':
+        { description: Todavía no comenzó, venció o su estado no lo permite }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/assignments/{id}/evidences/{evidenceId}/content:
+  get:
+    tags: [Duty rotations]
+    summary: Consultar evidencia privada de cumplimiento
+    description: Disponible para responsable, ejecutor, quien la subió o administradores de Rotaciones.
+    parameters:
+      - { $ref: '#/components/parameters/AssignmentId' }
+      - in: path
+        name: evidenceId
+        required: true
+        schema: { type: string, format: uuid }
+    responses:
+      '200':
+        description: Imagen JPG, PNG o WebP
+        headers:
+          Cache-Control:
+            schema: { type: string, example: 'private, no-store' }
+          X-Content-Type-Options:
+            schema: { type: string, example: nosniff }
+        content:
+          image/jpeg: { schema: { type: string, format: binary } }
+          image/png: { schema: { type: string, format: binary } }
+          image/webp: { schema: { type: string, format: binary } }
+      '403': { description: El usuario no puede consultar esta evidencia }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/assignments/{id}/reassign:
+  patch:
+    tags: [Duty rotations]
+    summary: Reasignar manualmente y proteger un turno
+    parameters: [{ $ref: '#/components/parameters/AssignmentId' }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [assignedUserId]
+            properties:
+              assignedUserId: { type: integer, minimum: 1 }
+    responses:
+      '200':
+        description: Turno reasignado con origen manual
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DutyRotationAssignment' }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/assignments/bulk:
+  delete:
+    tags: [Duty rotations]
+    summary: Eliminar turnos futuros automáticos seguros
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [ids]
+            properties:
+              ids:
+                {
+                  type: array,
+                  minItems: 1,
+                  items: { type: string, format: uuid },
+                }
+              dutyId: { type: string, format: uuid }
+              allowCurrentDay: { type: boolean }
+              deleteOnlyDeletable: { type: boolean }
+    responses:
+      '200': { description: Cantidades eliminadas y protegidas }
+      '409':
+        {
+          description: La selección contiene turnos protegidos en modo estricto,
+        }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/assignments/{id}/swap-requests:
+  post:
+    tags: [Duty rotations]
+    summary: Solicitar cambio dirigido o enviar a bolsa
+    description: En DISTRIBUTE_PARTICIPANTS solo se permiten intercambios dirigidos entre dos tareas de la misma ocurrencia; no se admite bolsa.
+    parameters: [{ $ref: '#/components/parameters/AssignmentId' }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            properties:
+              targetUserId: { type: integer, minimum: 1, nullable: true }
+              reason: { type: string, maxLength: 1000 }
+    responses:
+      '201': { description: Solicitud creada; el turno queda protegido }
+      '409':
+        {
+          description: Turno vencido,
+          no pendiente o con otra solicitud pendiente,
+        }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/swap-requests/{id}/approve:
+  patch:
+    tags: [Duty rotations]
+    summary: Aprobar un cambio dirigido pendiente y vigente
+    parameters: [{ $ref: '#/components/parameters/SwapRequestId' }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema: { type: object, additionalProperties: false }
+    responses:
+      '200': { description: Responsable cambiado; origen SWAP }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/swap-requests/{id}/reject:
+  patch:
+    tags: [Duty rotations]
+    summary: Rechazar una solicitud pendiente
+    parameters: [{ $ref: '#/components/parameters/SwapRequestId' }]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema: { type: object, additionalProperties: false }
+    responses:
+      '200': { description: Solicitud rechazada }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/swap-requests/pending-directed:
+  get:
+    tags: [Duty rotations]
+    summary: Consultar cambios dirigidos pendientes
+    description: >-
+      Lista solicitudes dirigidas que todavía conservan un turno pendiente.
+      Requiere acceso administrativo a Configuración de Rotaciones.
+    responses:
+      '200': { description: Solicitudes dirigidas pendientes }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/open-pool:
+  get:
+    tags: [Duty rotations]
+    summary: Consultar turnos disponibles en bolsa
+    description: >-
+      Devuelve únicamente turnos de actividades en las que participa el usuario
+      autenticado, excluye los turnos que él mismo envió a bolsa y omite los
+      turnos cuyo vencimiento ya pasó.
+    responses:
+      '200': { description: Solicitudes abiertas vigentes }
+    security: [{ bearerAuth: [] }]
+
+/duty-rotations/open-pool/{swapRequestId}/claim:
+  patch:
+    tags: [Duty rotations]
+    summary: Reclamar un turno vigente de la bolsa
+    parameters:
+      - in: path
+        name: swapRequestId
+        required: true
+        schema: { type: string, format: uuid }
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema: { type: object, additionalProperties: false }
+    responses:
+      '200': { description: Turno asignado al reclamante y protegido }
+      '409': { description: Turno vencido o ya no disponible }
+    security: [{ bearerAuth: [] }]
+
+components:
+  parameters:
+    DutyId:
+      in: path
+      name: id
+      required: true
+      schema: { type: string, format: uuid }
+    OccurrenceKey:
+      in: path
+      name: occurrenceKey
+      required: true
+      schema: { type: string, maxLength: 120 }
+    AssignmentId:
+      in: path
+      name: id
+      required: true
+      schema: { type: string, format: uuid }
+    SwapRequestId:
+      in: path
+      name: id
+      required: true
+      schema: { type: string, format: uuid }
+  schemas:
+    DutyWeekday:
+      type: string
+      enum: [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY]
+    DutyAssignmentStatus:
+      type: string
+      enum: [PENDING, COMPLETED, NO_SHOW, OPEN_POOL]
+    DutyAssignmentOrigin:
+      type: string
+      enum: [AUTO, MANUAL, SWAP, OPEN_POOL]
+    DutySlot:
+      type: object
+      additionalProperties: false
+      required: [key, label]
+      properties:
+        key: { type: string, pattern: '^[a-z0-9][a-z0-9_-]*$' }
+        label: { type: string, maxLength: 100 }
+        instructions:
+          { type: string, minLength: 1, maxLength: 500, nullable: true }
+        capacity:
+          oneOf:
+            - type: object
+              additionalProperties: false
+              required: [mode, count]
+              properties:
+                mode: { type: string, enum: [FIXED] }
+                count: { type: integer, minimum: 1, maximum: 500 }
+            - type: object
+              additionalProperties: false
+              required: [mode]
+              properties:
+                mode: { type: string, enum: [REMAINDER] }
+        eligibleParticipantIds:
+          type: array
+          uniqueItems: true
+          items: { type: integer, minimum: 1 }
+    DutyRecurrence:
+      oneOf:
+        - type: object
+          additionalProperties: false
+          required: [frequency, date, slots]
+          properties:
+            frequency: { type: string, enum: [ONCE] }
+            date: { type: string, format: date }
+            slots:
+              {
+                type: array,
+                minItems: 1,
+                items: { $ref: '#/components/schemas/DutySlot' },
+              }
+        - type: object
+          additionalProperties: false
+          required: [frequency, weekdays, slots]
+          properties:
+            frequency: { type: string, enum: [DAILY] }
+            weekdays:
+              {
+                type: array,
+                minItems: 1,
+                uniqueItems: true,
+                items: { $ref: '#/components/schemas/DutyWeekday' },
+              }
+            slots:
+              {
+                type: array,
+                minItems: 1,
+                items: { $ref: '#/components/schemas/DutySlot' },
+              }
+        - type: object
+          additionalProperties: false
+          required: [frequency, weekStartsOn, weekdays, slots]
+          properties:
+            frequency: { type: string, enum: [WEEKLY] }
+            weekStartsOn:
+              $ref: '#/components/schemas/DutyWeekday'
+            weekdays:
+              {
+                type: array,
+                minItems: 1,
+                uniqueItems: true,
+                items: { $ref: '#/components/schemas/DutyWeekday' },
+              }
+            slots:
+              {
+                type: array,
+                minItems: 1,
+                items: { $ref: '#/components/schemas/DutySlot' },
+              }
+        - type: object
+          additionalProperties: false
+          required: [frequency, daysOfMonth, slots]
+          properties:
+            frequency: { type: string, enum: [MONTHLY] }
+            daysOfMonth:
+              {
+                type: array,
+                minItems: 1,
+                uniqueItems: true,
+                items: { type: integer, minimum: 1, maximum: 31 },
+              }
+            slots:
+              {
+                type: array,
+                minItems: 1,
+                items: { $ref: '#/components/schemas/DutySlot' },
+              }
+    DutyDraftRecurrence:
+      description: >-
+        Regla editable. En WEEKLY el backend deriva weekStartsOn desde validFrom;
+        el cliente no debe enviarlo.
+      oneOf:
+        - type: object
+          additionalProperties: false
+          required: [frequency, date, slots]
+          properties:
+            frequency: { type: string, enum: [ONCE] }
+            date: { type: string, format: date }
+            slots:
+              {
+                type: array,
+                minItems: 1,
+                items: { $ref: '#/components/schemas/DutySlot' },
+              }
+        - type: object
+          additionalProperties: false
+          required: [frequency, weekdays, slots]
+          properties:
+            frequency: { type: string, enum: [DAILY] }
+            weekdays:
+              {
+                type: array,
+                minItems: 1,
+                uniqueItems: true,
+                items: { $ref: '#/components/schemas/DutyWeekday' },
+              }
+            slots:
+              {
+                type: array,
+                minItems: 1,
+                items: { $ref: '#/components/schemas/DutySlot' },
+              }
+        - type: object
+          additionalProperties: false
+          required: [frequency, weekdays, slots]
+          properties:
+            frequency: { type: string, enum: [WEEKLY] }
+            weekdays:
+              {
+                type: array,
+                minItems: 1,
+                uniqueItems: true,
+                items: { $ref: '#/components/schemas/DutyWeekday' },
+              }
+            slots:
+              {
+                type: array,
+                minItems: 1,
+                items: { $ref: '#/components/schemas/DutySlot' },
+              }
+        - type: object
+          additionalProperties: false
+          required: [frequency, daysOfMonth, slots]
+          properties:
+            frequency: { type: string, enum: [MONTHLY] }
+            daysOfMonth:
+              {
+                type: array,
+                minItems: 1,
+                uniqueItems: true,
+                items: { type: integer, minimum: 1, maximum: 31 },
+              }
+            slots:
+              {
+                type: array,
+                minItems: 1,
+                items: { $ref: '#/components/schemas/DutySlot' },
+              }
+    DutyConfigurationIssue:
+      type: object
+      additionalProperties: false
+      required: [code, field, message]
+      properties:
+        code:
+          type: string
+          enum:
+            [
+              INVALID_RECURRENCE_RULE,
+              INVALID_ALLOCATION_RULE,
+              FREQUENCY_MISMATCH,
+              NO_PARTICIPANTS,
+            ]
+        field: { type: string }
+        message: { type: string }
+    DutyRotationAllowedActions:
+      type: object
+      additionalProperties: false
+      required: [inspect, edit, repair, deactivate, reactivate]
+      properties:
+        inspect: { type: boolean }
+        edit: { type: boolean }
+        repair: { type: boolean }
+        deactivate: { type: boolean }
+        reactivate: { type: boolean }
+    DutyRotationParticipant:
+      type: object
+      additionalProperties: false
+      required: [id, dutyId, userId, position, user]
+      properties:
+        id: { type: string, format: uuid }
+        dutyId: { type: string, format: uuid }
+        userId: { type: integer, minimum: 1 }
+        position: { type: integer, minimum: 0 }
+        user:
+          type: object
+          required: [id, email, status, profile, role]
+          properties:
+            id: { type: integer, minimum: 1 }
+            email: { type: string }
+            status: { type: boolean }
+            profile: { type: object, nullable: true }
+            role: { type: object, nullable: true }
+    DutyRotation:
+      type: object
+      description: >-
+        DTO administrativo. Si configurationStatus es INVALID, recurrenceRule es null,
+        configurationIssues identifica el problema y las acciones automáticas quedan deshabilitadas.
+      additionalProperties: false
+      required:
+        - id
+        - name
+        - description
+        - capabilityKey
+        - accessWindowDays
+        - frequency
+        - assignmentStrategy
+        - participantSource
+        - evidencePolicy
+        - rosterVersion
+        - weekStartsOn
+        - validFrom
+        - validUntil
+        - planningStartsOn
+        - excludedOccurrenceKeys
+        - configurationVersion
+        - isActive
+        - lastReconciledAt
+        - participants
+        - createdAt
+        - updatedAt
+        - _count
+        - allowedActions
+        - configurationStatus
+        - configurationIssues
+        - recurrenceRule
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        description: { type: string, nullable: true }
+        capabilityKey: { type: string, nullable: true }
+        accessWindowDays: { type: integer, minimum: 0 }
+        frequency: { type: string, enum: [ONCE, DAILY, WEEKLY, MONTHLY] }
+        assignmentStrategy:
+          {
+            type: string,
+            enum:
+              [
+                ONE_OWNER_PER_PERIOD,
+                ONE_OWNER_PER_SLOT,
+                DISTRIBUTE_PARTICIPANTS,
+              ],
+          }
+        participantSource:
+          { type: string, enum: [EXPLICIT, ACTIVE_ELIGIBLE_SYNC] }
+        evidencePolicy:
+          { type: string, enum: [NONE, OPTIONAL_PHOTO, REQUIRED_PHOTO] }
+        rosterVersion: { type: integer, minimum: 1 }
+        weekStartsOn:
+          allOf:
+            - { $ref: '#/components/schemas/DutyWeekday' }
+          description: >-
+            Inicio normalizado del ciclo semanal persistido. Las reglas WEEKLY sin
+            este campo se marcan como configuración inválida y no se normalizan.
+        validFrom: { type: string, format: date }
+        validUntil: { type: string, format: date, nullable: true }
+        planningStartsOn: { type: string, format: date }
+        excludedOccurrenceKeys: { type: array, items: { type: string } }
+        configurationVersion: { type: integer, minimum: 1 }
+        isActive: { type: boolean }
+        lastReconciledAt: { type: string, format: date-time, nullable: true }
+        participants:
+          type: array
+          items: { $ref: '#/components/schemas/DutyRotationParticipant' }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        _count:
+          type: object
+          required: [assignments]
+          properties:
+            assignments: { type: integer, minimum: 0 }
+        allowedActions:
+          { $ref: '#/components/schemas/DutyRotationAllowedActions' }
+        configurationStatus: { type: string, enum: [VALID, INVALID] }
+        configurationIssues:
+          type: array
+          items: { $ref: '#/components/schemas/DutyConfigurationIssue' }
+        recurrenceRule:
+          nullable: true
+          allOf:
+            - { $ref: '#/components/schemas/DutyRecurrence' }
+    DutyAssignmentUser:
+      type: object
+      additionalProperties: false
+      required: [id, email, profile]
+      properties:
+        id: { type: integer, minimum: 1 }
+        email: { type: string }
+        profile:
+          type: object
+          nullable: true
+          additionalProperties: false
+          required: [firstName, lastName]
+          properties:
+            firstName: { type: string }
+            lastName: { type: string }
+    DutyAssignmentDuty:
+      type: object
+      description: Resumen estable de actividad para consumidores de turnos; no es el DTO administrativo.
+      additionalProperties: false
+      required: [id, name, capabilityKey, participants]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        capabilityKey: { type: string, nullable: true }
+        participants:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [id, dutyId, userId, position, user]
+            properties:
+              id: { type: string, format: uuid }
+              dutyId: { type: string, format: uuid }
+              userId: { type: integer, minimum: 1 }
+              position: { type: integer, minimum: 0 }
+              user: { $ref: '#/components/schemas/DutyAssignmentUser' }
+    DutyRotationAssignment:
+      type: object
+      description: Turno materializado. El periodo persistido es la fuente de verdad para su cobertura.
+      additionalProperties: false
+      required:
+        - id
+        - dutyId
+        - duty
+        - occurrenceKey
+        - periodStart
+        - periodEnd
+        - dueOn
+        - slotKey
+        - slotLabel
+        - slotInstructions
+        - baseSlotKey
+        - slotPosition
+        - assignedUserId
+        - assignedUser
+        - executedByUserId
+        - executedByUser
+        - status
+        - configurationVersion
+        - rosterVersion
+        - evidencePolicy
+        - origin
+        - isLocked
+        - resolutionNotes
+        - coverageStart
+        - coverageEnd
+        - coverageLabel
+        - createdAt
+        - updatedAt
+        - swapRequests
+        - evidences
+      properties:
+        id: { type: string, format: uuid }
+        dutyId: { type: string, format: uuid }
+        duty: { $ref: '#/components/schemas/DutyAssignmentDuty' }
+        occurrenceKey: { type: string }
+        periodStart: { type: string, format: date }
+        periodEnd: { type: string, format: date }
+        dueOn: { type: string, format: date }
+        slotKey: { type: string }
+        slotLabel: { type: string }
+        slotInstructions: { type: string, nullable: true }
+        baseSlotKey: { type: string, nullable: true }
+        slotPosition: { type: integer, minimum: 1, nullable: true }
+        assignedUserId: { type: integer, minimum: 1 }
+        assignedUser: { $ref: '#/components/schemas/DutyAssignmentUser' }
+        executedByUserId: { type: integer, minimum: 1, nullable: true }
+        executedByUser:
+          nullable: true
+          allOf:
+            - { $ref: '#/components/schemas/DutyAssignmentUser' }
+        status: { $ref: '#/components/schemas/DutyAssignmentStatus' }
+        configurationVersion: { type: integer, minimum: 1 }
+        rosterVersion: { type: integer, minimum: 1 }
+        evidencePolicy:
+          { type: string, enum: [NONE, OPTIONAL_PHOTO, REQUIRED_PHOTO] }
+        origin: { $ref: '#/components/schemas/DutyAssignmentOrigin' }
+        isLocked: { type: boolean }
+        resolutionNotes: { type: string, nullable: true }
+        coverageStart: { type: string, format: date }
+        coverageEnd: { type: string, format: date }
+        coverageLabel: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        swapRequests: { type: array, items: { type: object } }
+        evidences:
+          type: array
+          items:
+            type: object
+            required:
+              [
+                id,
+                assignmentId,
+                originalName,
+                mimeType,
+                sizeBytes,
+                submittedById,
+                createdAt,
+                contentUrl,
+              ]
+            properties:
+              id: { type: string, format: uuid }
+              assignmentId: { type: string, format: uuid }
+              originalName: { type: string }
+              mimeType:
+                { type: string, enum: [image/jpeg, image/png, image/webp] }
+              sizeBytes: { type: integer, minimum: 1 }
+              submittedById: { type: integer, minimum: 1 }
+              createdAt: { type: string, format: date-time }
+              contentUrl: { type: string }
+    DutyDraft:
+      type: object
+      additionalProperties: false
+      required:
+        [
+          name,
+          accessWindowDays,
+          assignmentStrategy,
+          participantSource,
+          evidencePolicy,
+          validFrom,
+          recurrence,
+          participantIds,
+        ]
+      properties:
+        name: { type: string, maxLength: 160 }
+        description: { type: string, nullable: true, maxLength: 1000 }
+        capabilityKey: { type: string, nullable: true, maxLength: 120 }
+        accessWindowDays: { type: integer, minimum: 0, maximum: 365 }
+        assignmentStrategy:
+          type: string
+          enum:
+            [ONE_OWNER_PER_PERIOD, ONE_OWNER_PER_SLOT, DISTRIBUTE_PARTICIPANTS]
+          description: >-
+            ONE_OWNER_PER_PERIOD admite un unico bloque interno y el backend lo
+            normaliza como period / Periodo completo. Las tareas editables solo
+            aplican a ONE_OWNER_PER_SLOT y los grupos a DISTRIBUTE_PARTICIPANTS.
+        participantSource:
+          type: string
+          enum: [EXPLICIT, ACTIVE_ELIGIBLE_SYNC]
+        evidencePolicy:
+          type: string
+          enum: [NONE, OPTIONAL_PHOTO, REQUIRED_PHOTO]
+        validFrom: { type: string, format: date }
+        validUntil: { type: string, format: date, nullable: true }
+        recurrence: { $ref: '#/components/schemas/DutyDraftRecurrence' }
+        participantIds:
+          {
+            type: array,
+            minItems: 1,
+            uniqueItems: true,
+            items: { type: integer, minimum: 1 },
+          }
+        excludedOccurrenceKeys:
+          { type: array, uniqueItems: true, items: { type: string } }
+    DutyEditRequest:
+      type: object
+      additionalProperties: false
+      required: [draft, effectiveFrom, expectedVersion, requestKey]
+      properties:
+        draft: { $ref: '#/components/schemas/DutyDraft' }
+        effectiveFrom: { type: string, format: date }
+        expectedVersion: { type: integer, minimum: 1 }
+        requestKey: { type: string, format: uuid }
+    DutyRosterSyncPreviewRequest:
+      type: object
+      additionalProperties: false
+      required: [effectiveFrom, expectedVersion, rosterFingerprint]
+      properties:
+        effectiveFrom: { type: string, format: date }
+        expectedVersion: { type: integer, minimum: 1 }
+        rosterFingerprint: { type: string, pattern: '^[a-f0-9]{64}$' }
+    DutyRosterSyncRequest:
+      type: object
+      additionalProperties: false
+      required: [effectiveFrom, expectedVersion, rosterFingerprint, requestKey]
+      properties:
+        effectiveFrom: { type: string, format: date }
+        expectedVersion: { type: integer, minimum: 1 }
+        rosterFingerprint: { type: string, pattern: '^[a-f0-9]{64}$' }
+        requestKey: { type: string, format: uuid }
+    DutyOccurrenceExclusionPreviewRequest:
+      type: object
+      additionalProperties: false
+      required: [excludedUserIds, expectedVersion]
+      properties:
+        excludedUserIds:
+          type: array
+          uniqueItems: true
+          maxItems: 500
+          items: { type: integer, minimum: 1 }
+        expectedVersion: { type: integer, minimum: 1 }
+        reason: { type: string, maxLength: 500 }
+    DutyOccurrenceExclusionRequest:
+      type: object
+      additionalProperties: false
+      required: [excludedUserIds, expectedVersion, requestKey]
+      properties:
+        excludedUserIds:
+          type: array
+          uniqueItems: true
+          maxItems: 500
+          items: { type: integer, minimum: 1 }
+        expectedVersion: { type: integer, minimum: 1 }
+        reason: { type: string, maxLength: 500 }
+        requestKey: { type: string, format: uuid }
+    DutyEligibleRosterUser:
+      type: object
+      additionalProperties: false
+      required: [id, email, status, userType, profile, role]
+      properties:
+        id: { type: integer, minimum: 1 }
+        email: { type: string }
+        status: { type: boolean }
+        userType: { type: string, enum: [INTERINO, REGULAR, REMOTO] }
+        profile:
+          type: object
+          nullable: true
+          additionalProperties: false
+          required: [firstName, lastName]
+          properties:
+            firstName: { type: string }
+            lastName: { type: string }
+        role:
+          type: object
+          nullable: true
+          additionalProperties: false
+          required: [id, name]
+          properties:
+            id: { type: integer, minimum: 1 }
+            name: { type: string }
+    DutyEligibleRosterResult:
+      type: object
+      additionalProperties: false
+      required: [participants, rosterFingerprint]
+      properties:
+        participants:
+          type: array
+          items: { $ref: '#/components/schemas/DutyEligibleRosterUser' }
+        rosterFingerprint: { type: string, pattern: '^[a-f0-9]{64}$' }
+    DutyRosterSyncPreviewResult:
+      type: object
+      additionalProperties: false
+      required: [addedIds, removedIds, preservedIds, rosterFingerprint, impact]
+      properties:
+        addedIds: { type: array, items: { type: integer, minimum: 1 } }
+        removedIds: { type: array, items: { type: integer, minimum: 1 } }
+        preservedIds: { type: array, items: { type: integer, minimum: 1 } }
+        rosterFingerprint: { type: string, pattern: '^[a-f0-9]{64}$' }
+        impact: { $ref: '#/components/schemas/DutyImpact' }
+    DutyRosterSyncMutationResult:
+      type: object
+      additionalProperties: false
+      required:
+        [
+          duty,
+          reconciliation,
+          idempotentReplay,
+          addedIds,
+          removedIds,
+          preservedIds,
+          rosterFingerprint,
+        ]
+      properties:
+        duty: { $ref: '#/components/schemas/DutyRotation' }
+        reconciliation:
+          nullable: true
+          allOf:
+            - { $ref: '#/components/schemas/DutyReconciliationResult' }
+        impact:
+          nullable: true
+          allOf:
+            - { $ref: '#/components/schemas/DutyImpact' }
+        idempotentReplay: { type: boolean }
+        addedIds: { type: array, items: { type: integer, minimum: 1 } }
+        removedIds: { type: array, items: { type: integer, minimum: 1 } }
+        preservedIds: { type: array, items: { type: integer, minimum: 1 } }
+        rosterFingerprint: { type: string, pattern: '^[a-f0-9]{64}$' }
+    DutyOccurrence:
+      type: object
+      additionalProperties: false
+      required: [occurrenceKey, periodStart, periodEnd, dueOn]
+      properties:
+        occurrenceKey: { type: string }
+        periodStart: { type: string, format: date }
+        periodEnd: { type: string, format: date }
+        dueOn: { type: string, format: date }
+    DutyOccurrenceAllocation:
+      type: object
+      additionalProperties: false
+      required:
+        [
+          slotKey,
+          slotLabel,
+          slotInstructions,
+          baseSlotKey,
+          slotPosition,
+          assignedUserId,
+          assignedUser,
+        ]
+      properties:
+        slotKey: { type: string }
+        slotLabel: { type: string }
+        slotInstructions: { type: string, nullable: true }
+        baseSlotKey: { type: string }
+        slotPosition: { type: integer, minimum: 1 }
+        assignedUserId: { type: integer, minimum: 1 }
+        assignedUser:
+          nullable: true
+          allOf:
+            - { $ref: '#/components/schemas/DutyEligibleRosterUser' }
+    DutyOccurrenceConflict:
+      type: object
+      additionalProperties: false
+      required: [assignmentId, assignedUserId, slotKey, reason]
+      properties:
+        assignmentId: { type: string }
+        assignedUserId: { type: integer, minimum: 0 }
+        slotKey: { type: string }
+        reason: { type: string }
+    DutyOccurrenceExclusionResult:
+      type: object
+      additionalProperties: false
+      required:
+        [
+          dutyId,
+          dutyName,
+          configurationVersion,
+          rosterVersion,
+          occurrence,
+          existingExclusions,
+          excludedUserIds,
+          canApply,
+          conflicts,
+          replacedCount,
+          warnings,
+          assignments,
+        ]
+      properties:
+        dutyId: { type: string, format: uuid }
+        dutyName: { type: string }
+        configurationVersion: { type: integer, minimum: 1 }
+        rosterVersion: { type: integer, minimum: 1 }
+        occurrence: { $ref: '#/components/schemas/DutyOccurrence' }
+        existingExclusions:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [userId, reason]
+            properties:
+              userId: { type: integer, minimum: 1 }
+              reason: { type: string, nullable: true }
+        excludedUserIds: { type: array, items: { type: integer, minimum: 1 } }
+        canApply: { type: boolean }
+        conflicts:
+          type: array
+          items: { $ref: '#/components/schemas/DutyOccurrenceConflict' }
+        replacedCount: { type: integer, minimum: 0 }
+        warnings: { type: array, items: { type: string } }
+        assignments:
+          type: array
+          items: { $ref: '#/components/schemas/DutyOccurrenceAllocation' }
+        persistedAssignments:
+          type: array
+          items: { $ref: '#/components/schemas/DutyRotationAssignment' }
+        reconciliation:
+          nullable: true
+          allOf:
+            - { $ref: '#/components/schemas/DutyReconciliationResult' }
+        idempotentReplay: { type: boolean }
+    DutyPreview:
+      type: object
+      additionalProperties: false
+      required:
+        [
+          occurrences,
+          warnings,
+          distributionWarnings,
+          adjustedStart,
+          horizonEnd,
+          rosterFingerprint,
+          participantSnapshot,
+        ]
+      properties:
+        occurrences:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              [
+                occurrenceKey,
+                periodStart,
+                periodEnd,
+                dueOn,
+                slotKey,
+                slotLabel,
+                slotInstructions,
+                baseSlotKey,
+                slotPosition,
+                assignedUser,
+              ]
+            properties:
+              occurrenceKey: { type: string }
+              periodStart: { type: string, format: date }
+              periodEnd: { type: string, format: date }
+              dueOn: { type: string, format: date }
+              slotKey: { type: string }
+              slotLabel: { type: string }
+              slotInstructions: { type: string, nullable: true }
+              baseSlotKey: { type: string, nullable: true }
+              slotPosition: { type: integer, minimum: 1, nullable: true }
+              assignedUser:
+                $ref: '#/components/schemas/DutyEligibleRosterUser'
+        warnings: { type: array, items: { type: string } }
+        distributionWarnings:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              [occurrenceKey, periodStart, periodEnd, repeatedParticipantCount]
+            properties:
+              occurrenceKey: { type: string, format: date }
+              periodStart: { type: string, format: date }
+              periodEnd: { type: string, format: date }
+              repeatedParticipantCount: { type: integer, minimum: 1 }
+        adjustedStart: { type: string, format: date, nullable: true }
+        horizonEnd: { type: string, format: date }
+        rosterFingerprint: { type: string, pattern: '^[a-f0-9]{64}$' }
+        participantSnapshot:
+          type: array
+          items: { type: object }
+    DutyImpactAssignment:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - dutyId
+        - occurrenceKey
+        - periodStart
+        - periodEnd
+        - dueOn
+        - slotKey
+        - slotLabel
+        - assignedUserId
+        - status
+        - origin
+        - isLocked
+      properties:
+        id: { type: string, format: uuid }
+        dutyId: { type: string, format: uuid }
+        occurrenceKey: { type: string }
+        periodStart: { type: string, format: date }
+        periodEnd: { type: string, format: date }
+        dueOn: { type: string, format: date }
+        slotKey: { type: string }
+        slotLabel: { type: string }
+        assignedUserId: { type: integer, minimum: 1 }
+        status: { $ref: '#/components/schemas/DutyAssignmentStatus' }
+        origin: { $ref: '#/components/schemas/DutyAssignmentOrigin' }
+        isLocked: { type: boolean }
+        protectionReason: { type: string }
+    DutyImpact:
+      type: object
+      additionalProperties: false
+      required:
+        - preservedCount
+        - removedCount
+        - regeneratedCount
+        - conflictCount
+        - preserved
+        - removed
+        - conflicts
+        - preview
+      properties:
+        preservedCount: { type: integer, minimum: 0 }
+        removedCount: { type: integer, minimum: 0 }
+        regeneratedCount: { type: integer, minimum: 0 }
+        conflictCount: { type: integer, minimum: 0 }
+        preserved:
+          type: array
+          items: { $ref: '#/components/schemas/DutyImpactAssignment' }
+        removed:
+          type: array
+          items: { $ref: '#/components/schemas/DutyImpactAssignment' }
+        conflicts:
+          type: array
+          items: { $ref: '#/components/schemas/DutyImpactAssignment' }
+        preview: { $ref: '#/components/schemas/DutyPreview' }
+    DutyReconciliationConflict:
+      type: object
+      additionalProperties: false
+      required: [assignmentId, occurrenceKey, slotKey, reason]
+      properties:
+        assignmentId: { type: string, format: uuid }
+        occurrenceKey: { type: string }
+        slotKey: { type: string }
+        reason: { type: string }
+    DutyReconciliationResult:
+      type: object
+      additionalProperties: false
+      required:
+        - dutyId
+        - createdCount
+        - preservedCount
+        - deletedCount
+        - conflictCount
+        - createdIds
+        - deletedIds
+        - conflicts
+      properties:
+        dutyId: { type: string, format: uuid }
+        createdCount: { type: integer, minimum: 0 }
+        preservedCount: { type: integer, minimum: 0 }
+        deletedCount: { type: integer, minimum: 0 }
+        conflictCount: { type: integer, minimum: 0 }
+        createdIds: { type: array, items: { type: string, format: uuid } }
+        deletedIds: { type: array, items: { type: string, format: uuid } }
+        conflicts:
+          type: array
+          items: { $ref: '#/components/schemas/DutyReconciliationConflict' }
+    DutyMutationResult:
+      type: object
+      additionalProperties: false
+      required: [duty, reconciliation, idempotentReplay]
+      properties:
+        duty: { $ref: '#/components/schemas/DutyRotation' }
+        reconciliation:
+          nullable: true
+          allOf:
+            - { $ref: '#/components/schemas/DutyReconciliationResult' }
+        idempotentReplay: { type: boolean }
+    DutyUpdateResult:
+      type: object
+      additionalProperties: false
+      required: [duty, reconciliation, idempotentReplay]
+      properties:
+        duty: { $ref: '#/components/schemas/DutyRotation' }
+        reconciliation:
+          nullable: true
+          allOf:
+            - { $ref: '#/components/schemas/DutyReconciliationResult' }
+        impact:
+          nullable: true
+          allOf:
+            - { $ref: '#/components/schemas/DutyImpact' }
+        idempotentReplay: { type: boolean }
+    DutyStatusPreview:
+      type: object
+      additionalProperties: false
+      required:
+        [isActive, removableCount, preservedCount, conflictCount, conflicts]
+      properties:
+        isActive: { type: boolean }
+        removableCount: { type: integer, minimum: 0 }
+        preservedCount: { type: integer, minimum: 0 }
+        conflictCount: { type: integer, minimum: 0 }
+        conflicts:
+          type: array
+          items: { $ref: '#/components/schemas/DutyImpactAssignment' }
+    DutyStatusMutationResult:
+      type: object
+      additionalProperties: false
+      required: [duty, reconciliation, idempotentReplay]
+      properties:
+        duty: { $ref: '#/components/schemas/DutyRotation' }
+        deletedCount: { type: integer, minimum: 0 }
+        conflicts:
+          type: array
+          items: { $ref: '#/components/schemas/DutyImpactAssignment' }
+        reconciliation:
+          nullable: true
+          allOf:
+            - { $ref: '#/components/schemas/DutyReconciliationResult' }
+        idempotentReplay: { type: boolean }

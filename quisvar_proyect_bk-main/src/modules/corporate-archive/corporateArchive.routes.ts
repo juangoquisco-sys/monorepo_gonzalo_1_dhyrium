@@ -1,0 +1,26 @@
+import { Router } from 'express';
+import authenticateHandler from '@/middlewares/auth.middleware';
+import role from '@/middlewares/role.middleware';
+import CorporateArchiveController from './corporateArchive.controller';
+import { corporateArchiveDocumentsUpload, corporateArchiveVersionUpload } from './corporateArchive.upload';
+
+const router = Router();
+router.use(authenticateHandler);
+router.use(role.RoleHandler(['MOD'], 'empresas'));
+router.get('/categories', CorporateArchiveController.categories);
+router.put('/scopes/:scopeType/:scopeId/categories/:categoryKey', CorporateArchiveController.resolveRoot);
+router.get('/roots/:rootId/tree', CorporateArchiveController.tree);
+router.get('/roots/:rootId/contents', CorporateArchiveController.contents);
+router.post('/roots/:rootId/folders', CorporateArchiveController.createFolder);
+router.patch('/folders/:id', CorporateArchiveController.renameFolder);
+router.post('/folders/:id/move', CorporateArchiveController.moveFolder);
+router.post('/folders/:id/archive', CorporateArchiveController.archiveFolder);
+router.post('/folders/:id/restore', CorporateArchiveController.restoreFolder);
+router.post('/folders/:id/documents', corporateArchiveDocumentsUpload, CorporateArchiveController.createDocuments);
+router.get('/documents/:id/download', CorporateArchiveController.download);
+router.get('/documents/:id/versions', CorporateArchiveController.documentVersions);
+router.post('/documents/:id/versions', corporateArchiveVersionUpload, CorporateArchiveController.createVersion);
+router.post('/documents/:id/move', CorporateArchiveController.moveDocument);
+router.post('/documents/:id/archive', CorporateArchiveController.archiveDocument);
+router.post('/documents/:id/restore', CorporateArchiveController.restoreDocument);
+export default router;

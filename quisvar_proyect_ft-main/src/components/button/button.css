@@ -1,0 +1,168 @@
+/* .button-solid {
+} */
+
+.btn-main-img {
+  width: 100%;
+}
+
+.btn-hiden {
+  display: none;
+}
+.btn-main-text {
+  width: 14%;
+  aspect-ratio: 1;
+}
+
+.btn-alert {
+  font-size: var(--size-paragraph);
+  font-weight: 400;
+  border: 1px solid var(--color-tertiary);
+  color: #000;
+}
+
+.btn-delete {
+  border: 2px solid var(--color-unresolved);
+}
+
+.button-link:hover {
+  text-decoration: underline;
+}
+
+.btn-disabled {
+  cursor: not-allowed;
+}
+
+.alert-modal-main {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  background-color: #00000062;
+  z-index: var(--z-modal);
+}
+
+.alert-modal-children {
+  margin: 0;
+  align-items: center;
+  border-radius: var(--radius-input);
+  background-color: #fff;
+  box-shadow: 3px 5.5px 4px rgba(0, 0, 0, 0.2);
+  min-width: 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.alert-modal-children h3 {
+  font-weight: bold;
+  text-align: center;
+  color: var(--color-secondary);
+}
+
+.alert-modal-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.alert-modal-copy p {
+  text-align: center;
+  color: var(--color-gray-tertiary);
+  line-height: 1.45;
+  max-width: 28rem;
+  white-space: pre-line;
+}
+
+.alert-modal-trash {
+  width: 4rem;
+  height: 4rem;
+}
+
+.container-btn {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+.modal-btn-confirm {
+  border-radius: 5px;
+  border: 1px solid var(--color-unresolved);
+  color: var(--color-unresolved);
+}
+.modal-btn-cancel {
+  border-radius: 5px;
+  border: 1px solid var(--color-secondary);
+  color: var(--color-secondary);
+}
+.modal-text-input {
+  width: 70%;
+  margin-bottom: 0.5rem;
+}
+.delete-form-btn {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-common {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.35rem;
+  cursor: pointer;
+  font-weight: 600;
+  justify-content: center;
+  border-radius: 0.3rem; /* El valor más común */
+  transition: background-color 0.5s ease, color 0.5s ease;
+  border: 1px solid;
+}
+
+/* Estilos específicos para .btn-main */
+.btn-main {
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  border-radius: 0.5rem;
+}
+
+/* Estilos específicos para .btn-main-style-2 */
+.btn-main-style-2 {
+  justify-content: center;
+  width: 100%;
+  gap: 0.625rem;
+  border-radius: 0.3125rem;
+  border: 1px solid #d4d4d4;
+  background-color: #f7f7f7;
+  padding: 0.5rem 0.625rem;
+  color: #5c5c5c;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+/* Estilos específicos para .btn-new-message */
+.btn-new-message {
+  background-color: var(--color-quinary);
+  color: var(--color-secondary);
+  border-radius: 0.3rem; /* Sobrescribir si es necesario */
+}
+
+.btn-send {
+  border: 1px solid var(--color-primary);
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 0.3rem; /* Sobrescribir si es necesario */
+}
+
+.btn-common:disabled {
+  cursor: not-allowed;
+}

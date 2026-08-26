@@ -1,0 +1,463 @@
+.salaryDetailTable {
+  display: flex;
+  width: 100%;
+  padding: 0.625rem 0rem;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+.salaryDetailTable-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+.salaryDetailTable-title {
+  color: var(--color-gray-tertiary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.035rem;
+  text-transform: uppercase;
+}
+.salaryDetailTable-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  align-items: center;
+}
+.salaryDetailTable-action {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--color-secondary);
+  align-items: center;
+}
+
+.salaryDetailTable-submitter {
+  position: relative;
+  display: block;
+  min-width: 0;
+  padding-right: 1.45rem;
+}
+
+.salaryDetailTable-moveUnit {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: transparent;
+  color: var(--color-secondary);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.salaryDetailTable-submitter:hover .salaryDetailTable-moveUnit,
+.salaryDetailTable-moveUnit:focus-visible {
+  opacity: 0.75;
+}
+
+.salaryDetailTable-moveUnit:hover {
+  background: #edf7fb;
+  opacity: 1;
+}
+
+.salaryDetailTable-unitOverride {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.05rem 0.32rem;
+  background: #fff7ed;
+  color: #b45309;
+  font-size: 0.58rem;
+  font-weight: 800;
+}
+
+.salaryDetailTable-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.salaryDetailTable-returnButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 1.9rem;
+  padding: 0.15rem 0.55rem;
+  border: 1px solid #d8e2ed;
+  border-radius: 5px;
+  background: #f7fbff;
+  color: var(--color-secondary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.salaryDetailTable-returnButton:hover {
+  border-color: var(--color-secondary);
+  background: #edf7fb;
+}
+.salaryDetailTable-reports {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  gap: 0.35rem;
+  color: var(--color-secondary);
+}
+
+.salaryDetailTable-fines {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+  min-width: 6.5rem;
+}
+
+.salaryDetailTable-attendanceFine {
+  display: inline-flex;
+  align-items: center;
+  width: 7.4rem;
+  min-height: 1.9rem;
+  border: 1px solid #cbd5df;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.salaryDetailTable-attendanceFine span {
+  padding-left: 0.5rem;
+  color: var(--color-secondary);
+  font-weight: 700;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.salaryDetailTable-attendanceFine input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  padding: 0.25rem 0.45rem;
+  color: var(--color-secondary);
+  font-weight: 700;
+  font-size: 0.78rem;
+}
+
+.salaryDetailTable-attendanceFine:focus-within {
+  border-color: var(--color-secondary);
+}
+
+.salaryDetailTable-attendanceFine input:disabled {
+  background: #f3f6f8;
+  color: #7a8b96;
+  cursor: not-allowed;
+}
+
+.salaryDetailTable-report {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.salaryDetailTable-report-open {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+  min-height: 2.15rem;
+  width: 100%;
+  min-width: 0;
+  padding: 0.25rem 0.45rem;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-secondary);
+  cursor: pointer;
+  text-align: left;
+}
+
+.salaryDetailTable-report-open:hover {
+  background: rgba(0, 48, 110, 0.08);
+}
+
+.salaryDetailTable-report-main {
+  display: grid;
+  min-width: 0;
+  line-height: 1.05rem;
+}
+
+.salaryDetailTable-report-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 1.9rem;
+  height: 1.9rem;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #c62828;
+  cursor: pointer;
+}
+
+.salaryDetailTable-report-delete:hover {
+  background: rgba(198, 40, 40, 0.1);
+}
+.salaryDetailTable-report-name {
+  color: var(--color-gray);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.salaryDetailTable-report-price {
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.salaryDetailTable-payableTotal {
+  color: #00695c;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.salaryDetailTable .table-container {
+  overflow-x: auto;
+}
+
+.salaryDetailTable .table {
+  table-layout: fixed;
+  min-width: 78rem;
+}
+
+.salaryDetailTable .table-header-row,
+.salaryDetailTable .table-body-row {
+  height: 2.65rem;
+}
+
+.salaryDetailTable .table-header-item,
+.salaryDetailTable .table-body-item {
+  padding-left: 0.45rem;
+  padding-right: 0.45rem;
+}
+
+.salaryDetailTable--UNAPPROVED .table-header-item:nth-child(1),
+.salaryDetailTable--UNAPPROVED .table-body-item:nth-child(1),
+.salaryDetailTable--UNPAID .table-header-item:nth-child(1),
+.salaryDetailTable--UNPAID .table-body-item:nth-child(1) {
+  width: 15rem;
+}
+
+.salaryDetailTable--UNAPPROVED .table-header-item:nth-child(2),
+.salaryDetailTable--UNAPPROVED .table-body-item:nth-child(2),
+.salaryDetailTable--UNPAID .table-header-item:nth-child(2),
+.salaryDetailTable--UNPAID .table-body-item:nth-child(2) {
+  width: 25rem;
+}
+
+.salaryDetailTable--UNAPPROVED .table-header-item:nth-child(3),
+.salaryDetailTable--UNAPPROVED .table-body-item:nth-child(3),
+.salaryDetailTable--UNPAID .table-header-item:nth-child(3),
+.salaryDetailTable--UNPAID .table-body-item:nth-child(3) {
+  width: 7.5rem;
+}
+
+.salaryDetailTable--UNAPPROVED .table-header-item:nth-child(4),
+.salaryDetailTable--UNAPPROVED .table-body-item:nth-child(4),
+.salaryDetailTable--UNPAID .table-header-item:nth-child(4),
+.salaryDetailTable--UNPAID .table-body-item:nth-child(4) {
+  width: 8.5rem;
+}
+
+.salaryDetailTable--UNAPPROVED .table-header-item:nth-child(5),
+.salaryDetailTable--UNAPPROVED .table-body-item:nth-child(5),
+.salaryDetailTable--UNPAID .table-header-item:nth-child(5),
+.salaryDetailTable--UNPAID .table-body-item:nth-child(5) {
+  width: 15rem;
+}
+
+.salaryDetailTable--UNAPPROVED .table-header-item:nth-child(6),
+.salaryDetailTable--UNAPPROVED .table-body-item:nth-child(6),
+.salaryDetailTable--UNPAID .table-header-item:nth-child(6),
+.salaryDetailTable--UNPAID .table-body-item:nth-child(6) {
+  width: 8rem;
+}
+
+.salaryDetailTable--UNAPPROVED .table-header-item:nth-child(7),
+.salaryDetailTable--UNAPPROVED .table-body-item:nth-child(7),
+.salaryDetailTable--UNPAID .table-header-item:nth-child(7),
+.salaryDetailTable--UNPAID .table-body-item:nth-child(7) {
+  width: 9rem;
+  text-align: center;
+}
+
+.salaryDetailTable--UNPAID .table-header-item:nth-child(8),
+.salaryDetailTable--UNPAID .table-body-item:nth-child(8) {
+  width: 0;
+}
+
+.salaryDetailTable--UNAPPROVED .table-header-item:nth-child(8),
+.salaryDetailTable--UNAPPROVED .table-body-item:nth-child(8) {
+  width: 4.25rem;
+  text-align: center;
+}
+
+.salaryDetailTable--APPROVED .table {
+  min-width: 82rem;
+}
+
+.salaryDetailTable--APPROVED .table-header-item:nth-child(1),
+.salaryDetailTable--APPROVED .table-body-item:nth-child(1) {
+  width: 3.25rem;
+  text-align: center;
+}
+
+.salaryDetailTable--APPROVED .table-header-item:nth-child(2),
+.salaryDetailTable--APPROVED .table-body-item:nth-child(2) {
+  width: 15rem;
+}
+
+.salaryDetailTable--APPROVED .table-header-item:nth-child(3),
+.salaryDetailTable--APPROVED .table-body-item:nth-child(3) {
+  width: 25rem;
+}
+
+.salaryDetailTable--APPROVED .table-header-item:nth-child(4),
+.salaryDetailTable--APPROVED .table-body-item:nth-child(4) {
+  width: 7.5rem;
+}
+
+.salaryDetailTable--APPROVED .table-header-item:nth-child(5),
+.salaryDetailTable--APPROVED .table-body-item:nth-child(5) {
+  width: 8.5rem;
+}
+
+.salaryDetailTable--APPROVED .table-header-item:nth-child(6),
+.salaryDetailTable--APPROVED .table-body-item:nth-child(6) {
+  width: 15rem;
+}
+
+.salaryDetailTable--APPROVED .table-header-item:nth-child(7),
+.salaryDetailTable--APPROVED .table-body-item:nth-child(7) {
+  width: 8rem;
+}
+
+.salaryDetailTable--APPROVED .table-header-item:nth-child(8),
+.salaryDetailTable--APPROVED .table-body-item:nth-child(8) {
+  width: 5rem;
+  text-align: center;
+}
+
+.salaryDetailTable-modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.34);
+}
+
+.salaryDetailTable-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: min(34rem, 94vw);
+  border-radius: 8px;
+  padding: 1rem;
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+}
+
+.salaryDetailTable-modal header,
+.salaryDetailTable-modal footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.salaryDetailTable-modal h3 {
+  margin: 0;
+  color: #001b5c;
+  font-size: 1rem;
+}
+
+.salaryDetailTable-modal p {
+  margin: 0.25rem 0 0;
+  color: #607d8b;
+  font-size: 0.78rem;
+  line-height: 1.2rem;
+}
+
+.salaryDetailTable-modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: #546e7a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.salaryDetailTable-modal select {
+  height: 2.35rem;
+  border: 1px solid #ccd7dd;
+  border-radius: 6px;
+  padding: 0 0.65rem;
+  color: #001b5c;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.salaryDetailTable-modal button {
+  min-height: 2.1rem;
+  border: 1px solid #d2e0eb;
+  border-radius: 6px;
+  padding: 0 0.75rem;
+  background: #fff;
+  color: #001b5c;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.salaryDetailTable-modal footer {
+  justify-content: flex-end;
+}
+
+.salaryDetailTable-modal footer button:last-child {
+  border-color: var(--color-secondary);
+  background: var(--color-secondary);
+  color: #fff;
+}
+
+.salaryDetailTable-report--liquidation {
+  border-color: color-mix(in srgb, var(--color-warning) 35%, transparent);
+  background: color-mix(in srgb, var(--color-warning) 8%, transparent);
+}
+
+.salaryDetailTable-liquidationBadge {
+  display: inline-flex;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.1rem 0.45rem;
+  background: color-mix(in srgb, var(--color-warning) 16%, transparent);
+  color: var(--color-warning);
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}

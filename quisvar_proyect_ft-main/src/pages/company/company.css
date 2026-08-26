@@ -1,0 +1,317 @@
+.company {
+  max-height: 100vh;
+  /* overflow-y: hidden; */
+  display: flex;
+  /* flex-direction: column; */
+  gap: 0.275rem;
+  /* gap: 1rem; */
+  height: 100%;
+  min-width: 0;
+}
+
+.company-directory {
+  display: grid;
+  gap: 0.6rem;
+  padding: 0 0.8rem 0.8rem;
+  border-bottom: 1px solid #dce5f0;
+}
+
+.company-directory-root {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  padding: 0.65rem 0.7rem;
+  border: 1px solid #d8e2ef;
+  border-left: 4px solid var(--color-primary);
+  border-radius: 0.6rem;
+  color: var(--color-secondary);
+  background: #f8fbff;
+}
+
+.company-directory-root h2 {
+  margin: 0;
+  color: var(--color-secondary);
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.company-directory-kicker {
+  display: block;
+  margin-bottom: 0.1rem;
+  color: #6b7b96;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.company-directory-number {
+  flex: 0 0 auto;
+  color: #526883;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.company-directory-branches {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+  padding-left: 1rem;
+}
+
+.company-directory-branch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.35rem;
+  min-width: 0;
+  min-height: 2.2rem;
+  border: 1px solid transparent;
+  border-radius: 0.45rem;
+  padding: 0.45rem 0.5rem;
+  color: #526883;
+  background: transparent;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+}
+
+.company-directory-branch:hover {
+  color: var(--color-primary);
+  background: #f3f8fd;
+}
+
+.company-directory-branch.is-active {
+  border-color: #c9e8ff;
+  color: var(--color-primary);
+  background: #eaf6ff;
+  box-shadow: inset 0 0 0 1px #c9e8ff;
+}
+
+.company-directory-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0 0.8rem;
+  color: #6b7b96;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.company-directory-add-btn {
+  width: 1.8rem;
+  min-width: 1.8rem;
+  border: none;
+}
+
+.company > .aside {
+  width: min(68rem, 72vw);
+}
+
+.company-table-scroll {
+  margin: 0 0.8rem;
+  border: 1px solid #dce5f0;
+  border-radius: 0.55rem;
+  overflow: auto;
+}
+
+.company-data-table {
+  width: 100%;
+  min-width: 64rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: #24364b;
+  font-size: 0.72rem;
+}
+
+.company-data-table th {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  padding: 0.72rem 0.65rem;
+  border-bottom: 1px solid #cbd8e6;
+  color: #526883;
+  background: #f3f7fb;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.025em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.company-data-table td {
+  max-width: 13rem;
+  padding: 0.72rem 0.65rem;
+  border-bottom: 1px solid #e5ebf2;
+  background: #fff;
+  vertical-align: top;
+}
+
+.company-data-table tbody tr:hover td {
+  background: #f8fbff;
+}
+
+.company-data-table tbody tr {
+  cursor: pointer;
+}
+
+.company-data-table tbody tr.is-selected td {
+  background: #eaf5ff;
+}
+
+.company-data-table tbody tr.is-selected td:first-child {
+  box-shadow: inset 3px 0 0 var(--color-primary);
+}
+
+.company-data-table tbody tr:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.company-data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.company-data-table td > span,
+.company-data-table td > strong {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.company-table-company {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 10rem;
+  color: #153f72;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.company-table-company:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.company-table-company img {
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  border: 1px solid #d7e1ec;
+  border-radius: 0.35rem;
+  object-fit: contain;
+}
+
+.company-table-label {
+  margin-bottom: 0.18rem;
+  color: #6b7b96;
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.company-table-missing {
+  margin-top: 0.18rem;
+  color: #9a6700;
+  font-size: 0.65rem;
+  font-style: italic;
+}
+
+.company-table-edit {
+  border: 1px solid #bdd2e6;
+  border-radius: 0.35rem;
+  padding: 0.35rem 0.55rem;
+  color: #174f8a;
+  background: #f5faff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.company-table-edit:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.scroll-y {
+  overflow-y: auto;
+}
+
+/* Directorio maestro-detalle: conserva el flujo compacto de empresas y consorcios. */
+.company > .aside {
+  width: 300px;
+}
+
+.consortium-title {
+  border: 0;
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.6rem;
+  color: var(--color-secondary);
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.consortium-title.cs-selected {
+  background: #f3f5f7;
+}
+
+.company-directory-item.active {
+  background: #eef6ff;
+  box-shadow: inset 3px 0 0 var(--color-primary);
+}
+
+.company.company--archive-route > .aside {
+  display: none;
+}
+
+.company.company--archive-route > .specialist-info {
+  width: 100%;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.search-box {
+  padding: 0 0.8rem;
+}
+.company-items {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.31rem 1.25rem;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+}
+.company-item-user-img {
+  height: 2.6875rem;
+}
+
+.company-items:hover {
+  background-color: var(--color-menu);
+}
+
+@media (max-width: 992px) {
+  .company {
+    flex-direction: column;
+    max-height: none;
+    height: auto;
+  }
+
+  .company.company--archive-route > .aside {
+    display: none;
+  }
+
+  .company.company--archive-route > .specialist-info {
+    width: 100%;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .company > .aside {
+    width: 100%;
+  }
+}

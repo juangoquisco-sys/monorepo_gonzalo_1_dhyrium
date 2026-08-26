@@ -1,0 +1,25 @@
+.optionUserSelect {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  cursor: pointer;
+}
+
+.asda {
+  width: 2rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  /* aspect-ratio: 1; */
+}
+.controlUser {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.optionUserSelect-span {
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+}

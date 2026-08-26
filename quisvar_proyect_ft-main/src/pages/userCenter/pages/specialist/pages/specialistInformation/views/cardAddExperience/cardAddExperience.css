@@ -1,0 +1,13 @@
+.add-ex-btn {
+  background-color: var(--color-primary);
+  color: white;
+  width: fit-content;
+  border-radius: 8px;
+}
+
+.add-ex-btn-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

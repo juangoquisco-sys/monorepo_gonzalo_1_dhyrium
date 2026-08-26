@@ -1,0 +1,183 @@
+.kitchenDateStrip {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.kitchenDateStrip-shell {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.kitchenDateStrip-track {
+  display: grid;
+  gap: 0.65rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.kitchenDateStrip-navBtn,
+.kitchenDateStrip-calendarBtn {
+  border: 1px solid rgba(0, 27, 105, 0.12);
+  background: #fff;
+  color: var(--color-secondary);
+  border-radius: 0.9rem;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kitchenDateStrip-navBtn {
+  width: 2.8rem;
+  min-width: 2.8rem;
+  height: 4.8rem;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 22px rgba(0, 27, 105, 0.08);
+}
+
+.kitchenDateStrip-card {
+  position: relative;
+  min-height: 4.8rem;
+  padding: 0.8rem 0.85rem;
+  border: 1px solid rgba(0, 27, 105, 0.08);
+  border-radius: 1rem;
+  background: #fff;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  scroll-snap-align: center;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.kitchenDateStrip-card-selected {
+  border-color: rgba(14, 156, 216, 0.55);
+  background: linear-gradient(180deg, rgba(14, 156, 216, 0.12), #fff 72%);
+  box-shadow: 0 14px 28px rgba(0, 27, 105, 0.08);
+  animation: kitchenDateStripSelect 0.28s ease;
+}
+
+.kitchenDateStrip-card-today:not(.kitchenDateStrip-card-selected) {
+  border-color: rgba(0, 27, 105, 0.18);
+}
+
+.kitchenDateStrip-weekday {
+  font-size: 0.72rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  color: var(--color-gray-tertiary);
+  font-weight: 700;
+}
+
+.kitchenDateStrip-dayMonth {
+  font-size: 1rem;
+  color: var(--color-secondary);
+  font-weight: 700;
+}
+
+.kitchenDateStrip-todayMark {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.65rem;
+  font-size: 0.68rem;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.kitchenDateStrip-calendarBtn {
+  min-height: 2.8rem;
+  padding: 0.72rem 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.kitchenDateStrip-picker,
+.kitchenDateStrip-picker > div,
+.kitchenDateStrip-picker .react-datepicker__input-container {
+  border-bottom: none !important;
+}
+
+.kitchenDateStrip-navBtn:hover:not(:disabled),
+.kitchenDateStrip-calendarBtn:hover:not(:disabled),
+.kitchenDateStrip-card:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(14, 156, 216, 0.45);
+}
+
+.kitchenDateStrip-navBtn:disabled,
+.kitchenDateStrip-calendarBtn:disabled,
+.kitchenDateStrip-card:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes kitchenDateStripSelect {
+  0% {
+    transform: translateY(0) scale(0.96);
+    box-shadow: 0 0 0 rgba(14, 156, 216, 0);
+  }
+
+  65% {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 18px 34px rgba(14, 156, 216, 0.16);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 14px 28px rgba(0, 27, 105, 0.08);
+  }
+}
+
+@media (max-width: 1100px) {
+  .kitchenDateStrip {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .kitchenDateStrip-shell {
+    width: 100%;
+  }
+
+  .kitchenDateStrip-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding-bottom: 0.2rem;
+  }
+
+  .kitchenDateStrip-card {
+    min-width: 7rem;
+    flex: 0 0 7rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .kitchenDateStrip-shell {
+    gap: 0.45rem;
+  }
+
+  .kitchenDateStrip-navBtn {
+    width: 2.45rem;
+    min-width: 2.45rem;
+  }
+
+  .kitchenDateStrip-card {
+    min-width: 6.4rem;
+    flex-basis: 6.4rem;
+    min-height: 4.4rem;
+  }
+
+  .kitchenDateStrip-calendarBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}

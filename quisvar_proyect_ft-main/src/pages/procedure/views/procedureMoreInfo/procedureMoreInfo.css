@@ -1,0 +1,133 @@
+.procedureMoreInfo {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 1rem;
+  border-radius: 0.2rem;
+  background: #fff;
+  box-shadow: -2px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.procedureMoreInfo-header-content {
+  position: relative;
+  background-color: #fff;
+  border-bottom: 1px solid #e3e3e3;
+  width: 100%;
+  padding-bottom: 0.2rem;
+}
+
+.procedureMoreInfo-main {
+  width: 100%;
+  overflow-y: auto;
+  margin-top: 0.3rem;
+}
+
+.procedureMoreInfo-sender-info-details {
+  display: flex;
+  align-items: center;
+  padding-right: 1rem;
+  justify-content: space-between;
+  width: 100%;
+
+  gap: 0.2rem;
+}
+
+.procedureMoreInfo-contain--left {
+  flex: 1;
+}
+
+.procedureMoreInfo-sender-info {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  align-items: center;
+  color: #000;
+}
+
+.procedureMoreInfo-sender-name {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--color-gray);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.25rem; /* 166.667% */
+}
+
+.procedureMoreInfo-date-send {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 20px;
+}
+
+.procedureMoreInfo-card-status-message {
+  border-radius: var(--radius-button);
+  padding: 0.1rem 0.4rem;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.procedureMoreInfo-status-ARCHIVADO {
+  background-color: var(--color-bg-liquidation);
+  color: var(--color-liquidation);
+}
+
+.procedureMoreInfo-status-PROCESO {
+  background-color: var(--color-bg-asigned);
+  color: var(--color-asigned);
+}
+
+.procedureMoreInfo-status-PENDIENTE {
+  background-color: var(--color-bg-asigned);
+  color: var(--color-asigned);
+}
+
+.procedureMoreInfo-status-RECHAZADO {
+  background-color: var(--color-bg-unresolved);
+  color: var(--color-unresolved);
+}
+
+.procedureMoreInfo-status-FINALIZADO {
+  background-color: var(--color-bg-done);
+  color: var(--color-done);
+}
+
+.procedureMoreInfo-container-files-grid {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 0.5rem;
+  font-size: 14px;
+  align-items: center;
+  /* grid-template-columns: repeat(4, minmax(0, 1fr)); */
+}
+
+.procedureHistory-container {
+  width: calc(100% - 1rem);
+  height: 100%;
+  position: absolute;
+  top: 0;
+  /* border: dashed 0.5px red; */
+  background-color: white;
+}
+
+.procedure-back-icon {
+  display: flex;
+  gap: 5px;
+  margin-left: 0.625rem;
+  margin-top: 0.625rem;
+  cursor: pointer;
+}
+
+.procedure-back-icon h4 {
+  font-family: Inter;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14.52px;
+  text-align: left;
+  color: var(--color-primary);
+}

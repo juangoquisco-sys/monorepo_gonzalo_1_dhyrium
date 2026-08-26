@@ -1,0 +1,87 @@
+.inbox-forward-data-content {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: #6e6e6e;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 150%;
+  gap: 1.2rem;
+  padding: 0.5rem;
+}
+.inbox-forward-type-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.inbox-forward-receiver-container {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-bottom: 1px solid #c4c4c4a2;
+}
+.inbox-receiver-container-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 90%;
+}
+.inbox-receiver-forward-chip {
+  display: flex;
+  height: 1.2rem;
+  margin: 0.3rem 0;
+  font-size: 0.8rem;
+  background-color: var(--color-menu);
+  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07));
+  border-radius: var(--radius-input);
+  padding: 0 0.3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.inbox-container-file-grid {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 0.5rem;
+  font-size: 14px;
+  align-items: center;
+  /* grid-template-columns: repeat(4, minmax(0, 1fr)); */
+}
+.inbox-forward-btn-submit-container {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+.inbox-forward-btn-submit {
+  background-color: #fff;
+  color: #000;
+  padding: 0.5rem 2rem;
+  font-weight: 500;
+  border-radius: 0.75rem;
+}
+.inbox-forward-btn-archiver {
+  background-color: var(--color-bg-unresolved);
+  color: var(--color-unresolved);
+  border: 1px solid var(--color-unresolved);
+  padding: 0.5rem 2rem;
+  font-weight: 500;
+  border-radius: 0.75rem;
+}
+.inbox-reply-title {
+  display: flex;
+  color: #000;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-primarylight);
+  padding: 0 0.5rem;
+}
+
+.inbox-forward-file-area {
+  border: 1px dashed #6e6e6e;
+  max-height: 4rem;
+  font-size: 14px;
+  color: #6e6e6e;
+}

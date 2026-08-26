@@ -1,0 +1,156 @@
+.budgetsPage-filter-contain {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  overflow: auto;
+  gap: 1rem;
+}
+.budgetsPage-filter {
+  display: flex;
+  gap: 1rem;
+  justify-content: baseline;
+  align-items: center;
+  width: 100%;
+  padding: 0 13px;
+  flex-wrap: wrap;
+}
+
+.budgetsPage-filter-icon {
+  display: flex;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: black;
+}
+.budgetsPage-filter-select {
+  padding: 0.2rem 0.2rem 0 0;
+}
+.budgetsPage-figure-icon {
+  width: 1rem;
+}
+
+.budgetsPage-filter-area {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.budgetsPage-filter-btn {
+  border-radius: 0.5rem;
+  border: 1px solid white;
+}
+
+.budgetsPage-filter-close {
+  width: 22px;
+  border: 0.5px solid gray;
+}
+
+.budgetsPage-title-contain {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 13px 0;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 1;
+}
+.budgetsPage-contain::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.budgetsPage-contain-left {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  padding: 0 0 0 1rem;
+}
+
+.budgetsPage-figure {
+  width: 1rem;
+}
+
+.budgetsPage-title {
+  color: #000;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: 0.01125rem;
+}
+
+.budgetsPage-contain-right {
+  min-width: 56rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  max-width: 100%;
+  gap: 1rem;
+}
+
+.budgetsPage-contain {
+  position: relative;
+  width: 98%;
+  margin-left: auto;
+  margin-top: 0.2rem;
+  overflow-y: auto;
+  flex: 1;
+  border-bottom: 1px solid #80808054;
+  min-width: 0;
+}
+
+.budgetsPage-more-options {
+  display: flex;
+  gap: 2rem;
+  position: absolute;
+
+  right: 40px;
+}
+
+.budgetsPage-index-download {
+  display: block;
+  width: 1.5rem;
+  aspect-ratio: 1;
+}
+
+.budgetsPage-cost-month {
+  display: flex;
+
+  align-items: center;
+  gap: 0.5rem;
+
+  color: var(--color-gray-tertiary);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  text-wrap: nowrap;
+}
+
+@media (max-width: 1200px) {
+  .budgetsPage-contain-right {
+    min-width: 0;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .budgetsPage-filter-contain {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .budgetsPage-title-contain {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .budgetsPage-contain {
+    width: 100%;
+  }
+}

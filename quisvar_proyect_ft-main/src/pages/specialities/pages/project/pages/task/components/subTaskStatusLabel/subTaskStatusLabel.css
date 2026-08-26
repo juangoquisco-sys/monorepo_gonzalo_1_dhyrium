@@ -1,0 +1,33 @@
+.subTaskStatusLabel-content {
+  width: 80%;
+  margin: 0 auto;
+}
+.subTaskStatusLabel-text {
+  width: 100%;
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  border-radius: var(--radius-input);
+  padding: 0.9rem;
+}
+
+.subTaskStatusLabel-UNRESOLVED {
+  background-color: var(--color-unresolved);
+}
+.subTaskStatusLabel-DENIED {
+  background-color: var(--color-unresolved);
+}
+.subTaskStatusLabel-PROCESS {
+  background-color: var(--color-process);
+}
+.subTaskStatusLabel-INREVIEW {
+  background-color: var(--color-process);
+}
+.subTaskStatusLabel-DONE {
+  background-color: var(--color-done);
+}
+.subTaskStatusLabel-LIQUIDATION {
+  background-color: var(--color-liquidation);
+}

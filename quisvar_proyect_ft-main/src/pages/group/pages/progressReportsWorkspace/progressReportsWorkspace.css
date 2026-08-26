@@ -1,0 +1,467 @@
+.prw-page {
+  min-height: 100%;
+  padding: 1.5rem;
+  background: var(--color-primarylight);
+  color: var(--color-secondary);
+}
+
+.prw-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.6rem;
+}
+
+.prw-header p,
+.prw-sectionTitle h2 {
+  margin: 0;
+  color: #8a98b2;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.prw-header h1 {
+  margin: 0.3rem 0 0.25rem;
+  color: var(--color-secondary);
+  font-size: 1.45rem;
+}
+
+.prw-header span {
+  color: #536681;
+}
+
+.prw-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(19rem, 24rem);
+  gap: 1rem;
+  align-items: start;
+}
+
+.prw-main {
+  display: grid;
+  gap: 1.3rem;
+}
+
+.prw-sectionTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+}
+
+.prw-sectionTitle b {
+  border-radius: 999px;
+  background: #fff4d6;
+  color: #d58a00;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+}
+
+.prw-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.prw-reportRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  background: var(--card);
+}
+
+.prw-icon,
+.prw-statsIcon {
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  aspect-ratio: 1;
+  border-radius: 0.55rem;
+  background: #edf4fb;
+  color: #8aa0bd;
+}
+
+.prw-reportRow strong,
+.prw-ready strong,
+.prw-draftCard strong {
+  display: block;
+  color: var(--color-secondary);
+  font-size: 0.86rem;
+}
+
+.prw-reportRow small,
+.prw-ready small,
+.prw-draftCard small {
+  color: #7c8ca7;
+  font-size: 0.68rem;
+}
+
+.prw-status {
+  color: var(--color-primary);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.prw-status.is-ready {
+  color: #07873d;
+}
+
+.prw-draftGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 0.9rem;
+}
+
+.prw-draftCard,
+.prw-stats,
+.prw-ready {
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  background: var(--card);
+  padding: 1rem;
+}
+
+.prw-draftCard {
+  display: grid;
+  gap: 0.65rem;
+  border-style: dashed;
+}
+
+.prw-draftTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.prw-draftTop > span {
+  width: fit-content;
+  border-radius: 0.35rem;
+  background: #e8eef6;
+  color: #7485a1;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.prw-draftTop div {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.prw-draftTop button {
+  display: grid;
+  place-items: center;
+  width: 1.8rem;
+  aspect-ratio: 1;
+  border: 1px solid #d8e3f1;
+  border-radius: 0.35rem;
+  background: #fff;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.prw-draftTop button:last-child {
+  color: #e94141;
+}
+
+.prw-draftTop button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.prw-renameDraft {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.prw-renameDraft input,
+.prw-modal input {
+  width: 100%;
+  border: 1px solid #d8e3f1;
+  border-radius: 0.4rem;
+  background: #fff;
+  color: var(--color-secondary);
+  padding: 0.55rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  outline: none;
+}
+
+.prw-renameDraft input:focus,
+.prw-modal input:focus {
+  border-color: var(--color-primary);
+}
+
+.prw-renameDraft button {
+  border: 1px solid var(--color-primary);
+  border-radius: 0.4rem;
+  background: #fff;
+  color: var(--color-primary);
+  padding: 0 0.65rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.prw-progress {
+  height: 0.3rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e8eef6;
+}
+
+.prw-progress i {
+  display: block;
+  height: 100%;
+  background: var(--color-primary);
+}
+
+.prw-side {
+  display: grid;
+  gap: 1rem;
+}
+
+.prw-stats {
+  display: grid;
+  gap: 0.8rem;
+  color: #fff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.prw-statsIcon {
+  color: #fff;
+  background: rgb(255 255 255 / 20%);
+}
+
+.prw-stats strong {
+  justify-self: end;
+  font-size: 2rem;
+}
+
+.prw-progress.is-light {
+  background: rgb(255 255 255 / 28%);
+}
+
+.prw-progress.is-light i {
+  background: #fff;
+}
+
+.prw-statGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.prw-statGrid p {
+  margin: 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.prw-statGrid b {
+  display: block;
+  font-size: 1rem;
+}
+
+.prw-ready {
+  padding: 0;
+  overflow: hidden;
+}
+
+.prw-readyTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.prw-readyTitle h2 {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.prw-ready button {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid #edf2f7;
+  background: #fff;
+  padding: 0.9rem 1rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.prw-ready button:hover {
+  background: var(--color-primarylight);
+}
+
+.prw-empty {
+  margin: 0;
+  border: 1px dashed #d4deeb;
+  border-radius: 0.45rem;
+  padding: 1rem;
+  color: #7c8ca7;
+  background: rgb(255 255 255 / 60%);
+}
+
+.prw-modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: rgb(0 27 105 / 32%);
+  padding: 1rem;
+}
+
+.prw-modal {
+  width: min(100%, 34rem);
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: #fff;
+  box-shadow: 0 1rem 3rem rgb(0 27 105 / 16%);
+}
+
+.prw-modal header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.prw-modal h2,
+.prw-modal h3,
+.prw-modal p {
+  margin: 0;
+}
+
+.prw-modal h2 {
+  font-size: 1.05rem;
+}
+
+.prw-modal p {
+  margin-top: 0.25rem;
+  color: #687a96;
+  font-size: 0.78rem;
+}
+
+.prw-modal header button {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  aspect-ratio: 1;
+  border: 1px solid #d8e3f1;
+  border-radius: 0.4rem;
+  background: #fff;
+  color: var(--color-secondary);
+  cursor: pointer;
+}
+
+.prw-modal label,
+.prw-modal section {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.9rem 1.1rem 0;
+  color: #8a98b2;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.prw-modal select,
+.prw-modal input {
+  width: 100%;
+  border: 1px solid #d8e3f1;
+  border-radius: 0.4rem;
+  background: #fff;
+  color: var(--color-secondary);
+  padding: 0.65rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  outline: none;
+  text-transform: none;
+}
+
+.prw-typeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.prw-typeGrid button {
+  border: 1px solid #d8e3f1;
+  border-radius: 0.45rem;
+  background: #fff;
+  color: #687a96;
+  padding: 0.7rem 0.4rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.prw-typeGrid button.is-active {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: inset 0 0 0 1px var(--color-primary);
+}
+
+.prw-typeGrid button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.prw-memberPicker {
+  display: grid;
+  gap: 0.45rem;
+  max-height: 11rem;
+  overflow: auto;
+}
+
+.prw-memberPicker label {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  border: 1px solid #d8e3f1;
+  border-radius: 0.4rem;
+  padding: 0.55rem 0.65rem;
+  color: var(--color-secondary);
+  font-size: 0.75rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.prw-modal footer {
+  padding: 1rem 1.1rem 1.1rem;
+}
+
+@media (max-width: 980px) {
+  .prw-header,
+  .prw-layout,
+  .prw-reportRow {
+    grid-template-columns: 1fr;
+  }
+
+  .prw-header {
+    align-items: stretch;
+  }
+}

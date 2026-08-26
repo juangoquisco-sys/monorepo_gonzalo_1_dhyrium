@@ -1,0 +1,17 @@
+.messageComment-info-footer {
+  margin-top: 1rem;
+  margin-inline: 0.2rem;
+}
+.messageComment-info-footer-btns {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+.messageComment-info-footer-title {
+  color: var(--color-unresolved);
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-bottom: 0.5rem;
+}

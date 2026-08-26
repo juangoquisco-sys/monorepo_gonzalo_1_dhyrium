@@ -1,0 +1,67 @@
+.pdf-btn {
+  border-radius: 5px;
+  border: 2px solid var(--color-primary);
+  color: white;
+  background-color: var(--color-primary);
+  padding: 0.3rem 0.5rem;
+}
+
+.pdf-btn-area {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pdf-btn-view-primary {
+  border-radius: var(--radius-input);
+  /* border: 2px solid var(--color-primary); */
+  color: white;
+  background-color: var(--color-primary);
+  padding: 0.3rem 0.5rem;
+  transition: 0.2s ease-in;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pdf-btn-view-primary:hover {
+  font-weight: bold;
+}
+
+.normal {
+  display: block;
+}
+
+.hover {
+  display: none;
+}
+
+.pdf-btn-view-white {
+  border-radius: var(--radius-input);
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  background-color: white;
+  padding: 0.2rem 0.5rem;
+  transition: 0.2s ease-in;
+  display: flex;
+  gap: 0.8rem;
+}
+
+.pdf-btn-view-white:hover {
+  color: white;
+  background-color: var(--color-primary);
+}
+.pdf-btn-view-white:hover .hover {
+  display: block;
+}
+.pdf-btn-view-white:hover .normal {
+  display: none;
+}
+
+.pdf-btn-area-view {
+  display: flex;
+  /* width: 100%; */
+  align-items: center;
+  gap: 1rem;
+}

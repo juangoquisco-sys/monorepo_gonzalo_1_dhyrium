@@ -1,0 +1,15 @@
+.regularProcedure {
+  width: 100%;
+  position: relative;
+  background-color: #fff;
+  padding: 0.5rem;
+  transition: 0.3s left ease;
+  filter: drop-shadow(0px 4px 3px rgb(0 0 0 / 0.3));
+  height: 100%;
+}
+
+.regularProcedure-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}

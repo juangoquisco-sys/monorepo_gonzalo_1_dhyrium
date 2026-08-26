@@ -1,0 +1,364 @@
+.specialist-data {
+  width: 33.3%;
+  padding: 1.25rem 0.9375rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.875rem;
+  flex-shrink: 0;
+  background-color: var(--color-primarylight);
+}
+
+.specialist-hr {
+  width: 100%;
+}
+
+.specialist-main-info {
+  display: flex;
+  gap: 1rem;
+  height: 9.5rem;
+  width: 100%;
+}
+
+.specialist-main-img {
+  width: 9.5rem;
+  height: 9.5rem;
+  background-color: gray;
+  border-radius: 50%;
+}
+
+.specialist-img-size {
+  width: 9.5rem;
+  height: 9.5rem;
+  border-radius: 50%;
+}
+
+.specialist-info-text {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.specialist-info-icon {
+  width: 1.1rem;
+  cursor: pointer;
+}
+
+.specialist-icons-area {
+  display: flex;
+  justify-content: space-between;
+}
+
+.specialist-icon-cv {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.specialist-info-name {
+  font-size: 1.3rem;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.0225rem;
+  line-height: 150%;
+  padding: 0.3rem;
+}
+
+.specialist-aditional-info {
+  width: 100%;
+}
+
+.specialist-info-rows {
+  display: flex;
+  justify-content: space-between;
+}
+
+.specialist-projects-list {
+  width: 100%;
+}
+
+.sp-name {
+  color: #000;
+  font-size: 0.9rem;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.sp-cui {
+  color: #000;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+.sp-details {
+  color: #000;
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.sp-details-area {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.sp-hr {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.sp-motion-div {
+  border-bottom: 1px dashed var(--color-secondary);
+}
+
+.sp-motion-click {
+  cursor: pointer;
+}
+
+.sp-motion-click:hover {
+  /* cursor: pointer; */
+  border-bottom: 1px dashed var(--color-secondary);
+}
+
+.specialist-experience {
+  width: 66.6%;
+  height: calc(100vh - (var(--navbar-height) + 78px));
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.specialist-info-exp {
+  display: flex;
+  flex-direction: column;
+  padding: 0.625rem;
+  height: 50%;
+}
+
+.specialist-info-title {
+  padding: 0.625rem;
+  height: auto;
+  width: fit-content;
+  color: white;
+  font-weight: 700;
+  background-color: var(--color-primary);
+}
+
+.specialist-more-info {
+  width: auto;
+  height: 100%;
+  border-left: 1px solid var(--color-primary);
+  padding-left: 2rem;
+  overflow-y: auto;
+}
+
+.smi-items {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  user-select: none;
+}
+
+.smi-unselected {
+  border-bottom: 1px solid #80808066;
+}
+
+.smi-selected {
+  border-bottom: 1.5px solid var(--color-primary);
+}
+
+.smi-specialty-name {
+  display: flex;
+  align-items: center;
+  width: 50%;
+}
+
+.smi-add-specialty {
+  display: flex;
+  justify-content: space-between;
+  /* width: 12rem; */
+  color: var(--color-primary);
+  cursor: pointer;
+  padding: 1.25rem 0;
+}
+
+.smi-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.specialist-sub-title {
+  padding: 0.5rem 0;
+  color: var(--color-secondary);
+}
+
+.specialist-add-experience-field {
+  display: flex;
+  width: 20.5rem;
+  height: 1.8rem;
+  padding: 0.55rem 1rem;
+  border-radius: 0.25rem;
+  background: var(--color-menu);
+}
+
+.specialist-detail-workspace {
+  height: 100%;
+  overflow-y: auto;
+  padding: 1rem;
+  background: var(--color-menu);
+}
+
+.specialist-detail-section {
+  overflow: hidden;
+  border: 1px solid var(--color-primarylight);
+  border-radius: 0.625rem;
+  background: #fff;
+}
+
+.specialist-detail-section + .specialist-detail-section {
+  margin-top: 0.75rem;
+}
+
+.specialist-detail-section-trigger {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  border: 0;
+  padding: 0.875rem 1rem;
+  color: var(--color-primary);
+  background: var(--color-primarylight);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.specialist-detail-section-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.specialist-detail-section-content {
+  padding: 1rem;
+}
+
+.specialist-profile-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.specialist-profile-avatar {
+  width: 5rem;
+  height: 5rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--color-primarylight);
+}
+
+.specialist-profile-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.specialist-profile-copy h1 {
+  margin: 0;
+  color: #000;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.specialist-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.875rem 1.5rem;
+  margin-top: 1rem;
+}
+
+.specialist-detail-grid dt {
+  color: #5f6773;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.specialist-detail-grid dd {
+  margin: 0.2rem 0 0;
+  color: #000;
+  font-size: 0.875rem;
+}
+
+.specialist-detail-grid a {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.specialist-detail-section-content .specialist-more-info {
+  height: auto;
+  min-height: 0;
+  max-height: 28rem;
+  padding-left: 1rem;
+}
+
+.specialist-history-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.specialist-history-list li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem;
+  border: 1px solid var(--color-primarylight);
+  border-radius: 0.5rem;
+}
+
+.specialist-history-list strong,
+.specialist-history-list span {
+  display: block;
+}
+
+.specialist-history-list strong {
+  color: #000;
+  font-size: 0.875rem;
+}
+
+.specialist-history-list span,
+.specialist-history-list time,
+.specialist-empty-state {
+  color: #5f6773;
+  font-size: 0.75rem;
+}
+
+.specialist-empty-state {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .specialist-profile-summary {
+    flex-direction: column;
+  }
+
+  .specialist-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .specialist-history-list li {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .specialist-history-list time {
+    grid-column: 2;
+  }
+}

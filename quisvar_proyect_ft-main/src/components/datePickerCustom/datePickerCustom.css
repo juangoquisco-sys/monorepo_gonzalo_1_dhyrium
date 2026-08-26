@@ -1,0 +1,40 @@
+.datePickerCustom-calendar-icon {
+  height: 100%;
+}
+
+.datePickerCustom-calendar {
+  /* width: 13.5rem; */
+  width: auto;
+}
+.datePickerCustom-full-width {
+  width: 100%;
+}
+
+.datePickerCustom-calendar div {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #00000066;
+}
+.datePickerCustom-calendar
+  .react-datepicker__input-container
+  .react-datepicker__calendar-icon {
+  padding: 0;
+}
+.datePickerCustom-calendar
+  .react-datepicker__input-container
+  .react-datepicker__close-icon {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+}
+.datePickerCustom-clear-btn {
+  position: relative;
+}
+
+.datePickerCustom-calendar .react-datepicker__view-calendar-icon input {
+  width: 92%;
+}
+.datePickerCustom-calendar-popper {
+  z-index: 21 !important;
+}

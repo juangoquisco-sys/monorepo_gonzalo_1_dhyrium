@@ -1,0 +1,56 @@
+.snowflake {
+  pointer-events: none;
+  user-select: none;
+  color: var(--color-primary);
+  font-size: 1.3rem;
+  font-family: Arial, sans-serif;
+  text-shadow: 0 0 5px var(--color-primary);
+
+  position: fixed;
+  top: -10%;
+  z-index: var(--z-table-cell);
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+
+  animation-name: snowflakes-shake;
+  animation-duration: 3s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.snowflake .inner {
+  animation-name: snowflakes-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Animaciones */
+@keyframes snowflakes-fall {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(110vh);
+  }
+}
+
+@keyframes snowflakes-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(80px);
+  }
+}
+
+.snowflakes-switch {
+  position: fixed;
+  z-index: var(--z-floating-action);
+  bottom: 0.2rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

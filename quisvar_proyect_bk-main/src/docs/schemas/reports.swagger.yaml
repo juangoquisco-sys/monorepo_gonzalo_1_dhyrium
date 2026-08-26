@@ -1,0 +1,250 @@
+/report/:
+  post:
+    tags:
+      - Reports
+    summary: Crear un informe
+    description: Crea un nuevo informe.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#components/schemas/create'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '400':
+        $ref: '#/components/responses/400'
+/reports/{id}/:
+  get:
+    tags:
+      - Reports
+    summary: Obtener un informe por ID
+    description: Devuelve los detalles de un informe por ID.
+    parameters:
+      - $ref: '#/components/parameters/report-id'
+      - $ref: '#/components/parameters/report-mods'
+      - $ref: '#/components/parameters/report-userinfo'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '400':
+        $ref: '#/components/responses/400'
+    security:
+      - bearerAuth: []
+  delete:
+    tags:
+      - Reports
+    summary: Eliminar un informe
+    description: Elimina un informe por ID.
+    parameters:
+      - $ref: '#/components/parameters/id'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '400':
+        $ref: '#/components/responses/400'
+/reports/self/{id}/:
+  get:
+    tags:
+      - Reports
+    summary: Obtener informes de usuario
+    description: Devuelve los detalles de los informes por ID de usuario.
+    parameters:
+      - $ref: '#/components/parameters/user-id'
+      - $ref: '#/components/parameters/report-type'
+      - $ref: '#/components/parameters/withoutpayments'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '400':
+        $ref: '#/components/responses/400'
+    security:
+      - bearerAuth: []
+/reports/update-items/{id}/:
+  put:
+    tags:
+      - Reports
+    summary: Actualizar items y precio total de un informe
+    description: Actualiza los items y el precio total de un informe.
+    parameters:
+      - $ref: '#/components/parameters/report-id'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/report-update-items'
+    responses:
+      '200':
+        $ref: '#/components/responses/200'
+      '400':
+        $ref: '#/components/responses/400'
+      '403':
+        description: El actor no es titular del informe ni MOD de Planillas.
+      '409':
+        description: El informe ya tiene conformidad y no admite cambios.
+    security:
+      - bearerAuth: []
+components:
+  schemas:
+    create:
+      type: object
+      required:
+        # - price
+        - percentage
+        - type
+        - initialDate
+        - untilDate
+        - userId
+        - ids
+      properties:
+        # price:
+        #   type: number
+        #   example: 1000.00
+        #   description: Precio del informe
+        percentage:
+          type: number
+          example: 30
+          description: Porcentaje del informe
+        attendanceDiscount:
+          type: number
+          example: 30
+          description: Descuento por asistencia
+        licensesDiscount:
+          type: number
+          example: 30
+          description: Descuento por salidas
+        type:
+          type: string
+          example: ADELANTO
+          description: Tipo de informe <b>[ADELANTO,LIQUIDATION]</b>
+          enum: [ADELANTO, LIQUIDATION]
+        initialDate:
+          type: string
+          example: 2022-01-01
+          description: Fecha del informe inicial
+        untilDate:
+          type: string
+          example: 2022-01-01
+          description: Fecha del informe final
+        userId:
+          type: integer
+          example: 2
+          description: ID del usuario
+        ids:
+          type: object
+          properties:
+            id:
+              type: integer
+            price:
+              type: integer
+            item:
+              type: string
+          example:
+            - id: 1
+              price: 1000
+              item: '1.1'
+            - id: 2
+              price: 2000
+              item: '1.2'
+    report-update-items:
+      type: object
+      required:
+        - subtotal
+        - total
+        - percentagePayment
+        - licensesDiscount
+        - attendanceDiscount
+      properties:
+        subtotal:
+          type: number
+          minimum: 0
+          description: Suma valorizada de las tareas. Puede ser cero.
+        total:
+          type: number
+          minimum: 0
+          description: Total a pagar luego de descuentos. Puede ser cero.
+        licensesDiscount:
+          type: number
+          minimum: 0
+        attendanceDiscount:
+          type: number
+          minimum: 0
+        earlyPaymentDiscount:
+          type: number
+          minimum: 0
+        percentagePayment:
+          type: number
+          minimum: 0
+          maximum: 100
+        ids:
+          type: array
+          items:
+            type: object
+            required: [id, percentage, price, days]
+            properties:
+              id:
+                type: integer
+              percentage:
+                type: number
+                minimum: 0
+                maximum: 100
+              price:
+                type: number
+                minimum: 0
+              days:
+                type: number
+                minimum: 0
+          example:
+            - id: 1
+              percentage: 30
+              price: 1000
+              days: 2.5
+              priceTask: 1000
+            - id: 2
+              percentage: 30
+              price: 1000
+              days: 2.5
+              priceTask: 1000
+
+  parameters:
+    report-id:
+      in: path
+      name: id
+      required: true
+      description: ID del informe
+      schema:
+        type: integer
+    report-mods:
+      in: query
+      name: mods
+      description: Traer proyectos con coordinadores
+      schema:
+        type: boolean
+    report-userinfo:
+      in: query
+      name: userinfo
+      description: Traer consulta con coordinador de grupo
+      schema:
+        type: boolean
+    user-id:
+      in: path
+      name: id
+      required: true
+      description: ID del usuario
+      schema:
+        type: integer
+    report-type:
+      in: query
+      name: type
+      description: Ingresar los tipos de <b>[ADELANTO,LIQUIDATION]</b>
+      example: ADELANTO
+      schema:
+        type: string
+    withoutpayments:
+      in: query
+      name: withoutpayments
+      description: Traer informes sin pagos
+      schema:
+        type: boolean

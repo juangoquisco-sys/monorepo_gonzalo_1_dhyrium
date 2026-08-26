@@ -1,0 +1,19 @@
+.dropDownSidebarSpeciality-slice {
+  position: relative;
+}
+.dropDownSidebarSpeciality-dropdown-content {
+  display: grid;
+  grid-template-rows: var(--rows, 0fr);
+  transition: 0.3s grid-template-rows;
+}
+.dropDownSidebarSpeciality-dropdown-sub {
+  overflow: hidden;
+  width: 98%;
+  margin-left: auto;
+  margin-top: 0.2rem;
+}
+
+.dropDownSidebarSpeciality-dropdown-sub-list {
+  display: flex;
+  flex-direction: column;
+}

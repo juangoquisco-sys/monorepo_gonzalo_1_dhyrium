@@ -1,0 +1,33 @@
+{
+  "conventionalCommits.scopes": [
+    "groups",
+    "mail",
+    "documentation",
+    "formats",
+    "basic-task",
+    "download",
+    "duplicate",
+    "basic-level",
+    "stages",
+    "level",
+    "pdf",
+    "schema",
+    "profile",
+    "queries",
+    "feedbacks",
+    "files",
+    "errors",
+    "task",
+    "reports",
+    "phases",
+    "sector",
+    "payrolls",
+    "projects",
+    "paymail",
+    "opttasks",
+    "licenses"
+  ],
+  "editor.fontLigatures": true
+  // "editor.bracketPairColorization.enabled": true,
+  // "editor.guides.bracketPairs": true
+}

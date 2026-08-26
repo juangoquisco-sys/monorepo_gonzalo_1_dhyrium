@@ -1,0 +1,54 @@
+.cardAddCollaborator {
+  display: flex;
+  flex-direction: column;
+  width: 26rem;
+  height: 28rem;
+  border-radius: 0.625rem;
+  background: #fff;
+  box-shadow: -2px 4px 4px 0px rgba(0, 0, 0, 0.15);
+  padding: 0.5rem;
+}
+.cardAddCollaborator-header {
+  display: flex;
+  padding: 0.625rem;
+  flex-direction: column;
+  gap: 0.625rem;
+  align-self: stretch;
+}
+.cardAddCollaborator-title {
+  color: #222;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.cardAddCollaborator-description {
+  color: var(--color-gray);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+.cardAddCollaborator-error {
+  padding: 0.625rem;
+  width: 100%;
+  color: var(--color-unresolved-light);
+  font-size: 0.5rem;
+  font-weight: 400;
+}
+.cardAddCollaborator-error-span {
+  font-weight: 600;
+}
+.cardAddCollaborator-container {
+  height: 100%;
+  padding: 0.625rem;
+}
+.cardAddCollaborator-footer-btn {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 100%;
+}
+.cardAddCollaborator-subcontainer {
+  overflow: auto;
+  max-height: 10rem;
+  padding: 0 0.1rem 0 0.5rem;
+}

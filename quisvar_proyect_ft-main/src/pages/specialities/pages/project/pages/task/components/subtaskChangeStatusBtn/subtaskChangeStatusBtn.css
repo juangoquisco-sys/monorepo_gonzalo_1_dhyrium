@@ -1,0 +1,11 @@
+.SubtaskChangeStatusBtn {
+  background-color: #c81d1e;
+  color: white;
+  border: none;
+}
+.DENY {
+  background-color: var(--color-review);
+}
+.ASIG {
+  background-color: var(--color-done);
+}

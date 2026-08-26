@@ -1,0 +1,83 @@
+.ule-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ule-items {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+  align-items: center;
+  border-bottom: 1px solid rgb(129, 126, 126);
+  cursor: pointer;
+  user-select: none;
+}
+
+.ule-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.ule-h3 {
+  color: back;
+  padding: none;
+}
+
+.ule-icon-size {
+  width: 1.2rem;
+}
+
+.ule-item-header {
+  display: grid;
+  grid-template-columns: 0.5fr 1.5fr;
+  background: var(--color-menu);
+}
+
+.ule-item-body {
+  display: grid;
+  grid-template-columns: 0.5fr 1.5fr;
+  font-size: 0.625rem;
+  cursor: context-menu;
+  user-select: none;
+}
+
+.ule-size {
+  font-size: 0.625rem;
+}
+
+.ule-items-area {
+  font-size: 0.625rem;
+}
+
+.ule-size-pc {
+  font-size: 0.625rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon-pc {
+  width: 1.2rem;
+}
+.ule-btn-pc {
+  margin-top: 0.5rem;
+  border: 1px solid gray;
+  width: fit-content;
+  padding: 0.2rem 0.5rem;
+}
+.ule-icon-overlay {
+  position: relative;
+}
+.isOn-overlay {
+  position: absolute;
+  left: -45px;
+}
+.isOn-overlay-text {
+  width: 100px;
+  background-color: black;
+  color: white;
+  font-size: 0.7rem;
+  padding: 1rem 0.5rem;
+  text-align: justify;
+  border-radius: var(--radius-input);
+}

@@ -1,0 +1,18 @@
+.taskHistory {
+  display: flex;
+  margin-top: 0.7rem;
+
+  overflow: hidden;
+  flex-direction: column;
+  height: 100%;
+}
+.taskHistory-items {
+  position: relative;
+  overflow-y: auto;
+}
+.taskHistory-void {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}

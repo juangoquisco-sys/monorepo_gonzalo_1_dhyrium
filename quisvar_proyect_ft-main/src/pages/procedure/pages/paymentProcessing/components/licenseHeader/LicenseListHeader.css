@@ -1,0 +1,119 @@
+.license-header-content {
+  display: grid;
+  column-gap: 0.25rem;
+  height: 2rem;
+  position: relative;
+  width: 100%;
+  background-color: var(--color-primarylight);
+  /* font-size: 0.6875rem; */
+  /* border-radius: 0.3rem; */
+  padding: 0 0.3rem;
+}
+
+.license-admin {
+  /* grid-template-columns: 0.5fr 1fr 1fr 0.5fr 1.4fr 2fr 1fr 1.2fr 1.2fr 1.2fr 2fr 1fr; */
+  grid-template-columns: 0.45fr 1.85fr 0.85fr 1.35fr 1.7fr 0.9fr 1.3fr 1.3fr 1.45fr 1.55fr 1.1fr;
+}
+
+.license-employee {
+  grid-template-columns: 0.5fr 0.9fr 0.5fr 0.95fr 1fr 1.4fr 0.9fr 1.35fr 1.35fr 1.45fr 1.25fr 0.95fr;
+}
+
+.license-header-items {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0 0.2rem;
+  overflow: hidden;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.license-header-applicant {
+  justify-content: flex-start;
+  text-align: left;
+  padding-left: 0.45rem;
+}
+
+.license-header-btns {
+  display: flex;
+  gap: 0.22rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  min-width: 0;
+  flex-wrap: wrap;
+  max-width: 11rem;
+  margin: 0 auto;
+}
+
+.license-btn-action {
+  cursor: pointer;
+  display: inline-flex;
+  min-height: 1.42rem;
+  border: 1px solid transparent;
+  font-size: 0.57rem;
+  font-weight: 800;
+  justify-content: center;
+  align-items: center;
+  gap: 0.16rem;
+  border-radius: 999px;
+  padding: 0.12rem 0.48rem;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 27, 105, 0.05);
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.license-btn-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 27, 105, 0.1);
+}
+
+.license-btn-action-icon {
+  width: 0.72rem;
+  height: 0.72rem;
+  flex: 0 0 auto;
+}
+
+.license-btn-approve {
+  border-color: #b9e5ff;
+  background-color: #e7f5ff;
+  color: #075ea8;
+}
+
+.license-btn-approve:hover {
+  background-color: #d6efff;
+}
+
+.license-btn-reject {
+  border-color: #ffc9c9;
+  background-color: #fff0f0;
+  color: #b42318;
+}
+
+.license-btn-reject:hover {
+  background-color: #ffe1e1;
+}
+
+.license-btn-cancel {
+  border-color: #ffc9c9;
+  background-color: #fff0f0;
+  color: #b42318;
+  font-weight: 800;
+}
+
+.license-btn-finish {
+  border-color: #bdebd0;
+  background-color: #dcf8e8;
+  color: #08773d;
+  font-weight: 800;
+}

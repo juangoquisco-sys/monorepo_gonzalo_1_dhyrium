@@ -1,0 +1,17 @@
+.imbox-data-content .tox .tox-editor-header {
+  z-index: 0;
+}
+.formRegister-btns {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.formRegister-number-document {
+  width: auto;
+  border-bottom: 1px solid var(--color-primary);
+  text-align: center;
+  width: 1.6rem;
+  font-weight: 700;
+  color: #6e6e6e;
+  font-size: 0.9rem;
+}

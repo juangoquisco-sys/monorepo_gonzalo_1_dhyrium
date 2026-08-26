@@ -1,0 +1,11 @@
+.addCollaboratorSelect-add {
+  display: flex;
+  padding: 0.15625rem 0.625rem;
+  gap: 0.625rem;
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 200;
+}
+.addCollaboratorSelect {
+  margin-top: 0.5rem;
+}

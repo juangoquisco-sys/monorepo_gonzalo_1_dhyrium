@@ -1,0 +1,7 @@
+.closeIcon {
+  position: absolute;
+  right: 1.75rem;
+  top: 1.75rem;
+  transition: ease 0.5s;
+  cursor: pointer;
+}

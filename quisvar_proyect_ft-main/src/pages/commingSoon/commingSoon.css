@@ -1,0 +1,51 @@
+.commingSoon {
+  width: 100%;
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  background-color: var(--color-quaternay);
+}
+.commingSoon-figure {
+  flex: 1;
+  height: 80vh;
+}
+.commingSoon-figure-img {
+  height: 100%;
+  object-fit: contain;
+}
+.commingSoon-contain-logo {
+  position: absolute;
+  width: 7rem;
+  top: 1rem;
+  left: 2rem;
+}
+.commingSoon-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+.commingSoon-title {
+  color: var(--color-menu);
+  font-size: 4rem;
+  text-align: center;
+}
+.commingSoon-span {
+  display: block;
+}
+.commingSoon-paragraph {
+  width: 100%;
+  text-align: center;
+  font-size: var(--size-button);
+  color: var(--color-menu);
+}
+.commingSoon-btn {
+  cursor: pointer;
+  background-color: var(--color-quaternay);
+  font-size: var(--size-button);
+  font-weight: bold;
+  color: var(--color-menu);
+  text-decoration: underline;
+}

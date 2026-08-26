@@ -1,0 +1,54 @@
+.tft-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.tft-title {
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+  letter-spacing: 0.015em;
+  text-align: left;
+  color: var(--color-secondary);
+}
+.tft-sticky {
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+.tft-left {
+  text-align: left;
+}
+.tft-anchor {
+  text-decoration: none;
+  color: var(--color-secondary);
+  position: relative;
+  z-index: 10;
+  cursor: cell;
+}
+.tft-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2fr 1fr 0.5fr 0.7fr;
+  background-color: var(--color-primarylight);
+  padding: 0.5rem 0.4rem;
+  align-items: center;
+  width: 80vw;
+  overflow-x: auto;
+}
+
+.tft-htitle {
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 500;
+  text-align: center;
+}
+.tft-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2fr 1fr 0.5fr 0.7fr;
+  padding: 0.5rem 0.4rem;
+  align-items: center;
+  width: 80vw;
+  overflow-x: auto;
+  color: black;
+}

@@ -1,0 +1,120 @@
+.fi-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  color: #eff3f8;
+  user-select: none;
+}
+
+.fi-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.fi-row {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: #9fb0c9;
+  background: transparent;
+  font-family: Montserrat, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.fi-row:hover {
+  color: #eff3f8;
+  background: rgba(239, 243, 248, 0.06);
+}
+
+.fi-row:focus-visible,
+.fi-add-subcategory:focus-visible {
+  outline: 2px solid #0e9cd8;
+  outline-offset: 2px;
+}
+
+.fi-row--active {
+  color: #ffffff;
+  border-color: rgba(121, 204, 236, 0.35);
+  background: rgba(14, 156, 216, 0.14);
+}
+
+.fi-icon {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  color: currentColor;
+}
+
+.fi-icon--chevron {
+  width: 0.9rem;
+  height: 0.9rem;
+  color: #79ccec;
+}
+
+.fi-branch {
+  width: 0.9rem;
+  height: 1px;
+  flex: 0 0 auto;
+  background: rgba(121, 204, 236, 0.35);
+}
+
+.fi-name {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fi-count {
+  min-width: 1.45rem;
+  height: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.35rem;
+  border: 1px solid rgba(239, 243, 248, 0.12);
+  border-radius: 999px;
+  color: #b7c3d7;
+  background: rgba(239, 243, 248, 0.06);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.fi-row--active .fi-count {
+  color: #06133a;
+  background: #79ccec;
+}
+
+.fi-add-subcategory {
+  width: fit-content;
+  min-height: 1.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid rgba(121, 204, 236, 0.24);
+  border-radius: 7px;
+  color: #79ccec;
+  background: rgba(14, 156, 216, 0.08);
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.fi-add-subcategory:hover {
+  color: #eff3f8;
+  background: rgba(14, 156, 216, 0.16);
+}

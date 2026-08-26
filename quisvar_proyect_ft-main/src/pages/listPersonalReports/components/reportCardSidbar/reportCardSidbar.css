@@ -1,0 +1,39 @@
+.reportCardSidbar {
+  display: flex;
+  padding: 0.3125rem 0.2rem;
+  align-items: center;
+  gap: 0.3125rem;
+  align-self: stretch;
+  background-color: #fff;
+  transition: background-color 0.3s ease;
+  border-radius: 0.2rem;
+  cursor: pointer;
+}
+
+.reportCardSidbar:hover {
+  background-color: var(--color-menu);
+}
+.reportCardSidbar-active {
+  background-color: var(--color-menu);
+}
+.reportCardSidbar-info {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.reportCardSidbar-info-created {
+  color: var(--color-gray);
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 150%;
+  letter-spacing: 0.00938rem;
+}
+.reportCardSidbar-info-name {
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1rem;
+  letter-spacing: 0.03rem;
+  text-transform: uppercase;
+}

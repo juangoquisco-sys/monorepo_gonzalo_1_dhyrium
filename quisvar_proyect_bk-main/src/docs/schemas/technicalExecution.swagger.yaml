@@ -1,0 +1,124 @@
+paths:
+  /meeting-units/{unitId}/technical-execution/tasks/{taskId}/review-submissions:
+    get:
+      tags: [Technical execution]
+      summary: Listar el historial de entregables de una subtarea técnica
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/unitId'
+        - $ref: '#/components/parameters/taskId'
+      responses:
+        '200':
+          description: Entregables ordenados desde la primera hasta la última versión
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TechnicalReviewSubmission'
+        '403':
+          description: El usuario no puede consultar la etapa técnica
+        '404':
+          description: Subtarea no encontrada
+    post:
+      tags: [Technical execution]
+      summary: Registrar un entregable más avanzado y reemplazar el pendiente
+      description: >-
+        Conserva el envío pendiente anterior con estado REPLACED y crea una nueva
+        versión PENDING. El porcentaje es acumulado, debe ser entero, mayor al
+        envío pendiente y no superar 100.
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/unitId'
+        - $ref: '#/components/parameters/taskId'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [projectId, stageId, percentage, files]
+              properties:
+                projectId:
+                  type: integer
+                  minimum: 1
+                stageId:
+                  type: integer
+                  minimum: 1
+                percentage:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                files:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '201':
+          description: Nueva versión registrada; responde la subtarea actualizada
+        '400':
+          description: Datos inválidos, sin envío pendiente o porcentaje no creciente
+        '403':
+          description: El usuario no puede registrar el entregable
+        '409':
+          description: El envío pendiente cambió o fue reemplazado durante la operación
+components:
+  parameters:
+    unitId:
+      name: unitId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    taskId:
+      name: taskId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+  schemas:
+    TechnicalReviewSubmission:
+      type: object
+      required: [id, percentage, createdAt, status, state, files]
+      properties:
+        id:
+          type: integer
+        author:
+          type: string
+          nullable: true
+        reviewer:
+          type: string
+          nullable: true
+        percentage:
+          type: integer
+        status:
+          type: boolean
+        state:
+          type: string
+          enum: [PENDING, REPLACED, APPROVED, OBSERVED]
+        replacedAt:
+          type: string
+          format: date-time
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              dir: { type: string }
+              name: { type: string }
+              originalname: { type: string, nullable: true }
+              type: { type: string }

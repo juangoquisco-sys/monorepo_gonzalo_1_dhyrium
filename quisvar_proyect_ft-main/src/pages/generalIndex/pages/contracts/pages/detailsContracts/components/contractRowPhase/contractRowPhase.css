@@ -1,0 +1,72 @@
+.contractRowPhase-row {
+  position: relative;
+  align-items: center;
+}
+.contractRowPhase-input {
+  width: 100%;
+  border-radius: 0.25rem;
+  border: 0.5px solid #00000033;
+  background: #fff;
+  padding: 0.3125rem;
+
+  color: #20388166;
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+.contractRowPhase-input-day {
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+}
+.contractRowPhase-text {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: #000;
+  font-size: 0.65rem;
+  font-style: normal;
+  font-weight: 600;
+}
+.contractRowPhase-dropdown-check {
+  position: absolute;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+  min-width: 100%;
+  height: 100%;
+}
+.detailsContracts-phase-ejecution-row:has(:checked)
+  + .contractRowPhase-dropdown-content {
+  grid-template-rows: 1fr;
+}
+.detailsContracts-phase-ejecution-row:has(:checked) {
+  --rotate: rotate(180deg);
+}
+.contractRowPhase-dropdown-content {
+  display: grid;
+  grid-template-rows: var(--rows, 0fr);
+  transition: 0.3s grid-template-rows;
+}
+.contractRowPhase-input-radio-contain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.contractRowPhase-input-radio {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+.contractRowPhase-dropdown-sub {
+  overflow: hidden;
+  width: 93.5%;
+  margin-left: auto;
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
+}
+.contractRowPhase-dropdown-arrow {
+  width: 1.5rem;
+  transform: var(--rotate, 0);
+  transition: 0.2s transform;
+}
