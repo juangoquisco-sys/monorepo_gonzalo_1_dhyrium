@@ -49,47 +49,63 @@ export const CompanyInformation = () => {
   return (
     <div className="company-detail-panel">
       <div className="company-data">
-        <div className="company-main-info">
-          <div className="company-icons-area">
-            <Link
-              to={`/empresas/archivo/company/${infoId}`}
-              className="rounded-md border border-border px-2 py-1 text-xs font-medium text-foreground hover:bg-muted"
-            >
-              Archivo corporativo
-            </Link>
-            <img
-              src="/svg/pencil-line.svg"
-              className="company-info-icon"
-              onClick={() => handleAddCompany(data?.id)}
-            />
-            <span className="company-icon-cv">
-              <img src="/svg/download.svg" className="company-info-icon" />
-              <h4>CV</h4>
-            </span>
-          </div>
-          <figure className="company-main-figure">
-            <img
-              src={
-                data?.img
-                  ? `${URL}/images/img/companies/${data.img}`
-                  : '/svg/user_icon.svg'
-              }
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'contain',
-                objectPosition: 'center',
-              }}
-            />
-          </figure>
-          <div className="company-info-text">
-            <h1 className="company-info-name">{data?.name}</h1>
-            <p className="company-info-ruc">RUC {data?.ruc || 'Pendiente'}</p>
-            <h2 className="company-info-section-title">Representante legal</h2>
-            {splitNames?.length > 0 &&
-              splitNames.map((name, index) => <p key={index}>{name}</p>)}
-            <p className="company-info-pending">DNI pendiente de registro</p>
-          </div>
+          <div className="company-main-info">
+            <div className="company-icons-area">
+              <Link
+                to={`/empresas/archivo/company/${infoId}`}
+                className="company-archive-link"
+              >
+                Archivo corporativo
+              </Link>
+              <div className="company-actions" aria-label="Acciones de la empresa">
+                <button
+                  type="button"
+                  className="company-icon-button"
+                  onClick={() => handleAddCompany(data?.id)}
+                  title="Editar información de la empresa"
+                  aria-label="Editar información de la empresa"
+                >
+                  <img src="/svg/pencil-line.svg" className="company-info-icon" />
+                </button>
+                <button
+                  type="button"
+                  className="company-cv-button"
+                  title="Descargar CV"
+                >
+                  <img src="/svg/download.svg" className="company-info-icon" />
+                  <span>CV</span>
+                </button>
+              </div>
+            </div>
+            <div className="company-profile">
+              <figure className="company-main-figure">
+                <img
+                  src={
+                    data?.img
+                      ? `${URL}/images/img/companies/${data.img}`
+                      : '/svg/office.svg'
+                  }
+                  alt={data?.name ? `Logotipo de ${data.name}` : 'Logotipo de empresa'}
+                  onError={event => {
+                    event.currentTarget.src = '/svg/office.svg';
+                  }}
+                />
+              </figure>
+              <div className="company-info-text">
+                <p className="company-info-eyebrow">Empresa registrada</p>
+                <h1 className="company-info-name">{data?.name || 'Empresa sin nombre'}</h1>
+                <p className="company-info-ruc">RUC {data?.ruc || 'Pendiente de registro'}</p>
+                <div className="company-representative">
+                  <h2 className="company-info-section-title">Representante legal</h2>
+                  {splitNames?.length > 0 ? (
+                    splitNames.map((name, index) => <p key={index}>{name}</p>)
+                  ) : (
+                    <p className="company-info-pending">Pendiente de registro</p>
+                  )}
+                  <p className="company-info-pending">DNI pendiente de registro</p>
+                </div>
+              </div>
+            </div>
         </div>
         <section
           className="company-aditional-info"
@@ -125,9 +141,12 @@ export const CompanyInformation = () => {
           </div>
         </section>
         <section className="company-projects-list">
-          <h2 className="company-info-section-title">
-            Contratos y proyectos registrados
-          </h2>
+          <div className="company-projects-heading">
+            <h2 className="company-info-section-title">
+              Contratos y proyectos registrados
+            </h2>
+            <span>{data?.contracts?.length || 0} registrados</span>
+          </div>
           {data?.contracts &&
             data.contracts?.map(project => (
               <article key={project.projectId} className="company-contract-item">
