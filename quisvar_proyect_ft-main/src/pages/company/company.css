@@ -3,7 +3,7 @@
   /* overflow-y: hidden; */
   display: flex;
   /* flex-direction: column; */
-  gap: 0.275rem;
+  gap: 0;
   /* gap: 1rem; */
   height: 100%;
   min-width: 0;
@@ -14,12 +14,13 @@
   min-height: 0;
   height: 100%;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0;
 }
 
 .company-shell > .company {
   min-height: 0;
   flex: 1;
+  height: auto;
 }
 
 .company-view-header {
@@ -28,7 +29,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0 0.25rem;
+  min-height: 3.25rem;
+  padding: 0.35rem 0.7rem;
+  background: var(--card);
 }
 
 .company-directory-nav {
@@ -38,14 +41,45 @@
   min-width: 0;
 }
 
+.company-selected-context {
+  display: grid;
+  min-width: 0;
+  margin-right: auto;
+  max-width: min(38rem, 42vw);
+  gap: 0.2rem;
+  padding-left: 0.85rem;
+  border-left: 1px solid var(--border);
+}
+
+.company-selected-context strong,
+.company-selected-context span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.company-selected-context strong {
+  color: var(--foreground);
+  font-size: 0.88rem;
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.company-selected-context span {
+  color: var(--muted-foreground);
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
 .company-directory-brand,
 .company-directory-nav button {
   display: inline-flex;
   align-items: center;
-  min-height: 2.15rem;
+  min-height: 2rem;
   border-radius: var(--radius-md);
   padding: 0 0.75rem;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
 }
 
@@ -173,7 +207,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.75rem 0.75rem 0.55rem;
+  padding: 0.7rem 0.7rem 0.55rem;
   border-bottom: 1px solid var(--border);
 }
 
@@ -185,17 +219,153 @@
 
 .company-directory-heading span {
   color: var(--muted-foreground);
-  font-size: 0.65rem;
+  font-size: 0.66rem;
   font-weight: 600;
 }
 
 .company-directory-heading strong {
   overflow: hidden;
   color: var(--foreground);
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.company-directory-new {
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: var(--radius-md);
+  min-height: 2rem;
+  padding: 0.4rem 0.65rem;
+  color: var(--primary-foreground);
+  background: var(--primary);
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.company-directory-new:hover {
+  filter: brightness(0.95);
+}
+
+.company-directory-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0.7rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--muted-foreground);
+  background: var(--background);
+}
+
+.company-directory-search:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+.company-directory-search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  padding: 0.65rem 0;
+  color: var(--foreground);
+  background: transparent;
+  font-size: 0.78rem;
+}
+
+.company-directory-search input::placeholder {
+  color: var(--muted-foreground);
+}
+
+.company .scroll-y {
+  min-height: 0;
+  flex: 1;
+  padding: 0 0.45rem 0.55rem;
+}
+
+.company .company-directory-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0.1rem 0;
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.65rem;
+  color: var(--foreground);
+  text-decoration: none;
+  transition: background-color 150ms ease;
+}
+
+.company .company-directory-item:hover {
+  background: var(--muted);
+}
+
+.company .company-directory-item.active {
+  background: var(--info-muted);
+  box-shadow: none;
+}
+
+.company-directory-index {
+  display: flex;
+  width: 2.35rem;
+  height: 2.35rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: var(--primary-foreground);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.company-directory-index.is-company {
+  background: var(--primary);
+}
+
+.company-directory-index.is-consortium {
+  background: var(--secondary);
+}
+
+.company .company-directory-item .specialist-item-user-img {
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: contain;
+}
+
+.company .company-directory-item .specialist-items-content {
+  min-width: 0;
+}
+
+.company .company-directory-item .specialist-item-name,
+.company .company-directory-item .specialist-item-dni {
+  overflow: hidden;
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.company .company-directory-item .specialist-item-name {
+  color: var(--foreground);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.company .company-directory-item .specialist-item-dni {
+  margin-top: 0.18rem;
+  color: var(--muted-foreground);
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.company-directory-empty {
+  padding: 2rem 1rem;
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+  text-align: center;
 }
 
 .company-table-tabs button span {
@@ -590,6 +760,15 @@
 /* Directorio maestro-detalle: conserva el flujo compacto de empresas y consorcios. */
 .company > .aside {
   width: 300px;
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-top: 0;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  background: var(--card);
+  box-shadow: var(--shadow-app-panel);
 }
 
 .consortium-title {
@@ -613,6 +792,10 @@
 }
 
 .company.company--archive-route > .aside {
+  display: none;
+}
+
+.company.company--two-panels > .aside {
   display: none;
 }
 

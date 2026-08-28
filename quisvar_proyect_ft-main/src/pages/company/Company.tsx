@@ -1,17 +1,16 @@
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import AppContextMenu from '@/components/appContextMenu/AppContextMenu';
-import Button from '@/components/button/Button';
 import Aside from '@/components/aside/Aside';
 import { isOpenCardCompany$, isOpenCardConsortium$ } from '@/services/sharingSubject';
 import './company.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { axiosInstance, URL } from '@/services/axiosInstance';
 import type { Companies, ConsortiumType, Option } from '@/types/types';
 import CardCompany from './views/cardCompany/CardCompany';
 import CardConsortium from './views/cardConsortium/CardConsortium';
-import { Columns3, TableProperties } from 'lucide-react';
+import { Columns2, Columns3, Search } from 'lucide-react';
 
-type CompanyView = 'table' | 'split';
+type CompanyView = 'directory-table' | 'two-panels' | 'three-panels';
 
 export const Company = () => {
   const { pathname } = useLocation();
@@ -20,8 +19,9 @@ export const Company = () => {
   const [companies, setCompanies] = useState<Companies[]>();
   const [consortiums, setConsortiums] = useState<ConsortiumType[]>();
   const [swap, setSwap] = useState(false);
-  const [view, setView] = useState<CompanyView>('split');
+  const [view, setView] = useState<CompanyView>('three-panels');
   const [isOverview, setIsOverview] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const getCompanies = () => {
     axiosInstance
@@ -52,7 +52,8 @@ export const Company = () => {
 
   const renderDirectoryItem = (
     item: Companies | ConsortiumType,
-    kind: 'company' | 'consortium'
+    kind: 'company' | 'consortium',
+    position: number
   ) => {
     const isCompany = kind === 'company';
     const optionsData: Option[] = [{
@@ -68,18 +69,9 @@ export const Company = () => {
             className="specialist-items company-directory-item"
             to={isCompany ? `informacion/${item.id}` : `consorcio/${item.id}`}
           >
-            <div className="specialist-img-content">
-              <img
-                src={item.img
-                  ? `${URL}/images/img/${isCompany ? 'companies' : 'consortium'}/${item.img}`
-                  : '/svg/office.svg'}
-                alt={item.name ? `Ícono de ${item.name}` : 'Ícono de empresa'}
-                className="specialist-item-user-img"
-                onError={event => {
-                  event.currentTarget.src = '/svg/office.svg';
-                }}
-              />
-            </div>
+            <span className={`company-directory-index ${isCompany ? 'is-company' : 'is-consortium'}`}>
+              {String(position).padStart(2, '0')}
+            </span>
             <div className="specialist-items-content">
               <h3 className="specialist-item-name" title={item.name}>
                 {item.name || 'Registro sin nombre'}
@@ -99,12 +91,28 @@ export const Company = () => {
   };
 
   const openRecord = (item: Companies | ConsortiumType, kind: 'company' | 'consortium') => {
-    setView('split');
+    setView('three-panels');
     navigate(kind === 'company' ? `informacion/${item.id}` : `consorcio/${item.id}`);
   };
 
   const records = swap ? consortiums : companies;
   const totalRecords = (companies?.length || 0) + (consortiums?.length || 0);
+  const visibleRecords = useMemo(() => {
+    const term = searchTerm.trim().toLocaleLowerCase();
+    if (!term) return records || [];
+    return (records || []).filter(item =>
+      [item.name, item.manager, 'ruc' in item ? item.ruc : '']
+        .filter(Boolean)
+        .join(' ')
+        .toLocaleLowerCase()
+        .includes(term)
+    );
+  }, [records, searchTerm]);
+  const selectedCompany = useMemo(() => {
+    const match = pathname.match(/\/empresas\/informacion\/(\d+)/);
+    const id = Number(match?.[1]);
+    return Number.isFinite(id) ? companies?.find(company => company.id === id) : undefined;
+  }, [companies, pathname]);
 
   return (
     <div className="company-shell">
@@ -139,24 +147,30 @@ export const Company = () => {
               Consorcios
             </button>
           </div>
-          {!isOverview && <div aria-label="Vista del directorio corporativo" className="company-view-switcher">
+          {selectedCompany && !swap && !isOverview && (
+            <div className="company-selected-context">
+              <strong>{selectedCompany.name}</strong>
+              <span>RUC {selectedCompany.ruc || 'Pendiente de registro'}</span>
+            </div>
+          )}
+          {!isOverview && <div aria-label="Cantidad de paneles visibles" className="company-view-switcher">
             <button
               type="button"
-              aria-pressed={view === 'table'}
-              onClick={() => setView('table')}
-              className={view === 'table' ? 'is-active' : ''}
+              aria-pressed={view === 'two-panels'}
+              onClick={() => setView('two-panels')}
+              className={view === 'two-panels' ? 'is-active' : ''}
             >
-              <TableProperties aria-hidden="true" className="size-4" />
-              Tabla
+              <Columns2 aria-hidden="true" className="size-4" />
+              2 paneles
             </button>
             <button
               type="button"
-              aria-pressed={view === 'split'}
-              onClick={() => setView('split')}
-              className={view === 'split' ? 'is-active' : ''}
+              aria-pressed={view === 'three-panels'}
+              onClick={() => setView('three-panels')}
+              className={view === 'three-panels' ? 'is-active' : ''}
             >
               <Columns3 aria-hidden="true" className="size-4" />
-              Ficha dividida
+              3 paneles
             </button>
           </div>}
         </header>
@@ -188,7 +202,7 @@ export const Company = () => {
             </button>
           </div>
         </section>
-      ) : view === 'table' && !isArchiveRoute ? (
+      ) : view === 'directory-table' && !isArchiveRoute ? (
         <section className="company-table-view" aria-label="Tabla del directorio corporativo">
           <div className="company-table-toolbar">
             <div className="company-table-title">
@@ -244,23 +258,38 @@ export const Company = () => {
           </div>
         </section>
       ) : (
-      <div className={`company${isArchiveRoute ? ' company--archive-route' : ''}`}>
+      <div className={`company${isArchiveRoute ? ' company--archive-route' : ''}${view === 'two-panels' ? ' company--two-panels' : ''}`}>
       <Aside>
         <div className="company-directory-heading">
           <div>
-            <span>Directorio</span>
+            <span>{swap ? `${consortiums?.length || 0} consorcios registrados` : `${companies?.length || 0} empresas registradas`}</span>
             <strong>{swap ? 'Consorcios registrados' : 'Empresas registradas'}</strong>
           </div>
-          <Button
-            icon="plus-dark"
+          <button
+            type="button"
+            className="company-directory-new"
             onClick={() => (!swap ? handleAddCompany() : handleAddConsortium())}
-            className="company-directory-add-btn"
-            variant="outline"
+          >
+            + Nuevo
+          </button>
+        </div>
+        <div className="company-directory-search">
+          <Search aria-hidden="true" className="size-4" />
+          <input
+            type="search"
+            value={searchTerm}
+            onChange={event => setSearchTerm(event.target.value)}
+            placeholder={swap ? 'Buscar por nombre o representante' : 'Buscar por RUC o nombre'}
+            aria-label={swap ? 'Buscar consorcios' : 'Buscar empresas'}
           />
         </div>
         <div className="scroll-y">
-          {!swap && companies?.map(item => renderDirectoryItem(item, 'company'))}
-          {swap && consortiums?.map(item => renderDirectoryItem(item, 'consortium'))}
+          {visibleRecords.map((item, index) =>
+            renderDirectoryItem(item, swap ? 'consortium' : 'company', index + 1)
+          )}
+          {!visibleRecords.length && (
+            <p className="company-directory-empty">No se encontraron registros.</p>
+          )}
         </div>
       </Aside>
       <section className="specialist-info min-w-0 flex-1">

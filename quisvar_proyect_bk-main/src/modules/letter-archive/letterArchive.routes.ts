@@ -1,0 +1,23 @@
+import { Router } from 'express';
+import authenticateHandler from '@/middlewares/auth.middleware';
+import role from '@/middlewares/role.middleware';
+import LetterArchiveController from './letterArchive.controller';
+import { letterArchiveDocumentsUpload } from './letterArchive.upload';
+
+const router = Router();
+router.use(authenticateHandler);
+router.use(role.RoleHandler(['MOD'], 'empresas'));
+router.get('/companies/:companyId/letters', LetterArchiveController.listRecords);
+router.get('/companies/:companyId/letters/:rootId', LetterArchiveController.getRecord);
+router.put('/companies/:companyId/letters/:rootId', LetterArchiveController.saveRecord);
+router.post('/companies/:companyId/letters/:rootId/versions/:versionNumber/restore', LetterArchiveController.restoreRecordVersion);
+router.put('/companies/:companyId/documents/:documentCode', LetterArchiveController.resolveRoot);
+router.get('/roots/:rootId/tree', LetterArchiveController.tree);
+router.post('/roots/:rootId/folders', LetterArchiveController.createFolder);
+router.patch('/folders/:folderId', LetterArchiveController.renameFolder);
+router.post('/folders/:folderId/duplicate', LetterArchiveController.duplicateFolder);
+router.patch('/folders/:folderId/move', LetterArchiveController.moveFolder);
+router.delete('/folders/:folderId', LetterArchiveController.deleteFolder);
+router.post('/folders/:folderId/documents', letterArchiveDocumentsUpload, LetterArchiveController.createDocuments);
+router.get('/documents/:documentId/download', LetterArchiveController.download);
+export default router;

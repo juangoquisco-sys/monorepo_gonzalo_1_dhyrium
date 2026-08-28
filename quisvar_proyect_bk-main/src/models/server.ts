@@ -31,6 +31,7 @@ import { ENV } from '@/config/env';
 import DocumentComposerService from '@/modules/document-composer/documentComposer.service';
 import { isPrivateTaskDocumentUploadPath } from '@/modules/task-documents/taskDocumentAssets.domain';
 import { isPrivateCorporateArchivePath } from '@/modules/corporate-archive/corporateArchive.storage';
+import { isPrivateLetterArchivePath } from '@/modules/letter-archive/letterArchive.storage';
 // import {
 //   createZktecoDeviceServiceFromEnv,
 //   type ZktecoDeviceService,
@@ -104,7 +105,8 @@ class Server {
       (req: Request, res: Response, next: NextFunction) => {
         if (
           !isPrivateTaskDocumentUploadPath(req.path) &&
-          !isPrivateCorporateArchivePath(req.path)
+          !isPrivateCorporateArchivePath(req.path) &&
+          !isPrivateLetterArchivePath(req.path)
         ) return next();
         res.set({
           'Cache-Control': 'private, no-store, max-age=0',

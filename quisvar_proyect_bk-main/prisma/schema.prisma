@@ -2063,6 +2063,84 @@ model Companies {
   consortium    ConsortiumOnCompanies[]
   contracts     Contratc[]
   archiveRoots  CorporateArchiveRoot[]
+  letterArchiveRoots LetterArchiveRoot[]
+}
+
+model LetterArchiveRoot {
+  id            String                 @id @default(uuid())
+  companyId     Int
+  documentCode  String                 @db.VarChar(120)
+  documentType  String                 @default("Cartas") @db.VarChar(120)
+  recordType    String                 @default("Reciente") @db.VarChar(30)
+  documentDate  DateTime?
+  entity        String                 @default("") @db.VarChar(300)
+  location      String                 @default("") @db.VarChar(180)
+  subject       String                 @default("") @db.Text
+  status        String                 @default("En revisión") @db.VarChar(40)
+  content       String                 @default("") @db.Text
+  versionNumber Int                    @default(0)
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  company       Companies              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  folders       LetterArchiveFolder[]
+  documents     LetterArchiveDocument[]
+  versions      LetterArchiveVersion[]
+
+  @@unique([companyId, documentCode])
+  @@index([companyId])
+}
+
+model LetterArchiveVersion {
+  id            String             @id @default(uuid())
+  rootId        String
+  versionNumber Int
+  documentCode  String             @db.VarChar(120)
+  documentType  String             @db.VarChar(120)
+  recordType    String             @db.VarChar(30)
+  documentDate  DateTime?
+  entity        String             @db.VarChar(300)
+  location      String             @db.VarChar(180)
+  subject       String             @db.Text
+  status        String             @db.VarChar(40)
+  content       String             @db.Text
+  createdAt     DateTime           @default(now())
+  root          LetterArchiveRoot  @relation(fields: [rootId], references: [id], onDelete: Cascade)
+
+  @@unique([rootId, versionNumber])
+  @@index([rootId, createdAt])
+}
+
+model LetterArchiveFolder {
+  id        String                @id @default(uuid())
+  rootId    String
+  parentId  String?
+  name      String                @db.VarChar(180)
+  sortOrder Int                   @default(0)
+  createdAt DateTime              @default(now())
+  updatedAt DateTime              @updatedAt
+  root      LetterArchiveRoot     @relation(fields: [rootId], references: [id], onDelete: Cascade)
+  parent    LetterArchiveFolder?  @relation("LetterArchiveFolderTree", fields: [parentId], references: [id], onDelete: Cascade)
+  children  LetterArchiveFolder[] @relation("LetterArchiveFolderTree")
+  documents LetterArchiveDocument[]
+
+  @@unique([rootId, parentId, name])
+  @@index([rootId, parentId, sortOrder])
+}
+
+model LetterArchiveDocument {
+  id           String              @id @default(uuid())
+  rootId       String
+  folderId     String
+  displayName  String              @db.VarChar(300)
+  storageKey   String              @unique @db.VarChar(500)
+  originalName String              @db.VarChar(300)
+  mimeType     String              @db.VarChar(150)
+  sizeBytes    BigInt
+  createdAt    DateTime            @default(now())
+  root         LetterArchiveRoot   @relation(fields: [rootId], references: [id], onDelete: Cascade)
+  folder       LetterArchiveFolder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+  @@index([rootId, folderId, createdAt])
 }
 
 model CorporateArchiveRoot {
