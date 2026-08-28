@@ -19,6 +19,7 @@ import {
   isOpenCardRegisteTask$,
   loader$,
 } from '@/services/sharingSubject';
+import { SnackbarUtilities } from '@/utils/SnackbarManager';
 import { useSortable } from '@dnd-kit/sortable';
 import { ProjectContext } from '../../context/ProjectContext';
 import { ProjectRole } from '../../models/definitiosProject';
@@ -35,6 +36,10 @@ import {
   getTaskFileUrl,
   isEditableWordFile,
 } from '../../pages/task/services/taskFile.service';
+import {
+  isDhyriumDesktopEnabled,
+  openWithDhyriumDesktop,
+} from '@/services/desktopConnector.service';
 
 interface LevelItemSubtaskProps {
   subtask: SubTask;
@@ -121,6 +126,7 @@ const LevelItemSubtaskGeneral = ({
   }, [monthlyPrice]);
 
   const socket = useContext(SocketContext);
+  const desktopEnabled = isDhyriumDesktopEnabled();
 
   const { stageId } = useParams();
 
@@ -240,15 +246,27 @@ const LevelItemSubtaskGeneral = ({
     });
   };
   const handleOpenTaskFile = (file: FileTask) => {
+    if (desktopEnabled) {
+      SnackbarUtilities.info(
+        `Abriendo ${file.originalname || file.name} con Dhyrium Desktop...`
+      );
+      void openWithDhyriumDesktop({
+        sourceKind: 'TASK_FILE',
+        sourceFileId: file.id,
+      }).catch(() => {
+        SnackbarUtilities.error(
+          'No se pudo abrir el archivo en Dhyrium Desktop. Verifique que inició sesión en Dhyrium Desktop e inténtelo nuevamente.'
+        );
+      });
+      return;
+    }
+
     if (isEditableWordFile(file)) {
       handleOpenEditableFile(file);
       return;
     }
-    downloadHref(
-      getTaskFileUrl(file),
-      file.originalname || file.name,
-      true
-    );
+
+    downloadHref(getTaskFileUrl(file), file.originalname || file.name, true);
   };
   const menuData: Option[] = [
     {
@@ -420,7 +438,11 @@ const LevelItemSubtaskGeneral = ({
                   <button
                     type="button"
                     className="levelSubtask-editable-file"
-                    title={`Abrir ${primaryFile.originalname}`}
+                    title={
+                      desktopEnabled
+                        ? `Abrir ${primaryFile.originalname} con Dhyrium Desktop`
+                        : `Abrir ${primaryFile.originalname}`
+                    }
                     onClick={event => {
                       event.preventDefault();
                       event.stopPropagation();
@@ -439,8 +461,16 @@ const LevelItemSubtaskGeneral = ({
                     <button
                       type="button"
                       className="levelSubtask-pdf-file"
-                      title={`Abrir ${pdfFile.originalname}`}
-                      aria-label={`Abrir PDF ${pdfFile.originalname}`}
+                      title={
+                        desktopEnabled
+                          ? `Abrir ${pdfFile.originalname} con Dhyrium Desktop`
+                          : `Abrir ${pdfFile.originalname}`
+                      }
+                      aria-label={
+                        desktopEnabled
+                          ? `Abrir ${pdfFile.originalname} con Dhyrium Desktop`
+                          : `Abrir PDF ${pdfFile.originalname}`
+                      }
                       onClick={event => {
                         event.preventDefault();
                         event.stopPropagation();

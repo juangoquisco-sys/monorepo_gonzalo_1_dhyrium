@@ -108,6 +108,7 @@ import NavigationSubMenu from './NavigationSubMenu';
 import { ProjectProvider } from '@/pages/specialities/pages/project/context/ProjectContext';
 import RouteLazyFallback from './RouteLazyFallback';
 import RouteLogger from './RouteLogger';
+import DhyriumDesktopPage from '@/pages/dhyriumDesktop/DhyriumDesktopPage';
 
 const PublicRouteSuspense = ({ children }: { children: ReactNode }) => (
   <Suspense fallback={<RouteLazyFallback />}>{children}</Suspense>
@@ -140,6 +141,7 @@ const Navigation = () => {
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path="/home" element={<Home />} />
+            <Route path="/dhyrium-desktop" element={<DhyriumDesktopPage />} />
             {/* <Route path="/dashboard" element={<Dashboard />} /> */}
 
             <Route element={<ProtectedRole menuAccess="centro-de-usuarios" />}>

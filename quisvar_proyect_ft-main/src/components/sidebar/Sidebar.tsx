@@ -55,6 +55,7 @@ import {
   Info,
   LogOut,
   UserPen,
+  MonitorDown,
   Video,
 } from 'lucide-react';
 
@@ -420,6 +421,12 @@ const Sidebar = () => {
                       Acerca de
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={() => navigate('/dhyrium-desktop')}
+                    >
+                      <MonitorDown />
+                      Dhyrium Desktop
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                       variant="destructive"
                       onClick={handleLogout}

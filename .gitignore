@@ -24,6 +24,7 @@ data/index/*
 **/uploads/
 **/index/
 **/storage/duty-rotations/
+artifacts/dhyrium-desktop/
 **/database/
 **/backups/
 **/Backup/

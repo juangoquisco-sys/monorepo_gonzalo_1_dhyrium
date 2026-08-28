@@ -72,6 +72,7 @@ import basicResourcesRouter from '@/modules/basic-resources/basicResources.route
 import documentComposerRouter from '@/modules/document-composer/documentComposer.routes';
 import contractDocumentsRouter from '@/modules/contract-documents/contractDocuments.routes';
 import taskDocumentsRouter from '@/modules/task-documents/taskDocuments.routes';
+import desktopDocumentsRouter from '@/modules/desktop-documents/desktopDocuments.routes';
 import liquidationsRouter from '@/modules/liquidations/liquidations.routes';
 import corporateArchiveRouter from '@/modules/corporate-archive/corporateArchive.routes';
 
@@ -138,6 +139,7 @@ export const routesConfig = [
   { path: '/document-composer', router: documentComposerRouter },
   { path: '/contract-documents', router: contractDocumentsRouter },
   { path: '/task-documents', router: taskDocumentsRouter },
+  { path: '/desktop', router: desktopDocumentsRouter },
   { path: '/liquidations', router: liquidationsRouter },
   { path: '/corporate-archive', router: corporateArchiveRouter },
   { path: '/meetings', router: meetingsRoutes },

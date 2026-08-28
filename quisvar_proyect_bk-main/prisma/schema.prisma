@@ -124,6 +124,10 @@ model Users {
   taskDocumentFileVersions            TaskDocumentFileVersion[]         @relation("TaskDocumentFileVersionCreator")
   taskDocumentEditSessions            TaskDocumentEditSession[]         @relation("TaskDocumentEditSessionActor")
   taskDocumentEvents                  TaskDocumentEvent[]               @relation("TaskDocumentEventActor")
+  createdDesktopDocuments             DesktopDocument[]                 @relation("DesktopDocumentCreator")
+  updatedDesktopDocuments             DesktopDocument[]                 @relation("DesktopDocumentUpdater")
+  desktopDocumentVersions             DesktopDocumentVersion[]          @relation("DesktopDocumentVersionCreator")
+  desktopDocumentLaunchTickets        DesktopDocumentLaunchTicket[]     @relation("DesktopDocumentLaunchUser")
   iclockCommands                      IclockDeviceCommand[]
 }
 
@@ -1661,6 +1665,79 @@ model TaskDocumentEvent {
   @@index([actorId])
 }
 
+enum DesktopDocumentSourceKind {
+  TASK_FILE
+  BASIC_FILE
+}
+
+enum DesktopDocumentVersionSource {
+  ORIGINAL_IMPORT
+  DESKTOP_SAVE
+}
+
+model DesktopDocument {
+  id                   String                    @id @default(uuid())
+  sourceKind           DesktopDocumentSourceKind
+  sourceFileId         Int?                      @unique
+  sourceBasicFileId    Int?                      @unique
+  originalName         String                    @db.VarChar(300)
+  extension            String                    @db.VarChar(32)
+  currentVersionNumber Int                       @default(1)
+  createdById          Int
+  updatedById          Int
+  createdAt            DateTime                  @default(now())
+  updatedAt            DateTime                  @updatedAt
+  sourceFile           Files?                    @relation("DesktopDocumentSourceFile", fields: [sourceFileId], references: [id], onDelete: Cascade)
+  sourceBasicFile      BasicFiles?               @relation("DesktopDocumentSourceBasicFile", fields: [sourceBasicFileId], references: [id], onDelete: Cascade)
+  createdBy            Users                     @relation("DesktopDocumentCreator", fields: [createdById], references: [id])
+  updatedBy            Users                     @relation("DesktopDocumentUpdater", fields: [updatedById], references: [id])
+  versions             DesktopDocumentVersion[]
+  launchTickets        DesktopDocumentLaunchTicket[]
+
+  @@index([updatedAt])
+  @@index([createdById])
+  @@index([updatedById])
+}
+
+model DesktopDocumentVersion {
+  id             String                       @id @default(uuid())
+  documentId     String
+  versionNumber  Int
+  storageKey     String                       @unique @db.VarChar(500)
+  originalName   String                       @db.VarChar(300)
+  mimeType       String                       @db.VarChar(150)
+  sizeBytes      BigInt
+  checksumSha256 String                       @db.VarChar(64)
+  source         DesktopDocumentVersionSource
+  createdById    Int
+  createdAt      DateTime                     @default(now())
+  document       DesktopDocument              @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  createdBy      Users                        @relation("DesktopDocumentVersionCreator", fields: [createdById], references: [id])
+  launchTickets  DesktopDocumentLaunchTicket[]
+
+  @@unique([documentId, versionNumber])
+  @@index([documentId, createdAt])
+  @@index([createdById])
+}
+
+model DesktopDocumentLaunchTicket {
+  id         String                 @id @default(uuid())
+  tokenHash  String                 @unique @db.VarChar(64)
+  userId     Int
+  documentId String
+  versionId  String
+  expiresAt  DateTime
+  redeemedAt DateTime?
+  createdAt  DateTime               @default(now())
+  user       Users                  @relation("DesktopDocumentLaunchUser", fields: [userId], references: [id])
+  document   DesktopDocument        @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  version    DesktopDocumentVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+  @@index([userId, createdAt])
+  @@index([documentId, createdAt])
+}
+
 model OperationalTasks {
   id             Int                @id @default(autoincrement())
   status         TaskRole           @default(UNRESOLVED)
@@ -1753,6 +1830,7 @@ model Files {
   assignedAt   DateTime  @default(now())
   feedback     Feedback? @relation(fields: [feedbackId], references: [id])
   subTasks     SubTasks  @relation(fields: [subTasksId], references: [id], onDelete: Cascade)
+  desktopDocument DesktopDocument? @relation("DesktopDocumentSourceFile")
 }
 
 model BasicFiles {
@@ -1769,6 +1847,7 @@ model BasicFiles {
   // feedback   Feedback? @relation(fields: [feedbackId], references: [id])
   subTasks        BasicTasks     @relation(fields: [subTasksId], references: [id], onDelete: Cascade)
   feedback        BasicFeedback? @relation(fields: [basicFeedbackId], references: [id])
+  desktopDocument DesktopDocument? @relation("DesktopDocumentSourceBasicFile")
 }
 
 model BasicResource {

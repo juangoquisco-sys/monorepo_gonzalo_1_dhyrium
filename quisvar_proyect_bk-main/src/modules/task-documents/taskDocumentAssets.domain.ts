@@ -56,10 +56,13 @@ export const isPrivateTaskDocumentUploadPath = (requestPath: string) => {
     .replace(/\\/g, '/')
     .replace(/^\/+/, '')
     .toLowerCase();
-  return (
-    normalized === 'task-documents-private' ||
-    normalized.startsWith('task-documents-private/') ||
-    normalized === 'task-documents' ||
-    normalized.startsWith('task-documents/')
+  const privateRoots = [
+    'task-documents-private',
+    'task-documents',
+    'task-document-files',
+    'desktop-documents',
+  ];
+  return privateRoots.some(
+    root => normalized === root || normalized.startsWith(`${root}/`)
   );
 };

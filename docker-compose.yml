@@ -43,3 +43,6 @@ services:
     ports:
       - "${APP_PORT:-8088}:80"
     restart: unless-stopped
+    volumes:
+      # El ZIP se entrega fuera de Git y de la imagen; vea docs/dhyrium-desktop-release.md.
+      - ./artifacts/dhyrium-desktop:/usr/share/nginx/html/desktop:ro

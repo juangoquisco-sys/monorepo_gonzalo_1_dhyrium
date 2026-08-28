@@ -44,6 +44,7 @@
     "test:task-document-preview": "node --test -r ts-node/register -r tsconfig-paths/register tests/taskDocumentPreview.test.ts",
     "test:task-document-office": "node --test -r ts-node/register -r tsconfig-paths/register tests/taskDocumentOffice.domain.test.ts tests/taskDocumentOffice.middleware.test.ts tests/taskDocumentOffice.schema.test.ts tests/taskDocumentOffice.policy.test.ts",
     "test:task-document-opc": "node --test -r ts-node/register -r tsconfig-paths/register tests/taskDocumentOpcInspector.test.ts",
+    "test:desktop-documents": "node --test -r ts-node/register -r tsconfig-paths/register tests/desktopDocuments.domain.test.ts tests/desktopDocuments.schema.test.ts tests/desktopDocuments.middleware.test.ts",
     "test:corporate-archive": "node --test -r ts-node/register -r tsconfig-paths/register tests/corporateArchive.schema.test.ts tests/corporateArchive.domain.test.ts tests/corporateArchive.storage.test.ts",
     "test:corporate-archive-import": "node --test -r ts-node/register -r tsconfig-paths/register tests/corporateArchiveImport.test.ts",
     "test:mail-category": "node --test -r ts-node/register tests/mailCategoryAuthorization.test.ts",

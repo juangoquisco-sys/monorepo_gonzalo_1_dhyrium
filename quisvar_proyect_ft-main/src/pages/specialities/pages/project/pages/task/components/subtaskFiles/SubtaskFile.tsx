@@ -2,11 +2,17 @@ import { useContext, type CSSProperties } from 'react';
 import { axiosInstance } from '@/services/axiosInstance';
 import type { FileTask } from '@/types/types';
 import { SocketContext } from '@/context/SocketContex';
+import { TaskContext } from '../taskCard/TaskCard';
 // import { useSelector } from 'react-redux';
 // import type { RootState } from '../../../../../../../../store';
 import './SubtaskFile.css';
 import { downloadHref } from '@/utils/tools';
+import { SnackbarUtilities } from '@/utils/SnackbarManager';
 import TaskFileTemplate from './TaskFileTemplate';
+import {
+  isDhyriumDesktopEnabled,
+  openWithDhyriumDesktop,
+} from '@/services/desktopConnector.service';
 import {
   getTaskFileUrl,
   isEditableWordFile,
@@ -41,6 +47,12 @@ SubtaskFileProps) => {
   //   (state: RootState) => state.userSession
   // );
   const socket = useContext(SocketContext);
+  const taskContext = useContext(TaskContext);
+  const desktopEnabled = isDhyriumDesktopEnabled();
+  const desktopSourceKind =
+    taskContext.service?.modalTask === 'basictasks'
+      ? 'BASIC_FILE'
+      : 'TASK_FILE';
 
   const deleteFile = (id: number) => {
     axiosInstance
@@ -55,6 +67,21 @@ SubtaskFileProps) => {
   };
 
   const handleLink = (file: FileTask) => {
+    if (desktopEnabled) {
+      SnackbarUtilities.info(
+        `Abriendo ${file.originalname} con Dhyrium Desktop...`
+      );
+      void openWithDhyriumDesktop({
+        sourceKind: desktopSourceKind,
+        sourceFileId: file.id,
+      }).catch(() => {
+        SnackbarUtilities.error(
+          'No se pudo abrir el archivo en Dhyrium Desktop. Verifique que inició sesión en Dhyrium Desktop e inténtelo nuevamente.'
+        );
+      });
+      return;
+    }
+
     if (onOpenEditable && isEditableWordFile(file)) {
       onOpenEditable(file);
       return;
@@ -78,7 +105,9 @@ SubtaskFileProps) => {
           icon={getIcon(file.name)}
           showDeleteBtn={showDeleteBtn}
           actionLabel={
-            onOpenEditable && isEditableWordFile(file)
+            desktopEnabled
+              ? `Abrir ${file.originalname} con Dhyrium Desktop`
+              : onOpenEditable && isEditableWordFile(file)
               ? `Revisar compatibilidad de ${file.originalname} en Dhyrium Writer`
               : `Descargar ${file.originalname}`
           }

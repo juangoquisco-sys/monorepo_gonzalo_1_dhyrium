@@ -1,0 +1,201 @@
+.dhyrium-desktop-page {
+  min-height: calc(100vh - var(--header-height));
+  display: grid;
+  place-items: start center;
+  padding: clamp(1rem, 4vw, 3.5rem);
+  background: radial-gradient(
+      circle at top right,
+      rgba(14, 156, 216, 0.14),
+      transparent 30rem
+    ),
+    linear-gradient(135deg, #f7fbff, #f3f8ff 55%, #fff);
+}
+
+.dhyrium-desktop-card {
+  width: min(100%, 54rem);
+  display: grid;
+  gap: 1.25rem;
+  padding: clamp(1.25rem, 4vw, 2.4rem);
+  border: 1px solid rgba(14, 156, 216, 0.2);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 1.25rem 3.25rem rgba(0, 27, 105, 0.12);
+}
+
+.dhyrium-desktop-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.dhyrium-desktop-icon {
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 0.9rem;
+  background: rgba(14, 156, 216, 0.12);
+  color: var(--color-primary);
+}
+
+.dhyrium-desktop-icon svg {
+  width: 1.65rem;
+  height: 1.65rem;
+}
+
+.dhyrium-desktop-kicker {
+  margin: 0 0 0.25rem;
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.dhyrium-desktop-heading h1 {
+  margin: 0;
+  color: var(--color-tertiary);
+  font-size: clamp(1.55rem, 4vw, 2.2rem);
+}
+
+.dhyrium-desktop-heading p:not(.dhyrium-desktop-kicker),
+.dhyrium-desktop-footnote {
+  margin: 0.55rem 0 0;
+  color: var(--color-gray-text);
+  line-height: 1.5;
+}
+
+.dhyrium-desktop-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(14, 156, 216, 0.24);
+  border-radius: 0.75rem;
+  background: #f0fbff;
+  color: var(--color-secondary);
+  line-height: 1.45;
+}
+
+.dhyrium-desktop-notice svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: 0 0 auto;
+  color: var(--color-primary);
+}
+
+.dhyrium-desktop-steps {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding-left: 1.4rem;
+}
+
+.dhyrium-desktop-steps li {
+  padding-left: 0.35rem;
+  color: var(--color-tertiary);
+}
+
+.dhyrium-desktop-steps strong,
+.dhyrium-desktop-steps span {
+  display: block;
+}
+
+.dhyrium-desktop-steps span {
+  margin-top: 0.25rem;
+  color: var(--color-gray-text);
+  line-height: 1.45;
+}
+
+.dhyrium-desktop-download,
+.dhyrium-desktop-server-url button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.5rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 0.6rem;
+  background: var(--color-primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 750;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.dhyrium-desktop-download {
+  margin-top: 0.65rem;
+  padding: 0.55rem 0.85rem;
+}
+
+.dhyrium-desktop-download:hover,
+.dhyrium-desktop-server-url button:hover {
+  border-color: var(--color-secondary);
+  background: var(--color-secondary);
+}
+
+.dhyrium-desktop-download svg,
+.dhyrium-desktop-server-url button svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.dhyrium-desktop-server-url {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+  padding: 0.5rem;
+  border: 1px solid #d9e4ef;
+  border-radius: 0.7rem;
+  background: #f8fafc;
+}
+
+.dhyrium-desktop-server-url code {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  color: var(--color-tertiary);
+  font-size: 0.86rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dhyrium-desktop-server-url button {
+  min-height: 2.15rem;
+  padding: 0.4rem 0.65rem;
+  font-size: 0.85rem;
+}
+
+.dhyrium-desktop-footnote {
+  padding-top: 1rem;
+  border-top: 1px solid #e5edf5;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 560px) {
+  .dhyrium-desktop-page {
+    padding: 1rem 0.75rem;
+  }
+
+  .dhyrium-desktop-heading {
+    gap: 0.75rem;
+  }
+
+  .dhyrium-desktop-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .dhyrium-desktop-server-url {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .dhyrium-desktop-server-url code {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
