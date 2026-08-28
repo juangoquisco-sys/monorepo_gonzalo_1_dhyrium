@@ -51,6 +51,20 @@ describe('HTTP logging policy', () => {
     );
   });
 
+  it('redacta el permiso temporal de Dhyrium Desktop en los paths HTTP', () => {
+    const token = 'Abcdefghijklmnopqrstuvwxyz0123456789_-ABCDE';
+    assert.equal(token.length, 43);
+
+    const path = `/api/v1/desktop/documents/launches/${token}/redeem`;
+    const redacted = redactSensitiveRequestPath(path);
+
+    assert.equal(
+      redacted,
+      '/api/v1/desktop/documents/launches/[token]/redeem'
+    );
+    assert.equal(redacted.includes(token), false);
+  });
+
   it('omite health checks exitosos pero conserva sus errores', () => {
     process.env.ROUTE = 'api/v1';
     const req = { originalUrl: '/api/v1/health?probe=1' } as never;

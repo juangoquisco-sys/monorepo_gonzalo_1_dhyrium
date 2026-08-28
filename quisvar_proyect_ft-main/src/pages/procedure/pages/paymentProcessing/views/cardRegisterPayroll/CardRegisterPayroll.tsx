@@ -40,7 +40,7 @@ const CardRegisterPayroll = () => {
     SnackbarUtilities.success(
       'Trámites registrados correctamente en la planilla'
     );
-    navigate(`/planilla/${payrollId}`);
+    navigate(`/centro-de-usuarios/planillas/${payrollId}`);
   };
 
   return (

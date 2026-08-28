@@ -251,7 +251,9 @@ const PayrollMayBridge = () => {
 
   useEffect(() => {
     if (salaryId || usePayrollListQuery.isLoading || !latestPayroll) return;
-    navigate(`/planilla/${latestPayroll.id}/elaboracion`, { replace: true });
+    navigate(`/centro-de-usuarios/planillas/${latestPayroll.id}/elaboracion`, {
+      replace: true,
+    });
   }, [latestPayroll, navigate, salaryId, usePayrollListQuery.isLoading]);
 
   const candidatesQuery = useQuery({
@@ -585,7 +587,7 @@ const PayrollMayBridge = () => {
     },
     onSuccess: data => {
       SnackbarUtilities.success('Informes agregados a planilla');
-      navigate(`/planilla/${data.payrollId}/elaboracion`);
+      navigate(`/centro-de-usuarios/planillas/${data.payrollId}/elaboracion`);
     },
     onError: error => {
       SnackbarUtilities.error(
@@ -693,7 +695,9 @@ const PayrollMayBridge = () => {
   };
 
   const handleTaskPreview = (taskId: number) => {
-    navigate(`/planilla/${activePayrollId}/elaboracion/tarea/${taskId}`);
+    navigate(
+      `/centro-de-usuarios/planillas/${activePayrollId}/elaboracion/tarea/${taskId}`
+    );
   };
 
   const handleWorkspaceTaskNavigate = async ({

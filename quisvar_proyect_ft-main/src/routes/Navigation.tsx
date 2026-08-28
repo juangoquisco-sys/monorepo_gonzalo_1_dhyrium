@@ -155,10 +155,7 @@ const Navigation = () => {
                   element={<Navigate to="usuarios/internos" replace />}
                 />
                 <Route path="usuarios" element={<UsersDirectory />}>
-                  <Route
-                    index
-                    element={<Navigate to="internos" replace />}
-                  />
+                  <Route index element={<Navigate to="internos" replace />} />
                   <Route path="internos" element={<InternalUsersDirectory />} />
                   <Route path="externos" element={<Specialist />}>
                     <Route
@@ -173,6 +170,108 @@ const Navigation = () => {
                 />
                 <Route path="organigrama" element={<OrgChart />} />
                 <Route
+                  element={
+                    <ProtectedRole
+                      menuAccess="tramites"
+                      subMenuAccess="planilla"
+                    />
+                  }
+                >
+                  <Route
+                    path="planillas/mi-solicitud"
+                    element={<PayrollSelfSubmission />}
+                  />
+                </Route>
+                <Route
+                  element={
+                    <ProtectedRole
+                      menuAccess="tramites"
+                      subMenuAccess="planilla"
+                      typeRol="MOD"
+                    />
+                  }
+                >
+                  <Route path="planillas" element={<SalaryList />}>
+                    <Route
+                      path=":salaryId/recepcion"
+                      element={<PayrollPersonnelRequests />}
+                    />
+                    <Route path="puente-mayo" element={<PayrollMayBridge />}>
+                      <Route path="tarea/:taskId" element={<Task />} />
+                    </Route>
+                    <Route
+                      path=":salaryId/elaboracion"
+                      element={<PayrollElaboration />}
+                    >
+                      <Route path="tarea/:taskId" element={<Task />} />
+                    </Route>
+                    <Route path=":salaryId" element={<SalaryDetail />}>
+                      <Route path=":paymessageId" element={<MessagePage />}>
+                        <Route
+                          path="report/:reportId"
+                          element={<ReportPersonalTask />}
+                        />
+                      </Route>
+                    </Route>
+                  </Route>
+                </Route>
+                <Route
+                  element={<ProtectedRole menuAccess="control-asistencia" />}
+                >
+                  <Route
+                    path="control-asistencia"
+                    element={<ControlAttendanceLayout />}
+                  >
+                    <Route index element={<NavigationSubMenu />} />
+                    <Route
+                      element={
+                        <ProtectedRole
+                          menuAccess="control-asistencia"
+                          subMenuAccess="registro"
+                        />
+                      }
+                    >
+                      <Route path="registro" element={<Attendance />} />
+                    </Route>
+                    <Route path="salidas" element={<LicensePage />} />
+                    <Route
+                      element={
+                        <ProtectedRole
+                          menuAccess="control-asistencia"
+                          subMenuAccess="incidencias"
+                        />
+                      }
+                    >
+                      <Route
+                        path="incidencias"
+                        element={<AttendanceIncidents />}
+                      />
+                    </Route>
+                    <Route
+                      element={
+                        <ProtectedRole
+                          menuAccess="control-asistencia"
+                          subMenuAccess="reconciliar-faltas"
+                        />
+                      }
+                    >
+                      <Route
+                        path="reconciliar-faltas"
+                        element={<AttendanceReconciliation />}
+                      />
+                    </Route>
+                  </Route>
+                </Route>
+                <Route
+                  path="salidas"
+                  element={
+                    <Navigate
+                      to="/centro-de-usuarios/control-asistencia/salidas"
+                      replace
+                    />
+                  }
+                />
+                <Route
                   path="especialistas/*"
                   element={<Navigate to="usuarios/externos" replace />}
                 />
@@ -182,7 +281,15 @@ const Navigation = () => {
             <Route element={<ProtectedRole menuAccess="tramites" />}>
               <Route path="/tramites" element={<Procedure />}>
                 <Route index element={<NavigationSubMenu />} />
-                <Route path="salidas" element={<LicensePage />} />
+                <Route
+                  path="salidas"
+                  element={
+                    <Navigate
+                      to="/centro-de-usuarios/control-asistencia/salidas"
+                      replace
+                    />
+                  }
+                />
                 <Route
                   element={
                     <ProtectedRole

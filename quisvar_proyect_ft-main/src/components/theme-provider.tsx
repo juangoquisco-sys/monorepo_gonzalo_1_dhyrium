@@ -26,14 +26,22 @@ export function ThemeProvider({
   storageKey = 'vite-ui-theme',
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  );
+  // El tema de la aplicación es claro por defecto. No reutilizamos una
+  // preferencia heredada del navegador porque puede dejar toda la interfaz
+  // con la clase `dark` aun cuando el producto no ofrece un selector de tema.
+  const [theme, setTheme] = useState<Theme>(defaultTheme);
+
+  useEffect(() => {
+    localStorage.removeItem(storageKey);
+    // Conserva compatibilidad con la clave utilizada por versiones previas.
+    localStorage.removeItem('vite-ui-theme');
+  }, [storageKey]);
 
   useEffect(() => {
     const root = window.document.documentElement;
 
     root.classList.remove('light', 'dark');
+    root.style.colorScheme = 'light';
 
     if (theme === 'system') {
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')

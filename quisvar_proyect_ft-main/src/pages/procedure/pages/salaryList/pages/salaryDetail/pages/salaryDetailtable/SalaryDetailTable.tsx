@@ -190,7 +190,9 @@ const SalaryDetailTable = ({ office }: SalaryDetailTableProps) => {
 
   const handleViewMessage = (id: number) => {
     navigate(
-      `/planilla/${salaryId}/${id}?${new URLSearchParams(searchParams)}`,
+      `/centro-de-usuarios/planillas/${salaryId}/${id}?${new URLSearchParams(
+        searchParams
+      )}`,
       {
         state: {
           forPay: typePayroll === TypePayroll.UNPAID,

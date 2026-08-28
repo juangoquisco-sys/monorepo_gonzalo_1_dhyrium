@@ -79,7 +79,7 @@ export const MailPage = () => {
   ];
 
   const goToPayroll = () => {
-    navigate('/planilla');
+    navigate('/centro-de-usuarios/planillas');
   };
 
   return (

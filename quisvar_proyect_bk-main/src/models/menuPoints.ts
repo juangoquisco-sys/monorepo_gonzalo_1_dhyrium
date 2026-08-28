@@ -187,6 +187,7 @@ const MENU_POINTS: Menu[] = [
     title: 'Control de asistencia',
     route: 'control-asistencia',
     access: ['MOD', 'USER'],
+    noView: true,
   },
   { id: 5, title: 'Usuarios', route: 'centro-de-usuarios', access: ['MOD'] },
 

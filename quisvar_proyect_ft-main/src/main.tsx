@@ -86,7 +86,7 @@ const root = ReactDOM.createRoot(container, {
 
 root.render(
   // <React.StrictMode>
-  <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+  <ThemeProvider defaultTheme="light" storageKey="dhyrium-ui-theme">
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
         <SnackbarProvider autoHideDuration={4000} maxSnack={3}>

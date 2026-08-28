@@ -34,9 +34,9 @@ const ON_DEMAND_PRELOAD_CHUNKS = [
   'ViewPdf',
 ];
 
-// Usa la IP LAN fija de esta misma PC. Evita el relay de `localhost` de Docker
-// Desktop, que puede conservar conexiones colgadas después de recrear el backend.
-const LOCAL_BACKEND_TARGET = 'http://172.16.10.177:8081';
+// El servidor Docker actualizado está en esta misma estación. Vite acepta las
+// conexiones de la red local y las redirige internamente a ese servidor.
+const LOCAL_BACKEND_TARGET = 'http://127.0.0.1:8088';
 const LOCAL_BACKEND_PATHS =
   '^/(api|socket\\.io|projects|uploads|index|models|editables|reviews|task-document-assets|file-user|general|reports|images|public|api-docs|iclock)(/|$)';
 

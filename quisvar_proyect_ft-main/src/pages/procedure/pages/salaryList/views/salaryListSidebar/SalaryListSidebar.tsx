@@ -23,6 +23,8 @@ const PAYROLL_PHASES = [
   { label: 'Por pagar', value: TypePayroll.UNPAID },
 ] as const;
 
+const PAYROLL_BASE_PATH = '/centro-de-usuarios/planillas';
+
 const MONTHS = [
   'Enero',
   'Febrero',
@@ -63,7 +65,7 @@ const SalaryListSidebar = () => {
   const isRequests = location.pathname.includes('/recepcion');
   const isElaboration = location.pathname.includes('/elaboracion');
   const isMayBridge =
-    location.pathname.startsWith('/planilla/puente-mayo') ||
+    location.pathname.startsWith(`${PAYROLL_BASE_PATH}/puente-mayo`) ||
     location.pathname.startsWith(
       '/tramites/tramite-de-pago/planilla/puente-mayo'
     );
@@ -84,11 +86,11 @@ const SalaryListSidebar = () => {
   );
   const activePayrollId = salaryId || latestPayroll?.id;
   const getPayrollPath = (payrollId: string | number) =>
-    `/planilla/${payrollId}?typePayroll=${TypePayroll.UNAPPROVED}`;
+    `${PAYROLL_BASE_PATH}/${payrollId}?typePayroll=${TypePayroll.UNAPPROVED}`;
   const getCurrentPhasePath = (payrollId: string | number) => {
-    if (isRequests) return `/planilla/${payrollId}/recepcion`;
+    if (isRequests) return `${PAYROLL_BASE_PATH}/${payrollId}/recepcion`;
     if (isElaboration || isMayBridge)
-      return `/planilla/${payrollId}/elaboracion`;
+      return `${PAYROLL_BASE_PATH}/${payrollId}/elaboracion`;
     return getPayrollPath(payrollId);
   };
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -102,7 +104,7 @@ const SalaryListSidebar = () => {
       navigate(
         isRequests || isElaboration || isMayBridge
           ? getCurrentPhasePath(latestPayroll.id)
-          : `/planilla/${latestPayroll.id}/recepcion`,
+          : `${PAYROLL_BASE_PATH}/${latestPayroll.id}/recepcion`,
         { replace: true }
       );
     }
@@ -138,7 +140,7 @@ const SalaryListSidebar = () => {
     if (nextPayroll) {
       navigate(getPayrollPath(nextPayroll.id));
     } else {
-      navigate('/planilla');
+      navigate(PAYROLL_BASE_PATH);
     }
   };
 
@@ -218,14 +220,16 @@ const SalaryListSidebar = () => {
   const handlePhaseClick = (phase: (typeof PAYROLL_PHASES)[number]) => {
     if (!activePayrollId) return;
     if (phase.value === 'REQUESTS') {
-      navigate(`/planilla/${activePayrollId}/recepcion`);
+      navigate(`${PAYROLL_BASE_PATH}/${activePayrollId}/recepcion`);
       return;
     }
     if (phase.value === 'ELABORATION') {
-      navigate(`/planilla/${activePayrollId}/elaboracion`);
+      navigate(`${PAYROLL_BASE_PATH}/${activePayrollId}/elaboracion`);
       return;
     }
-    navigate(`/planilla/${activePayrollId}?typePayroll=${phase.value}`);
+    navigate(
+      `${PAYROLL_BASE_PATH}/${activePayrollId}?typePayroll=${phase.value}`
+    );
   };
 
   const isPhaseActive = (phase: (typeof PAYROLL_PHASES)[number]) => {
