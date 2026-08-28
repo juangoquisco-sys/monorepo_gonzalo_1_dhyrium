@@ -54,40 +54,17 @@ import {
   FileText,
   Info,
   LogOut,
-  UserPen,
   MonitorDown,
+  UserPen,
   Video,
 } from 'lucide-react';
 
-const HIDDEN_SIDEBAR_ROUTES = new Set(['rotaciones']);
+const HIDDEN_SIDEBAR_ROUTES = new Set(['rotaciones', 'control-asistencia']);
 
 const buildVisibleMenuPoints = (menuPoints: MenuItem[] = []) => {
-  const hasPayrollAccess = menuPoints.some(
-    item =>
-      item.route === 'tramites' &&
-      item.menu?.some(subMenu => subMenu.route === 'planilla')
+  return menuPoints.filter(
+    item => !item.noView && !HIDDEN_SIDEBAR_ROUTES.has(item.route)
   );
-
-  return menuPoints
-    .filter(item => !item.noView && !HIDDEN_SIDEBAR_ROUTES.has(item.route))
-    .flatMap(item => {
-      if (item.route !== 'tramites' || !hasPayrollAccess) return [item];
-      const payrollSubMenu = item.menu?.find(
-        subMenu => subMenu.route === 'planilla'
-      );
-      const isUserPayroll = payrollSubMenu?.typeRol === 'USER';
-
-      const payrollItem: MenuItem = {
-        ...item,
-        id: -1,
-        route: 'planilla',
-        path: isUserPayroll ? '/planilla/mi-solicitud' : '/planilla',
-        title: 'Planillas',
-        menu: [],
-      };
-
-      return [item, payrollItem];
-    });
 };
 
 const Sidebar = () => {
@@ -420,13 +397,13 @@ const Sidebar = () => {
                       <Info />
                       Acerca de
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onClick={() => navigate('/dhyrium-desktop')}
                     >
                       <MonitorDown />
                       Dhyrium Desktop
                     </DropdownMenuItem>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem
                       variant="destructive"
                       onClick={handleLogout}

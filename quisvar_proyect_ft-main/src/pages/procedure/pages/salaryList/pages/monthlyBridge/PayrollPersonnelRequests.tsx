@@ -351,14 +351,20 @@ const PayrollPersonnelRequests = () => {
           <button
             type="button"
             className="payrollPersonnelRequests-myRequest"
-            onClick={() => navigate('/planilla/mi-solicitud')}
+            onClick={() =>
+              navigate('/centro-de-usuarios/planillas/mi-solicitud')
+            }
           >
             Crear mi solicitud
           </button>
           <button
             type="button"
             className="payrollMayBridge-downloadZip"
-            onClick={() => navigate(`/planilla/${activePayrollId}/elaboracion`)}
+            onClick={() =>
+              navigate(
+                `/centro-de-usuarios/planillas/${activePayrollId}/elaboracion`
+              )
+            }
             disabled={!activePayrollId}
           >
             Ir a elaboración

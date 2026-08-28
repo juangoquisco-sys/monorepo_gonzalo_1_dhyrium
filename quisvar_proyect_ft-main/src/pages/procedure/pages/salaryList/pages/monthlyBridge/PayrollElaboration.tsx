@@ -348,7 +348,9 @@ const ReportEvidence = ({
   };
 
   const handleTaskPreview = (taskId: number) => {
-    navigate(`/planilla/${payrollId}/elaboracion/tarea/${taskId}`);
+    navigate(
+      `/centro-de-usuarios/planillas/${payrollId}/elaboracion/tarea/${taskId}`
+    );
   };
 
   const handleWorkspaceTaskNavigate = async ({
@@ -905,7 +907,9 @@ const PayrollElaboration = () => {
   };
 
   const closeTaskModal = () => {
-    navigate(`/planilla/${activePayrollId}/elaboracion`, { replace: true });
+    navigate(`/centro-de-usuarios/planillas/${activePayrollId}/elaboracion`, {
+      replace: true,
+    });
   };
 
   const payrollPeriod =

@@ -10,24 +10,7 @@ import {
 } from '@/utils/auditLogPolicy';
 import { resolveAuditErrorResponse } from '@/utils/auditErrorResponse';
 import { getRequestClientIp } from '@/utils/clientIp';
-
-const escapeRegExp = (value: string) =>
-  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-const getRequestPath = (req: Request) => {
-  const rawPath = (req.originalUrl || req.url || req.path || '').split('?')[0];
-  const routePrefix = process.env.ROUTE
-    ? `/${process.env.ROUTE}`.replace(/\/+/g, '/')
-    : '';
-  const pathWithoutPrefix =
-    routePrefix && rawPath.startsWith(routePrefix)
-      ? rawPath.replace(new RegExp(`^${escapeRegExp(routePrefix)}`), '') || '/'
-      : rawPath || req.path || '/';
-  return pathWithoutPrefix.replace(
-    /(\/task-documents\/office-edit\/)[A-Za-z0-9_-]{43}(?=\/|$)/,
-    '$1[token]'
-  );
-};
+import { getAuditRequestPath } from '@/utils/auditRequestPath';
 
 const OMITTED_AUDIT_PATHS = new Set(['/health']);
 
@@ -36,7 +19,7 @@ export const auditLogger = async (
   res: Response,
   next: NextFunction
 ) => {
-  const path = getRequestPath(req);
+  const path = getAuditRequestPath(req);
   if (OMITTED_AUDIT_PATHS.has(path)) return next();
 
   const method = req.method.toUpperCase();

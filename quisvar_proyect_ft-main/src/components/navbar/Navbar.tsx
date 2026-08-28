@@ -19,7 +19,7 @@ interface NavbarProps {
 }
 
 const Navbar = ({
-  title = 'Default Title',
+  title,
   subMenu = [],
   component,
   topMenuItems = [],
@@ -31,12 +31,18 @@ const Navbar = ({
       }`}
     >
       {topMenuItems.length > 0 && (
-        <div className="navbar-header-top-menus" role="tablist" aria-label="Entidad de trabajo">
+        <div
+          className="navbar-header-top-menus"
+          role="tablist"
+          aria-label="Entidad de trabajo"
+        >
           {topMenuItems.map(item => (
             <button
               key={item.id}
               type="button"
-              className={`navbar-top-menu${item.isActive ? ' navbar-top-menu-active' : ''}`}
+              className={`navbar-top-menu${
+                item.isActive ? ' navbar-top-menu-active' : ''
+              }`}
               role="tab"
               aria-selected={item.isActive ?? false}
               onClick={item.onClick}
@@ -46,7 +52,7 @@ const Navbar = ({
           ))}
         </div>
       )}
-      <p className="navbar-title">{title}</p>
+      {title && <p className="navbar-title">{title}</p>}
       <div className="navbar-header-menus">
         {subMenu.map(header => (
           <NavLink key={header.id} to={header.route}>

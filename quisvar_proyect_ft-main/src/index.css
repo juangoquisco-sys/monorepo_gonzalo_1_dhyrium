@@ -89,6 +89,7 @@
 }
 
 :root {
+  color-scheme: light;
   --radius: 0.625rem;
 
   --background: #ffffff;

@@ -4,6 +4,8 @@ import morgan from 'morgan';
 const HEALTH_PATHS = new Set(['/health', '/system/health']);
 const OFFICE_EDIT_TOKEN_PATH_PATTERN =
   /(\/task-documents\/office-edit\/)[A-Za-z0-9_-]{43}(?=\/|$)/g;
+const DESKTOP_LAUNCH_TICKET_PATH_PATTERN =
+  /(\/desktop\/documents\/launches\/)[A-Za-z0-9_-]{43}(?=\/redeem(?:\/|$))/g;
 
 export const resolveTrustProxy = (value: string | undefined) => {
   if (!value) return false;
@@ -20,7 +22,9 @@ export const resolveTrustProxy = (value: string | undefined) => {
 };
 
 export const redactSensitiveRequestPath = (path: string) =>
-  path.replace(OFFICE_EDIT_TOKEN_PATH_PATTERN, '$1[token]');
+  path
+    .replace(OFFICE_EDIT_TOKEN_PATH_PATTERN, '$1[token]')
+    .replace(DESKTOP_LAUNCH_TICKET_PATH_PATTERN, '$1[token]');
 
 export const getRequestPathname = (req: Request) => {
   const pathname =

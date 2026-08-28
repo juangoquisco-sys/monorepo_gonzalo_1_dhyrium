@@ -1,6 +1,32 @@
 name: dhyrium-software-secondary
 
 services:
+  db:
+    image: postgres:18.1-alpine
+    restart: unless-stopped
+    shm_size: 128mb
+    ports:
+      # 5433 esta ocupado por otro entorno local en esta maquina; puede
+      # ajustarse sin afectar la red interna Docker.
+      - "127.0.0.1:${LOCAL_DB_PORT:-5434}:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dhyrium_db
+    volumes:
+      - postgres_local_data:/var/lib/postgresql
+      - ./.agent-local/database-clone:/restore:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
   backend:
     image: diegoromani560/dhyrium_software_v1:production-latest
     env_file:
@@ -13,6 +39,8 @@ services:
       DOCX_RENDERER_URL: http://host.docker.internal:8092/render/docx-to-pdf
       DOCX_RENDERER_TOKEN: dhyrium-local-word-renderer-v1
       DOCX_RENDERER_REQUIRE_EXACT: "true"
+      # El contenedor nunca usa la DATABASE_URL externa heredada de .env.
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/dhyrium_db?schema=public
     restart: unless-stopped
     volumes:
       - ./quisvar_proyect_ft-main/data/uploads:/app/uploads
@@ -22,6 +50,9 @@ services:
       - "8081"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    depends_on:
+      db:
+        condition: service_healthy
     healthcheck:
       test:
         [
@@ -42,7 +73,11 @@ services:
         condition: service_healthy
     ports:
       - "${APP_PORT:-8088}:80"
-    restart: unless-stopped
     volumes:
       # El ZIP se entrega fuera de Git y de la imagen; vea docs/dhyrium-desktop-release.md.
       - ./artifacts/dhyrium-desktop:/usr/share/nginx/html/desktop:ro
+    restart: unless-stopped
+
+volumes:
+  postgres_local_data:
+    driver: local
