@@ -53,7 +53,10 @@ $backendBuildArguments = @(
   (Join-Path $rootPath 'quisvar_proyect_bk-main')
 )
 $frontendBuildArguments = @(
-  'build', '--build-arg', 'VITE_API_URL=', '--tag', $frontendVersionImage,
+  'build', '--build-arg', 'VITE_API_URL=',
+  '--build-arg', 'VITE_DHYRIUM_DESKTOP_ENABLED=true',
+  '--build-arg', 'VITE_DHYRIUM_DESKTOP_DOWNLOAD_URL=/desktop/DhyriumDesktop-0.1.4-win-x64-pilot.zip',
+  '--tag', $frontendVersionImage,
   '--tag', $frontendLatestImage, (Join-Path $rootPath 'quisvar_proyect_ft-main')
 )
 Invoke-Docker -DockerArguments $backendBuildArguments
