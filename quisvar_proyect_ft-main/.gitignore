@@ -52,3 +52,6 @@ scratch_db.js
 scripts/migration/
 test_passwords.js
 test_prisma_passwords.js
+
+# Paquetes de prueba generados para Dhyrium Desktop.
+public/desktop/

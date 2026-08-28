@@ -9,3 +9,7 @@ playwright-report
 npm-debug.log*
 Dockerfile
 docker-compose*.yml
+desktop-connector/bin
+desktop-connector/obj
+desktop-connector/publish
+work
