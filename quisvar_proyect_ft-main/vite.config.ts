@@ -34,9 +34,9 @@ const ON_DEMAND_PRELOAD_CHUNKS = [
   'ViewPdf',
 ];
 
-// El servidor Docker actualizado está en esta misma estación. Vite acepta las
-// conexiones de la red local y las redirige internamente a ese servidor.
-const LOCAL_BACKEND_TARGET = 'http://127.0.0.1:8088';
+// En desarrollo, usa la misma entrada publicada que localhost:8088. Así Vite
+// no queda conectado a una instancia local antigua cuando Docker recrea el backend.
+const LOCAL_BACKEND_TARGET = 'http://localhost:8081';
 const LOCAL_BACKEND_PATHS =
   '^/(api|socket\\.io|projects|uploads|index|models|editables|reviews|task-document-assets|file-user|general|reports|images|public|api-docs|iclock)(/|$)';
 

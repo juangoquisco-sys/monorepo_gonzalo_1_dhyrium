@@ -45,8 +45,12 @@ export const collectDescendantIds = (unit?: OrgUnit | null): Set<string> => {
 export const orgChartService = {
   async getTree(): Promise<OrgTreeSummary> {
     const { data } = await axiosInstance.get<OrgUnit[] | OrgUnit>('/org/tree', {
-      params: { scope: 'directory' },
-      headers: { noLoader: true },
+      params: { scope: 'directory', refreshedAt: Date.now() },
+      headers: {
+        noLoader: true,
+        'Cache-Control': 'no-cache',
+        Pragma: 'no-cache',
+      },
     });
     const roots = normalizeTree(data);
     return {

@@ -435,11 +435,7 @@ const OrgChart = () => {
       setUsers(userData);
       setSelectedId(current => {
         if (current && findOrgUnit(roots, current)?.isActive) return current;
-        return (
-          flattenOrgUnits(roots).find(
-            unit => unit.isActive && isGeneralRoot(unit)
-          )?.id ?? roots.find(unit => unit.isActive)?.id
-        );
+        return undefined;
       });
     } catch {
       setError('El modulo de organigrama aun no esta disponible.');
@@ -447,6 +443,23 @@ const OrgChart = () => {
       setLoading(false);
     }
   }, []);
+
+  const restoreConsolidatedView = useCallback(async () => {
+    setSelectedId(undefined);
+    setSelectedPosition(undefined);
+    setEditingUnitId(undefined);
+    setEditingMemberId(undefined);
+    setExpandedAtlasNodes(new Set());
+    setUnitForm(emptyUnitForm);
+    setMemberForm(emptyMembershipForm);
+    setUnitFormOpen(false);
+    setUnitFormError(undefined);
+    setSearch('');
+    setUserSearchOpen(false);
+    setViewMode('reading');
+    setZoom(100);
+    await getTree();
+  }, [getTree]);
 
   const getMembers = useCallback(async (unitId?: string) => {
     if (!unitId) {
@@ -796,12 +809,12 @@ const OrgChart = () => {
             variant="outline"
             size="xxs"
             leftIcon={<RefreshCw size={14} />}
-            onClick={getTree}
+            onClick={() => void restoreConsolidatedView()}
           />
         </div>
       )}
 
-      <section className="orgChart-workspace">
+      <section className={`orgChart-workspace${selectedUnit ? ' is-inspector-open' : ''}`}>
         <main className="orgChart-canvasPanel">
           <div className="orgChart-toolbar">
             <div>
@@ -866,7 +879,7 @@ const OrgChart = () => {
                 size="xxs"
                 text="Actualizar"
                 leftIcon={<RefreshCw size={14} />}
-                onClick={getTree}
+                onClick={() => void restoreConsolidatedView()}
               />
               <Button
                 size="xxs"
@@ -967,7 +980,7 @@ const OrgChart = () => {
           </div>
         </main>
 
-        <aside className="orgChart-inspector">
+        {selectedUnit && <aside className="orgChart-inspector">
           <div className="orgChart-inspectorHeader">
             <div>
               <span className="orgChart-eyebrow">Unidad seleccionada</span>
@@ -1306,7 +1319,7 @@ const OrgChart = () => {
               )}
             </div>
           </section>
-        </aside>
+        </aside>}
       </section>
     </div>
   );

@@ -18,7 +18,7 @@
 
 .orgChart-workspace {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(21rem, 25rem);
+  grid-template-columns: minmax(0, 1fr);
   gap: 0;
   align-items: start;
   min-height: calc(100vh - 8rem);
@@ -574,6 +574,10 @@
 .orgChart-memberForm {
   display: grid;
   gap: 0.72rem;
+}
+
+.orgChart-workspace.is-inspector-open {
+  grid-template-columns: minmax(0, 1fr) minmax(21rem, 25rem);
 }
 
 .orgChart-formContext {
