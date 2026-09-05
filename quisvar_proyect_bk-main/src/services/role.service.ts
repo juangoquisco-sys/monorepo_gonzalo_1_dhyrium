@@ -157,6 +157,16 @@ class RoleService {
     const role = await prisma.role.findUnique({
       where: { id },
       include: {
+        users: {
+          where: { status: true },
+          select: {
+            id: true,
+            profile: {
+              select: { firstName: true, lastName: true, dni: true },
+            },
+          },
+          orderBy: { profile: { lastName: 'asc' } },
+        },
         menuPoints: {
           select: {
             id: true,
@@ -237,12 +247,41 @@ class RoleService {
 
     return getRole;
   }
-  static async delete(id: number) {
+  static async delete(id: number, replacementRoleId?: number) {
     if (!id) throw new AppError('Oops!,ID invalido', 400);
-    const deleteRole = await prisma.role.delete({
-      where: { id },
+    if (replacementRoleId === id) {
+      throw new AppError('El rol destino debe ser diferente al rol eliminado.', 400);
+    }
+
+    return prisma.$transaction(async tx => {
+      const role = await tx.role.findUnique({
+        where: { id },
+        select: { id: true, name: true, _count: { select: { users: true } } },
+      });
+      if (!role) throw new AppError('No se pudo encontrar el rol', 404);
+
+      if (role._count.users > 0 && !replacementRoleId) {
+        throw new AppError(
+          'Debe seleccionar un rol destino para reasignar a los usuarios afectados.',
+          400
+        );
+      }
+
+      if (replacementRoleId) {
+        const replacement = await tx.role.findUnique({
+          where: { id: replacementRoleId },
+          select: { id: true },
+        });
+        if (!replacement) throw new AppError('El rol destino no existe.', 404);
+        await tx.users.updateMany({
+          where: { roleId: id },
+          data: { roleId: replacementRoleId },
+        });
+      }
+
+      await tx.role.delete({ where: { id } });
+      return { id: role.id, reassignedUsers: role._count.users };
     });
-    return deleteRole;
   }
   static async editHierarchy(id: number, hierarchy: number) {
     if (!id) throw new AppError('Oops!,ID invalido', 400);

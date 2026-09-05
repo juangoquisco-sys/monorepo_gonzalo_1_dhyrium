@@ -74,7 +74,7 @@ const RolesAndPermissions = () => {
 
           <div className="rolesAndPermissions-body-contain">
             {roles?.map(rol => (
-              <RoleTableRow key={rol.id} rol={rol} onSave={getRoles} />
+              <RoleTableRow key={rol.id} rol={rol} roles={roles ?? []} onSave={getRoles} />
             ))}
           </div>
           {isAddNewRole && (

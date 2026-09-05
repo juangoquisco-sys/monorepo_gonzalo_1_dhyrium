@@ -46,7 +46,11 @@ export class RoleController {
   public delete: ControllerFunction = async (req, res, next) => {
     try {
       const { id } = req.params;
-      const query = await RoleService.delete(+id);
+      const replacementRoleId = req.body?.replacementRoleId;
+      const query = await RoleService.delete(
+        +id,
+        replacementRoleId === undefined ? undefined : +replacementRoleId
+      );
       res.status(200).json(query);
     } catch (error) {
       console.log(error);

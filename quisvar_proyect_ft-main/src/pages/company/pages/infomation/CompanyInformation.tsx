@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState, type CSSProperties, type FormEvent, type PointerEvent as ReactPointerEvent } from 'react';
+import { Fragment, useEffect, useState, type CSSProperties, type FormEvent, type PointerEvent as ReactPointerEvent, type ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 import { ChevronDown, ChevronRight, FilePlus2, FileText, FolderOpen, Pencil, Plus, Search, Upload } from 'lucide-react';
 import './companyInformation.css';
@@ -7,7 +7,7 @@ import AppContextMenu from '@/components/appContextMenu/AppContextMenu';
 import { AppButton } from '@/components/app-ui/app-button';
 import { AppInput } from '@/components/app-ui/app-input';
 import { openDialog, type DialogHandle } from '@/utils/dialog';
-import { createLetterArchiveFolder, deleteLetterArchiveFolder, downloadLetterArchiveFile, duplicateLetterArchiveFolder, getLetterArchiveTree, getLetterRecord, listLetterRecords, moveLetterArchiveFolder, renameLetterArchiveFolder, resolveLetterArchive, restoreLetterRecordVersion, saveLetterRecord, type LetterArchiveFolder, type LetterRecord, type LetterRecordVersion, uploadLetterArchiveFiles } from './letterArchive.service';
+import { createLetterArchiveFolder, deleteLetterArchiveFolder, downloadLetterArchiveFile, duplicateLetterArchiveFolder, getLetterArchiveTree, getLetterRecord, listLetterRecords, moveLetterArchiveFolder, renameLetterArchiveFolder, resolveLetterArchive, restoreLetterRecordVersion, saveLetterRecord, type LetterArchiveFolder, type LetterRecordVersion, uploadLetterArchiveFiles } from './letterArchive.service';
 
 const DEFAULT_SECTIONS = [
   'Documentos de trámite',
@@ -240,26 +240,6 @@ export const CompanyInformation = () => {
     { name: 'Eliminar', type: 'button', function: () => deleteDocumentType(name) },
   ];
 
-  const addRecord = (recordType: CorporateDocument['recordType']) => {
-    if (!activeDocument) return;
-    const nextNumber = String(documents.length + 1).padStart(4, '0');
-    setDocuments(current => [
-      {
-        id: `${activeDocument}-${Date.now()}`,
-        type: activeDocument,
-        code: `${activeDocument.slice(0, 5).toUpperCase()}-REG-2026-${nextNumber}`,
-        date: '27/8/2026',
-        year: '2026',
-        entity: 'Empresa seleccionada',
-        location: 'Puno',
-        subject: recordType === 'Histórica' ? 'Documento histórico pendiente de completar' : `Nuevo registro de ${activeDocument.toLowerCase()}`,
-        status: 'En revisión',
-        recordType,
-      },
-      ...current,
-    ]);
-  };
-
   const clearDocumentFilters = () => {
     setDocumentNumberFilter('');
     setEntityFilter('');
@@ -353,7 +333,7 @@ export const CompanyInformation = () => {
     });
   };
 
-  const renderArchiveFolder = (folder: LetterArchiveFolder, item: string, depth = 0): JSX.Element => {
+  const renderArchiveFolder = (folder: LetterArchiveFolder, item: string, depth = 0): ReactElement => {
     const isExpanded = expandedArchiveFolderIds.includes(folder.id);
     const isSelected = selectedArchiveFolderId === folder.id;
     return <div key={folder.id} className="letter-archive__branch">
@@ -527,14 +507,6 @@ export const CompanyInformation = () => {
     } finally {
       setIsSavingLetter(false);
     }
-  };
-
-  const advanceDocumentStatus = (id: string) => {
-    const statuses: DocumentStatus[] = ['En revisión', 'Enviada', 'Respondida', 'Archivada'];
-    setDocuments(current => current.map(item => {
-      if (item.id !== id) return item;
-      return { ...item, status: statuses[(statuses.indexOf(item.status) + 1) % statuses.length] };
-    }));
   };
 
   const resizeDocumentPanels = (event: ReactPointerEvent<HTMLDivElement>) => {

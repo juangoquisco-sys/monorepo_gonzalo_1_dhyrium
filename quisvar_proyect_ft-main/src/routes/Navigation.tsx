@@ -104,6 +104,7 @@ import {
 import ProtectedRole from '@/guards/ProtectedRole/ProtectedRole';
 import { ProtectedRoute } from '@/guards/ProtectedRoute/ProtectedRoute';
 import ProtectedSystemUser from '@/guards/ProtectedSystemUser/ProtectedSystemUser';
+import RoleManagementGuard from '@/guards/RoleManagementGuard/RoleManagementGuard';
 import NavigationSubMenu from './NavigationSubMenu';
 import { ProjectProvider } from '@/pages/specialities/pages/project/context/ProjectContext';
 import RouteLazyFallback from './RouteLazyFallback';
@@ -164,10 +165,12 @@ const Navigation = () => {
                     />
                   </Route>
                 </Route>
-                <Route
-                  path="roles-y-permisos"
-                  element={<RolesAndPermissions />}
-                />
+                <Route element={<RoleManagementGuard />}>
+                  <Route
+                    path="roles-y-permisos"
+                    element={<RolesAndPermissions />}
+                  />
+                </Route>
                 <Route path="organigrama" element={<OrgChart />} />
                 <Route
                   element={

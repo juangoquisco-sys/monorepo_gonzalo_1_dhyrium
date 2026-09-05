@@ -22,13 +22,16 @@ import { handleMenu } from '../../utils/tools';
 import { SnackbarUtilities } from '@/utils/SnackbarManager';
 import type { SubMenuOptions } from '../../models/types';
 import { SocketContext } from '@/context/SocketContex';
+import { openDialog } from '@/utils/dialog';
+import RoleDeleteConfirmation from './RoleDeleteConfirmation';
 
 interface RoleTableRowProps {
   rol: Roles;
+  roles: Roles[];
   onSave: () => void;
 }
 
-const RoleTableRow = ({ rol, onSave }: RoleTableRowProps) => {
+const RoleTableRow = ({ rol, roles, onSave }: RoleTableRowProps) => {
   const [openEditData, setOpenEditData] = useState<boolean>(false);
   const [subMenuOptions, setSubMenuOptions] = useState<SubMenuOptions | null>(
     null
@@ -122,11 +125,29 @@ const RoleTableRow = ({ rol, onSave }: RoleTableRowProps) => {
     setSubMenuOptions(data);
   };
 
-  const handleDeleteRole = () => {
-    axiosInstance.delete(`/role/${rol.id}`).then(() => {
-      SnackbarUtilities.success(`Rol: "${role}" eliminado correctamente`);
-      onSave();
-    });
+  const handleDeleteRole = async () => {
+    try {
+      const { data } = await axiosInstance.get(`/role/${rol.id}`);
+      let dialogHandle: ReturnType<typeof openDialog>;
+      dialogHandle = openDialog({
+        title: 'Confirmar eliminación de rol',
+        description: 'Los usuarios afectados deben ser reasignados antes de eliminar el rol.',
+        width: 'min(100%, 36rem)',
+        children: (
+          <RoleDeleteConfirmation
+            role={data}
+            roles={roles.map(({ id, name }) => ({ id, name }))}
+            onSave={onSave}
+            onClose={() => dialogHandle?.close()}
+          />
+        ),
+      });
+      if (!dialogHandle) {
+        SnackbarUtilities.warning('No se pudo abrir la confirmación.');
+      }
+    } catch {
+      SnackbarUtilities.error('No se pudo consultar el impacto del rol.');
+    }
   };
 
   const handleEditMenu = () => {
