@@ -26,7 +26,9 @@ const Procedure = () => {
     <div className="procedure">
       {!isPayrollRoute && (
         <Navbar
-          subMenu={subMenu.filter(item => item.route !== 'salidas')}
+          subMenu={subMenu.filter(
+            item => String(item.route) !== 'salidas' || item.typeRol === 'USER'
+          )}
           component={
             <ProcedureSelectOffice officeId={officeId} onChange={setofficeId} />
           }

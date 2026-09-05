@@ -61,10 +61,50 @@ import {
 
 const HIDDEN_SIDEBAR_ROUTES = new Set(['rotaciones', 'control-asistencia']);
 
-const buildVisibleMenuPoints = (menuPoints: MenuItem[] = []) => {
-  return menuPoints.filter(
-    item => !item.noView && !HIDDEN_SIDEBAR_ROUTES.has(item.route)
+const isPersonalAttendanceIncidentsMenu = (item: MenuItem) => {
+  if (item.route !== 'control-asistencia') return false;
+  const subMenus = item.menu ?? [];
+  const canViewOwnIncidents = subMenus.some(
+    subMenu => subMenu.route === 'incidencias' && subMenu.typeRol === 'USER'
   );
+  const hasAttendanceManagement = subMenus.some(
+    subMenu => subMenu.typeRol === 'MOD'
+  );
+  return canViewOwnIncidents && !hasAttendanceManagement;
+};
+
+const getPersonalPayrollMenu = (menuPoints: MenuItem[] = []) => {
+  const proceduresMenu = menuPoints.find(item => item.route === 'tramites');
+  const payrollMenu = proceduresMenu?.menu?.find(
+    item => item.route === 'planilla' && item.typeRol === 'USER'
+  );
+
+  if (!payrollMenu) return null;
+
+  return {
+    ...payrollMenu,
+    menu: [],
+    path: '/planilla/mi-solicitud',
+  };
+};
+
+const buildVisibleMenuPoints = (menuPoints: MenuItem[] = []) => {
+  const visibleMenuPoints = menuPoints
+    .filter(
+      item =>
+        isPersonalAttendanceIncidentsMenu(item) ||
+        (!item.noView && !HIDDEN_SIDEBAR_ROUTES.has(item.route))
+    )
+    .map(item =>
+      isPersonalAttendanceIncidentsMenu(item)
+        ? { ...item, path: '/control-asistencia/incidencias' }
+        : item
+    );
+
+  const personalPayrollMenu = getPersonalPayrollMenu(menuPoints);
+  return personalPayrollMenu
+    ? [...visibleMenuPoints, personalPayrollMenu]
+    : visibleMenuPoints;
 };
 
 const Sidebar = () => {

@@ -3,16 +3,19 @@ import './cardMoreOptions.css';
 import { motion } from 'framer-motion';
 
 const options = [
+  /*
   {
     img: '/img/invoiceComputer.png',
     name: 'Factura personalizada',
     link: '/factura',
   },
+  */
   {
     img: '/img/food.svg',
     name: 'Comidas',
     link: '/cocina',
   },
+  /*
   {
     img: '/svg/calendary-icon.svg',
     name: 'Rotaciones',
@@ -23,6 +26,7 @@ const options = [
     name: 'Control de puerta',
     link: '/control-puerta',
   },
+  */
   {
     img: '/svg/menu/metrado-estructuras.svg',
     name: 'Metrado de Estructuras',

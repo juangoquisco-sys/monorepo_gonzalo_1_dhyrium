@@ -32,6 +32,7 @@ import DocumentComposerService from '@/modules/document-composer/documentCompose
 import { isPrivateTaskDocumentUploadPath } from '@/modules/task-documents/taskDocumentAssets.domain';
 import { isPrivateCorporateArchivePath } from '@/modules/corporate-archive/corporateArchive.storage';
 import { isPrivateLetterArchivePath } from '@/modules/letter-archive/letterArchive.storage';
+import ClasesPermitAutomationService from '@/services/clasesPermitAutomation.service';
 // import {
 //   createZktecoDeviceServiceFromEnv,
 //   type ZktecoDeviceService,
@@ -155,6 +156,10 @@ class Server {
   //ms-word:ofe|u|http://localhost:8081/file-user/cv%20%2015-03-2024.docx
   // ms-word:ofe|u|http://localhost:8081/api-docs/file-user/cv%20%2015-03-2024.docx
   async conectionCron() {
+    void ClasesPermitAutomationService.reconcile().catch(error => {
+      console.error('Permiso automatico de Clases: no se pudo reconciliar', error);
+    });
+
     const time = new TimerCron('30 6 * * *');
     time.crontimer(() => {
       if (ENV.NODE_ENV !== 'production') {
@@ -249,6 +254,20 @@ class Server {
           result.failures
         );
       }
+    });
+
+    const clasesCleanupCron = new TimerCron('0 0 * * *', {
+      timezone: 'America/Lima',
+    });
+    clasesCleanupCron.crontimerAsync(async () => {
+      await ClasesPermitAutomationService.reconcile();
+    });
+
+    const clasesReturnCron = new TimerCron('30 19 * * 1-5', {
+      timezone: 'America/Lima',
+    });
+    clasesReturnCron.crontimerAsync(async () => {
+      await ClasesPermitAutomationService.markReturnAtDueTime();
     });
   }
   conectionWebSockect() {

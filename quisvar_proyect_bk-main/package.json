@@ -36,6 +36,8 @@
     "test:basic-resource-storage": "node --test -r ts-node/register tests/basicResourceStorage.test.ts",
     "test:tutorial-materials": "node --test -r ts-node/register -r tsconfig-paths/register tests/tutorialMaterialsPolicy.test.ts",
     "test:tutorial-media-ticket": "node --test -r ts-node/register -r tsconfig-paths/register tests/tutorialMediaTicket.test.ts",
+    "test:clases-permit-automation": "node --test -r ts-node/register -r tsconfig-paths/register tests/clasesPermitAutomation.test.ts",
+    "test:payroll-self-submission-authorization": "node --test -r ts-node/register -r tsconfig-paths/register tests/payrollSelfSubmissionAuthorization.test.ts",
     "test:technical-review-submissions": "node --test -r ts-node/register -r tsconfig-paths/register tests/technicalReviewSubmissions.policy.test.ts",
     "test:document-composer": "node --test -r ts-node/register tests/documentComposer.domain.test.ts tests/documentComposer.thumbnail.test.ts",
     "test:contract-document-tree": "node --test -r ts-node/register tests/contractDocumentTree.test.ts",

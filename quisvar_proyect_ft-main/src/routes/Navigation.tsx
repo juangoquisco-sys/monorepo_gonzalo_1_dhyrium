@@ -174,6 +174,7 @@ const Navigation = () => {
                     <ProtectedRole
                       menuAccess="tramites"
                       subMenuAccess="planilla"
+                      typeRol="USER"
                     />
                   }
                 >
@@ -282,14 +283,16 @@ const Navigation = () => {
               <Route path="/tramites" element={<Procedure />}>
                 <Route index element={<NavigationSubMenu />} />
                 <Route
-                  path="salidas"
                   element={
-                    <Navigate
-                      to="/centro-de-usuarios/control-asistencia/salidas"
-                      replace
+                    <ProtectedRole
+                      menuAccess="tramites"
+                      subMenuAccess="salidas"
+                      typeRol="USER"
                     />
                   }
-                />
+                >
+                  <Route path="salidas" element={<LicensePage />} />
+                </Route>
                 <Route
                   element={
                     <ProtectedRole
@@ -356,7 +359,11 @@ const Navigation = () => {
             </Route>
             <Route
               element={
-                <ProtectedRole menuAccess="tramites" subMenuAccess="planilla" />
+                <ProtectedRole
+                  menuAccess="tramites"
+                  subMenuAccess="planilla"
+                  typeRol="USER"
+                />
               }
             >
               <Route

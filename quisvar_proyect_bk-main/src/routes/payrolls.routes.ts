@@ -30,6 +30,10 @@ class PayrollsRoutes {
       '/monthly-bridge/tasks/:taskId/workspace-link',
       PayrollsControllers.monthlyBridgeTaskWorkspaceLink
     );
+    this.router.use(
+      '/self-submission',
+      role.RoleHandler(['USER'], 'tramites', 'planilla')
+    );
     this.router.get(
       '/self-submission/active-payroll',
       PayrollsControllers.selfSubmissionActivePayroll
