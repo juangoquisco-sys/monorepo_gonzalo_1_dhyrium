@@ -137,6 +137,18 @@ interface AdministrativePreviewResponse {
 
 const dateInputValue = (date: Date) => date.toISOString().slice(0, 10);
 
+const payrollPeriodInputValue = (value?: string | null) => {
+  if (!value) return null;
+
+  const dateOnly = value.match(/^\d{4}-\d{2}-\d{2}/)?.[0];
+  if (dateOnly) return dateOnly;
+
+  const parsedDate = new Date(value);
+  return Number.isNaN(parsedDate.getTime())
+    ? null
+    : dateInputValue(parsedDate);
+};
+
 const toLimaBoundary = (date: string, edge: 'start' | 'end') => {
   const time = edge === 'start' ? '00:00:00.000' : '23:59:59.999';
   return `${date}T${time}-05:00`;
@@ -281,6 +293,24 @@ const PayrollSelfSubmission = () => {
     },
     enabled: Boolean(attachmentTarget?.paymessageId),
   });
+
+  useEffect(() => {
+    const periodStart = payrollPeriodInputValue(
+      activePayrollQuery.data?.periodStart
+    );
+    const periodEnd = payrollPeriodInputValue(
+      activePayrollQuery.data?.periodEnd
+    );
+
+    if (!periodStart || !periodEnd) return;
+
+    setUploadStart(periodStart);
+    setUploadEnd(periodEnd);
+  }, [
+    activePayrollQuery.data?.id,
+    activePayrollQuery.data?.periodStart,
+    activePayrollQuery.data?.periodEnd,
+  ]);
 
   useEffect(() => {
     const contractAmount = Number(
