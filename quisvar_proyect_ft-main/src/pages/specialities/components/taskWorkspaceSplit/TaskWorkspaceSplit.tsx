@@ -41,7 +41,7 @@ interface TaskWorkspaceSplitProps {
   lowerContent: ReactNode;
 }
 
-const DEFAULT_PANELS: WorkspacePanel[] = [1, 2, 3];
+const DEFAULT_PANELS: WorkspacePanel[] = [1, 2, 4];
 const VALID_PANELS = new Set<WorkspacePanel>([1, 2, 3, 4, 5]);
 
 const PANEL_OPTIONS: ReadonlyArray<{
