@@ -9,7 +9,7 @@ type QpdfResult = {
 
 export const runQpdf = (
   args: readonly string[],
-  timeout = DOCUMENT_COMPOSER_LIMITS.qpdfTimeoutMs
+  timeout: number = DOCUMENT_COMPOSER_LIMITS.qpdfTimeoutMs
 ) =>
   new Promise<QpdfResult>((resolve, reject) => {
     execFile(
@@ -37,12 +37,12 @@ export const runQpdf = (
     );
   });
 
-export const validatePdfWithQpdf = async (filePath: string) => {
-  await runQpdf(buildQpdfCheckArgs(filePath));
+export const validatePdfWithQpdf = async (filePath: string, timeout?: number) => {
+  await runQpdf(buildQpdfCheckArgs(filePath), timeout);
 };
 
-export const getPdfPageCount = async (filePath: string) => {
-  const { stdout } = await runQpdf(buildQpdfPageCountArgs(filePath));
+export const getPdfPageCount = async (filePath: string, timeout?: number) => {
+  const { stdout } = await runQpdf(buildQpdfPageCountArgs(filePath), timeout);
   const count = Number.parseInt(stdout.trim(), 10);
   if (!Number.isInteger(count) || count < 1) {
     throw new AppError(

@@ -2,7 +2,12 @@
 import { FeedbackType, Files, Levels, SubTasks } from '@prisma/client';
 import { prisma } from '@/utils/prisma.server';
 import AppError from '@/utils/appError';
-import { dataWithLevel, numberToConvert, percentageTasks } from '@/utils/tools';
+import {
+  basenameFromPath,
+  dataWithLevel,
+  numberToConvert,
+  percentageTasks,
+} from '@/utils/tools';
 import {
   DuplicateLevel,
   FolderLevels,
@@ -25,6 +30,16 @@ export interface LevelItemQuery {
   item: Levels['typeItem'];
   type: 'STAGE' | 'LEVEL';
 }
+
+export type MergedPdfPathIndexEntry = {
+  levelId: number;
+  taskId?: number;
+  fileId?: number;
+  coverDepth?: number;
+  isTaskCover?: boolean;
+};
+
+export type MergedPdfPathIndex = Map<string, MergedPdfPathIndexEntry>;
 
 class LevelsServices {
   public static async getLevelList(
@@ -413,7 +428,8 @@ class LevelsServices {
   public static async mergePDFs(
     array: GetFolderLevels[],
     outputPath: string,
-    atributtes: PathAtributtes & ParamsMergePdfs
+    atributtes: PathAtributtes & ParamsMergePdfs,
+    pathIndex: MergedPdfPathIndex = new Map()
   ) {
     const findList = array.filter(
       ({ rootId, rootLevel }) =>
@@ -439,7 +455,15 @@ class LevelsServices {
             } else {
               arrayFiles = task.files;
             }
-            return this.getRenameFiles(arrayFiles, outputPath, name, i);
+            const renamed = this.getRenameFiles(arrayFiles, outputPath, name, i);
+            renamed.forEach(file => {
+              pathIndex.set(basenameFromPath(file.newPath), {
+                levelId: rootId,
+                taskId: task.id,
+                fileId: file.id,
+              });
+            });
+            return renamed;
           })
           .flat();
         if (atributtes.createFiles) {
@@ -454,6 +478,10 @@ class LevelsServices {
         if (cover && atributtes.createCover) {
           await new Promise(resolve => {
             const outPut = outputPath + '/' + name + '.pdf';
+            pathIndex.set(basenameFromPath(outPut), {
+              levelId: rootId,
+              coverDepth: item.split('.').filter(Boolean).length,
+            });
             resolve(GenerateFiles.coverV2(name, outPut, { fontSize: 40 }));
           });
         }
@@ -461,7 +489,8 @@ class LevelsServices {
         const next: MergeLevels[] = await this.mergePDFs(
           list,
           outputPath,
-          nextData
+          nextData,
+          pathIndex
         );
         const data = { id: rootId, name, cover, files };
         if (!next.length) return data;

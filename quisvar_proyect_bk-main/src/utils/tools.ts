@@ -922,3 +922,6 @@ export const TransformWeekReport = (
 
 export const naturalCompare = (a: string, b: string) =>
   a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+
+export const basenameFromPath = (filePath: string) =>
+  filePath.split(/[\\/]/).pop() ?? filePath;

@@ -6,6 +6,7 @@ import {
 } from '@/pages/specialities/services/projectDocuments.service';
 import type { Level } from '@/types/types';
 import { ProjectContext } from '../context/ProjectContext';
+import { openExpedienteFoliationDialog } from '../components/expedienteFoliation/expedienteFoliation.dialog';
 
 interface useOptionLevelsProps {
   data: Level;
@@ -44,6 +45,11 @@ const useOptionLevels = ({ data }: useOptionLevelsProps) => {
       name: 'Unir PDFs',
       fn: () =>
         handleMergePdfs(typeLevel, data.id, data.name, service.mergePdfs),
+      icon: 'merge-pdf',
+    },
+    {
+      name: 'Impresiones y foliado',
+      fn: () => openExpedienteFoliationDialog(data),
       icon: 'merge-pdf',
     },
   ];

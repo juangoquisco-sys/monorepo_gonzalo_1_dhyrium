@@ -112,6 +112,8 @@ model Users {
   payrollInfo                         UserPayrollInfo?
   documentArtifacts                   DocumentArtifact[]
   contractDocumentVersions            ContractDocumentVersion[]
+  expedienteFoliations                ExpedienteFoliation[]
+  foliationReprintLogs                FoliationReprintLog[]
   createdCorporateArchiveRoots        CorporateArchiveRoot[]           @relation("CorporateArchiveRootCreator")
   createdCorporateArchiveFolders      CorporateArchiveFolder[]         @relation("CorporateArchiveFolderCreator")
   archivedCorporateArchiveFolders     CorporateArchiveFolder[]         @relation("CorporateArchiveFolderArchiver")
@@ -3188,6 +3190,7 @@ model DocumentArtifact {
   expiresAt        DateTime?
   owner            Users                     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   contractVersions ContractDocumentVersion[]
+  expedienteFoliation ExpedienteFoliation?
 
   @@unique([ownerId, idempotencyKey])
   @@index([ownerId, status])
@@ -3228,6 +3231,40 @@ model ContractDocumentVersion {
   @@unique([contractDocumentId, versionNumber])
   @@index([artifactId])
   @@index([authorId])
+}
+
+model ExpedienteFoliation {
+  id            Int               @id @default(autoincrement())
+  rootId        Int
+  rootType      String
+  artifactId    String            @unique
+  totalPages    Int
+  position      FoliationPosition @default(TOP_RIGHT)
+  marginX       Int               @default(10)
+  marginY       Int               @default(10)
+  pageEntries   Json
+  generatedById Int
+  generatedAt   DateTime          @default(now())
+  artifact      DocumentArtifact  @relation(fields: [artifactId], references: [id], onDelete: Restrict)
+  generatedBy   Users             @relation(fields: [generatedById], references: [id], onDelete: Restrict)
+
+  @@unique([rootId, rootType])
+}
+
+model FoliationReprintLog {
+  id            Int                    @id @default(autoincrement())
+  rootId        Int
+  rootType      String
+  scope         FoliationReprintScope
+  scopeLabel    String
+  folioRange    String
+  pageCount     Int
+  requestedById Int
+  requestedAt   DateTime               @default(now())
+  requestedBy   Users                  @relation(fields: [requestedById], references: [id], onDelete: Restrict)
+
+  @@index([rootId, rootType])
+  @@index([requestedById])
 }
 
 model Role {
@@ -3622,6 +3659,20 @@ enum DocumentArtifactStatus {
   PUBLISHED
   FAILED
   EXPIRED
+}
+
+enum FoliationReprintScope {
+  LEVEL
+  TASK
+  FILE
+  PAGE
+}
+
+enum FoliationPosition {
+  TOP_RIGHT
+  TOP_LEFT
+  BOTTOM_RIGHT
+  BOTTOM_LEFT
 }
 
 enum CorporateArchiveScopeType {

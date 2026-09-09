@@ -3,9 +3,11 @@ import {
   copyFileSync,
   existsSync,
   mkdirSync,
+  readdirSync,
   rmSync,
   statSync,
 } from 'fs';
+import path from 'path';
 import AppError from '@/utils/appError';
 import BasicLevelServices from '@/services/basiclevels.services';
 import {
@@ -13,10 +15,13 @@ import {
   LevelAttributes,
   MergePdfBasicLevelAttributes,
 } from '@/types/types';
-import LevelsServices from '@/services/levels.services';
+import LevelsServices, {
+  type MergedPdfPathIndex,
+} from '@/services/levels.services';
 import { AtrributesMergeFilters } from '@/types/task';
 import { SubTasks } from '@prisma/client';
 import SubTasksServices from '@/services/subtasks.services';
+import { naturalCompare } from '@/utils/tools';
 
 class DowloadServices {
   public static async level(
@@ -121,7 +126,8 @@ class DowloadServices {
   public static async mergePdfLevel(
     id: number,
     type: 'level' | 'stage',
-    { createCover, createFiles, ...attributes }: AtrributesMergeFilters
+    { createCover, createFiles, ...attributes }: AtrributesMergeFilters,
+    pathIndex?: MergedPdfPathIndex
   ) {
     if (!id) throw new AppError('Oops!, ID incorrecto', 400);
     const {
@@ -140,10 +146,22 @@ class DowloadServices {
       createCover,
       ...info,
     };
-    const pathList = await LevelsServices.mergePDFs(data, sourceDir, params);
+    const pathList = await LevelsServices.mergePDFs(
+      data,
+      sourceDir,
+      params,
+      pathIndex
+    );
     if (!pathList.length)
       throw new AppError('Error, no se encontraron archivos', 404);
     return { pathList, sourceDir };
+  }
+
+  public static collectMergedPaths(sourceDir: string) {
+    return readdirSync(sourceDir)
+      .filter(file => file.endsWith('.pdf'))
+      .sort(naturalCompare)
+      .map(file => path.join(sourceDir, file));
   }
 
   public static async taskFiles(

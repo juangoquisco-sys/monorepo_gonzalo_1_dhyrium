@@ -71,6 +71,7 @@ import systemSocketUsersRouter from '@/routes/systemSocketUsers.routes';
 import basicResourcesRouter from '@/modules/basic-resources/basicResources.routes';
 import documentComposerRouter from '@/modules/document-composer/documentComposer.routes';
 import contractDocumentsRouter from '@/modules/contract-documents/contractDocuments.routes';
+import expedienteFoliationRouter from '@/modules/expediente-foliation/expedienteFoliation.routes';
 import taskDocumentsRouter from '@/modules/task-documents/taskDocuments.routes';
 import desktopDocumentsRouter from '@/modules/desktop-documents/desktopDocuments.routes';
 import liquidationsRouter from '@/modules/liquidations/liquidations.routes';
@@ -139,6 +140,7 @@ export const routesConfig = [
   { path: '/basic-resources', router: basicResourcesRouter },
   { path: '/document-composer', router: documentComposerRouter },
   { path: '/contract-documents', router: contractDocumentsRouter },
+  { path: '/expediente-foliation', router: expedienteFoliationRouter },
   { path: '/task-documents', router: taskDocumentsRouter },
   { path: '/desktop', router: desktopDocumentsRouter },
   { path: '/liquidations', router: liquidationsRouter },
