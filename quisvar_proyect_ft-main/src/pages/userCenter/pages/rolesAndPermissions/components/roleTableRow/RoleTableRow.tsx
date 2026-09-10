@@ -18,7 +18,7 @@ import './roleTableRow.css';
 import AppContextMenu from '@/components/appContextMenu/AppContextMenu';
 import IconAction from '@/components/iconAction/IconAction';
 import { axiosInstance } from '@/services/axiosInstance';
-import { handleMenu } from '../../utils/tools';
+import { handleStoredPermission } from '../../utils/tools';
 import { SnackbarUtilities } from '@/utils/SnackbarManager';
 import type { SubMenuOptions } from '../../models/types';
 import { SocketContext } from '@/context/SocketContex';
@@ -48,6 +48,7 @@ const RoleTableRow = ({ rol, roles, onSave }: RoleTableRowProps) => {
     setRole(target.value);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- a server refresh resets the legacy editable draft.
     setEditMenuPoints(rol.menuPointsDb);
     setMenuPoints(rol.menuPoints);
     return () => {
@@ -57,13 +58,16 @@ const RoleTableRow = ({ rol, roles, onSave }: RoleTableRowProps) => {
     };
   }, [rol]);
 
-  const handleEditMenuPoint = ({ target }: ChangeEvent<HTMLInputElement>) => {
+  const handleEditMenuPoint = (
+    { target }: ChangeEvent<HTMLInputElement>,
+    menuPoint: MenuRoleForm
+  ) => {
     const { value, id } = target;
     const [, menuId] = id.split('-');
-
-    const newMenuOption = handleMenu(
+    const newMenuOption = handleStoredPermission(
       value as MenuRole,
-      +menuId,
+      menuPoint.storage?.menuId ?? +menuId,
+      menuPoint.storage?.subMenuId,
       editMenuPoints
     );
     setEditMenuPoints(newMenuOption);
@@ -73,45 +77,12 @@ const RoleTableRow = ({ rol, roles, onSave }: RoleTableRowProps) => {
   }: ChangeEvent<HTMLInputElement>) => {
     const { value, id } = target;
     const [, menuId, subMenuId] = id.split('-');
-    const previousMenuPoint = editMenuPoints.find(
-      menu => menu.menuId === +menuId
-    );
-    const previousSubMenus = previousMenuPoint?.subMenuPoints ?? [];
-    const newSubMenuOption = handleMenu(
+    const newMenuPoints = handleStoredPermission(
       value as MenuRole,
-      +subMenuId,
-      previousSubMenus
-    );
-    const nextParentRole = newSubMenuOption.some(
-      subMenu => subMenu.typeRol === 'MOD'
-    )
-      ? 'MOD'
-      : newSubMenuOption[0]?.typeRol;
-
-    if (!nextParentRole) {
-      const menuOption = handleMenu('' as MenuRole, +menuId, editMenuPoints);
-      setEditMenuPoints(menuOption);
-      return;
-    }
-
-    const menuOption = handleMenu(
-      nextParentRole as MenuRole,
       +menuId,
+      +subMenuId,
       editMenuPoints
     );
-    const findMenuPointsDb = rol.menuPointsDb.find(
-      menu => menu.menuId === +menuId
-    );
-    const newMenuPoints = menuOption.map(menu => {
-      if (menu.menuId === +menuId) {
-        if (findMenuPointsDb) {
-          menu.id = findMenuPointsDb.id;
-        }
-        return { ...menu, subMenuPoints: newSubMenuOption };
-      }
-      return menu;
-    });
-
     setEditMenuPoints(newMenuPoints);
   };
 
@@ -128,8 +99,7 @@ const RoleTableRow = ({ rol, roles, onSave }: RoleTableRowProps) => {
   const handleDeleteRole = async () => {
     try {
       const { data } = await axiosInstance.get(`/role/${rol.id}`);
-      let dialogHandle: ReturnType<typeof openDialog>;
-      dialogHandle = openDialog({
+      const dialogHandle: ReturnType<typeof openDialog> = openDialog({
         title: 'Confirmar eliminación de rol',
         description: 'Los usuarios afectados deben ser reasignados antes de eliminar el rol.',
         width: 'min(100%, 36rem)',
@@ -251,7 +221,7 @@ const RoleTableRow = ({ rol, roles, onSave }: RoleTableRowProps) => {
                     text={acc}
                     menuPointId={`${rol.id}-${menuPoint.id}`}
                     checked={acc === menuPoint.typeRol}
-                    onChange={handleEditMenuPoint}
+                    onChange={event => handleEditMenuPoint(event, menuPoint)}
                   />
                 ))}
                 <RolesAndPermissionsRadio
@@ -259,7 +229,7 @@ const RoleTableRow = ({ rol, roles, onSave }: RoleTableRowProps) => {
                   text={'NO'}
                   checked={!menuPoint.typeRol}
                   menuPointId={`${rol.id}-${menuPoint.id}`}
-                  onChange={handleEditMenuPoint}
+                  onChange={event => handleEditMenuPoint(event, menuPoint)}
                 />
               </>
             )}
@@ -303,7 +273,9 @@ const RoleTableRow = ({ rol, roles, onSave }: RoleTableRowProps) => {
                     key={acc}
                     value={acc}
                     text={acc}
-                    menuPointId={`${rol.id}-${subMenuOptions.menuId}-${menuPoint.id}`}
+                    menuPointId={`${rol.id}-${
+                      menuPoint.storage?.menuId ?? subMenuOptions.menuId
+                    }-${menuPoint.storage?.subMenuId ?? menuPoint.id}`}
                     checked={acc === menuPoint.typeRol}
                     onChange={handleEditSubMenuPoint}
                   />
@@ -312,7 +284,9 @@ const RoleTableRow = ({ rol, roles, onSave }: RoleTableRowProps) => {
                   value={''}
                   text={'NO'}
                   checked={!menuPoint.typeRol}
-                  menuPointId={`${rol.id}-${subMenuOptions.menuId}-${menuPoint.id}`}
+                  menuPointId={`${rol.id}-${
+                    menuPoint.storage?.menuId ?? subMenuOptions.menuId
+                  }-${menuPoint.storage?.subMenuId ?? menuPoint.id}`}
                   onChange={handleEditSubMenuPoint}
                 />
               </div>

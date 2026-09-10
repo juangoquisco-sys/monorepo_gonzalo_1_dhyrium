@@ -6,12 +6,13 @@ import {
   forwardRef,
   useState,
 } from 'react';
-import Eye from '/svg/eye.svg';
-import EyeClose from '/svg/eyeClose.svg';
 import './input.css';
 import { STYLE_INPUT } from './inputDefinitions';
 import type { FieldErrors, FieldValues, Path } from 'react-hook-form';
-import InputErrorInfo from '../inputErrorInfo/InputErrorInfo';
+import InputErrorInfoComponent from '../inputErrorInfo/InputErrorInfo';
+
+const EYE_ICON_PATH = '/svg/eye.svg';
+const EYE_CLOSED_ICON_PATH = '/svg/eyeClose.svg';
 interface InputTextProps<FormData extends FieldValues>
   extends InputHTMLAttributes<HTMLInputElement> {
   name?: Path<FormData>;
@@ -121,8 +122,8 @@ const InputText = <FormData extends FieldValues>(
         {type == 'password' && (
           <img
             onClick={viewPassword}
-            src={isShow ? Eye : EyeClose}
-            alt={Eye}
+            src={isShow ? EYE_ICON_PATH : EYE_CLOSED_ICON_PATH}
+            alt="Mostrar u ocultar contraseña"
             className="input-icon"
           />
         )}
@@ -135,7 +136,7 @@ const InputText = <FormData extends FieldValues>(
         )}
       </div>
       {name && errors && errors[name] && (
-        <InputErrorInfo
+        <InputErrorInfoComponent
           errors={errors}
           name={name}
           isRelative={errorRelative}

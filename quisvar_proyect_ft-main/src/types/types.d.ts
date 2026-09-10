@@ -256,6 +256,14 @@ export interface MenuItem {
   typeRol: string;
   menu: MenuItem[];
   noView?: boolean;
+  permissionKey?: string;
+  presentation?: PermissionPresentation;
+}
+
+export interface PermissionPresentation {
+  group: 'general' | 'users' | 'directive-compliance' | 'operations';
+  order: number;
+  placements: ('sidebar' | 'user-center' | 'directive-center')[];
 }
 
 export interface SubMenu {
@@ -290,6 +298,7 @@ export type MenuAccess =
   | 'mis-tareas'
   | 'rotaciones'
   | 'control-puerta'
+  | 'factura'
   | 'metrados';
 
 export interface User {
@@ -1430,6 +1439,14 @@ export interface Menu {
   route: string;
   access: MenuRole[];
   menu?: Menu[];
+  noView?: boolean;
+  permissionKey?: string;
+  presentation?: PermissionPresentation;
+  storage?: PermissionStorageReference;
+}
+export interface PermissionStorageReference {
+  menuId: number;
+  subMenuId?: number;
 }
 export interface MenuPoint {
   id?: number;

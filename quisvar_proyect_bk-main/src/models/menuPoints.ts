@@ -16,6 +16,7 @@ export type MenuAccess =
   | 'mis-tareas'
   | 'rotaciones'
   | 'control-puerta'
+  | 'factura'
   | 'metrados';
 
 export type MenuRole = 'MOD' | 'MEMBER' | 'VIEWER' | 'USER';
@@ -23,6 +24,14 @@ interface MenuGeneral {
   id: number;
   title: string;
   access: MenuRole[];
+  permissionKey?: string;
+  presentation?: PermissionPresentation;
+}
+
+export interface PermissionPresentation {
+  group: 'general' | 'users' | 'directive-compliance' | 'operations';
+  order: number;
+  placements: ('sidebar' | 'user-center' | 'directive-center')[];
 }
 export interface MenuRoles {
   id: number;
@@ -63,6 +72,8 @@ interface MenuHeader {
   title: string;
   menu?: (MenuHeader | undefined)[] | null;
   noView?: boolean;
+  permissionKey?: string;
+  presentation?: PermissionPresentation;
 }
 export class MenuPoints {
   private _menuPoints: Menu[] = MENU_POINTS;
@@ -75,7 +86,7 @@ export class MenuPoints {
         const { menuId, typeRol, subMenuPoints, id: idRelation } = menuPoint;
         const findMenu = this._menuPoints.find(({ id }) => id === menuId);
         if (!findMenu) return;
-        const { id, route, title, noView } = findMenu;
+        const { id, route, title, noView, permissionKey, presentation } = findMenu;
         let menu: (MenuHeader | undefined)[] | null = null;
         if (subMenuPoints && subMenuPoints.length > 0) {
           const subMenus = this._subMenuPoints[menuId] ?? null;
@@ -96,6 +107,8 @@ export class MenuPoints {
           title,
           idRelation,
           noView,
+          permissionKey,
+          presentation,
         };
         if (menu) {
           menuPointsValues.menu = menu;
@@ -113,15 +126,23 @@ export class MenuPoints {
       return menuPoint;
     });
 
-    return newMenuPoints;
+    return newMenuPoints.sort(
+      (a, b) =>
+        (a.presentation?.order ?? a.id * 10) -
+        (b.presentation?.order ?? b.id * 10)
+    );
   };
   public getHeadersOptions(data: Role) {
     const { id, name, menu } = this.roleTransform(data);
     const menuFilter = menu.filter(men => !!men) as MenuHeader[];
     const menuPoints = menuFilter.map(
-      ({ id, route, title, typeRol, menu, noView }) => {
+      ({ id, route, title, typeRol, menu, noView, permissionKey, presentation }) => {
         const menuFilter = menu?.filter(men => !!men) as MenuHeader[];
-        const menuOrder = menuFilter?.sort((a, b) => a.id - b.id);
+        const menuOrder = menuFilter?.sort(
+          (a, b) =>
+            (a.presentation?.order ?? a.id * 10) -
+            (b.presentation?.order ?? b.id * 10)
+        );
         return {
           id,
           route,
@@ -129,17 +150,23 @@ export class MenuPoints {
           menu: menuOrder,
           typeRol,
           noView,
+          permissionKey,
+          presentation,
         };
       }
     );
-    const menuPointsOrder = menuPoints.sort((a, b) => a.id - b.id);
+    const menuPointsOrder = menuPoints.sort(
+      (a, b) =>
+        (a.presentation?.order ?? a.id * 10) -
+        (b.presentation?.order ?? b.id * 10)
+    );
     return { id, name, menuPoints: menuPointsOrder };
   }
   public getMenuOptions(data: Role) {
     const { id, name, menu } = this.roleTransform(data);
     const menuFilter = menu.filter(men => !!men) as MenuHeader[];
     const menuPoints = menuFilter.map(
-      ({ id, route, title, typeRol, idRelation, menu }) => {
+      ({ id, route, title, typeRol, idRelation, menu, permissionKey, presentation }) => {
         const menuFilter = menu?.filter(men => !!men) as
           | MenuHeader[]
           | undefined;
@@ -150,6 +177,8 @@ export class MenuPoints {
           typeRol,
           idRelation,
           menu: menuFilter,
+          permissionKey,
+          presentation,
         };
       }
     );
@@ -174,22 +203,50 @@ export class MenuPoints {
 }
 
 const MENU_POINTS: Menu[] = [
-  { id: 1, title: 'Inicio', route: 'home', access: ['MOD'] },
-  { id: 2, title: 'Tramites', route: 'tramites', access: ['MOD'] },
+  {
+    id: 1,
+    title: 'Inicio',
+    route: 'home',
+    access: ['MOD'],
+    permissionKey: 'home.access',
+    presentation: { group: 'general', order: 10, placements: ['sidebar'] },
+  },
+  {
+    id: 2,
+    title: 'Trámites',
+    route: 'tramites',
+    access: ['MOD'],
+    permissionKey: 'procedures.access',
+    presentation: { group: 'operations', order: 20, placements: ['sidebar'] },
+  },
   {
     id: 3,
     title: 'Proyectos',
     route: 'especialidades',
     access: ['MOD', 'VIEWER', 'MEMBER'],
+    presentation: { group: 'operations', order: 30, placements: ['sidebar'] },
   },
   {
     id: 4,
-    title: 'Control de asistencia',
+    title: 'Cumplimiento de directivas',
     route: 'control-asistencia',
     access: ['MOD', 'USER'],
     noView: true,
+    permissionKey: 'attendance.access',
+    presentation: {
+      group: 'directive-compliance',
+      order: 50,
+      placements: ['user-center', 'directive-center'],
+    },
   },
-  { id: 5, title: 'Usuarios', route: 'centro-de-usuarios', access: ['MOD'] },
+  {
+    id: 5,
+    title: 'Usuarios',
+    route: 'centro-de-usuarios',
+    access: ['MOD'],
+    permissionKey: 'users.access',
+    presentation: { group: 'users', order: 40, placements: ['sidebar'] },
+  },
 
   {
     id: 6,
@@ -224,10 +281,16 @@ const MENU_POINTS: Menu[] = [
   },
   {
     id: 12,
-    title: 'Cocina',
+    title: 'Comidas',
     route: 'cocina',
     access: ['MOD'],
     noView: true,
+    permissionKey: 'meals.access',
+    presentation: {
+      group: 'directive-compliance',
+      order: 52,
+      placements: ['directive-center'],
+    },
   },
   {
     id: 13,
@@ -235,6 +298,12 @@ const MENU_POINTS: Menu[] = [
     route: 'rotaciones',
     access: ['MOD'],
     noView: true,
+    permissionKey: 'duty-rotations.access',
+    presentation: {
+      group: 'directive-compliance',
+      order: 53,
+      placements: ['directive-center'],
+    },
   },
   {
     id: 14,
@@ -242,6 +311,25 @@ const MENU_POINTS: Menu[] = [
     route: 'control-puerta',
     access: ['MOD', 'USER'],
     noView: true,
+    permissionKey: 'gate-control.access',
+    presentation: {
+      group: 'directive-compliance',
+      order: 54,
+      placements: ['directive-center'],
+    },
+  },
+  {
+    id: 16,
+    title: 'Factura personalizada',
+    route: 'factura',
+    access: ['MOD'],
+    noView: true,
+    permissionKey: 'custom-invoice.access',
+    presentation: {
+      group: 'directive-compliance',
+      order: 51,
+      placements: ['directive-center'],
+    },
   },
   {
     id: 15,
@@ -288,13 +376,30 @@ export const TRAMITES_OPTIONS: SubMenu[] = [
     route: 'comunicado',
     access: ['MOD', 'USER'],
   },
-  { id: 4, title: 'Salidas', route: 'salidas', access: ['MOD', 'USER'] },
+  {
+    id: 4,
+    title: 'Salidas',
+    route: 'salidas',
+    access: ['MOD', 'USER'],
+    permissionKey: 'departures.access',
+    presentation: {
+      group: 'directive-compliance',
+      order: 20,
+      placements: ['directive-center'],
+    },
+  },
   {
     id: 5,
     title: 'Planillas',
     route: 'planilla',
     access: ['MOD', 'USER'],
     noView: true,
+    permissionKey: 'payroll.access',
+    presentation: {
+      group: 'users',
+      order: 60,
+      placements: ['user-center', 'sidebar'],
+    },
   },
   {
     id: 6,
@@ -369,18 +474,36 @@ export const CONTROL_ASISTENCIA_OPTIONS: SubMenu[] = [
     title: 'Registro',
     route: 'registro',
     access: ['MOD'],
+    permissionKey: 'attendance.register',
+    presentation: {
+      group: 'directive-compliance',
+      order: 10,
+      placements: ['directive-center'],
+    },
   },
   {
     id: 2,
     title: 'Reconciliar faltas',
     route: 'reconciliar-faltas',
     access: ['MOD'],
+    permissionKey: 'attendance.reconcile',
+    presentation: {
+      group: 'directive-compliance',
+      order: 40,
+      placements: ['directive-center'],
+    },
   },
   {
     id: 3,
     title: 'Incidencias',
     route: 'incidencias',
     access: ['MOD', 'USER'],
+    permissionKey: 'attendance.incidents',
+    presentation: {
+      group: 'directive-compliance',
+      order: 30,
+      placements: ['directive-center'],
+    },
   },
 ];
 export const CONTROL_PUERTA_OPTIONS: SubMenu[] = [

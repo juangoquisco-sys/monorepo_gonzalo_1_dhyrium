@@ -17,7 +17,10 @@ import LicencesController, {
   voidLicensePenaltyAdjustments,
   updateCheckOut,
 } from '@/controllers/licenses.controllers';
-import { _admin_role, _employee_role } from '@/middlewares/role.middleware';
+import role, {
+  _admin_role,
+  _employee_role,
+} from '@/middlewares/role.middleware';
 import uploads from '@/middlewares/upload.middleware';
 import { getLicenseUserOptions } from '@/controllers/userLookup.controllers';
 // import { role } from '../middlewares';
@@ -25,6 +28,7 @@ const router = Router();
 router.use(authenticateHandler);
 //EMPLOYEE ROLE
 router.use(_employee_role);
+router.use(role.RoleHandler(['MOD', 'USER'], 'tramites', 'salidas'));
 router.get('/licenses-user/:id', LicencesController.getByUser);
 // router.use(role.RoleHandler('licencias', 'USER'));
 router.get('/employee/:id', getLicensesEmployee);
@@ -40,6 +44,7 @@ router.get('/active', activeLicenses);
 router.delete('/:id', deleteLicense);
 //ADMIN ROLE
 router.use(_admin_role);
+router.use(role.RoleHandler(['MOD'], 'tramites', 'salidas'));
 router.get('/users/options', getLicenseUserOptions);
 router.post('/free', createFreeForAll);
 router.patch('/approve/:id', approveLicense);

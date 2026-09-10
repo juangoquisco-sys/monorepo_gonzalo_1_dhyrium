@@ -799,7 +799,11 @@ const Navigation = () => {
                 <Route path="list/:listId/:name" element={<VideoList />} />
               </Route>
             </Route>
-            <Route path="/factura" element={<CustomizableInvoice />} />
+            <Route
+              element={<ProtectedRole menuAccess="factura" typeRol="MOD" />}
+            >
+              <Route path="/factura" element={<CustomizableInvoice />} />
+            </Route>
             <Route
               element={<ProtectedRole menuAccess="metrados" typeRol="MOD" />}
             >

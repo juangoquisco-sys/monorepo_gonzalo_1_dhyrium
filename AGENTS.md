@@ -10,6 +10,7 @@ Antes de modificar cualquier producto bajo esta raíz:
 6. Trabajar un solo hito cerrado por `/goal`; no mezclar hitos.
 7. No marcar paridad o verificación sin prueba funcional y evidencia visual.
 8. Cuando se solicite levantar o validar todo, ejecutar `./publish-and-run.ps1` desde esta raíz.
+9. Todo módulo nuevo o movimiento de navegación debe conservar una clave de permiso estable, declarar sus ubicaciones visuales y actualizar la prueba `accessControlCatalog.test.ts`. La ubicación visual no redefine ni duplica el permiso.
 
 Usa el modelo adecuado para la petición. Reserva Sol para diseño de arquitectura e incidencias críticas de base de datos.
 
