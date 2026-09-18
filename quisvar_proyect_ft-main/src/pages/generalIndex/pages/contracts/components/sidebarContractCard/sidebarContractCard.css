@@ -8,7 +8,9 @@
   cursor: pointer;
   align-items: center;
   cursor: pointer;
-  padding: 0.3rem 1.5rem;
+  padding: 0.55rem 2rem 0.55rem 1rem;
+  border-radius: 0.375rem;
+  margin: 0 0.25rem;
 }
 .contract-selected {
   background-color: #d6e5ff;
@@ -56,5 +58,19 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  overflow: hidden;
+}
+
+.SidebarContractCard-sidebar-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.SidebarContractCard-status-label {
+  flex: 0 0 auto;
+  color: #667085;
+  font-size: 0.625rem;
+  white-space: nowrap;
 }

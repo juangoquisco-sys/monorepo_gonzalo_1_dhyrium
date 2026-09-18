@@ -7,6 +7,7 @@ import type {
   ListSpecialties,
   Specialists,
 } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import { prisma } from '@/utils/prisma.server';
 import AppError from '@/utils/appError';
 import { existsSync, mkdirSync, rmdirSync } from 'fs';
@@ -190,28 +191,89 @@ class ContractServices {
     companyId?: Companies['id'],
     consortiumId?: Consortium['id'],
     type?: ContractForm['type'],
-    date?: string
+    date?: string,
+    search?: string
   ) {
     if (
       (companyId && isNaN(companyId)) ||
       (consortiumId && isNaN(consortiumId))
     )
       throw new AppError('Opps, id Invalida', 400);
-    const gmt_5 = 5 * 60 * 60 * 1000;
-    const gte = date ? new Date(new Date(date).getTime() + gmt_5) : undefined;
-    const lt = gte ? new Date(new Date(gte).setMonth(12)) : undefined;
+    const year = date ? Number(date) : undefined;
+    if (year && (!Number.isInteger(year) || year < 1900 || year > 3000))
+      throw new AppError('El año de registro no es válido', 400);
+
+    const gte = year ? new Date(year, 0, 1) : undefined;
+    const lt = year ? new Date(year + 1, 0, 1) : undefined;
+    const normalizedSearch = search?.trim();
+    const where: Prisma.ContratcWhereInput = {
+      createdAt: { lt, gte },
+      companyId,
+      consortiumId,
+      type,
+    };
+
+    if (normalizedSearch) {
+      where.OR = [
+        { cui: { contains: normalizedSearch, mode: 'insensitive' } },
+        {
+          contractNumber: {
+            contains: normalizedSearch,
+            mode: 'insensitive',
+          },
+        },
+        {
+          projectShortName: {
+            contains: normalizedSearch,
+            mode: 'insensitive',
+          },
+        },
+        {
+          projectName: {
+            contains: normalizedSearch,
+            mode: 'insensitive',
+          },
+        },
+        { name: { contains: normalizedSearch, mode: 'insensitive' } },
+      ];
+    } else if (startsWith) {
+      where.cui = { startsWith };
+    }
+
     const showContract = await prisma.contratc.findMany({
-      where: {
-        cui: { startsWith },
-        createdAt: { lt, gte },
-        companyId,
-        consortiumId,
-        type,
-      },
+      where,
       orderBy: [{ createdAt: 'asc' }, { contractNumber: 'asc' }],
       select: Queries.selectContract.select,
     });
     return showContract;
+  }
+
+  public static async getOrganizationFilterOptions() {
+    const [companies, consortiums] = await Promise.all([
+      prisma.companies.findMany({
+        where: { contracts: { some: {} } },
+        select: { id: true, name: true, _count: { select: { contracts: true } } },
+      }),
+      prisma.consortium.findMany({
+        where: { contracts: { some: {} } },
+        select: { id: true, name: true, _count: { select: { contracts: true } } },
+      }),
+    ]);
+
+    return [
+      ...companies.map(company => ({
+        id: company.id,
+        name: company.name,
+        kind: 'company' as const,
+        contractCount: company._count.contracts,
+      })),
+      ...consortiums.map(consortium => ({
+        id: consortium.id,
+        name: consortium.name,
+        kind: 'consortium' as const,
+        contractCount: consortium._count.contracts,
+      })),
+    ].sort((first, second) => first.name.localeCompare(second.name, 'es'));
   }
 
   public static async show(id: Contratc['id']) {

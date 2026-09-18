@@ -11,6 +11,8 @@ export interface FilterContract {
   status: string;
 }
 
+export type ContractStatus = 'red' | 'skyBlue' | 'yellow' | 'grey';
+
 export interface ContractSpecialties {
   id: number;
   listSpecialties: ListSpecialties;
