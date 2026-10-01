@@ -35,6 +35,7 @@ export type BiometricMarkResult =
         | 'INVALID_TIMESTAMP'
         | 'EVENT_BEFORE_OPEN'
         | 'EVENT_IN_FUTURE'
+        | 'CAPTURE_WINDOW_CLOSED'
         | 'USER_NOT_SUMMONED'
         | 'DUPLICATE_OR_INELIGIBLE';
     };
@@ -61,7 +62,7 @@ class BiometricAttendanceService {
           captureMode: AttendanceCaptureMode.BIOMETRIC,
           state: AttendanceListState.OPEN,
         },
-        select: { id: true, openedAt: true },
+        select: { id: true, openedAt: true, captureWindowEndsAt: true },
       });
       if (!list?.openedAt) {
         return { outcome: 'NO_OPEN_LIST' } as const;
@@ -72,6 +73,7 @@ class BiometricAttendanceService {
         verifyMode: log.verifyMode,
         timestamp: log.timestamp,
         openedAt: list.openedAt,
+        captureWindowEndsAt: list.captureWindowEndsAt,
         now,
         configuration: configuration(),
       });
@@ -157,8 +159,12 @@ class BiometricAttendanceService {
     return result;
   }
 
-  static async close(listId: number, actorId: number) {
-    if (!isValidAttendanceActorId(actorId)) {
+  static async close(
+    listId: number,
+    actorId: number | null,
+    reviewDeadlineAt: Date | null = null
+  ) {
+    if (actorId !== null && !isValidAttendanceActorId(actorId)) {
       throw new AppError('Administrador autenticado invalido', 401);
     }
     const now = new Date();
@@ -186,7 +192,11 @@ class BiometricAttendanceService {
           captureMode: AttendanceCaptureMode.BIOMETRIC,
           state: AttendanceListState.OPEN,
         },
-        data: { state: AttendanceListState.REVIEW, closedAt: now },
+        data: {
+          state: AttendanceListState.REVIEW,
+          closedAt: now,
+          ...(reviewDeadlineAt ? { reviewDeadlineAt } : {}),
+        },
       });
       if (updated.count !== 1) {
         throw new AppError('La lista biometrica ya no esta abierta', 409);

@@ -17,6 +17,40 @@
   border-color: color-mix(in srgb, var(--primary) 32%, var(--border));
 }
 
+.alertNotify-content--urgent {
+  border-color: color-mix(in srgb, var(--danger) 55%, var(--border));
+  background: color-mix(in srgb, var(--danger-muted) 55%, var(--card) 45%);
+  animation: alertNotify-pulse 1.4s ease-in-out infinite;
+}
+
+.alertNotify-urgentBanner {
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 0.5rem;
+  color: var(--danger-foreground);
+  background: var(--danger);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.alertNotify-minimized--urgent {
+  border-color: color-mix(in srgb, var(--danger) 55%, var(--border));
+  color: var(--danger-foreground);
+  background: var(--danger);
+  animation: alertNotify-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes alertNotify-pulse {
+  0%,
+  100% {
+    box-shadow: var(--shadow-app-panel);
+  }
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--danger) 22%, transparent);
+  }
+}
+
 .alertNotify-heading,
 .alertNotify-statusRow {
   display: flex;
@@ -72,9 +106,11 @@
 }
 
 .alertNotify-status {
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
   color: var(--foreground);
-  font-size: 0.9rem;
-  font-weight: 650;
+  font-size: 0.82rem;
+  font-weight: 700;
 }
 
 .alertNotify-finality {

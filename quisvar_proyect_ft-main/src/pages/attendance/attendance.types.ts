@@ -43,6 +43,8 @@ export type AttendanceList = {
   openedAt: string | null;
   closedAt: string | null;
   finalizedAt: string | null;
+  captureWindowEndsAt: string | null;
+  reviewDeadlineAt: string | null;
   users: AttendanceParticipant[];
 };
 
@@ -55,6 +57,8 @@ export type CurrentAttendance = {
     state: AttendanceListState;
     openedAt: string | null;
     finalizedAt: string | null;
+    captureWindowEndsAt: string | null;
+    reviewDeadlineAt: string | null;
     status: AttendanceStatus;
     statusSource: AttendanceStatusSource;
     biometricMarkedAt: string | null;
@@ -88,4 +92,6 @@ export type PendingAttendance = {
   state: Exclude<AttendanceListState, 'FINALIZED'>;
   openedAt: string | null;
   createdAt: string;
+  captureWindowEndsAt: string | null;
+  reviewDeadlineAt: string | null;
 };

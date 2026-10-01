@@ -52,6 +52,7 @@ const ControlAttendanceLayout = () => {
     'salidas',
     'incidencias',
     'reconciliar-faltas',
+    'rankings-productividad',
   ];
   const canAccessDepartures = hasPermission(menuPoints, {
     menu: 'tramites',
