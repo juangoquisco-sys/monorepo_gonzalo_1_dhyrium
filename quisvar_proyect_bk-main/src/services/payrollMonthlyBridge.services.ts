@@ -2101,7 +2101,7 @@ class PayrollMonthlyBridgeServices {
     officeId,
     periodStart,
     periodEnd,
-    label = 'mayo',
+    label,
   }: {
     amount: number;
     discountAmount?: number;
@@ -2109,15 +2109,15 @@ class PayrollMonthlyBridgeServices {
     officeId: number;
     periodStart: Date;
     periodEnd: Date;
-    label?: string;
+    label?: 'administrativo';
   }) {
     const safeDiscount = Math.max(0, Number(discountAmount || 0));
     const finalAmount = Math.max(0, amount - safeDiscount);
+    const periodLabel = this.reportPeriodLabel(periodStart);
     return {
-      name:
-        label === 'administrativo'
-          ? 'Reporte MENSUAL Administrativo - 2026'
-          : 'Reporte  MENSUAL Puente Mayo - 2026',
+      name: `Reporte MENSUAL${
+        label === 'administrativo' ? ' Administrativo' : ''
+      } ${periodLabel}`,
       type: 'MENSUAL' as ReportUserType,
       subprice: amount,
       price: finalAmount,
@@ -2128,6 +2128,20 @@ class PayrollMonthlyBridgeServices {
       untilDate: periodEnd,
       officeId,
     };
+  }
+
+  private static reportPeriodLabel(periodStart: Date) {
+    const parts = new Intl.DateTimeFormat('es-PE', {
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'America/Lima',
+    }).formatToParts(periodStart);
+    const month = parts.find(part => part.type === 'month')?.value || '';
+    const year = parts.find(part => part.type === 'year')?.value || '';
+    const capitalizedMonth = month
+      ? `${month.charAt(0).toUpperCase()}${month.slice(1)}`
+      : 'Periodo';
+    return `${capitalizedMonth} - ${year || periodStart.getUTCFullYear()}`;
   }
 
   private static fullName(

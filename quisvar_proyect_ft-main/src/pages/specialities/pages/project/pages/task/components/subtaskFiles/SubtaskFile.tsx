@@ -12,6 +12,7 @@ import TaskFileTemplate from './TaskFileTemplate';
 import {
   isDhyriumDesktopEnabled,
   openWithDhyriumDesktop,
+  reportDesktopOpenError,
 } from '@/services/desktopConnector.service';
 import {
   getTaskFileUrl,
@@ -74,11 +75,7 @@ SubtaskFileProps) => {
       void openWithDhyriumDesktop({
         sourceKind: desktopSourceKind,
         sourceFileId: file.id,
-      }).catch(() => {
-        SnackbarUtilities.error(
-          'No se pudo abrir el archivo en Dhyrium Desktop. Verifique que inició sesión en Dhyrium Desktop e inténtelo nuevamente.'
-        );
-      });
+      }).catch(reportDesktopOpenError);
       return;
     }
 

@@ -17,6 +17,16 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store.types';
 import { OfficeUnitTreeSelect } from '@/pages/group/components/OfficeUnitTreeSelect';
 import { getMeetingUnitsOverview } from '@/pages/group/services/meetingUnitProjects.service';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { AppButton } from '@/components/app-ui/app-button';
+import { SnackbarUtilities } from '@/utils/SnackbarManager';
 
 type LegacyStageInfo = StageInfo & {
   assignmentUnit?: {
@@ -29,9 +39,36 @@ type LegacyStageInfo = StageInfo & {
 
 type LegacyStageForm = Omit<StageForm, 'groupId'> & { unitId: string };
 
+type StageVersionType = 'BASICOS' | 'ESPECIALIDADES' | 'COSTOS' | 'OTRO';
+
+interface StageVersionSibling {
+  stageId: number;
+  stageName: string;
+  versionNumber: number;
+  isCurrent: boolean;
+}
+
+interface StageVersionInfo {
+  versionType: StageVersionType | null;
+  versionLabel: string | null;
+  isCurrent: boolean;
+  siblings: StageVersionSibling[];
+}
+
+const VERSION_TYPE_OPTIONS: { value: StageVersionType; label: string }[] = [
+  { value: 'BASICOS', label: 'Básicos' },
+  { value: 'ESPECIALIDADES', label: 'Especialidades' },
+  { value: 'COSTOS', label: 'Costos y presupuestos' },
+  { value: 'OTRO', label: 'Otro' },
+];
+
 const GeneralData = () => {
   const { stageId } = useParams();
   const [stageInfo, setStageInfo] = useState<LegacyStageInfo | null>(null);
+  const [versionInfo, setVersionInfo] = useState<StageVersionInfo | null>(null);
+  const [savingVersionType, setSavingVersionType] = useState(false);
+  const [markCurrentDialogOpen, setMarkCurrentDialogOpen] = useState(false);
+  const [markingCurrent, setMarkingCurrent] = useState(false);
   const modAuth = useSelector((state: RootState) => state.modAuthProject);
   const {
     handleSubmit,
@@ -48,7 +85,41 @@ const GeneralData = () => {
 
   useEffect(() => {
     getStageDetails();
+    getVersionInfo();
   }, []);
+
+  const getVersionInfo = () => {
+    axiosInstance
+      .get<StageVersionInfo>(`/stages/${stageId}/version`, {
+        headers: { noLoader: true },
+      })
+      .then(res => setVersionInfo(res.data));
+  };
+
+  const changeVersionType = (versionType: StageVersionType) => {
+    setSavingVersionType(true);
+    axiosInstance
+      .patch<StageVersionInfo>(`/stages/${stageId}/version`, { versionType })
+      .then(res => {
+        setVersionInfo(res.data);
+        SnackbarUtilities.success('Tipo de etapa actualizado.');
+      })
+      .catch(() => SnackbarUtilities.error('No se pudo actualizar el tipo de etapa.'))
+      .finally(() => setSavingVersionType(false));
+  };
+
+  const markVersionCurrent = () => {
+    setMarkingCurrent(true);
+    axiosInstance
+      .post<StageVersionInfo>(`/stages/${stageId}/version/mark-current`)
+      .then(res => {
+        setVersionInfo(res.data);
+        setMarkCurrentDialogOpen(false);
+        SnackbarUtilities.success('Etapa marcada como vigente.');
+      })
+      .catch(() => SnackbarUtilities.error('No se pudo marcar la etapa como vigente.'))
+      .finally(() => setMarkingCurrent(false));
+  };
 
   const getStageDetails = () => {
     axiosInstance
@@ -115,7 +186,77 @@ const GeneralData = () => {
             </p>
           </div>
         )}
+        {versionInfo && (
+          <div className="generalData-info-group">
+            <h2 className="generalData-edit-info-title">VERSIONADO DE LA ETAPA</h2>
+            <div className="col-input">
+              <label className="input-label">
+                Tipo de etapa (para el ranking de productividad):
+              </label>
+              <select
+                value={versionInfo.versionType ?? ''}
+                disabled={!modAuth || savingVersionType}
+                onChange={event =>
+                  changeVersionType(event.target.value as StageVersionType)
+                }
+              >
+                <option value="" disabled>
+                  Sin clasificar
+                </option>
+                {VERSION_TYPE_OPTIONS.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {versionInfo.siblings.length > 1 &&
+              (versionInfo.isCurrent ? (
+                <p className="generalData-info-stage-text">
+                  Esta es la versión vigente de "{versionInfo.siblings[0]?.stageName.replace(/\s+v\d+$/i, '')}"
+                  {' '}({versionInfo.siblings.length} versiones). Solo el trabajo
+                  de la versión vigente cuenta para el ranking de productividad.
+                </p>
+              ) : (
+                modAuth && (
+                  <AppButton
+                    type="button"
+                    variant="outline"
+                    onClick={() => setMarkCurrentDialogOpen(true)}
+                  >
+                    Marcar esta etapa como vigente
+                  </AppButton>
+                )
+              ))}
+          </div>
+        )}
       </div>
+
+      <Dialog open={markCurrentDialogOpen} onOpenChange={setMarkCurrentDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Marcar etapa como vigente</DialogTitle>
+            <DialogDescription>
+              Al marcar esta etapa como la versión vigente, el trabajo ya
+              aprobado en la version anterior de esta etapa dejará de contar
+              para el ranking de productividad a partir de ahora. Esta acción
+              no se puede deshacer desde aquí.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <AppButton
+              variant="outline"
+              onClick={() => setMarkCurrentDialogOpen(false)}
+              disabled={markingCurrent}
+            >
+              Cancelar
+            </AppButton>
+            <AppButton onClick={markVersionCurrent} disabled={markingCurrent}>
+              {markingCurrent ? 'Marcando…' : 'Confirmar'}
+            </AppButton>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       {modAuth && (
         <form
           className="generalData-edit-info"

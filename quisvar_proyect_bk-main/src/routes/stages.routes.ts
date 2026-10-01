@@ -16,6 +16,7 @@ class StagesRoutes {
     this.router.get('/lastVisited', StagesControllers.showLastVisited);
     this.router.post('/:id/visit', StagesControllers.createLastLastVisited);
     this.router.get('/details/:id', StagesControllers.details);
+    this.router.get('/:id/version', StagesControllers.showVersion);
     this.router.get('/:id', StagesControllers.show);
     this.router.get('/basics/:id', StagesControllers.showBasics);
     this.router.get('/report/:id', StagesControllers.showReport);
@@ -26,6 +27,8 @@ class StagesRoutes {
     this.router.post('/add-budget/:id', StagesControllers.addBudget);
     this.router.patch('/:id', StagesControllers.update);
     this.router.patch('/details/:id', StagesControllers.updateDetails);
+    this.router.patch('/:id/version', StagesControllers.updateVersionType);
+    this.router.post('/:id/version/mark-current', StagesControllers.markVersionCurrent);
     this.router.delete('/:id', StagesControllers.delete);
   }
 }

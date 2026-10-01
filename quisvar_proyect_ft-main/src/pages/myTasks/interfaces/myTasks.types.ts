@@ -1,4 +1,4 @@
-import type { UserProfile } from '@/types/types';
+import type { FileTask, UserProfile } from '@/types/types';
 import type { TaskStatus } from '../../specialities/pages/project/models/definitiosProject';
 
 export interface ProjectTask<T> {
@@ -43,6 +43,7 @@ export interface ModTask {
 }
 
 export interface TaskInfo {
+  feedBacks?: { files: FileTask[] }[];
   item: string;
   id: number;
   name: string;

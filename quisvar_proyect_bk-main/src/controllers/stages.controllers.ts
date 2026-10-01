@@ -119,6 +119,25 @@ class StagesControllers {
     return res.status(200).json(query);
   }
 
+  public static async showVersion(req: Request, res: Response) {
+    const { id } = req.params;
+    const query = await StageServices.getVersionInfo(+id);
+    return res.status(200).json(query);
+  }
+
+  public static async updateVersionType(req: Request, res: Response) {
+    const { id } = req.params;
+    const { versionType } = req.body;
+    const query = await StageServices.setVersionType(+id, versionType);
+    return res.status(200).json(query);
+  }
+
+  public static async markVersionCurrent(req: Request, res: Response) {
+    const { id } = req.params;
+    const query = await StageServices.markVersionCurrent(+id);
+    return res.status(200).json(query);
+  }
+
   public static async delete(req: Request, res: Response) {
     const { id } = req.params;
     const _stage_id = parseInt(id);

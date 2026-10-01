@@ -204,6 +204,22 @@ class TaskOnUsersServices {
       include: {
         task: {
           include: {
+            // Match the deliverables shown in the project: latest submission only.
+            feedBacks: {
+              take: 1,
+              orderBy: { createdAt: 'desc' },
+              select: {
+                files: {
+                  select: {
+                    id: true,
+                    dir: true,
+                    name: true,
+                    type: true,
+                    originalname: true,
+                  },
+                },
+              },
+            },
             Levels: {
               select: {
                 id: true,

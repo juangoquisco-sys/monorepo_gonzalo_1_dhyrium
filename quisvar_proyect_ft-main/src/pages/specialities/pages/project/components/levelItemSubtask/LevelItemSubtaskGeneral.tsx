@@ -39,6 +39,7 @@ import {
 import {
   isDhyriumDesktopEnabled,
   openWithDhyriumDesktop,
+  reportDesktopOpenError,
 } from '@/services/desktopConnector.service';
 
 interface LevelItemSubtaskProps {
@@ -253,11 +254,7 @@ const LevelItemSubtaskGeneral = ({
       void openWithDhyriumDesktop({
         sourceKind: 'TASK_FILE',
         sourceFileId: file.id,
-      }).catch(() => {
-        SnackbarUtilities.error(
-          'No se pudo abrir el archivo en Dhyrium Desktop. Verifique que inició sesión en Dhyrium Desktop e inténtelo nuevamente.'
-        );
-      });
+      }).catch(reportDesktopOpenError);
       return;
     }
 

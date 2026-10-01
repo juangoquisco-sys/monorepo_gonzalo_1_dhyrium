@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useQueries, useQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import {
   Building2,
   ChevronRight,
@@ -21,10 +26,18 @@ import {
   getMeetingUnitProjects,
   getMeetingUnitsOverview,
 } from '../../../group/services/meetingUnitProjects.service';
+import {
+  unlinkMeetingUnitProjectFocus,
+  updateMeetingUnitProjectFocus,
+} from '../../../group/services/officeMeetings.service';
 import type {
   MeetingProjectFocus,
   MeetingUnitOverviewItem,
 } from '../../../group/types/meetingUnitProjects.types';
+import { getCurrentStageId } from '../../../group/utils/meetingProjectFocus';
+import AppContextMenu from '@/components/appContextMenu/AppContextMenu';
+import { SnackbarUtilities } from '@/utils/SnackbarManager';
+import type { Option } from '@/types/types';
 
 type ProjectSidebarView = 'tree' | 'office' | 'mine';
 
@@ -181,12 +194,101 @@ const ProjectFocusList = ({
   emptyText: string;
 }) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const goToProject = (projectFocus: MeetingProjectFocus) => {
     let urlNavigate = `proyecto/${projectFocus.projectId}`;
-    const firstStage = projectFocus.project.stages?.[0];
-    if (firstStage) urlNavigate += `/etapa/${firstStage.id}`;
+    const stageId = getCurrentStageId(projectFocus);
+    if (stageId) urlNavigate += `/etapa/${stageId}`;
     navigate(urlNavigate);
+  };
+
+  const invalidateProjectFocus = () => {
+    queryClient.invalidateQueries({
+      predicate: query => query.queryKey[0] === 'specialities-sidebar',
+    });
+    queryClient.invalidateQueries({ queryKey: ['office-meetings'] });
+    queryClient.invalidateQueries({ queryKey: ['office-project-focus'] });
+    queryClient.invalidateQueries({ queryKey: ['technical-office-projects'] });
+  };
+
+  const toggleStatusMutation = useMutation({
+    mutationFn: (projectFocus: MeetingProjectFocus) =>
+      // isCurrent stays untouched: the technical-projects list in the
+      // workspace screen always requires isCurrent: true, so flipping it
+      // off here would hide the project even with inactive ones shown.
+      updateMeetingUnitProjectFocus(
+        projectFocus.unitId,
+        projectFocus.id as string,
+        {
+          status: projectFocus.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE',
+        }
+      ),
+    onSuccess: () => {
+      SnackbarUtilities.success('Estado del proyecto actualizado.');
+      invalidateProjectFocus();
+    },
+    onError: () => {
+      SnackbarUtilities.error(
+        'No se pudo actualizar el estado. Verifica tus permisos sobre la oficina.'
+      );
+    },
+  });
+
+  const unlinkMutation = useMutation({
+    mutationFn: (projectFocus: MeetingProjectFocus) =>
+      unlinkMeetingUnitProjectFocus(
+        projectFocus.unitId,
+        projectFocus.id as string
+      ),
+    onSuccess: () => {
+      SnackbarUtilities.success('Proyecto desvinculado de la oficina.');
+      invalidateProjectFocus();
+    },
+    onError: () => {
+      SnackbarUtilities.error(
+        'No se pudo desvincular. Verifica tus permisos sobre la oficina.'
+      );
+    },
+  });
+
+  const goToManageStages = (projectFocus: MeetingProjectFocus) => {
+    const params = new URLSearchParams({
+      tab: 'proyectos',
+      unitId: projectFocus.unitId,
+      manage: '1',
+    });
+    if (projectFocus.id) params.set('focusId', projectFocus.id);
+    navigate(`/grupos/oficinas/workspace?${params.toString()}`);
+  };
+
+  const getCardOptions = (projectFocus: MeetingProjectFocus): Option[] => {
+    if (!projectFocus.id) return [];
+    return [
+      {
+        name:
+          projectFocus.status === 'ACTIVE'
+            ? 'Marcar proyecto inactivo'
+            : 'Marcar proyecto activo',
+        type: 'button',
+        function: () => toggleStatusMutation.mutate(projectFocus),
+      },
+      {
+        name: 'Gestionar etapas...',
+        type: 'button',
+        function: () => goToManageStages(projectFocus),
+      },
+      {
+        name: 'Desvincular de la oficina',
+        type: 'button',
+        function: () => {
+          const confirmed = window.confirm(
+            `Desvincular "${getProjectName(projectFocus.project)}" de esta oficina?`
+          );
+          if (confirmed) unlinkMutation.mutate(projectFocus);
+        },
+      },
+    ];
   };
 
   if (isLoading) return <LoaderForComponent />;
@@ -198,26 +300,32 @@ const ProjectFocusList = ({
   return (
     <div className="sidebarSpeciality-projectList">
       {projects.map(projectFocus => (
-        <button
-          type="button"
-          className="sidebarSpeciality-projectCard"
+        <AppContextMenu
           key={`${projectFocus.unitId}-${projectFocus.projectId}`}
-          onClick={() => goToProject(projectFocus)}
+          data={getCardOptions(projectFocus)}
         >
-          <span className="sidebarSpeciality-projectKicker">
-            {projectFocus.unitName ||
-              projectFocus.project.contract?.municipality ||
-              'Oficina'}
-          </span>
-          <strong>{getProjectName(projectFocus.project)}</strong>
-          <small>{getProjectCode(projectFocus.project)}</small>
-          <span
-            className={`sidebarSpeciality-projectStatus is-${projectFocus.status.toLowerCase()}`}
+          <button
+            type="button"
+            className="sidebarSpeciality-projectCard"
+            onClick={() => goToProject(projectFocus)}
           >
-            {projectFocus.status === 'ACTIVE' ? 'Activo' : projectFocus.status}
-          </span>
-          <ChevronRight size={16} />
-        </button>
+            <span className="sidebarSpeciality-projectKicker">
+              {projectFocus.unitName ||
+                projectFocus.project.contract?.municipality ||
+                'Oficina'}
+            </span>
+            <strong>{getProjectName(projectFocus.project)}</strong>
+            <small>{getProjectCode(projectFocus.project)}</small>
+            <span
+              className={`sidebarSpeciality-projectStatus is-${projectFocus.status.toLowerCase()}`}
+            >
+              {projectFocus.status === 'ACTIVE'
+                ? 'Activo'
+                : projectFocus.status}
+            </span>
+            <ChevronRight size={16} />
+          </button>
+        </AppContextMenu>
       ))}
     </div>
   );

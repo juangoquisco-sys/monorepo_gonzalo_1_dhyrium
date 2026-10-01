@@ -413,6 +413,100 @@ class StageServices {
     return createStage;
   }
 
+  private static async ensureVersionMetadata(stage: {
+    id: number;
+    name: string;
+    projectId: number;
+    versionMetadata: { id: string; groupId: string } | null;
+  }) {
+    if (stage.versionMetadata) return stage.versionMetadata;
+    const group = await prisma.stageVersionGroup.create({
+      data: {
+        projectId: stage.projectId,
+        baseName: this.stageVersionBaseName(stage.name),
+        stageType: this.stageVersionType(stage.name),
+      },
+      select: { id: true },
+    });
+    return prisma.stageVersion.create({
+      data: {
+        groupId: group.id,
+        stageId: stage.id,
+        versionNumber: 1,
+        versionLabel: 'v1',
+        sourceKind: StageVersionSourceKind.EMPTY,
+        status: 'ACTIVE',
+        isCurrent: true,
+      },
+      select: { id: true, groupId: true },
+    });
+  }
+
+  static async getVersionInfo(stageId: Stages['id']) {
+    const stage = await prisma.stages.findUnique({
+      where: { id: stageId },
+      select: {
+        id: true,
+        name: true,
+        versionMetadata: { include: { group: true } },
+      },
+    });
+    if (!stage) throw new AppError('Etapa no encontrada', 404);
+    if (!stage.versionMetadata) {
+      return { versionType: null, versionLabel: null, isCurrent: true, siblings: [] };
+    }
+    const siblings = await prisma.stageVersion.findMany({
+      where: { groupId: stage.versionMetadata.groupId },
+      include: { stage: { select: { id: true, name: true } } },
+      orderBy: { versionNumber: 'asc' },
+    });
+    return {
+      versionType: stage.versionMetadata.group.stageType,
+      versionLabel: stage.versionMetadata.versionLabel,
+      isCurrent: stage.versionMetadata.isCurrent,
+      siblings: siblings.map(s => ({
+        stageId: s.stage.id,
+        stageName: s.stage.name,
+        versionNumber: s.versionNumber,
+        isCurrent: s.isCurrent,
+      })),
+    };
+  }
+
+  static async setVersionType(stageId: Stages['id'], versionType: StageVersionType) {
+    const stage = await prisma.stages.findUnique({
+      where: { id: stageId },
+      select: { id: true, name: true, projectId: true, versionMetadata: { select: { id: true, groupId: true } } },
+    });
+    if (!stage) throw new AppError('Etapa no encontrada', 404);
+    const metadata = await this.ensureVersionMetadata(stage);
+    await prisma.stageVersionGroup.update({
+      where: { id: metadata.groupId },
+      data: { stageType: versionType },
+    });
+    return this.getVersionInfo(stageId);
+  }
+
+  static async markVersionCurrent(stageId: Stages['id']) {
+    const stage = await prisma.stages.findUnique({
+      where: { id: stageId },
+      select: { id: true, name: true, projectId: true, versionMetadata: { select: { id: true, groupId: true } } },
+    });
+    if (!stage) throw new AppError('Etapa no encontrada', 404);
+    const metadata = await this.ensureVersionMetadata(stage);
+    await prisma.$transaction([
+      prisma.stageVersion.updateMany({
+        where: { groupId: metadata.groupId, isCurrent: true },
+        data: { isCurrent: false },
+      }),
+      prisma.stageVersion.update({
+        where: { id: metadata.id },
+        data: { isCurrent: true },
+      }),
+    ]);
+    return this.getVersionInfo(stageId);
+  }
+
   static async update(id: Stages['id'], { name }: Stages) {
     if (!id) throw new AppError('Oops!, ID invalido', 400);
     const duplicated = await this.duplicate(id, name, 'ID');

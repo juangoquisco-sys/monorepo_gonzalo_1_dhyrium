@@ -72,6 +72,8 @@ class ListServices {
         state: true,
         openedAt: true,
         createdAt: true,
+        captureWindowEndsAt: true,
+        reviewDeadlineAt: true,
       },
       orderBy: { openedAt: 'desc' },
     });
@@ -118,6 +120,8 @@ class ListServices {
         openedAt: true,
         closedAt: true,
         finalizedAt: true,
+        captureWindowEndsAt: true,
+        reviewDeadlineAt: true,
         users: {
           orderBy: [
             { user: { profile: { lastName: 'asc' } } },

@@ -34,6 +34,7 @@ import { formatAmountMoneyPEN, getFullName } from '@/utils/tools';
 import useNavigateWithParams from '@/hooks/useNavigateWithParams';
 import type { MyTask } from '../../../../interfaces/myTasks.types';
 import { handleProjectNavigate } from '../../../../tools/projectNavigation';
+import PersonalTaskFiles from './PersonalTaskFiles';
 
 const TablePersonalTask = () => {
   // const navigate = useNavigate();
@@ -115,8 +116,14 @@ const TablePersonalTask = () => {
       id: 'TAREA',
       header: 'TAREA',
       cell: ({ getValue }) => (
-        <div className="tablePersonalTask-task-name text-ellipsis">
-          {getValue().item} {getValue().name}
+        <div>
+          <div className="tablePersonalTask-task-name text-ellipsis">
+            {getValue().item} {getValue().name}
+          </div>
+          <PersonalTaskFiles
+            taskName={getValue().name}
+            files={getValue().feedBacks?.[0]?.files ?? []}
+          />
         </div>
       ),
       enableGrouping: true,

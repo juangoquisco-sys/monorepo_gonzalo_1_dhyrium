@@ -25,7 +25,7 @@ const LevelSubtaskGeneral = ({ level }: LevelSutaskProps) => {
   const [data, setData] = useState<SubTask[]>(subTasks);
   const isAddCount = useRef(0);
 
-  const { emitWithLoader, socket } = useEmitWithLoader();
+  const { emitWithLoader } = useEmitWithLoader();
 
   useEffect(() => {
     let uniqueTasks;
@@ -59,14 +59,17 @@ const LevelSubtaskGeneral = ({ level }: LevelSutaskProps) => {
     });
   };
   const handleOrder = () => {
-    const _data = data.map(({ id }) => ({ id }));
-    const _subtask = subTasks.map(({ id }) => ({ id }));
-    if (_data === _subtask) return;
-    const dataToSend = _data
-      .map(({ id }, index) => ({ id, index }))
-      .filter(({ id, index }) => id !== _subtask[index].id)
-      .map(({ id, index }) => ({ id, index: index + 1 }));
-    socket.emit(service.sortTask, stageId, dataToSend);
+    const hasChanged = data.some(
+      ({ id }, index) => id !== subTasks[index]?.id
+    );
+    if (!hasChanged) return;
+    const dataToSend = data.map(({ id }, index) => ({
+      id,
+      index: index + 1,
+    }));
+    void emitWithLoader(service.sortTask, stageId, dataToSend).catch(() => {
+      setData(subTasks);
+    });
   };
   const handleChange = () => {
     if (editOrder) {
@@ -103,7 +106,9 @@ const LevelSubtaskGeneral = ({ level }: LevelSutaskProps) => {
       stageId,
       index: data.length + 1,
     };
-    socket.emit(service.addTask, body);
+    void emitWithLoader(service.addTask, body).catch(() => {
+      setData(data);
+    });
   };
   return (
     <div className="levelSubtask">

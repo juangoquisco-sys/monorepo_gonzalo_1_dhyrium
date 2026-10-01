@@ -24,10 +24,12 @@ import {
   Crown,
   Download,
   Eye,
+  EyeOff,
   FileText,
   Filter,
   FolderOpen,
   FolderTree,
+  Link2Off,
   ListPlus,
   MoreHorizontal,
   PanelLeftClose,
@@ -145,11 +147,17 @@ import {
   updateOfficeMember,
   updateTechnicalReviewPercentage,
   updateWorkspaceStage,
+  unlinkMeetingUnitProjectFocus,
   updateTechnicalLevel,
   updateTechnicalSubtask,
   updateTechnicalValuation,
 } from '../../services/officeMeetings.service';
 import { getMeetingUnitsOverview } from '../../services/meetingUnitProjects.service';
+import {
+  activeFocusStages,
+  activeStageFocus,
+  focusKey,
+} from '../../utils/meetingProjectFocus';
 import type {
   Commitment,
   CommitmentReviewDecision,
@@ -496,29 +504,6 @@ const projectCandidateLabel = (project?: OfficeProjectCandidate) =>
   project?.contract?.projectName ||
   project?.name ||
   'Proyecto sin nombre';
-
-const focusKey = (focus: MeetingProjectFocus) =>
-  focus.id || `${focus.unitId}-${focus.projectId}`;
-
-const activeStageFocus = (focus?: MeetingProjectFocus | null) =>
-  (focus?.stageFocus ?? []).filter(
-    stageFocus => stageFocus.isCurrent && stageFocus.status !== 'INACTIVE'
-  );
-
-const activeFocusStages = (focus?: MeetingProjectFocus | null) =>
-  activeStageFocus(focus)
-    .map(stageFocus => stageFocus.stage)
-    .sort((a, b) => {
-      const currentSort =
-        Number(b.versionMetadata?.isCurrent || false) -
-        Number(a.versionMetadata?.isCurrent || false);
-      if (currentSort) return currentSort;
-      const versionSort =
-        (b.versionMetadata?.versionNumber || 0) -
-        (a.versionMetadata?.versionNumber || 0);
-      if (versionSort) return versionSort;
-      return a.name.localeCompare(b.name);
-    });
 
 const displayTitle = (value?: string | null) =>
   (value || 'Oficina')
@@ -4467,6 +4452,11 @@ const TechnicalOfficeProjectsWorkspace = ({
   }, [projects, search, showInactiveProjects]);
 
   useEffect(() => {
+    if (!selectedUnitId || projectsQuery.isLoading) return;
+    if (projects.length === 0) setShowProjectPanel(true);
+  }, [selectedUnitId, projectsQuery.isLoading, projects.length]);
+
+  useEffect(() => {
     if (!projects.length) {
       setSelectedFocusId(null);
       setSelectedProjectId(null);
@@ -5287,6 +5277,21 @@ const TechnicalOfficeProjectsWorkspace = ({
     setProjectModalOpen(true);
   };
 
+  useEffect(() => {
+    if (searchParams.get('manage') !== '1' || !projects.length) return;
+    const focusFromUrl = searchParams.get('focusId');
+    const projectFromUrl = Number(searchParams.get('projectId'));
+    const targetFocus =
+      projects.find(focus => focusKey(focus) === focusFromUrl) ||
+      projects.find(focus => focus.projectId === projectFromUrl);
+    if (!targetFocus) return;
+    openProjectModal(targetFocus);
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete('manage');
+    setSearchParams(nextParams, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projects, searchParams]);
+
   const selectedProjectCandidate = useMemo(
     () =>
       (projectCandidatesQuery.data ?? []).find(
@@ -5377,6 +5382,80 @@ const TechnicalOfficeProjectsWorkspace = ({
         error instanceof Error
           ? error.message
           : 'No se pudo vincular el proyecto.'
+      );
+    },
+  });
+
+  const toggleProjectFocusStatusMutation = useMutation({
+    mutationFn: (focus: MeetingProjectFocus) =>
+      // isCurrent is intentionally left untouched: the technical-projects
+      // list this screen reads from always requires isCurrent: true, so
+      // flipping it off here would hide the project even with "Mostrar
+      // inactivos" on. Only `status` should change.
+      updateMeetingUnitProjectFocus(focus.unitId, focus.id as string, {
+        status: focus.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE',
+      }),
+    onSuccess: () => {
+      SnackbarUtilities.success('Estado del proyecto actualizado.');
+      invalidateProjectFocusWorkspace();
+    },
+    onError: error => {
+      SnackbarUtilities.error(
+        error instanceof Error
+          ? error.message
+          : 'No se pudo actualizar el estado del proyecto.'
+      );
+    },
+  });
+
+  const unlinkProjectFocusMutation = useMutation({
+    mutationFn: (focus: MeetingProjectFocus) =>
+      unlinkMeetingUnitProjectFocus(focus.unitId, focus.id as string),
+    onSuccess: (_, focus) => {
+      SnackbarUtilities.success('Proyecto desvinculado de la oficina.');
+      invalidateProjectFocusWorkspace();
+      if (focusKey(focus) === selectedFocusId) {
+        setSelectedFocusId(null);
+        setSelectedProjectId(null);
+        setSelectedStageId(null);
+      }
+    },
+    onError: error => {
+      SnackbarUtilities.error(
+        error instanceof Error ? error.message : 'No se pudo desvincular.'
+      );
+    },
+  });
+
+  const toggleStageFocusMutation = useMutation({
+    mutationFn: ({
+      focus,
+      stageId,
+      nextActive,
+    }: {
+      focus: MeetingProjectFocus;
+      stageId: number;
+      nextActive: boolean;
+    }) => {
+      const currentIds = activeStageFocus(focus).map(
+        stageFocus => stageFocus.stageId
+      );
+      const nextIds = nextActive
+        ? Array.from(new Set([...currentIds, stageId]))
+        : currentIds.filter(id => id !== stageId);
+      return updateMeetingUnitProjectFocus(focus.unitId, focus.id as string, {
+        stageIds: nextIds,
+        status: 'ACTIVE',
+        isCurrent: true,
+      });
+    },
+    onSuccess: () => {
+      SnackbarUtilities.success('Etapas de la oficina actualizadas.');
+      invalidateProjectFocusWorkspace();
+    },
+    onError: error => {
+      SnackbarUtilities.error(
+        error instanceof Error ? error.message : 'No se pudo actualizar la etapa.'
       );
     },
   });
@@ -7089,22 +7168,24 @@ const TechnicalOfficeProjectsWorkspace = ({
                         <Badge variant="outline">
                           {filteredProjects.length} proyectos
                         </Badge>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                className="size-8 text-slate-500 hover:text-blue-700"
-                                onClick={() => setShowProjectPanel(false)}
-                              >
-                                <PanelLeftClose size={16} />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Ocultar proyectos</TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+                        {projects.length > 0 && (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  className="size-8 text-slate-500 hover:text-blue-700"
+                                  onClick={() => setShowProjectPanel(false)}
+                                >
+                                  <PanelLeftClose size={16} />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Ocultar proyectos</TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
                       </div>
                     </div>
                     <div className="mt-3 space-y-2">
@@ -7165,87 +7246,184 @@ const TechnicalOfficeProjectsWorkspace = ({
                       const stages = showInactiveProjects
                         ? focus.stageFocus ?? []
                         : activeStageFocus(focus);
+                      const canManageThisFocus =
+                        canManageSelectedUnit && Boolean(focus.id);
                       return (
-                        <div
-                          key={`${focus.id}-${focus.projectId}`}
-                          className={`mb-2 w-full rounded-md border p-3 text-left transition ${
-                            active
-                              ? 'border-blue-600 bg-blue-50'
-                              : 'border-slate-200 bg-white hover:bg-slate-50'
-                          }`}
-                        >
-                          <button
-                            type="button"
-                            className="w-full text-left"
-                            onClick={() => selectProjectFocus(focus)}
-                          >
-                            <div className="flex items-start justify-between gap-2">
-                              <p className="text-sm font-semibold text-slate-950">
-                                {projectLabel(focus)}
-                              </p>
-                              <Badge
-                                variant={
-                                  focus.status === 'ACTIVE'
-                                    ? 'success'
-                                    : 'outline'
+                        <ContextMenu key={`${focus.id}-${focus.projectId}`}>
+                          <ContextMenuTrigger asChild>
+                            <div
+                              className={`mb-2 w-full rounded-md border p-3 text-left transition ${
+                                active
+                                  ? 'border-blue-600 bg-blue-50'
+                                  : 'border-slate-200 bg-white hover:bg-slate-50'
+                              }`}
+                            >
+                              <button
+                                type="button"
+                                className="w-full text-left"
+                                onClick={() => selectProjectFocus(focus)}
+                              >
+                                <div className="flex items-start justify-between gap-2">
+                                  <p className="text-sm font-semibold text-slate-950">
+                                    {projectLabel(focus)}
+                                  </p>
+                                  <Badge
+                                    variant={
+                                      focus.status === 'ACTIVE'
+                                        ? 'success'
+                                        : 'outline'
+                                    }
+                                  >
+                                    {focus.status}
+                                  </Badge>
+                                </div>
+                                <div className="mt-2 flex flex-wrap gap-2 text-xs text-slate-500">
+                                  <span className="inline-flex items-center gap-1">
+                                    <ClipboardList size={13} />
+                                    CUI {focus.project.contract?.cui || 'S/C'}
+                                  </span>
+                                  <span className="inline-flex items-center gap-1">
+                                    <CalendarDays size={13} />
+                                    {stages.length} etapas activas
+                                  </span>
+                                </div>
+                                <p className="mt-2 text-xs font-medium text-slate-600">
+                                  {focus.unit?.name ||
+                                    selectedUnit?.name ||
+                                    'Oficina'}
+                                </p>
+                              </button>
+                              {!!stages.length && (
+                                <div className="mt-3 flex flex-wrap gap-1.5">
+                                  {stages.map(stageFocus => (
+                                    <ContextMenu key={stageFocus.id}>
+                                      <ContextMenuTrigger asChild>
+                                        <span
+                                          className="inline-block"
+                                          onContextMenu={event =>
+                                            event.stopPropagation()
+                                          }
+                                        >
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              setSelectedFocusId(
+                                                focusKey(focus)
+                                              );
+                                              setSelectedProjectId(
+                                                focus.projectId
+                                              );
+                                              setSelectedStageId(
+                                                stageFocus.stageId
+                                              );
+                                              updateParams({
+                                                focusId: focusKey(focus),
+                                                projectId: String(
+                                                  focus.projectId
+                                                ),
+                                                stageId: String(
+                                                  stageFocus.stageId
+                                                ),
+                                              });
+                                            }}
+                                            className={`rounded-md border px-2 py-1 text-xs font-semibold transition ${
+                                              stageFocus.status === 'INACTIVE'
+                                                ? 'border-slate-200 bg-slate-100 text-slate-400'
+                                                : selectedStageId ===
+                                                    stageFocus.stageId &&
+                                                  active
+                                                ? 'border-blue-500 bg-white text-blue-700'
+                                                : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-blue-200 hover:text-blue-700'
+                                            }`}
+                                            disabled={
+                                              stageFocus.status === 'INACTIVE'
+                                            }
+                                          >
+                                            {stageVersionLabel(
+                                              stageFocus.stage
+                                            )}
+                                          </button>
+                                        </span>
+                                      </ContextMenuTrigger>
+                                      {canManageThisFocus && (
+                                        <ContextMenuContent className="w-52">
+                                          <ContextMenuItem
+                                            onSelect={() =>
+                                              toggleStageFocusMutation.mutate({
+                                                focus,
+                                                stageId: stageFocus.stageId,
+                                                nextActive:
+                                                  stageFocus.status ===
+                                                  'INACTIVE',
+                                              })
+                                            }
+                                          >
+                                            {stageFocus.status ===
+                                            'INACTIVE' ? (
+                                              <Eye size={14} />
+                                            ) : (
+                                              <EyeOff size={14} />
+                                            )}
+                                            {stageFocus.status === 'INACTIVE'
+                                              ? 'Reactivar etapa'
+                                              : 'Quitar esta etapa'}
+                                          </ContextMenuItem>
+                                        </ContextMenuContent>
+                                      )}
+                                    </ContextMenu>
+                                  ))}
+                                </div>
+                              )}
+                              {!stages.length && (
+                                <p className="mt-3 rounded-md border border-dashed border-slate-200 p-2 text-xs text-slate-500">
+                                  Sin etapas asignadas a esta oficina.
+                                </p>
+                              )}
+                            </div>
+                          </ContextMenuTrigger>
+                          {canManageThisFocus && (
+                            <ContextMenuContent className="w-56">
+                              <ContextMenuItem
+                                onSelect={() =>
+                                  toggleProjectFocusStatusMutation.mutate(
+                                    focus
+                                  )
                                 }
                               >
-                                {focus.status}
-                              </Badge>
-                            </div>
-                            <div className="mt-2 flex flex-wrap gap-2 text-xs text-slate-500">
-                              <span className="inline-flex items-center gap-1">
-                                <ClipboardList size={13} />
-                                CUI {focus.project.contract?.cui || 'S/C'}
-                              </span>
-                              <span className="inline-flex items-center gap-1">
-                                <CalendarDays size={13} />
-                                {stages.length} etapas activas
-                              </span>
-                            </div>
-                            <p className="mt-2 text-xs font-medium text-slate-600">
-                              {focus.unit?.name ||
-                                selectedUnit?.name ||
-                                'Oficina'}
-                            </p>
-                          </button>
-                          {!!stages.length && (
-                            <div className="mt-3 flex flex-wrap gap-1.5">
-                              {stages.map(stageFocus => (
-                                <button
-                                  key={stageFocus.id}
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedFocusId(focusKey(focus));
-                                    setSelectedProjectId(focus.projectId);
-                                    setSelectedStageId(stageFocus.stageId);
-                                    updateParams({
-                                      focusId: focusKey(focus),
-                                      projectId: String(focus.projectId),
-                                      stageId: String(stageFocus.stageId),
-                                    });
-                                  }}
-                                  className={`rounded-md border px-2 py-1 text-xs font-semibold transition ${
-                                    stageFocus.status === 'INACTIVE'
-                                      ? 'border-slate-200 bg-slate-100 text-slate-400'
-                                      : selectedStageId ===
-                                          stageFocus.stageId && active
-                                      ? 'border-blue-500 bg-white text-blue-700'
-                                      : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-blue-200 hover:text-blue-700'
-                                  }`}
-                                  disabled={stageFocus.status === 'INACTIVE'}
-                                >
-                                  {stageVersionLabel(stageFocus.stage)}
-                                </button>
-                              ))}
-                            </div>
+                                {focus.status === 'ACTIVE' ? (
+                                  <EyeOff size={14} />
+                                ) : (
+                                  <Eye size={14} />
+                                )}
+                                {focus.status === 'ACTIVE'
+                                  ? 'Marcar proyecto inactivo'
+                                  : 'Marcar proyecto activo'}
+                              </ContextMenuItem>
+                              <ContextMenuItem
+                                onSelect={() => openProjectModal(focus)}
+                              >
+                                <Settings2 size={14} />
+                                Gestionar etapas...
+                              </ContextMenuItem>
+                              <ContextMenuSeparator />
+                              <ContextMenuItem
+                                variant="destructive"
+                                onSelect={() => {
+                                  const confirmed = window.confirm(
+                                    `Desvincular "${projectLabel(
+                                      focus
+                                    )}" de esta oficina?`
+                                  );
+                                  if (confirmed)
+                                    unlinkProjectFocusMutation.mutate(focus);
+                                }}
+                              >
+                                <Link2Off size={14} />
+                                Desvincular de la oficina
+                              </ContextMenuItem>
+                            </ContextMenuContent>
                           )}
-                          {!stages.length && (
-                            <p className="mt-3 rounded-md border border-dashed border-slate-200 p-2 text-xs text-slate-500">
-                              Sin etapas asignadas a esta oficina.
-                            </p>
-                          )}
-                        </div>
+                        </ContextMenu>
                       );
                     })}
                   </div>{' '}

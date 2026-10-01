@@ -5,6 +5,13 @@ import { numberToConvert } from '@/utils/tools';
 import Queries from '@/utils/queries';
 import { unlinkSync } from 'fs';
 import LegacyTaskAssignmentContextService from './legacyTaskAssignmentContext.services';
+import {
+  insertTaskId,
+  lockTaskOrder,
+  orderTaskIds,
+  requestedTaskIds,
+  writeBasicTaskOrder,
+} from './taskOrdering.services';
 
 class BasicTasksServices {
   public static async find(id: BasicTasks['id']) {
@@ -67,20 +74,43 @@ class BasicTasksServices {
     levels_Id,
     _index,
   }: BasicTasks & { _index?: number }) {
-    const isDuplicated = await this.findDuplicates(name, levels_Id, 'ROOT');
-    const { duplicated, quantity, typeItem } = isDuplicated;
-    if (duplicated) throw new AppError('Error, Nombre existente', 409);
-    const data = {
-      name,
-      days,
-      levels_Id,
-      index: _index || quantity + 1,
-      typeItem,
-    };
-    const newTask = await prisma.basicTasks.create({
-      data: { ...data, price },
+    return prisma.$transaction(async transaction => {
+      await lockTaskOrder(transaction, 'basic', levels_Id);
+      const level = await transaction.basicLevels.findUnique({
+        where: { id: levels_Id },
+        select: {
+          typeItem: true,
+          subTasks: {
+            orderBy: [{ index: 'asc' }, { id: 'asc' }],
+            select: { id: true, index: true, name: true },
+          },
+        },
+      });
+      if (!level) throw new AppError('No se pudo encontrar el índice', 404);
+      if (level.subTasks.some(task => task.name === name))
+        throw new AppError('Error, Nombre existente', 409);
+      const orderedIds = orderTaskIds(level.subTasks);
+      const insertionIndex = _index
+        ? Math.min(Math.max(_index - 1, 0), orderedIds.length)
+        : orderedIds.length;
+      const temporaryIndex =
+        Math.max(0, ...level.subTasks.map(task => task.index)) +
+        level.subTasks.length +
+        1;
+      const newTask = await transaction.basicTasks.create({
+        data: {
+          name,
+          days,
+          levels_Id,
+          index: temporaryIndex,
+          typeItem: level.typeItem,
+          price,
+        },
+      });
+      orderedIds.splice(insertionIndex, 0, newTask.id);
+      await writeBasicTaskOrder(transaction, orderedIds);
+      return { ...newTask, index: insertionIndex + 1 };
     });
-    return newTask;
   }
 
   public static async update(
@@ -96,29 +126,59 @@ class BasicTasksServices {
   }
 
   public static async sort(list: { id: number; index: number }[]) {
-    const sortingList = list.map(({ id, index }) => {
-      return prisma.basicTasks.update({ where: { id }, data: { index } });
+    if (!list.length) return [];
+    const firstTask = await prisma.basicTasks.findUnique({
+      where: { id: list[0].id },
+      select: { levels_Id: true },
     });
-    return await prisma.$transaction(sortingList);
+    if (!firstTask) throw new AppError('No existe la tarea', 404);
+    return prisma.$transaction(async transaction => {
+      await lockTaskOrder(transaction, 'basic', firstTask.levels_Id);
+      const siblings = await transaction.basicTasks.findMany({
+        where: { levels_Id: firstTask.levels_Id },
+        orderBy: [{ index: 'asc' }, { id: 'asc' }],
+        select: { id: true, index: true },
+      });
+      let orderedIds: number[];
+      try {
+        orderedIds = requestedTaskIds(orderTaskIds(siblings), list);
+      } catch {
+        throw new AppError(
+          'El orden debe incluir todas las tareas una sola vez',
+          400
+        );
+      }
+      await writeBasicTaskOrder(transaction, orderedIds);
+      return orderedIds.map((id, position) => ({ id, index: position + 1 }));
+    });
   }
 
   public static async delete(id: BasicTasks['id']) {
     if (!id) throw new AppError('Oops!,ID invalido', 400);
-    const subTaskDelete = await prisma.basicTasks.delete({
+    const task = await prisma.basicTasks.findUnique({
       where: { id },
-      select: { index: true, levels_Id: true },
+      select: { levels_Id: true },
     });
-    if (!subTaskDelete) throw new AppError('Oops!,ID invalido', 400);
-    const filterTaskList = await prisma.basicTasks.groupBy({
-      by: ['id', 'index'],
-      where: {
-        levels_Id: subTaskDelete.levels_Id,
-        index: { gt: subTaskDelete.index },
-      },
-      orderBy: { index: 'asc' },
+    if (!task) throw new AppError('Oops!,ID invalido', 400);
+    return prisma.$transaction(async transaction => {
+      await lockTaskOrder(transaction, 'basic', task.levels_Id);
+      const siblings = await transaction.basicTasks.findMany({
+        where: { levels_Id: task.levels_Id },
+        orderBy: [{ index: 'asc' }, { id: 'asc' }],
+        select: { id: true, index: true },
+      });
+      const subTaskDelete = await transaction.basicTasks.delete({
+        where: { id },
+        select: { index: true, levels_Id: true },
+      });
+      const orderedIds = orderTaskIds(siblings).filter(taskId => taskId !== id);
+      await writeBasicTaskOrder(transaction, orderedIds);
+      const updateList = orderedIds.map((taskId, position) => ({
+        id: taskId,
+        index: position + 1,
+      }));
+      return { subTaskDelete, updateList };
     });
-    const updateList = await this.listByUpdate(filterTaskList);
-    return { subTaskDelete, updateList };
   }
 
   public static async restore(id: BasicTasks['id']) {
@@ -150,18 +210,43 @@ class BasicTasksServices {
     const findLevel = await prisma.basicTasks.findUnique({ where: { id } });
     if (!findLevel)
       throw new AppError('No se pudieron encontrar el nivel', 404);
-    const { index: _index, levels_Id, typeItem } = findLevel;
-    const index = typeGte === 'upper' ? { gte: _index } : { gt: _index };
-    const filterTaskList = await prisma.basicTasks.groupBy({
-      by: ['id', 'index'],
-      where: { levels_Id, index },
-      orderBy: { index: 'asc' },
+    return prisma.$transaction(async transaction => {
+      await lockTaskOrder(transaction, 'basic', findLevel.levels_Id);
+      const anchor = await transaction.basicTasks.findUnique({ where: { id } });
+      if (!anchor)
+        throw new AppError('No se pudieron encontrar el nivel', 404);
+      const siblings = await transaction.basicTasks.findMany({
+        where: { levels_Id: anchor.levels_Id },
+        orderBy: [{ index: 'asc' }, { id: 'asc' }],
+        select: { id: true, index: true, name: true },
+      });
+      if (siblings.some(task => task.name === name))
+        throw new AppError('Error, Nombre existente', 409);
+      const temporaryIndex =
+        Math.max(0, ...siblings.map(task => task.index)) + siblings.length + 1;
+      const newLevel = await transaction.basicTasks.create({
+        data: {
+          levels_Id: anchor.levels_Id,
+          name,
+          days,
+          index: temporaryIndex,
+          typeItem: anchor.typeItem,
+        },
+      });
+      const orderedIds = insertTaskId(
+        orderTaskIds(siblings),
+        newLevel.id,
+        id,
+        typeGte
+      );
+      await writeBasicTaskOrder(transaction, orderedIds);
+      const newIndex = orderedIds.indexOf(newLevel.id) + 1;
+      const updateLevels = orderedIds.map((taskId, position) => ({
+        id: taskId,
+        index: position + 1,
+      }));
+      return { newLevel: { ...newLevel, index: newIndex }, updateLevels };
     });
-    const parseIndex = typeGte === 'upper' ? _index : _index + 1;
-    const data = { levels_Id, name, days, index: parseIndex, typeItem };
-    const newLevel = await prisma.basicTasks.create({ data });
-    const updateLevels = await this.listByUpdate(filterTaskList, 1);
-    return { newLevel, updateLevels };
   }
 
   public static async findDuplicates(
@@ -190,18 +275,6 @@ class BasicTasksServices {
     const quantity = subTasks.length;
     const duplicated = subTasks.some(task => task.name === name);
     return { duplicated, quantity, levels_Id, typeItem };
-  }
-
-  public static async listByUpdate(
-    list: { id: number; index: number }[],
-    quantity: number = -1
-  ) {
-    const updateListPerLevel = list.map(({ id, index }) => {
-      const data = { index: index + quantity };
-      const update = prisma.basicTasks.update({ where: { id }, data });
-      return update;
-    });
-    return await prisma.$transaction(updateListPerLevel);
   }
 
   private static async getItem(list: number[]) {

@@ -513,7 +513,7 @@ const SalaryDetailTable = ({ office }: SalaryDetailTableProps) => {
               handleNavigateReport(
                 report.id,
                 !office?.status,
-                report.name.includes('Puente Mayo')
+                report.type === 'MENSUAL'
               );
 
             return (

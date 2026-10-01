@@ -708,6 +708,15 @@ class MeetingUnitsServices {
     const focus = await prisma.orgUnitProjectFocus.findMany({
       where: { unitId: { in: sourceUnitIds }, isCurrent: true },
       include: {
+        stageFocus: {
+          where: { isCurrent: true, status: { not: 'INACTIVE' } },
+          include: {
+            stage: {
+              select: STAGE_WITH_VERSION_SELECT,
+            },
+          },
+          orderBy: [{ status: 'asc' }, { updatedAt: 'desc' }],
+        },
         project: {
           include: {
             contract: {

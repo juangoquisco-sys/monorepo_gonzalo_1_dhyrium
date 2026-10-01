@@ -15,6 +15,13 @@ import { Level } from '@/types/types';
 import path from 'path';
 import LevelsServices from '@/services/levels.services';
 import LegacyTaskAssignmentContextService from '@/services/legacyTaskAssignmentContext.services';
+import {
+  insertTaskId,
+  lockTaskOrder,
+  orderTaskIds,
+  requestedTaskIds,
+  writeSubTaskOrder,
+} from '@/services/taskOrdering.services';
 
 class SubTasksServices {
   public static async find(id: SubTasks['id']) {
@@ -97,16 +104,46 @@ class SubTasksServices {
   }: Pick<SubTasks, 'name' | 'price' | 'days' | 'levels_Id'> & {
     index?: number;
   }) {
-    const isDuplicated = await this.findDuplicates(name, levels_Id, 'ROOT');
-    const { duplicated, quantity, typeItem } = isDuplicated;
     const mods = await this.getCoordinate(levels_Id);
-    if (duplicated) throw new AppError('Error, Nombre existente', 409);
-    //--------------------------------------------------------------------------
-    const data = { name, levels_Id, index: index || quantity + 1, typeItem };
-    const newTask = await prisma.subTasks.create({
-      data: { ...data, price, days, mods },
+    return prisma.$transaction(async transaction => {
+      await lockTaskOrder(transaction, 'technical', levels_Id);
+      const level = await transaction.levels.findUnique({
+        where: { id: levels_Id },
+        select: {
+          typeItem: true,
+          subTasks: {
+            orderBy: [{ index: 'asc' }, { id: 'asc' }],
+            select: { id: true, index: true, name: true },
+          },
+        },
+      });
+      if (!level) throw new AppError('No se pudo encontrar el índice', 404);
+      if (level.subTasks.some(task => task.name === name))
+        throw new AppError('Error, Nombre existente', 409);
+
+      const orderedIds = orderTaskIds(level.subTasks);
+      const insertionIndex = index
+        ? Math.min(Math.max(index - 1, 0), orderedIds.length)
+        : orderedIds.length;
+      const temporaryIndex =
+        Math.max(0, ...level.subTasks.map(task => task.index)) +
+        level.subTasks.length +
+        1;
+      const newTask = await transaction.subTasks.create({
+        data: {
+          name,
+          levels_Id,
+          index: temporaryIndex,
+          typeItem: level.typeItem,
+          price,
+          days,
+          mods,
+        },
+      });
+      orderedIds.splice(insertionIndex, 0, newTask.id);
+      await writeSubTaskOrder(transaction, orderedIds);
+      return { ...newTask, index: insertionIndex + 1 };
     });
-    return newTask;
   }
 
   public static async update(
@@ -151,16 +188,39 @@ class SubTasksServices {
   }
 
   public static async sorting(list: SortingListType[]) {
-    const sortingItems = list.map(({ id, index }) => {
-      return prisma.subTasks.update({ where: { id }, data: { index } });
+    if (!list.length) return [];
+    const firstTask = await prisma.subTasks.findUnique({
+      where: { id: list[0].id },
+      select: { levels_Id: true },
     });
-    return await prisma.$transaction(sortingItems);
+    if (!firstTask) throw new AppError('No existe la tarea', 404);
+
+    return prisma.$transaction(async transaction => {
+      await lockTaskOrder(transaction, 'technical', firstTask.levels_Id);
+      const siblings = await transaction.subTasks.findMany({
+        where: { levels_Id: firstTask.levels_Id },
+        orderBy: [{ index: 'asc' }, { id: 'asc' }],
+        select: { id: true, index: true },
+      });
+      let orderedIds: number[];
+      try {
+        orderedIds = requestedTaskIds(orderTaskIds(siblings), list);
+      } catch {
+        throw new AppError(
+          'El orden debe incluir todas las tareas una sola vez',
+          400
+        );
+      }
+      await writeSubTaskOrder(transaction, orderedIds);
+      return orderedIds.map((id, position) => ({ id, index: position + 1 }));
+    });
   }
   public static async delete(id: SubTasks['id']) {
     if (!id) throw new AppError('Oops!,ID invalido', 400);
     const task = await prisma.subTasks.findUnique({
       where: { id },
       select: {
+        levels_Id: true,
         Levels: { select: { unique: true } },
         _count: { select: { users: { where: { statusPayment: true } } } },
       },
@@ -176,21 +236,30 @@ class SubTasksServices {
         'No se puede eliminar esta tarea porque tiene asignaciones con pago registrado.',
         409
       );
-    const subTaskDelete = await prisma.subTasks.delete({
-      where: { id },
-      select: { index: true, levels_Id: true },
+    return prisma.$transaction(async transaction => {
+      await lockTaskOrder(transaction, 'technical', task.levels_Id);
+      const current = await transaction.subTasks.findUnique({
+        where: { id },
+        select: { index: true, levels_Id: true },
+      });
+      if (!current) throw new AppError('Oops!,ID invalido', 400);
+      const siblings = await transaction.subTasks.findMany({
+        where: { levels_Id: current.levels_Id },
+        orderBy: [{ index: 'asc' }, { id: 'asc' }],
+        select: { id: true, index: true },
+      });
+      const subTaskDelete = await transaction.subTasks.delete({
+        where: { id },
+        select: { index: true, levels_Id: true },
+      });
+      const orderedIds = orderTaskIds(siblings).filter(taskId => taskId !== id);
+      await writeSubTaskOrder(transaction, orderedIds);
+      const itemsToUpdate = orderedIds.map((taskId, position) => ({
+        id: taskId,
+        index: position + 1,
+      }));
+      return { subTaskDelete, itemsToUpdate };
     });
-    if (!subTaskDelete) throw new AppError('Oops!,ID invalido', 400);
-    const itemsToDelete = await prisma.subTasks.groupBy({
-      by: ['id', 'index'],
-      where: {
-        levels_Id: subTaskDelete.levels_Id,
-        index: { gt: subTaskDelete.index },
-      },
-      orderBy: { index: 'asc' },
-    });
-    const itemsToUpdate = await this.listByUpdate(itemsToDelete);
-    return { subTaskDelete, itemsToUpdate };
   }
 
   public static async approved(id: SubTasks['id']) {
@@ -250,29 +319,42 @@ class SubTasksServices {
     //------------------------------------------------------------------
     const findTask = await prisma.subTasks.findUnique({ where: { id } });
     if (!findTask) throw new AppError('No existe la tarea', 404);
-    const { index: _index, levels_Id, typeItem } = findTask;
-    const index = typeGte === 'upper' ? { gte: _index } : { gt: _index };
-    const itemsToUpdates = await prisma.subTasks.groupBy({
-      by: ['id', 'index'],
-      where: { levels_Id, index },
-      orderBy: { index: 'asc' },
+    return prisma.$transaction(async transaction => {
+      await lockTaskOrder(transaction, 'technical', findTask.levels_Id);
+      const anchor = await transaction.subTasks.findUnique({ where: { id } });
+      if (!anchor) throw new AppError('No existe la tarea', 404);
+      const siblings = await transaction.subTasks.findMany({
+        where: { levels_Id: anchor.levels_Id },
+        orderBy: [{ index: 'asc' }, { id: 'asc' }],
+        select: { id: true, index: true, name: true },
+      });
+      if (siblings.some(task => task.name === name))
+        throw new AppError('Error, Nombre existente', 409);
+      const temporaryIndex =
+        Math.max(0, ...siblings.map(task => task.index)) + siblings.length + 1;
+      const newTask = await transaction.subTasks.create({
+        data: {
+          levels_Id: anchor.levels_Id,
+          name,
+          days,
+          index: temporaryIndex,
+          typeItem: anchor.typeItem,
+        },
+      });
+      const orderedIds = insertTaskId(
+        orderTaskIds(siblings),
+        newTask.id,
+        id,
+        typeGte
+      );
+      await writeSubTaskOrder(transaction, orderedIds);
+      const newIndex = orderedIds.indexOf(newTask.id) + 1;
+      const updateTasks = orderedIds.map((taskId, position) => ({
+        id: taskId,
+        index: position + 1,
+      }));
+      return { newTask: { ...newTask, index: newIndex }, updateTasks };
     });
-    const parseIndex = typeGte === 'upper' ? _index : _index + 1;
-    const data = { levels_Id, name, days, index: parseIndex, typeItem };
-    const newTask = await prisma.subTasks.create({ data: { ...data } });
-    const updateTasks = await this.listByUpdate(itemsToUpdates, 1);
-    return { newTask, updateTasks };
-  }
-
-  private static async listByUpdate(
-    list: SortingListType[],
-    quantity: number = -1
-  ) {
-    const itemsToUpdate = list.map(({ id, index }) => {
-      const data = { index: index + quantity };
-      return prisma.subTasks.update({ where: { id }, data });
-    });
-    return await prisma.$transaction(itemsToUpdate);
   }
 
   public static async findDuplicates(

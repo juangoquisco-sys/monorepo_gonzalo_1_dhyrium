@@ -34,6 +34,12 @@ import ProjectsServices from '@/services/projects.services';
 import path from 'path';
 import { TaskDuplicateOptions } from '@/types/duplicates';
 import LegacyTaskAssignmentContextService from '@/services/legacyTaskAssignmentContext.services';
+import {
+  insertTaskId,
+  lockTaskOrder,
+  orderTaskIds,
+  writeSubTaskOrder,
+} from '@/services/taskOrdering.services';
 
 class DuplicatesServices {
   static async project(
@@ -228,58 +234,55 @@ class DuplicatesServices {
       },
     });
     if (!getSubTask) throw new AppError('Ops!, no se pudo encontrar', 404);
-    const { files, Levels, index, ...subTaskData } = getSubTask;
+    const { files, Levels, ...subTaskData } = getSubTask;
     const newPath = await PathServices.level(Levels.id);
     const newEditables = newPath.replace('projects', 'editables');
-    //--------------------------set_new_item-----------------------------
-    const { item: rootItem, id: levels_Id } = Levels;
-    const parseItem = rootItem ? rootItem : '';
-    const lastItem = numberToConvert(index + 1, subTaskData.typeItem);
-    if (!lastItem) throw new AppError('excediste Limite de conversion', 400);
-    const item = parseItem + lastItem + '.';
-    //--------------------------set_new_subtasks-------------------------
-    const status: SubTasks['status'] = 'UNRESOLVED';
-    const data = {
-      ...subTaskData,
-      status,
-      name,
-      item,
-      levels_Id,
-      index: index + 1,
-    };
-    const newSubTask = await prisma.subTasks.create({ data });
-    //--------------------------set_new_files----------------------------
     const hash = new Date().getTime();
-    const _files = files.map(
+    const newFiles = files.map(
       ({ id, assignedAt, feedbackId, subTasksId, ...data }) => {
         const nameFile = data.name.split('$$')[1];
-        const name = `${hash}$$${nameFile}`;
-        copyFileSync(`${data.dir}/${data.name}`, `${data.dir}/${name}`);
-        return { ...data, name, subTasksId: newSubTask.id };
+        const fileName = `${hash}$$${nameFile}`;
+        copyFileSync(`${data.dir}/${data.name}`, `${data.dir}/${fileName}`);
+        return { ...data, name: fileName };
       }
     );
-    await prisma.files.createMany({ data: _files });
-    //------------------------------------------------------------------
-    const list = await prisma.subTasks.findMany({
-      where: {
-        levels_Id,
-        index: { gt: index },
-        id: {
-          not: newSubTask.id,
+    return prisma.$transaction(async transaction => {
+      await lockTaskOrder(transaction, 'technical', Levels.id);
+      const source = await transaction.subTasks.findUnique({
+        where: { id: _id },
+      });
+      if (!source) throw new AppError('Ops!, no se pudo encontrar', 404);
+      const siblings = await transaction.subTasks.findMany({
+        where: { levels_Id: Levels.id },
+        orderBy: [{ index: 'asc' }, { id: 'asc' }],
+        select: { id: true, index: true, name: true },
+      });
+      if (siblings.some(task => task.name === name))
+        throw new AppError('Nombre registrado anteriormente', 409);
+      const temporaryIndex =
+        Math.max(0, ...siblings.map(task => task.index)) + siblings.length + 1;
+      const newSubTask = await transaction.subTasks.create({
+        data: {
+          ...subTaskData,
+          status: 'UNRESOLVED',
+          name,
+          item: null,
+          levels_Id: Levels.id,
+          index: temporaryIndex,
+          files: { createMany: { data: newFiles } },
         },
-      },
-      orderBy: { index: 'asc' },
-      include: {
-        files: {
-          where: { OR: [{ type: 'UPLOADS' }] },
-          select: { id: true, dir: true, name: true, type: true },
-        },
-      },
+        include: { files: true },
+      });
+      const orderedIds = insertTaskId(
+        orderTaskIds(siblings),
+        newSubTask.id,
+        _id,
+        'lower'
+      );
+      await writeSubTaskOrder(transaction, orderedIds);
+      const newIndex = orderedIds.indexOf(newSubTask.id) + 1;
+      return { ...newSubTask, index: newIndex };
     });
-    //--------------------------------------------------------------
-
-    //--------------------------------------------------------------
-    return { ...newSubTask, files: _files };
   }
 
   static async listSubtask(
