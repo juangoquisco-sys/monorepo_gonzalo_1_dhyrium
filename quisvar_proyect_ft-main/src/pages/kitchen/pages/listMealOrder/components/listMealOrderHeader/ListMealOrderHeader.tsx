@@ -42,6 +42,7 @@ const ListMealOrderHeader = () => {
     searchText,
     handleSearchChange,
     isLoading,
+    activeView,
   } = useContext(ListMealOrderContext);
   const [isExportingImage, setIsExportingImage] = useState(false);
 
@@ -51,7 +52,7 @@ const ListMealOrderHeader = () => {
         mealOrderSelected.hour || '00:00'
       )} - ${formatFullDayDateUtc(date)}`
     : `Pedidos del dia - ${formatFullDayDateUtc(date)}`;
-  const whatsappMessage = `Comparto el consolidado de ${exportName}.`;
+  const whatsappMessage = `Comparto el consolidado de ${exportName}.\nEstado de entrega: ${filters.pickupStatus}.`;
 
   const mealSummary = useMemo(() => {
     const positive = mealUsers.filter(user => user.mealStatus === true).length;
@@ -312,8 +313,7 @@ const ListMealOrderHeader = () => {
             cuando el pedido esté cerrado.
           </p>
         </div>
-
-        <div className="listMealOrder-toolbar">
+        {activeView === 'delivery' && <div className="listMealOrder-toolbar">
           <Input
             type="search"
             value={searchText}
@@ -357,6 +357,20 @@ const ListMealOrderHeader = () => {
             width={12}
           />
 
+          {mealOrderSelected?.type.toLowerCase() === 'almuerzo' && (
+            <Select
+              value={filters.lunchMenuOrder}
+              data={['Orden original', 'Segundo (A-Z)']}
+              placeholder="Ordenar"
+              onChange={onChangeFilter}
+              name="lunchMenuOrder"
+              extractValue={value => value}
+              renderTextField={value => value}
+              styleVariant="tertiary"
+              width={12}
+            />
+          )}
+
           <Button
             leftIcon={<PiArrowClockwiseBold size={17} />}
             size="xxs"
@@ -365,7 +379,7 @@ const ListMealOrderHeader = () => {
             borderRadius={10}
             disabled={isLoading}
           />
-        </div>
+        </div>}
       </div>
 
       <div className="listMealOrder-summaryBlock">
@@ -408,17 +422,15 @@ const ListMealOrderHeader = () => {
               color="secondary"
               disabled={isExportingImage}
             />
-            {!!navigator.share && (
-              <Button
-                size="xxs"
-                variant="outline"
-                text="Compartir"
-                leftIcon={<PiShareNetworkFill size={16} />}
-                onClick={handleShareToWhatsApp}
-                color="secondary"
-                disabled={isExportingImage}
-              />
-            )}
+            <Button
+              size="xxs"
+              variant="outline"
+              text="Compartir"
+              leftIcon={<PiShareNetworkFill size={16} />}
+              onClick={handleShareToWhatsApp}
+              color="secondary"
+              disabled={isExportingImage}
+            />
             <Button
               size="xxs"
               variant="outline"

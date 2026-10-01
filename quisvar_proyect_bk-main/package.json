@@ -23,6 +23,7 @@
     "test:gate-control": "node --test -r ts-node/register tests/gateControl.domain.test.ts",
     "test:attendance-control": "node --test -r ts-node/register tests/attendanceControl.domain.test.ts",
     "test:biometric-attendance": "node --test -r ts-node/register tests/biometricAttendance.domain.test.ts",
+    "test:lunch-menu": "node --test -r ts-node/register -r tsconfig-paths/register tests/lunchMenu.domain.test.ts",
     "test:iclock": "node --test -r ts-node/register -r tsconfig-paths/register tests/iclockServices.test.ts",
     "test:zkteco-device": "node --test -r ts-node/register tests/zktecoDeviceService.test.ts",
     "test:duty-coverage": "node --test -r ts-node/register tests/dutyCoverage.domain.test.ts",

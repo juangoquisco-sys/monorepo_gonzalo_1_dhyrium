@@ -189,4 +189,7 @@ export interface KitchenMonthlyResponse {
   days: KitchenMonthlyDay[];
 }
 
-export type MealOrderBody = Omit<MealOrder, 'id' | 'createdAt' | 'isClose'>;
+export type MealOrderBody = Omit<
+  MealOrder,
+  'id' | 'createdAt' | 'isClose' | 'isDistributed'
+>;

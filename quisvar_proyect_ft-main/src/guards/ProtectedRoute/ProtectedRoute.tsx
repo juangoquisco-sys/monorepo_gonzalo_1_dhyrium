@@ -2,6 +2,7 @@ import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Suspense, useEffect, useRef } from 'react';
 import AlertConfirm from '@/components/alertConfirm/AlertConfirm';
 import AlertNotification from '@/components/alertNotification/AlertNotification';
+import LunchMenuNotification from '@/components/alertNotification/LunchMenuNotification';
 import ButtonDelete from '@/components/button/ButtonDelete';
 import ConfirmAction from '@/components/confirmAction/ConfirmAction';
 import ErrorBoundary from '@/components/errorBoundary/ErrorBoundary';
@@ -77,6 +78,7 @@ export const ProtectedRoute = () => {
           )}
         </div>
         <AlertNotification />
+        <LunchMenuNotification />
         <AlertConfirm />
         <ButtonDelete notIsVisible />
         <ViewPdf />
