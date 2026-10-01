@@ -27,6 +27,18 @@ export const allMealsOrderByDate: ControllerFunction = async (req, res) => {
   const query = await KitchenServices.allMealsOrderByDate(date as string);
   res.status(200).json(query);
 };
+export const generateDistributionOrder: ControllerFunction = async (req, res) => {
+  const query = await KitchenServices.generateDistributionOrder(
+    Number(req.body.mealOrderId)
+  );
+  res.status(200).json(query);
+};
+export const resetDistributionOrder: ControllerFunction = async (req, res) => {
+  const query = await KitchenServices.resetDistributionOrder(
+    Number(req.body.mealOrderId)
+  );
+  res.status(200).json(query);
+};
 export const kitchenHistory: ControllerFunction = async (req, res) => {
   const { dateFrom, dateTo, mealType, userType, search, pickupStatus } =
     req.query;

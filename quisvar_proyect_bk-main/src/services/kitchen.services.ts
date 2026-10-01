@@ -25,9 +25,11 @@ type KitchenTransaction = KitchenDb & Pick<typeof prisma, '$queryRaw'>;
 type LockedMealOrder = {
   id: number;
   mealId: number;
+  type: string;
   orderDate: Date;
   orderTime: string;
   isClose: boolean;
+  isDistributed: boolean;
 };
 type LockedMealOrderOnUser = {
   userId: number;
@@ -49,6 +51,8 @@ type NormalizeKitchenPickupOptions = {
 };
 
 class KitchenServices {
+  private static readonly distributionMealTypes = new Set(['Almuerzo']);
+
   static parseDateInput(date: string | Date) {
     if (date instanceof Date) {
       const parsedDate = new Date(date);
@@ -91,6 +95,37 @@ class KitchenServices {
     const endDate = new Date(startDate);
     endDate.setDate(startDate.getDate() + 1);
     return { startDate, endDate };
+  }
+
+  static getDistributionWeekRange(orderDate: Date | string) {
+    const weekStart = KitchenServices.normalizeDateOnly(orderDate);
+    const weekday = weekStart.getDay();
+    weekStart.setDate(weekStart.getDate() - (weekday === 0 ? 6 : weekday - 1));
+    const currentDayStart = KitchenServices.normalizeDateOnly(orderDate);
+    return { weekStart, currentDayStart };
+  }
+
+  static isDistributionSupportedMealType(type: string) {
+    return KitchenServices.distributionMealTypes.has(type);
+  }
+
+  static orderFairDistribution(
+    participantIds: number[],
+    relativePositions: Map<number, number[]>,
+    random: () => number = Math.random
+  ) {
+    return participantIds
+      .map(userId => {
+        const history = relativePositions.get(userId) || [];
+        const relativeAverage =
+          history.length === 0
+            ? 0.5
+            : history.reduce((total, value) => total + value, 0) /
+              history.length;
+        return { userId, score: relativeAverage * 1.5 + random() };
+      })
+      .sort((left, right) => right.score - left.score)
+      .map(participant => participant.userId);
   }
 
   static normalizeDateOnly(date: string | Date) {
@@ -423,15 +458,170 @@ class KitchenServices {
       SELECT
         id,
         "mealId",
+        type,
         "orderDate",
         "orderTime",
-        "isClose"
+        "isClose",
+        "isDistributed"
       FROM "MealOrder"
       WHERE id = ${mealOrderId}
       FOR UPDATE
     `;
 
     return mealOrder || null;
+  }
+
+  static async synchronizeDistributionAfterClose(
+    mealOrderId: number,
+    tx: KitchenTransaction
+  ) {
+    const confirmedUsers = await tx.mealOrderOnUsers.findMany({
+      where: { mealOrderId, status: true },
+      select: { userId: true, distributionOrder: true },
+    });
+    const confirmedUserIds = new Set(confirmedUsers.map(user => user.userId));
+    const existingOrder = confirmedUsers
+      .filter(
+        (user): user is { userId: number; distributionOrder: number } =>
+          user.distributionOrder !== null
+      )
+      .sort((left, right) => left.distributionOrder - right.distributionOrder);
+    const newUsers = confirmedUsers
+      .filter(user => user.distributionOrder === null)
+      .sort((left, right) => left.userId - right.userId);
+    const orderedUserIds = [
+      ...existingOrder.map(user => user.userId),
+      ...newUsers.map(user => user.userId),
+    ];
+
+    await tx.mealOrderOnUsers.updateMany({
+      where: {
+        mealOrderId,
+        userId: { notIn: [...confirmedUserIds] },
+      },
+      data: { distributionOrder: null, distributionGeneratedAt: null },
+    });
+
+    const generatedAt = new Date();
+    await Promise.all(
+      orderedUserIds.map((userId, index) =>
+        tx.mealOrderOnUsers.update({
+          where: { userId_mealOrderId: { userId, mealOrderId } },
+          data: {
+            distributionOrder: index + 1,
+            distributionGeneratedAt: generatedAt,
+          },
+        })
+      )
+    );
+  }
+
+  static async generateDistributionOrder(mealOrderId: number) {
+    if (!Number.isSafeInteger(mealOrderId) || mealOrderId <= 0) {
+      throw new AppError('mealOrderId debe ser un entero positivo', 400);
+    }
+
+    return prisma.$transaction(async tx => {
+      const mealOrder = await KitchenServices.lockMealOrderById(mealOrderId, tx);
+      if (!mealOrder) throw new AppError('La orden no existe', 404);
+      if (!mealOrder.isClose) {
+        throw new AppError(
+          'Debe cerrar el pedido antes de realizar el sorteo',
+          409
+        );
+      }
+      if (!KitchenServices.isDistributionSupportedMealType(mealOrder.type)) {
+        throw new AppError('Este tipo de comida no admite sorteo', 422);
+      }
+
+      const participants = await tx.mealOrderOnUsers.findMany({
+        where: { mealOrderId, status: true },
+        select: { userId: true },
+      });
+      if (participants.length === 0) {
+        throw new AppError('No hay comensales confirmados para sortear', 422);
+      }
+
+      const { weekStart, currentDayStart } =
+        KitchenServices.getDistributionWeekRange(mealOrder.orderDate);
+      const previousOrders = await tx.mealOrder.findMany({
+        where: {
+          type: mealOrder.type,
+          isDistributed: true,
+          orderDate: { gte: weekStart, lt: currentDayStart },
+        },
+        select: {
+          mealOrderOnUsers: {
+            where: { distributionOrder: { not: null } },
+            select: { userId: true, distributionOrder: true },
+          },
+        },
+      });
+      const relativePositions = new Map<number, number[]>();
+      previousOrders.forEach(order => {
+        const count = order.mealOrderOnUsers.length;
+        order.mealOrderOnUsers.forEach(user => {
+          const relative =
+            count <= 1 ? 0.5 : ((user.distributionOrder || 1) - 1) / (count - 1);
+          const history = relativePositions.get(user.userId) || [];
+          history.push(relative);
+          relativePositions.set(user.userId, history);
+        });
+      });
+
+      const orderedParticipantIds = KitchenServices.orderFairDistribution(
+        participants.map(participant => participant.userId),
+        relativePositions
+      );
+
+      const generatedAt = new Date();
+      await tx.mealOrderOnUsers.updateMany({
+        where: { mealOrderId },
+        data: { distributionOrder: null, distributionGeneratedAt: null },
+      });
+      await Promise.all(
+        orderedParticipantIds.map((userId, index) =>
+          tx.mealOrderOnUsers.update({
+            where: {
+              userId_mealOrderId: {
+                userId,
+                mealOrderId,
+              },
+            },
+            data: { distributionOrder: index + 1, distributionGeneratedAt: generatedAt },
+          })
+        )
+      );
+      await tx.mealOrder.update({
+        where: { id: mealOrderId },
+        data: { isDistributed: true },
+      });
+
+      return { mealOrderId, isDistributed: true, participants: participants.length };
+    });
+  }
+
+  static async resetDistributionOrder(mealOrderId: number) {
+    if (!Number.isSafeInteger(mealOrderId) || mealOrderId <= 0) {
+      throw new AppError('mealOrderId debe ser un entero positivo', 400);
+    }
+
+    return prisma.$transaction(async tx => {
+      const mealOrder = await KitchenServices.lockMealOrderById(mealOrderId, tx);
+      if (!mealOrder) throw new AppError('La orden no existe', 404);
+      if (!mealOrder.isClose) {
+        throw new AppError('Debe cerrar el pedido antes de restablecer el sorteo', 409);
+      }
+
+      await tx.mealOrderOnUsers.updateMany({
+        where: { mealOrderId },
+        data: { distributionOrder: null, distributionGeneratedAt: null },
+      });
+      return tx.mealOrder.update({
+        where: { id: mealOrderId },
+        data: { isDistributed: false },
+      });
+    });
   }
 
   static async lockMealOrderOnUser(
@@ -1109,6 +1299,8 @@ class KitchenServices {
                 amountOfFood: true,
                 pickupStatus: true,
                 pickupUpdatedAt: true,
+                distributionOrder: true,
+                distributionGeneratedAt: true,
               },
             },
           },
@@ -1204,6 +1396,9 @@ class KitchenServices {
               licenseJustification,
             }),
             pickupUpdatedAt: findMealOrderUser?.pickupUpdatedAt || null,
+            distributionOrder: findMealOrderUser?.distributionOrder || null,
+            distributionGeneratedAt:
+              findMealOrderUser?.distributionGeneratedAt || null,
             licenseJustification,
           };
         });
@@ -1649,11 +1844,22 @@ class KitchenServices {
     { mealId, mealOrderId, orderDate }: OrderMealBody
   ) {
     if (mealOrderId) {
-      const mealOrderOnUser = await prisma.mealOrder.update({
-        where: { id: mealOrderId },
-        data: { isClose: disabled },
+      return prisma.$transaction(async tx => {
+        const mealOrder = await KitchenServices.lockMealOrderById(
+          mealOrderId,
+          tx
+        );
+        if (!mealOrder) throw new AppError('La orden no existe', 404);
+
+        const updatedMealOrder = await tx.mealOrder.update({
+          where: { id: mealOrderId },
+          data: { isClose: disabled },
+        });
+        if (disabled && mealOrder.isDistributed) {
+          await KitchenServices.synchronizeDistributionAfterClose(mealOrderId, tx);
+        }
+        return updatedMealOrder;
       });
-      return mealOrderOnUser;
     } else {
       if (!mealId || !orderDate) throw new AppError('Ocurrio un error', 400);
       const meal = await prisma.meal.findUnique({ where: { id: mealId } });

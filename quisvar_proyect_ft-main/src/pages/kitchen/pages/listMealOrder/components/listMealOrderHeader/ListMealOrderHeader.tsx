@@ -1,5 +1,6 @@
 import {
   PiArrowClockwiseBold,
+  PiArrowsClockwiseBold,
   PiFileJpgFill,
   PiFilePdfFill,
   PiMagnifyingGlassBold,
@@ -42,6 +43,9 @@ const ListMealOrderHeader = () => {
     searchText,
     handleSearchChange,
     isLoading,
+    isDistributing,
+    onGenerateDistribution,
+    onResetDistribution,
   } = useContext(ListMealOrderContext);
   const [isExportingImage, setIsExportingImage] = useState(false);
 
@@ -51,7 +55,20 @@ const ListMealOrderHeader = () => {
         mealOrderSelected.hour || '00:00'
       )} - ${formatFullDayDateUtc(date)}`
     : `Pedidos del dia - ${formatFullDayDateUtc(date)}`;
-  const whatsappMessage = `Comparto el consolidado de ${exportName}.`;
+  const distributionUsers = mealUsers
+    .filter(user => user.mealStatus === true && user.distributionOrder)
+    .sort(
+      (left, right) =>
+        (left.distributionOrder || 0) - (right.distributionOrder || 0)
+    );
+  const whatsappMessage = mealOrderSelected?.order?.isDistributed
+    ? `Comparto el consolidado de ${exportName}.\n\nOrden de reparto:\n${distributionUsers
+        .map(user => `#${user.distributionOrder} ${user.profile.lastName}, ${user.profile.firstName}`)
+        .join('\n')}`
+    : `Comparto el consolidado de ${exportName}.`;
+  const canDistribute =
+    mealOrderSelected?.type === 'Almuerzo' &&
+    !!mealOrderSelected.order?.isClose;
 
   const mealSummary = useMemo(() => {
     const positive = mealUsers.filter(user => user.mealStatus === true).length;
@@ -399,6 +416,32 @@ const ListMealOrderHeader = () => {
       <DivFlex autoWidth className="listMealOrder-actions">
         {mealOrderSelected && (
           <DivFlex autoWidth gap={0.8} className="listMealOrder-exportActions">
+            {canDistribute && (
+              <Button
+                size="xxs"
+                variant="outline"
+                text={
+                  mealOrderSelected.order?.isDistributed
+                    ? 'Re-sortear justo'
+                    : 'Realizar Sorteo Justo'
+                }
+                leftIcon={<PiArrowsClockwiseBold size={16} />}
+                onClick={onGenerateDistribution}
+                color="secondary"
+                disabled={isDistributing}
+              />
+            )}
+            {canDistribute && mealOrderSelected.order?.isDistributed && (
+              <Button
+                size="xxs"
+                variant="outline"
+                text="Restablecer orden"
+                leftIcon={<PiArrowClockwiseBold size={16} />}
+                onClick={onResetDistribution}
+                color="secondary"
+                disabled={isDistributing}
+              />
+            )}
             <Button
               size="xxs"
               variant="outline"

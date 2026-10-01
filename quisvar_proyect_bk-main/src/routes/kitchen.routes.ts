@@ -3,6 +3,7 @@ import authenticateHandler from '@/middlewares/auth.middleware';
 import role from '@/middlewares/role.middleware';
 import {
   allMealsOrderByDate,
+  generateDistributionOrder,
   kitchenHistory,
   kitchenHistoryByUser,
   myMealsOrder,
@@ -12,6 +13,7 @@ import {
   orderMeals,
   orderMealsByUser,
   orderMealsDisabled,
+  resetDistributionOrder,
 } from '@/controllers/kitchen.controllers';
 
 const router = Router();
@@ -21,6 +23,16 @@ router.get(
   '/my-meal-order',
   role.RoleHandler(['MOD'], 'cocina', 'formulario'),
   myMealsOrder
+);
+router.post(
+  '/distribution-order/generate',
+  role.RoleHandler(['MOD'], 'cocina', 'lista'),
+  generateDistributionOrder
+);
+router.post(
+  '/distribution-order/reset',
+  role.RoleHandler(['MOD'], 'cocina', 'lista'),
+  resetDistributionOrder
 );
 router.get(
   '/my-meal-order/month',

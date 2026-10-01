@@ -30,6 +30,7 @@ const ListMealOrder = () => {
   const [mealOrderSelected, setMealOrderSelected] = useState<Meal | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isTogglingMealClose, setIsTogglingMealClose] = useState(false);
+  const [isDistributing, setIsDistributing] = useState(false);
   const isBeforeToday = isBeforeTodayFn(date);
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -118,6 +119,28 @@ const ListMealOrder = () => {
     }
   };
 
+  const runDistributionAction = async (action: 'generate' | 'reset') => {
+    const mealOrderId = mealOrderSelected?.order?.id;
+    if (!mealOrderId) return;
+
+    try {
+      setIsDistributing(true);
+      await axiosInstance.post(`/kitchen/distribution-order/${action}`, {
+        mealOrderId,
+      });
+      SnackbarUtilities.success(
+        action === 'generate'
+          ? mealOrderSelected?.order?.isDistributed
+            ? 'Sorteo realizado nuevamente'
+            : 'Sorteo justo realizado'
+          : 'Orden del sorteo restablecido'
+      );
+      await getOrderMealByDate(date);
+    } finally {
+      setIsDistributing(false);
+    }
+  };
+
   const hasMeals = (mealsOrder?.length || 0) > 0;
   const hasLoadedMeals = mealsOrder !== null;
   const showInitialLoading = isLoading && !hasLoadedMeals;
@@ -140,6 +163,9 @@ const ListMealOrder = () => {
         handleSearchChange,
         isLoading,
         isTogglingMealClose,
+        isDistributing,
+        onGenerateDistribution: () => runDistributionAction('generate'),
+        onResetDistribution: () => runDistributionAction('reset'),
       }}
     >
       <div

@@ -176,6 +176,7 @@ const TableListMealOrder = () => {
     null
   );
   const showActionColumn = !!meal?.order?.isClose && !isBeforeToday;
+  const hasActiveDistribution = !!meal?.order?.isDistributed;
 
   const columnHelper = createColumnHelper<UserMeal>();
 
@@ -277,9 +278,20 @@ const TableListMealOrder = () => {
   const columns = [
     columnHelper.display({
       header: 'N°',
-      cell: ({ row }) => (
-        <div style={{ textAlign: 'center' }}>{row.index + 1}</div>
-      ),
+      cell: ({ row }) => {
+        const order = row.original.distributionOrder;
+        return (
+          <div style={{ textAlign: 'center' }}>
+            {hasActiveDistribution && order ? (
+              <TableListMealOrderChip className="tableListMealOrder-chip--food">
+                #{order}
+              </TableListMealOrderChip>
+            ) : (
+              row.index + 1
+            )}
+          </div>
+        );
+      },
     }),
     columnHelper.accessor(user => getFullNameRevert(user), {
       id: 'fullName',
@@ -430,6 +442,7 @@ const TableListMealOrder = () => {
     const searchValue = searchText.trim().toLowerCase();
 
     return (meal?.order?.users ?? [])
+      .filter(user => !hasActiveDistribution || user.mealStatus === true)
       .filter(user => {
         if (filters.orderStatus === 'Todos') {
           return true;
@@ -471,8 +484,20 @@ const TableListMealOrder = () => {
         const fullName = getFullNameRevert(user).toLowerCase();
         const phone = user.profile.phone?.toLowerCase() || '';
         return fullName.includes(searchValue) || phone.includes(searchValue);
+      })
+      .sort((left, right) => {
+        if (!hasActiveDistribution) return 0;
+        return (left.distributionOrder || Number.MAX_SAFE_INTEGER) - (
+          right.distributionOrder || Number.MAX_SAFE_INTEGER
+        );
       });
-  }, [meal, filters.orderStatus, filters.pickupStatus, searchText]);
+  }, [
+    meal,
+    filters.orderStatus,
+    filters.pickupStatus,
+    searchText,
+    hasActiveDistribution,
+  ]);
 
   const table = useReactTable({
     data: filteredData,
@@ -577,7 +602,9 @@ const TableListMealOrder = () => {
                   >
                     <div className="tableListMealOrder-mobileHeader">
                       <span className="tableListMealOrder-mobileNumber">
-                        {index + 1}
+                        {hasActiveDistribution && user.distributionOrder
+                          ? `#${user.distributionOrder}`
+                          : index + 1}
                       </span>
                       <strong className="tableListMealOrder-mobileName">
                         {getFullNameRevert(user)}

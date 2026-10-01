@@ -36,6 +36,9 @@ interface ListMealOrderContextProps {
   handleSearchChange: (event: ChangeEvent<HTMLInputElement>) => void;
   isLoading: boolean;
   isTogglingMealClose: boolean;
+  isDistributing: boolean;
+  onGenerateDistribution: () => Promise<void>;
+  onResetDistribution: () => Promise<void>;
 }
 
 export const ListMealOrderContext = createContext(
