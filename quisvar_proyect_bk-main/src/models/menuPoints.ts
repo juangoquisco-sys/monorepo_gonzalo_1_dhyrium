@@ -505,6 +505,18 @@ export const CONTROL_ASISTENCIA_OPTIONS: SubMenu[] = [
       placements: ['directive-center'],
     },
   },
+  {
+    id: 4,
+    title: 'Rankings de productividad',
+    route: 'rankings-productividad',
+    access: ['MOD', 'USER'],
+    permissionKey: 'productivity-rankings.access',
+    presentation: {
+      group: 'directive-compliance',
+      order: 45,
+      placements: ['sidebar', 'directive-center'],
+    },
+  },
 ];
 export const CONTROL_PUERTA_OPTIONS: SubMenu[] = [
   {
