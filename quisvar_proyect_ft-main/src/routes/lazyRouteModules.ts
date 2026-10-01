@@ -19,6 +19,11 @@ const asLoader = <TName extends string, TProps>(
 
 export const routeLoaders = {
   Attendance: asLoader(() => import('@/pages/attendance/Attendance')),
+  AttendanceCallConfigPage: asLoader(() =>
+    import('@/pages/attendanceCallConfig/AttendanceCallConfigPage').then(
+      ({ default: AttendanceCallConfigPage }) => ({ AttendanceCallConfigPage })
+    )
+  ),
   AttendanceIncidents: asLoader(() =>
     import('@/pages/controlAttendance/AttendanceIncidents').then(
       ({ default: AttendanceIncidents }) => ({ AttendanceIncidents })
@@ -300,6 +305,11 @@ export const routeLoaders = {
       Procedure,
     }))
   ),
+  ProductivityRankings: asLoader(() =>
+    import('@/pages/productivityRankings/ProductivityRankings').then(
+      ({ default: ProductivityRankings }) => ({ ProductivityRankings })
+    )
+  ),
   ProductionBonusPage: asLoader(
     () => import('@/pages/procedure/pages/productionBonus/ProductionBonusPage')
   ),
@@ -455,6 +465,10 @@ export const routeLoaders = {
 };
 
 export const Attendance = lazyNamed(routeLoaders.Attendance, 'Attendance');
+export const AttendanceCallConfigPage = lazyNamed(
+  routeLoaders.AttendanceCallConfigPage,
+  'AttendanceCallConfigPage'
+);
 export const AttendanceIncidents = lazyNamed(
   routeLoaders.AttendanceIncidents,
   'AttendanceIncidents'
@@ -656,6 +670,10 @@ export const OfficeProjectsAdmin = lazyNamed(
 export const OfficeStats = lazyNamed(routeLoaders.OfficeStats, 'OfficeStats');
 export const OrgChart = lazyNamed(routeLoaders.OrgChart, 'OrgChart');
 export const Procedure = lazyNamed(routeLoaders.Procedure, 'Procedure');
+export const ProductivityRankings = lazyNamed(
+  routeLoaders.ProductivityRankings,
+  'ProductivityRankings'
+);
 export const ProductionBonusPage = lazyNamed(
   routeLoaders.ProductionBonusPage,
   'ProductionBonusPage'

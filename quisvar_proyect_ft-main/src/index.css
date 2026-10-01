@@ -297,6 +297,13 @@
   --color-bg-correction: var(--info-muted);
   --color-bg-review: var(--review-muted);
   --color-bg-holding: rgb(255 159 67 / 16%);
+  --color-list-p: rgb(87 217 163 / 55%);
+  --color-list-t: rgb(255 209 64 / 55%);
+  --color-list-f: rgb(255 107 107 / 32%);
+  --color-list-g: rgb(255 107 107 / 58%);
+  --color-list-m: rgb(255 59 59 / 78%);
+  --color-list-l: rgb(125 181 255 / 55%);
+  --color-list-s: rgb(158 141 255 / 60%);
   --color-menu: #0b1d4d;
   --color-text-gray: #c2cad8;
   --color-primary-gradiant: #38bdf8;

@@ -191,12 +191,12 @@ const basicSocketCotroller = (
       catchAsyncSocket(
         async (
           { stageId, id, ...body }: TaskStage,
-          typeGte: 'upper' | 'lower'
-          // callback: Function
+          typeGte: 'upper' | 'lower',
+          callback: Function
         ) => {
           await BasicTasksServices.addToUpperorLower(+id, body, typeGte);
           await emitStage(stageId);
-          // callback();
+          callback();
         }
       )
     );

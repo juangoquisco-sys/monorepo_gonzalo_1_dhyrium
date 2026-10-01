@@ -1,5 +1,6 @@
 import '@/config/env';
 import Server from '@/models/server';
+import { startDesktopTransferMaintenance } from '@/modules/desktop-documents/desktopDocuments.publication';
 
 const isDatabaseConnectionError = (error: unknown) => {
   const message =
@@ -38,11 +39,13 @@ process.on('uncaughtException', error => {
 const server = new Server();
 
 server.listen();
+const stopDesktopMaintenance = startDesktopTransferMaintenance();
 
 let isShuttingDown = false;
 const shutdown = async (signal: 'SIGINT' | 'SIGTERM') => {
   if (isShuttingDown) return;
   isShuttingDown = true;
+  stopDesktopMaintenance();
   console.info(`Cerrando servidor (${signal})`);
 
   try {

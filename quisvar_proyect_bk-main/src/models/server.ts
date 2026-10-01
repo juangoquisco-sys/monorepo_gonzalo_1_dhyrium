@@ -33,6 +33,7 @@ import { isPrivateTaskDocumentUploadPath } from '@/modules/task-documents/taskDo
 import { isPrivateCorporateArchivePath } from '@/modules/corporate-archive/corporateArchive.storage';
 import { isPrivateLetterArchivePath } from '@/modules/letter-archive/letterArchive.storage';
 import ClasesPermitAutomationService from '@/services/clasesPermitAutomation.service';
+import AttendanceSchedulerService from '@/services/attendance/attendanceScheduler.service';
 // import {
 //   createZktecoDeviceServiceFromEnv,
 //   type ZktecoDeviceService,
@@ -268,6 +269,17 @@ class Server {
     });
     clasesReturnCron.crontimerAsync(async () => {
       await ClasesPermitAutomationService.markReturnAtDueTime();
+    });
+
+    const attendanceSchedulerCron = new TimerCron('* * * * *', {
+      timezone: 'America/Lima',
+    });
+    attendanceSchedulerCron.crontimerAsync(async () => {
+      try {
+        await AttendanceSchedulerService.runTick();
+      } catch (error) {
+        console.error('Asistencia: error en el scheduler automatico', error);
+      }
     });
   }
   conectionWebSockect() {

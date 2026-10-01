@@ -151,7 +151,8 @@ class Sockets {
                 error instanceof PrismaClientKnownRequestError
               ) {
                 socket.emit('server:error', error.message);
-                (args[args.length - 1] as Function)({ error: true });
+                const callback = args[args.length - 1];
+                if (typeof callback === 'function') callback({ error: true });
               }
             }
           };

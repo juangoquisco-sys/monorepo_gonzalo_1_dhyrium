@@ -88,6 +88,23 @@ const getPersonalPayrollMenu = (menuPoints: MenuItem[] = []) => {
   };
 };
 
+const getPersonalRankingsMenu = (menuPoints: MenuItem[] = []) => {
+  const directivesMenu = menuPoints.find(
+    item => item.route === 'control-asistencia'
+  );
+  const rankingsMenu = directivesMenu?.menu?.find(
+    item => item.route === 'rankings-productividad' && item.typeRol === 'USER'
+  );
+
+  if (!rankingsMenu) return null;
+
+  return {
+    ...rankingsMenu,
+    menu: [],
+    path: '/rankings-productividad',
+  };
+};
+
 const buildVisibleMenuPoints = (menuPoints: MenuItem[] = []) => {
   const visibleMenuPoints = menuPoints
     .filter(
@@ -101,10 +118,12 @@ const buildVisibleMenuPoints = (menuPoints: MenuItem[] = []) => {
         : item
     );
 
-  const personalPayrollMenu = getPersonalPayrollMenu(menuPoints);
-  return personalPayrollMenu
-    ? [...visibleMenuPoints, personalPayrollMenu]
-    : visibleMenuPoints;
+  const personalShortcuts = [
+    getPersonalPayrollMenu(menuPoints),
+    getPersonalRankingsMenu(menuPoints),
+  ].filter((item): item is NonNullable<typeof item> => !!item);
+
+  return [...visibleMenuPoints, ...personalShortcuts];
 };
 
 const Sidebar = () => {

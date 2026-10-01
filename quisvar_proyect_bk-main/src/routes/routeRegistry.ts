@@ -14,6 +14,7 @@ import sectorRouter from '@/routes/sector.routes';
 import typeSpecialityRouter from '@/routes/typeSpecialities.routes';
 import levelsRouter from '@/routes/levels.routes';
 import listRouter from '@/routes/list.routes';
+import attendanceCallConfigRouter from '@/routes/attendanceCallConfig.routes';
 import MailRouter from '@/routes/mail.routes';
 import licenseRouter from '@/routes/licenses.routes';
 import productionBonusRouter from '@/routes/productionBonus.routes';
@@ -77,6 +78,7 @@ import desktopDocumentsRouter from '@/modules/desktop-documents/desktopDocuments
 import liquidationsRouter from '@/modules/liquidations/liquidations.routes';
 import corporateArchiveRouter from '@/modules/corporate-archive/corporateArchive.routes';
 import letterArchiveRouter from '@/modules/letter-archive/letterArchive.routes';
+import productivityRankingsRouter from '@/modules/productivity-rankings/productivityRankings.routes';
 
 export const routesConfig = [
   { path: '/health', router: healthRouter },
@@ -96,6 +98,7 @@ export const routesConfig = [
   { path: '/sector', router: sectorRouter },
   { path: '/levels', router: levelsRouter },
   { path: '/list', router: listRouter },
+  { path: '/attendance-call-config', router: attendanceCallConfigRouter },
   { path: '/license', router: licenseRouter },
   { path: '/production-bonus', router: productionBonusRouter },
   { path: '/metrados', router: metradosRouter },
@@ -146,6 +149,7 @@ export const routesConfig = [
   { path: '/liquidations', router: liquidationsRouter },
   { path: '/corporate-archive', router: corporateArchiveRouter },
   { path: '/letter-archive', router: letterArchiveRouter },
+  { path: '/productivity-rankings', router: productivityRankingsRouter },
   { path: '/meetings', router: meetingsRoutes },
   { path: '/meeting-external-contacts', router: meetingExternalContactsRoutes },
   { path: '/progress-reports', router: progressReportsRoutes },

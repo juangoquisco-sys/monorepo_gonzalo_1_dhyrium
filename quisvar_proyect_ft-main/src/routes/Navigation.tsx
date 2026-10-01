@@ -3,6 +3,7 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import {
   Attendance,
+  AttendanceCallConfigPage,
   AttendanceIncidents,
   AttendanceReconciliation,
   AuditLogsPage,
@@ -94,6 +95,7 @@ import {
   MetradoStructures,
   MyDutyRotations,
   OrgChart,
+  ProductivityRankings,
   PayrollElaboration,
   PayrollMayBridge,
   PayrollPersonnelRequests,
@@ -264,6 +266,19 @@ const Navigation = () => {
                         element={<AttendanceReconciliation />}
                       />
                     </Route>
+                    <Route
+                      element={
+                        <ProtectedRole
+                          menuAccess="control-asistencia"
+                          subMenuAccess="rankings-productividad"
+                        />
+                      }
+                    >
+                      <Route
+                        path="rankings-productividad"
+                        element={<ProductivityRankings />}
+                      />
+                    </Route>
                   </Route>
                 </Route>
                 <Route
@@ -359,6 +374,19 @@ const Navigation = () => {
                   </Route>
                 </Route>
               </Route>
+            </Route>
+            <Route
+              element={
+                <ProtectedRole
+                  menuAccess="control-asistencia"
+                  subMenuAccess="rankings-productividad"
+                />
+              }
+            >
+              <Route
+                path="/rankings-productividad"
+                element={<ProductivityRankings />}
+              />
             </Route>
             <Route
               element={
@@ -542,6 +570,10 @@ const Navigation = () => {
                   }
                 >
                   <Route path="registro" element={<Attendance />} />
+                  <Route
+                    path="configuracion-llamados"
+                    element={<AttendanceCallConfigPage />}
+                  />
                 </Route>
                 <Route
                   element={

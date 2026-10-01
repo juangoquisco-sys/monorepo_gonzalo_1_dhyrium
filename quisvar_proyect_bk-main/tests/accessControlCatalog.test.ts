@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import test from 'node:test';
 import { MenuPoints } from '../src/models/menuPoints';
 import roleMiddleware from '../src/middlewares/role.middleware';
@@ -41,6 +43,21 @@ test('orders the directive modules together without changing their legacy ids', 
   assert.equal(menus.find(menu => menu.route === 'cocina')?.id, 12);
 });
 
+test('registers productivity rankings as a directive-compliance submenu with a stable permission', () => {
+  const directives = menus.find(menu => menu.route === 'control-asistencia');
+  const rankings = directives?.menu?.find(
+    menu => menu.route === 'rankings-productividad'
+  );
+
+  assert.ok(rankings);
+  assert.equal(rankings?.permissionKey, 'productivity-rankings.access');
+  assert.deepEqual(rankings?.access, ['MOD', 'USER']);
+  assert.deepEqual(rankings?.presentation?.placements, [
+    'sidebar',
+    'directive-center',
+  ]);
+});
+
 test('authorizes departures by its stable legacy permission, not by visual placement', () => {
   const userInfo = {
     role: {
@@ -67,4 +84,23 @@ test('authorizes departures by its stable legacy permission, not by visual place
     ),
     false
   );
+});
+
+test('protects kitchen distribution endpoints with the stable list permission', () => {
+  const kitchenRoutes = readFileSync(
+    join(__dirname, '../src/routes/kitchen.routes.ts'),
+    'utf8'
+  );
+
+  for (const path of [
+    '/distribution-order/generate',
+    '/distribution-order/reset',
+  ]) {
+    assert.match(
+      kitchenRoutes,
+      new RegExp(
+        `['\"]${path}['\"],[\\s\\S]{0,120}RoleHandler\\(\\['MOD'\\], 'cocina', 'lista'\\)`
+      )
+    );
+  }
 });

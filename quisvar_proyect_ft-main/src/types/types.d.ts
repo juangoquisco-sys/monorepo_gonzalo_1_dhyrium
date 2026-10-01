@@ -299,7 +299,8 @@ export type MenuAccess =
   | 'rotaciones'
   | 'control-puerta'
   | 'factura'
-  | 'metrados';
+  | 'metrados'
+  | 'rankings-productividad';
 
 export interface User {
   id: number;

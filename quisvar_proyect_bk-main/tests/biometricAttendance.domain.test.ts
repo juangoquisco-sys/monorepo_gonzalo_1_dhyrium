@@ -123,6 +123,38 @@ test.describe('Attendance lifecycle policy', () => {
     }
   });
 
+  test('rejects fingerprint events after the configured capture window closes', () => {
+    const configuration = buildBiometricConfiguration({
+      allowedSerials: 'ZK-01',
+      fingerprintVerifyModes: '1',
+      clockSkewSeconds: 30,
+    });
+    const captureWindowEndsAt = new Date('2026-07-23T13:59:30.000Z');
+    assert.deepEqual(
+      evaluateBiometricEvent({
+        serialNumber: 'ZK-01',
+        verifyMode: '1',
+        timestamp: '2026-07-23 09:00:00',
+        openedAt: new Date('2026-07-23T13:59:00.000Z'),
+        captureWindowEndsAt,
+        now,
+        configuration,
+      }),
+      { accepted: false, reason: 'CAPTURE_WINDOW_CLOSED' }
+    );
+
+    const result = evaluateBiometricEvent({
+      serialNumber: 'ZK-01',
+      verifyMode: '1',
+      timestamp: '2026-07-23 08:59:30',
+      openedAt: new Date('2026-07-23T13:58:00.000Z'),
+      captureWindowEndsAt,
+      now,
+      configuration,
+    });
+    assert.equal(result.accepted, true);
+  });
+
   test('fails closed for devices, methods and timestamps outside the session', () => {
     const configuration = buildBiometricConfiguration({
       allowedSerials: '',
