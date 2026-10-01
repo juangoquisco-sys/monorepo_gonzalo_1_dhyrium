@@ -90,6 +90,13 @@ model Users {
   createdMetradoExports               MetradoExport[]                   @relation("MetradoExportCreator")
   metradoEvents                       MetradoEvent[]                    @relation("MetradoEventActor")
   orgMemberships                      OrganizationalMembership[]
+  updatedRankingConfigs               RankingConfig[]                   @relation("RankingConfigUpdater")
+  closedRankingPeriods                RankingPeriod[]                   @relation("RankingPeriodCloser")
+  rankingEntries                      RankingEntry[]                    @relation("RankingEntryUser")
+  rankingOfficeExclusions             RankingOfficeMemberExclusion[]    @relation("RankingOfficeExclusionUser")
+  createdRankingOfficeExclusions      RankingOfficeMemberExclusion[]    @relation("RankingOfficeExclusionCreator")
+  nonTaskActivities                   NonTaskActivity[]                 @relation("NonTaskActivityUser")
+  reviewedNonTaskActivities           NonTaskActivity[]                 @relation("NonTaskActivityReviewer")
   createdMeetings                     Meeting[]                         @relation("MeetingCreator")
   meetingLifecycleEvents              MeetingLifecycleEvent[]           @relation("MeetingLifecycleActor")
   createdMeetingActaRevisions         MeetingActaRevision[]             @relation("MeetingActaRevisionCreator")
@@ -114,11 +121,11 @@ model Users {
   contractDocumentVersions            ContractDocumentVersion[]
   expedienteFoliations                ExpedienteFoliation[]
   foliationReprintLogs                FoliationReprintLog[]
-  createdCorporateArchiveRoots        CorporateArchiveRoot[]           @relation("CorporateArchiveRootCreator")
-  createdCorporateArchiveFolders      CorporateArchiveFolder[]         @relation("CorporateArchiveFolderCreator")
-  archivedCorporateArchiveFolders     CorporateArchiveFolder[]         @relation("CorporateArchiveFolderArchiver")
-  createdCorporateArchiveDocuments    CorporateArchiveDocument[]       @relation("CorporateArchiveDocumentCreator")
-  archivedCorporateArchiveDocuments   CorporateArchiveDocument[]       @relation("CorporateArchiveDocumentArchiver")
+  createdCorporateArchiveRoots        CorporateArchiveRoot[]            @relation("CorporateArchiveRootCreator")
+  createdCorporateArchiveFolders      CorporateArchiveFolder[]          @relation("CorporateArchiveFolderCreator")
+  archivedCorporateArchiveFolders     CorporateArchiveFolder[]          @relation("CorporateArchiveFolderArchiver")
+  createdCorporateArchiveDocuments    CorporateArchiveDocument[]        @relation("CorporateArchiveDocumentCreator")
+  archivedCorporateArchiveDocuments   CorporateArchiveDocument[]        @relation("CorporateArchiveDocumentArchiver")
   uploadedCorporateArchiveVersions    CorporateArchiveDocumentVersion[] @relation("CorporateArchiveVersionUploader")
   createdTaskDocuments                TaskDocument[]                    @relation("TaskDocumentCreator")
   updatedTaskDocuments                TaskDocument[]                    @relation("TaskDocumentUpdater")
@@ -130,6 +137,7 @@ model Users {
   updatedDesktopDocuments             DesktopDocument[]                 @relation("DesktopDocumentUpdater")
   desktopDocumentVersions             DesktopDocumentVersion[]          @relation("DesktopDocumentVersionCreator")
   desktopDocumentLaunchTickets        DesktopDocumentLaunchTicket[]     @relation("DesktopDocumentLaunchUser")
+  lockedDesktopDocuments              DesktopDocument[]                 @relation("DesktopDocumentLockHolder")
   iclockCommands                      IclockDeviceCommand[]
 }
 
@@ -1514,6 +1522,117 @@ model BasicTasks {
   document  TaskDocument?      @relation("BasicTaskDocument")
 }
 
+// --- Productivity Rankings -------------------------------------------------
+
+model RankingConfig {
+  id                     String            @id @default(uuid())
+  topN                   Int               @default(5)
+  periodType             RankingPeriodType @default(MONTHLY)
+  minWeightDaysToQualify Float             @default(0)
+  excludedRoleIds        Int[]             @default([])
+  excludedUserIds        Int[]             @default([])
+  rankingEligibleUnitIds String[]          @default([])
+  updatedById            Int
+  updatedAt              DateTime          @updatedAt
+  updatedBy              Users             @relation("RankingConfigUpdater", fields: [updatedById], references: [id])
+}
+
+model RankingPeriod {
+  id            String               @id @default(uuid())
+  type          RankingPeriodType
+  periodStart   DateTime
+  periodEnd     DateTime
+  status        RankingPeriodStatus  @default(OPEN)
+  closedAt      DateTime?
+  closedById    Int?
+  createdAt     DateTime             @default(now())
+  closedBy      Users?               @relation("RankingPeriodCloser", fields: [closedById], references: [id], onDelete: SetNull)
+  entries       RankingEntry[]
+  officeEntries RankingOfficeEntry[]
+
+  @@unique([type, periodStart, periodEnd])
+}
+
+model RankingEntry {
+  id              String             @id @default(uuid())
+  periodId        String
+  userId          Int
+  unitId          String?
+  score           Float
+  totalWeightDays Float
+  avgApprovalPct  Float
+  position        Int
+  qualified       Boolean            @default(true)
+  createdAt       DateTime           @default(now())
+  period          RankingPeriod      @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  user            Users              @relation("RankingEntryUser", fields: [userId], references: [id], onDelete: Cascade)
+  lines           RankingEntryLine[]
+
+  @@unique([periodId, userId])
+  @@index([periodId, position])
+}
+
+model RankingEntryLine {
+  id           String                @id @default(uuid())
+  entryId      String
+  sourceType   RankingLineSourceType
+  sourceId     String
+  sourceLabel  String
+  weightDays   Float
+  approvalPct  Float
+  contribution Float
+  entry        RankingEntry          @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  @@index([entryId])
+}
+
+model RankingOfficeEntry {
+  id             String        @id @default(uuid())
+  periodId       String
+  unitId         String
+  totalScore     Float
+  memberCount    Int
+  scorePerMember Float
+  position       Int
+  period         RankingPeriod @relation(fields: [periodId], references: [id], onDelete: Cascade)
+
+  @@unique([periodId, unitId])
+  @@index([periodId, position])
+}
+
+model RankingOfficeMemberExclusion {
+  id          String   @id @default(uuid())
+  unitId      String
+  userId      Int
+  reason      String?
+  createdById Int
+  createdAt   DateTime @default(now())
+  user        Users    @relation("RankingOfficeExclusionUser", fields: [userId], references: [id], onDelete: Cascade)
+  createdBy   Users    @relation("RankingOfficeExclusionCreator", fields: [createdById], references: [id])
+
+  @@unique([unitId, userId])
+}
+
+model NonTaskActivity {
+  id           String                @id @default(uuid())
+  userId       Int
+  type         String
+  description  String?
+  proposedDays Float
+  approvedDays Float?
+  status       NonTaskActivityStatus @default(PENDING)
+  reviewedById Int?
+  reviewedAt   DateTime?
+  periodDate   DateTime
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  user         Users                 @relation("NonTaskActivityUser", fields: [userId], references: [id], onDelete: Cascade)
+  reviewedBy   Users?                @relation("NonTaskActivityReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([userId, periodDate])
+  @@index([status])
+}
+
 model TaskDocument {
   id                String                    @id @default(uuid())
   subTaskId         Int?                      @unique
@@ -1678,43 +1797,48 @@ enum DesktopDocumentVersionSource {
 }
 
 model DesktopDocument {
-  id                   String                    @id @default(uuid())
+  id                   String                        @id @default(uuid())
   sourceKind           DesktopDocumentSourceKind
-  sourceFileId         Int?                      @unique
-  sourceBasicFileId    Int?                      @unique
-  originalName         String                    @db.VarChar(300)
-  extension            String                    @db.VarChar(32)
-  currentVersionNumber Int                       @default(1)
+  sourceFileId         Int?                          @unique
+  sourceBasicFileId    Int?                          @unique
+  originalName         String                        @db.VarChar(300)
+  extension            String                        @db.VarChar(32)
+  currentVersionNumber Int                           @default(1)
   createdById          Int
   updatedById          Int
-  createdAt            DateTime                  @default(now())
-  updatedAt            DateTime                  @updatedAt
-  sourceFile           Files?                    @relation("DesktopDocumentSourceFile", fields: [sourceFileId], references: [id], onDelete: Cascade)
-  sourceBasicFile      BasicFiles?               @relation("DesktopDocumentSourceBasicFile", fields: [sourceBasicFileId], references: [id], onDelete: Cascade)
-  createdBy            Users                     @relation("DesktopDocumentCreator", fields: [createdById], references: [id])
-  updatedBy            Users                     @relation("DesktopDocumentUpdater", fields: [updatedById], references: [id])
+  createdAt            DateTime                      @default(now())
+  updatedAt            DateTime                      @updatedAt
+  lockedById           Int?
+  lockedAt             DateTime?
+  lockExpiresAt        DateTime?
+  sourceFile           Files?                        @relation("DesktopDocumentSourceFile", fields: [sourceFileId], references: [id], onDelete: Cascade)
+  sourceBasicFile      BasicFiles?                   @relation("DesktopDocumentSourceBasicFile", fields: [sourceBasicFileId], references: [id], onDelete: Cascade)
+  createdBy            Users                         @relation("DesktopDocumentCreator", fields: [createdById], references: [id])
+  updatedBy            Users                         @relation("DesktopDocumentUpdater", fields: [updatedById], references: [id])
+  lockedBy             Users?                        @relation("DesktopDocumentLockHolder", fields: [lockedById], references: [id])
   versions             DesktopDocumentVersion[]
   launchTickets        DesktopDocumentLaunchTicket[]
 
   @@index([updatedAt])
   @@index([createdById])
   @@index([updatedById])
+  @@index([lockExpiresAt])
 }
 
 model DesktopDocumentVersion {
-  id             String                       @id @default(uuid())
+  id             String                        @id @default(uuid())
   documentId     String
   versionNumber  Int
-  storageKey     String                       @unique @db.VarChar(500)
-  originalName   String                       @db.VarChar(300)
-  mimeType       String                       @db.VarChar(150)
+  storageKey     String                        @unique @db.VarChar(500)
+  originalName   String                        @db.VarChar(300)
+  mimeType       String                        @db.VarChar(150)
   sizeBytes      BigInt
-  checksumSha256 String                       @db.VarChar(64)
+  checksumSha256 String                        @db.VarChar(64)
   source         DesktopDocumentVersionSource
   createdById    Int
-  createdAt      DateTime                     @default(now())
-  document       DesktopDocument              @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  createdBy      Users                        @relation("DesktopDocumentVersionCreator", fields: [createdById], references: [id])
+  createdAt      DateTime                      @default(now())
+  document       DesktopDocument               @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  createdBy      Users                         @relation("DesktopDocumentVersionCreator", fields: [createdById], references: [id])
   launchTickets  DesktopDocumentLaunchTicket[]
 
   @@unique([documentId, versionNumber])
@@ -1820,23 +1944,23 @@ model BasicUsersOnFeedbacks {
 }
 
 model Files {
-  id           Int       @id @default(autoincrement())
-  name         String
-  author       String?
-  originalname String?
-  userId       Int? //-----
-  dir          String
-  type         FileTypes
-  subTasksId   Int
-  feedbackId   Int?
-  assignedAt   DateTime  @default(now())
-  feedback     Feedback? @relation(fields: [feedbackId], references: [id])
-  subTasks     SubTasks  @relation(fields: [subTasksId], references: [id], onDelete: Cascade)
+  id              Int              @id @default(autoincrement())
+  name            String
+  author          String?
+  originalname    String?
+  userId          Int? //-----
+  dir             String
+  type            FileTypes
+  subTasksId      Int
+  feedbackId      Int?
+  assignedAt      DateTime         @default(now())
+  feedback        Feedback?        @relation(fields: [feedbackId], references: [id])
+  subTasks        SubTasks         @relation(fields: [subTasksId], references: [id], onDelete: Cascade)
   desktopDocument DesktopDocument? @relation("DesktopDocumentSourceFile")
 }
 
 model BasicFiles {
-  id              Int            @id @default(autoincrement())
+  id              Int              @id @default(autoincrement())
   name            String
   originalname    String?
   author          String?
@@ -1845,10 +1969,10 @@ model BasicFiles {
   subTasksId      Int
   basicFeedbackId Int?
   feedbackId      Int?
-  assignedAt      DateTime       @default(now())
+  assignedAt      DateTime         @default(now())
   // feedback   Feedback? @relation(fields: [feedbackId], references: [id])
-  subTasks        BasicTasks     @relation(fields: [subTasksId], references: [id], onDelete: Cascade)
-  feedback        BasicFeedback? @relation(fields: [basicFeedbackId], references: [id])
+  subTasks        BasicTasks       @relation(fields: [subTasksId], references: [id], onDelete: Cascade)
+  feedback        BasicFeedback?   @relation(fields: [basicFeedbackId], references: [id])
   desktopDocument DesktopDocument? @relation("DesktopDocumentSourceBasicFile")
 }
 
@@ -2019,13 +2143,13 @@ model PersonBussiness {
 }
 
 model Consortium {
-  id        Int                     @id @default(autoincrement())
-  name      String
-  manager   String
-  img       String?
-  projectId Int?                    @unique
-  contracts Contratc[]
-  companies ConsortiumOnCompanies[]
+  id           Int                     @id @default(autoincrement())
+  name         String
+  manager      String
+  img          String?
+  projectId    Int?                    @unique
+  contracts    Contratc[]
+  companies    ConsortiumOnCompanies[]
   archiveRoots CorporateArchiveRoot[]
   // companies Company[]
   // project   Projects  @relation(fields: [projectId], references: [id], onDelete: Cascade)
@@ -2046,44 +2170,44 @@ model Consortium {
 // }
 
 model Companies {
-  id            Int                     @id @default(autoincrement())
-  name          String
-  ruc           String                  @unique @db.VarChar(11)
-  manager       String
-  address       String
-  departure     String
-  orderQuantity Int                     @default(0)
-  color         String                  @default("#00B0F0")
-  phone         String                  @default("957 415 743")
-  email         String                  @default("sschilisrl_106@gmail.com")
-  inscription   DateTime?
-  activities    DateTime?
-  SEE           DateTime?
-  CCI           String                  @unique
-  description   String?
-  img           String?
-  consortium    ConsortiumOnCompanies[]
-  contracts     Contratc[]
-  archiveRoots  CorporateArchiveRoot[]
+  id                 Int                     @id @default(autoincrement())
+  name               String
+  ruc                String                  @unique @db.VarChar(11)
+  manager            String
+  address            String
+  departure          String
+  orderQuantity      Int                     @default(0)
+  color              String                  @default("#00B0F0")
+  phone              String                  @default("957 415 743")
+  email              String                  @default("sschilisrl_106@gmail.com")
+  inscription        DateTime?
+  activities         DateTime?
+  SEE                DateTime?
+  CCI                String                  @unique
+  description        String?
+  img                String?
+  consortium         ConsortiumOnCompanies[]
+  contracts          Contratc[]
+  archiveRoots       CorporateArchiveRoot[]
   letterArchiveRoots LetterArchiveRoot[]
 }
 
 model LetterArchiveRoot {
-  id            String                 @id @default(uuid())
+  id            String                  @id @default(uuid())
   companyId     Int
-  documentCode  String                 @db.VarChar(120)
-  documentType  String                 @default("Cartas") @db.VarChar(120)
-  recordType    String                 @default("Reciente") @db.VarChar(30)
+  documentCode  String                  @db.VarChar(120)
+  documentType  String                  @default("Cartas") @db.VarChar(120)
+  recordType    String                  @default("Reciente") @db.VarChar(30)
   documentDate  DateTime?
-  entity        String                 @default("") @db.VarChar(300)
-  location      String                 @default("") @db.VarChar(180)
-  subject       String                 @default("") @db.Text
-  status        String                 @default("En revisión") @db.VarChar(40)
-  content       String                 @default("") @db.Text
-  versionNumber Int                    @default(0)
-  createdAt     DateTime               @default(now())
-  updatedAt     DateTime               @updatedAt
-  company       Companies              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  entity        String                  @default("") @db.VarChar(300)
+  location      String                  @default("") @db.VarChar(180)
+  subject       String                  @default("") @db.Text
+  status        String                  @default("En revisión") @db.VarChar(40)
+  content       String                  @default("") @db.Text
+  versionNumber Int                     @default(0)
+  createdAt     DateTime                @default(now())
+  updatedAt     DateTime                @updatedAt
+  company       Companies               @relation(fields: [companyId], references: [id], onDelete: Cascade)
   folders       LetterArchiveFolder[]
   documents     LetterArchiveDocument[]
   versions      LetterArchiveVersion[]
@@ -2093,36 +2217,36 @@ model LetterArchiveRoot {
 }
 
 model LetterArchiveVersion {
-  id            String             @id @default(uuid())
+  id            String            @id @default(uuid())
   rootId        String
   versionNumber Int
-  documentCode  String             @db.VarChar(120)
-  documentType  String             @db.VarChar(120)
-  recordType    String             @db.VarChar(30)
+  documentCode  String            @db.VarChar(120)
+  documentType  String            @db.VarChar(120)
+  recordType    String            @db.VarChar(30)
   documentDate  DateTime?
-  entity        String             @db.VarChar(300)
-  location      String             @db.VarChar(180)
-  subject       String             @db.Text
-  status        String             @db.VarChar(40)
-  content       String             @db.Text
-  createdAt     DateTime           @default(now())
-  root          LetterArchiveRoot  @relation(fields: [rootId], references: [id], onDelete: Cascade)
+  entity        String            @db.VarChar(300)
+  location      String            @db.VarChar(180)
+  subject       String            @db.Text
+  status        String            @db.VarChar(40)
+  content       String            @db.Text
+  createdAt     DateTime          @default(now())
+  root          LetterArchiveRoot @relation(fields: [rootId], references: [id], onDelete: Cascade)
 
   @@unique([rootId, versionNumber])
   @@index([rootId, createdAt])
 }
 
 model LetterArchiveFolder {
-  id        String                @id @default(uuid())
+  id        String                  @id @default(uuid())
   rootId    String
   parentId  String?
-  name      String                @db.VarChar(180)
-  sortOrder Int                   @default(0)
-  createdAt DateTime              @default(now())
-  updatedAt DateTime              @updatedAt
-  root      LetterArchiveRoot     @relation(fields: [rootId], references: [id], onDelete: Cascade)
-  parent    LetterArchiveFolder?  @relation("LetterArchiveFolderTree", fields: [parentId], references: [id], onDelete: Cascade)
-  children  LetterArchiveFolder[] @relation("LetterArchiveFolderTree")
+  name      String                  @db.VarChar(180)
+  sortOrder Int                     @default(0)
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
+  root      LetterArchiveRoot       @relation(fields: [rootId], references: [id], onDelete: Cascade)
+  parent    LetterArchiveFolder?    @relation("LetterArchiveFolderTree", fields: [parentId], references: [id], onDelete: Cascade)
+  children  LetterArchiveFolder[]   @relation("LetterArchiveFolderTree")
   documents LetterArchiveDocument[]
 
   @@unique([rootId, parentId, name])
@@ -2169,72 +2293,72 @@ model CorporateArchiveRoot {
 }
 
 model CorporateArchiveFolder {
-  id           String                   @id @default(uuid())
-  rootId       String
-  parentId     String?
-  name         String                   @db.VarChar(180)
-  nameNormalized String                 @db.VarChar(180)
-  isRoot       Boolean                  @default(false)
-  createdById  Int
-  archivedAt   DateTime?
-  archivedById Int?
+  id                 String                     @id @default(uuid())
+  rootId             String
+  parentId           String?
+  name               String                     @db.VarChar(180)
+  nameNormalized     String                     @db.VarChar(180)
+  isRoot             Boolean                    @default(false)
+  createdById        Int
+  archivedAt         DateTime?
+  archivedById       Int?
   archiveOperationId String?
-  createdAt    DateTime                 @default(now())
-  updatedAt    DateTime                 @updatedAt
-  root         CorporateArchiveRoot     @relation("CorporateArchiveFolders", fields: [rootId], references: [id], onDelete: Restrict)
-  rootFor      CorporateArchiveRoot?    @relation("CorporateArchiveRootFolder")
-  parent       CorporateArchiveFolder?  @relation("CorporateArchiveFolderTree", fields: [parentId, rootId], references: [id, rootId], onDelete: Restrict)
-  children     CorporateArchiveFolder[] @relation("CorporateArchiveFolderTree")
-  documents    CorporateArchiveDocument[]
-  createdBy    Users                    @relation("CorporateArchiveFolderCreator", fields: [createdById], references: [id])
-  archivedBy   Users?                   @relation("CorporateArchiveFolderArchiver", fields: [archivedById], references: [id], onDelete: SetNull)
+  createdAt          DateTime                   @default(now())
+  updatedAt          DateTime                   @updatedAt
+  root               CorporateArchiveRoot       @relation("CorporateArchiveFolders", fields: [rootId], references: [id], onDelete: Restrict)
+  rootFor            CorporateArchiveRoot?      @relation("CorporateArchiveRootFolder")
+  parent             CorporateArchiveFolder?    @relation("CorporateArchiveFolderTree", fields: [parentId, rootId], references: [id, rootId], onDelete: Restrict)
+  children           CorporateArchiveFolder[]   @relation("CorporateArchiveFolderTree")
+  documents          CorporateArchiveDocument[]
+  createdBy          Users                      @relation("CorporateArchiveFolderCreator", fields: [createdById], references: [id])
+  archivedBy         Users?                     @relation("CorporateArchiveFolderArchiver", fields: [archivedById], references: [id], onDelete: SetNull)
 
-  @@index([rootId, parentId])
   @@unique([id, rootId])
   @@unique([rootId, parentId, nameNormalized])
+  @@index([rootId, parentId])
   @@index([rootId, archivedAt])
   @@index([archiveOperationId])
 }
 
 model CorporateArchiveDocument {
-  id               String                          @id @default(uuid())
-  rootId           String
-  folderId         String
-  displayName      String                          @db.VarChar(300)
-  status           CorporateArchiveDocumentStatus  @default(ACTIVE)
-  currentVersionId String?                         @unique
-  createdById      Int
-  archivedAt       DateTime?
-  archivedById     Int?
+  id                 String                            @id @default(uuid())
+  rootId             String
+  folderId           String
+  displayName        String                            @db.VarChar(300)
+  status             CorporateArchiveDocumentStatus    @default(ACTIVE)
+  currentVersionId   String?                           @unique
+  createdById        Int
+  archivedAt         DateTime?
+  archivedById       Int?
   archiveOperationId String?
-  createdAt        DateTime                        @default(now())
-  updatedAt        DateTime                        @updatedAt
-  folder           CorporateArchiveFolder          @relation(fields: [folderId, rootId], references: [id, rootId], onDelete: Restrict)
-  currentVersion   CorporateArchiveDocumentVersion? @relation("CorporateArchiveCurrentVersion", fields: [currentVersionId, id], references: [id, documentId], onDelete: Restrict)
-  versions         CorporateArchiveDocumentVersion[] @relation("CorporateArchiveDocumentVersions")
-  createdBy        Users                           @relation("CorporateArchiveDocumentCreator", fields: [createdById], references: [id])
-  archivedBy       Users?                          @relation("CorporateArchiveDocumentArchiver", fields: [archivedById], references: [id], onDelete: SetNull)
+  createdAt          DateTime                          @default(now())
+  updatedAt          DateTime                          @updatedAt
+  folder             CorporateArchiveFolder            @relation(fields: [folderId, rootId], references: [id, rootId], onDelete: Restrict)
+  currentVersion     CorporateArchiveDocumentVersion?  @relation("CorporateArchiveCurrentVersion", fields: [currentVersionId, id], references: [id, documentId], onDelete: Restrict)
+  versions           CorporateArchiveDocumentVersion[] @relation("CorporateArchiveDocumentVersions")
+  createdBy          Users                             @relation("CorporateArchiveDocumentCreator", fields: [createdById], references: [id])
+  archivedBy         Users?                            @relation("CorporateArchiveDocumentArchiver", fields: [archivedById], references: [id], onDelete: SetNull)
 
+  @@unique([currentVersionId, id])
   @@index([rootId, folderId, status])
   @@index([folderId, createdAt])
   @@index([archiveOperationId])
-  @@unique([currentVersionId, id])
 }
 
 model CorporateArchiveDocumentVersion {
-  id          String                   @id @default(uuid())
-  documentId  String
-  version     Int
-  storageKey  String                   @unique @db.VarChar(500)
-  originalName String                  @db.VarChar(300)
-  mimeType    String                   @db.VarChar(150)
-  sizeBytes   BigInt
-  sha256      String                   @db.VarChar(64)
+  id           String                    @id @default(uuid())
+  documentId   String
+  version      Int
+  storageKey   String                    @unique @db.VarChar(500)
+  originalName String                    @db.VarChar(300)
+  mimeType     String                    @db.VarChar(150)
+  sizeBytes    BigInt
+  sha256       String                    @db.VarChar(64)
   uploadedById Int
-  createdAt   DateTime                 @default(now())
-  document    CorporateArchiveDocument @relation("CorporateArchiveDocumentVersions", fields: [documentId], references: [id], onDelete: Cascade)
-  currentFor  CorporateArchiveDocument? @relation("CorporateArchiveCurrentVersion")
-  uploadedBy  Users                    @relation("CorporateArchiveVersionUploader", fields: [uploadedById], references: [id])
+  createdAt    DateTime                  @default(now())
+  document     CorporateArchiveDocument  @relation("CorporateArchiveDocumentVersions", fields: [documentId], references: [id], onDelete: Cascade)
+  currentFor   CorporateArchiveDocument? @relation("CorporateArchiveCurrentVersion")
+  uploadedBy   Users                     @relation("CorporateArchiveVersionUploader", fields: [uploadedById], references: [id])
 
   @@unique([documentId, version])
   @@unique([id, documentId])
@@ -2348,19 +2472,59 @@ enum TrainingLevel {
 }
 
 model List {
-  id          Int                   @id @default(autoincrement())
-  title       String?
-  timer       String?
-  captureMode AttendanceCaptureMode @default(MANUAL)
-  state       AttendanceListState   @default(FINALIZED)
-  openedAt    DateTime?
-  closedAt    DateTime?
-  finalizedAt DateTime?
-  createdAt   DateTime              @default(now())
-  updatedAt   DateTime              @updatedAt
-  users       ListOnUsers[]
+  id                    Int                   @id @default(autoincrement())
+  title                 String?
+  timer                 String?
+  captureMode           AttendanceCaptureMode @default(MANUAL)
+  state                 AttendanceListState   @default(FINALIZED)
+  openedAt              DateTime?
+  closedAt              DateTime?
+  finalizedAt           DateTime?
+  callConfigId          Int?
+  callConfig            AttendanceCallConfig? @relation(fields: [callConfigId], references: [id], onDelete: SetNull)
+  captureWindowEndsAt   DateTime?
+  reviewDeadlineAt      DateTime?
+  closingSoonNotifiedAt DateTime?
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  users                 ListOnUsers[]
 
   @@index([captureMode, state, openedAt])
+  @@index([callConfigId])
+  @@index([state, captureWindowEndsAt])
+  @@index([state, reviewDeadlineAt])
+}
+
+model AttendanceCallConfig {
+  id               Int                             @id @default(autoincrement())
+  position         Int
+  title            String
+  captureStartTime String
+  captureEndTime   String
+  captureMode      AttendanceCaptureMode           @default(BIOMETRIC)
+  isActive         Boolean                         @default(true)
+  createdAt        DateTime                        @default(now())
+  updatedAt        DateTime                        @updatedAt
+  weekdayOverrides AttendanceCallWeekdayOverride[]
+  lists            List[]
+
+  @@unique([position])
+}
+
+model AttendanceCallWeekdayOverride {
+  id               Int                  @id @default(autoincrement())
+  callConfigId     Int
+  callConfig       AttendanceCallConfig @relation(fields: [callConfigId], references: [id], onDelete: Cascade)
+  weekday          AttendanceWeekday
+  skip             Boolean              @default(false)
+  title            String?
+  captureStartTime String?
+  captureEndTime   String?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  @@unique([callConfigId, weekday])
+  @@index([weekday])
 }
 
 model Licenses {
@@ -3171,25 +3335,25 @@ model Contratc {
 }
 
 model DocumentArtifact {
-  id               String                    @id @default(uuid())
-  ownerId          Int
-  type             DocumentArtifactType
-  status           DocumentArtifactStatus    @default(PROCESSING)
-  safeName         String
-  originalName     String?
-  storageKey       String                    @unique
-  mimeType         String                    @default("application/pdf")
-  sizeBytes        Int
-  pageCount        Int
-  sha256           String
-  manifest         Json?
-  idempotencyKey   String?
-  failureCode      String?
-  createdAt        DateTime                  @default(now())
-  updatedAt        DateTime                  @updatedAt
-  expiresAt        DateTime?
-  owner            Users                     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  contractVersions ContractDocumentVersion[]
+  id                  String                    @id @default(uuid())
+  ownerId             Int
+  type                DocumentArtifactType
+  status              DocumentArtifactStatus    @default(PROCESSING)
+  safeName            String
+  originalName        String?
+  storageKey          String                    @unique
+  mimeType            String                    @default("application/pdf")
+  sizeBytes           Int
+  pageCount           Int
+  sha256              String
+  manifest            Json?
+  idempotencyKey      String?
+  failureCode         String?
+  createdAt           DateTime                  @default(now())
+  updatedAt           DateTime                  @updatedAt
+  expiresAt           DateTime?
+  owner               Users                     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  contractVersions    ContractDocumentVersion[]
   expedienteFoliation ExpedienteFoliation?
 
   @@unique([ownerId, idempotencyKey])
@@ -3252,7 +3416,7 @@ model ExpedienteFoliation {
 }
 
 model FoliationReprintLog {
-  id            Int                    @id @default(autoincrement())
+  id            Int                   @id @default(autoincrement())
   rootId        Int
   rootType      String
   scope         FoliationReprintScope
@@ -3260,8 +3424,8 @@ model FoliationReprintLog {
   folioRange    String
   pageCount     Int
   requestedById Int
-  requestedAt   DateTime               @default(now())
-  requestedBy   Users                  @relation(fields: [requestedById], references: [id], onDelete: Restrict)
+  requestedAt   DateTime              @default(now())
+  requestedBy   Users                 @relation(fields: [requestedById], references: [id], onDelete: Restrict)
 
   @@index([rootId, rootType])
   @@index([requestedById])
@@ -3357,6 +3521,7 @@ model MealOrder {
   type             String
   orderTime        String
   isClose          Boolean            @default(false)
+  isDistributed    Boolean            @default(false)
   orderDate        DateTime
   createdAt        DateTime           @default(now())
   mealOrderOnUsers MealOrderOnUsers[]
@@ -3374,6 +3539,8 @@ model MealOrderOnUsers {
   amountOfFood    AmountOfFood      @default(Normal)
   pickupStatus    MealPickupStatus?
   pickupUpdatedAt DateTime?
+  distributionOrder      Int?
+  distributionGeneratedAt DateTime?
   createdAt       DateTime          @default(now())
 
   @@id([userId, mealOrderId])
@@ -3483,6 +3650,16 @@ enum AttendanceListState {
   OPEN
   REVIEW
   FINALIZED
+}
+
+enum AttendanceWeekday {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
 }
 
 enum AttendanceReconciliationStatus {
@@ -4052,4 +4229,25 @@ enum OrganizationalLegacyType {
   GROUP
   SPECIALITY
   TYPE_SPECIALITY
+}
+
+enum RankingPeriodType {
+  MONTHLY
+}
+
+enum RankingPeriodStatus {
+  OPEN
+  CLOSED
+}
+
+enum RankingLineSourceType {
+  SUB_TASK
+  BASIC_TASK
+  NON_TASK_ACTIVITY
+}
+
+enum NonTaskActivityStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
