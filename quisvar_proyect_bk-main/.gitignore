@@ -12,7 +12,8 @@ file_review/**
 public/**
 storage/duty-rotations/**
 compress_cp
-jsonData
+jsonData/*
+!jsonData/professions.json
 download
 Backup
 .vscode/tasks.json

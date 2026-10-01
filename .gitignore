@@ -29,7 +29,8 @@ artifacts/dhyrium-desktop/
 **/backups/
 **/Backup/
 **/compress_cp/
-**/jsonData/
+**/jsonData/*
+!quisvar_proyect_bk-main/jsonData/professions.json
 **/download/
 **/file_model/
 **/file_review/

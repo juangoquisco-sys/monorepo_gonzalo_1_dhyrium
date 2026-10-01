@@ -1,58 +1,37 @@
-name: dhyrium-software-secondary
+name: dhyrium-vibecode
 
+# Corte aislado del legacy. No incluye PostgreSQL: el backend usa la instancia
+# existente de 5492 indicada por DATABASE_URL en el .env privado de la raíz.
 services:
-  db:
-    image: postgres:18.1-alpine
-    restart: unless-stopped
-    shm_size: 128mb
-    ports:
-      # 5433 esta ocupado por otro entorno local en esta maquina; puede
-      # ajustarse sin afectar la red interna Docker.
-      - "127.0.0.1:${LOCAL_DB_PORT:-5434}:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: dhyrium_db
-    volumes:
-      - postgres_local_data:/var/lib/postgresql
-      - ./.agent-local/database-clone:/restore:ro
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"',
-        ]
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 10s
-
   backend:
-    image: diegoromani560/dhyrium_software_v1:production-latest
+    image: dhyrium-vibecode-backend:local
+    build:
+      context: ./quisvar_proyect_bk-main
+      dockerfile: Dockerfile
     env_file:
+      # Conserva claves de autenticación/cifrado. El archivo raíz se carga
+      # después para fijar DATABASE_URL en 5492.
+      - ./quisvar_proyect_bk-main/.env
       - ./.env
     environment:
       NODE_ENV: production
       HOST: 0.0.0.0
       PORT: 8081
       ROUTE: api/v1
+      DATABASE_URL: ${DATABASE_URL}
       DOCX_RENDERER_URL: http://host.docker.internal:8092/render/docx-to-pdf
       DOCX_RENDERER_TOKEN: dhyrium-local-word-renderer-v1
       DOCX_RENDERER_REQUIRE_EXACT: "true"
-      # El contenedor nunca usa la DATABASE_URL externa heredada de .env.
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/dhyrium_db?schema=public
-    restart: unless-stopped
     volumes:
-      - ./quisvar_proyect_ft-main/data/uploads:/app/uploads
-      - ./quisvar_proyect_ft-main/data/public:/app/public
-      - ./quisvar_proyect_ft-main/data/index:/app/index
+      - "E:/backend_files_2/uploads:/app/uploads"
+      - "E:/backend_files_2/public:/app/public"
+      - "E:/backend_files_2/index:/app/index"
+      - "E:/backend_files_2/jsonData:/app/jsonData"
     expose:
       - "8081"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    depends_on:
-      db:
-        condition: service_healthy
+    restart: "no"
     healthcheck:
       test:
         [
@@ -67,17 +46,20 @@ services:
       start_period: 20s
 
   frontend:
-    image: diegoromani560/dhyrium_software_v1_frontend:production-latest
+    image: dhyrium-vibecode-frontend:local
+    build:
+      context: ./quisvar_proyect_ft-main
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ""
+        VITE_DHYRIUM_DESKTOP_ENABLED: "true"
+        VITE_DHYRIUM_DESKTOP_DOWNLOAD_URL: "/desktop/DhyriumDesktop-0.3.3-win-x64-pilot.zip"
     depends_on:
       backend:
         condition: service_healthy
     ports:
-      - "${APP_PORT:-8088}:80"
+      - "8002:80"
     volumes:
-      # El ZIP se entrega fuera de Git y de la imagen; vea docs/dhyrium-desktop-release.md.
-      - ./artifacts/dhyrium-desktop:/usr/share/nginx/html/desktop:ro
-    restart: unless-stopped
-
-volumes:
-  postgres_local_data:
-    driver: local
+      # Artefacto validado de Desktop; Nginx lo sirve sin incorporarlo a la imagen.
+      - "./artifacts/dhyrium-desktop:/usr/share/nginx/html/desktop:ro"
+    restart: "no"
