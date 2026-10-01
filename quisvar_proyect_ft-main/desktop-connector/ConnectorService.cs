@@ -26,32 +26,34 @@ public sealed class ConnectorService
     private readonly DhyriumApiClient _apiClient;
     private readonly ITokenVault _tokenVault;
     private readonly ILocalFileLauncher _fileLauncher;
+    private readonly ICadObserver? _observer;
 
     public ConnectorService(
         ConnectorSettings settings,
         DhyriumApiClient apiClient,
         ITokenVault tokenVault,
-        ILocalFileLauncher fileLauncher)
+        ILocalFileLauncher fileLauncher, ICadObserver? observer = null)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
         _tokenVault = tokenVault ?? throw new ArgumentNullException(nameof(tokenVault));
         _fileLauncher = fileLauncher ?? throw new ArgumentNullException(nameof(fileLauncher));
+        _observer = observer;
     }
 
     public async Task<OpenedDocumentSession> OpenDocumentAsync(
         DesktopDocumentOpenRequest request,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default, bool openEditor = true)
     {
         var workspace = new ManagedDocumentWorkspace(
             _settings,
             _apiClient,
             _tokenVault,
-            request);
+            request, openEditor, _observer);
         try
         {
             var localFilePath = await workspace.PrepareAsync(cancellationToken);
-            var process = _fileLauncher.Open(localFilePath);
+            var process = openEditor ? _fileLauncher.Open(localFilePath) : null;
             return new OpenedDocumentSession(workspace, localFilePath, process);
         }
         catch
@@ -94,8 +96,26 @@ public sealed class OpenedDocumentSession : IAsyncDisposable
     }
 
     public string LocalFilePath { get; }
+    public DesktopDocumentOpenRequest CurrentRequest => _workspace.CurrentRequest;
+    public DrawingPresence EditorPresence => _workspace.EditorPresence;
+    public bool HasEditorLock => _workspace.HasEditorLock;
+    public bool HasPendingChanges => _workspace.HasPendingChanges;
+    public bool IsMapPackage => _workspace.IsMapPackage;
+    public bool IsReadOnly => _workspace.IsReadOnly;
+    public string? LockedByName => _workspace.LockedByName;
+    public bool SourcePublicationPending => _workspace.LastUpload?.SourcePublicationPending == true;
+    public Task CancelPendingDeliveryAsync() => _workspace.CancelPendingDeliveryAsync();
+    public Task DeliverMapPackageAsync(string path, CancellationToken cancellationToken = default) =>
+        _workspace.DeliverMapPackageAsync(path, cancellationToken);
 
     public string? LastSyncError => _workspace.LastSyncError;
+    public DateTimeOffset? LastSyncedAt => _workspace.LastSyncedAt;
+    public bool IsSynchronizing => _workspace.IsSynchronizing;
+    public string? RecoveryStatus => _workspace.RecoveryStatus;
+    public string? RecoveryDirectory => _workspace.RecoveryDirectory;
+    public void SelectAutosaveSource(string path) => _workspace.SelectAutosaveSource(path);
+    public bool RecoveryDelivered => _workspace.RecoveryDelivered;
+    public Task DeliverRecoveredDrawingAsync(string path, CancellationToken token) => _workspace.DeliverRecoveredDrawingAsync(path, token);
 
     public Task<bool> SyncNowAsync(CancellationToken cancellationToken = default) =>
         _workspace.SyncNowAsync(cancellationToken);
@@ -125,7 +145,9 @@ public sealed class OpenedDocumentSession : IAsyncDisposable
         _disposed = true;
         try
         {
-            await _workspace.SyncNowAsync();
+            // Closing/pause never triggers a hidden multi-gigabyte upload.
+            // Pending snapshots remain on disk for explicit retry.
+            await Task.CompletedTask;
         }
         finally
         {

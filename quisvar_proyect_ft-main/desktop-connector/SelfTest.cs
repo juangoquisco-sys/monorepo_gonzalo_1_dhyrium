@@ -8,6 +8,9 @@ public static class SelfTest
 {
     public static async Task RunAsync()
     {
+        await TransferSelfTest.RunAsync();
+        await RecoverySelfTest.RunAsync();
+        await SessionSelfTest.RunAsync();
         var temporaryRoot = Path.Combine(
             Path.GetTempPath(),
             $"Dhyrium-Desktop-SelfTest-{Guid.NewGuid():N}");
@@ -43,7 +46,8 @@ public static class SelfTest
                 "El enlace no conservó el permiso temporal.");
 
             var launcher = new RecordingFileLauncher();
-            var service = new ConnectorService(settings, apiClient, vault, launcher);
+            var observer = new SessionSelfTest.TestObserver { Presence = DrawingPresence.Open };
+            var service = new ConnectorService(settings, apiClient, vault, launcher, observer);
             await using (var session = await service.OpenDocumentAsync(request))
             {
                 Ensure(File.Exists(session.LocalFilePath), "El archivo no se preparó localmente.");
@@ -84,20 +88,42 @@ public static class SelfTest
 
                 var editorLockPath = Path.ChangeExtension(session.LocalFilePath, ".dwl");
                 await File.WriteAllTextAsync(editorLockPath, "AutoCAD abierto");
+                // AutoCAD retains a writable handle after Ctrl+S. Upload must
+                // complete while both the handle and .dwl are still present.
+                await using (var drawing = new FileStream(session.LocalFilePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+                {
+                    handler.FailNextUpload = true;
+                    drawing.Seek(0, SeekOrigin.End);
+                    await drawing.WriteAsync(Encoding.UTF8.GetBytes("\nCtrl+S sin cerrar AutoCAD"));
+                    await drawing.FlushAsync();
+                    var deadline = DateTime.UtcNow.AddSeconds(18);
+                    while (handler.UploadCount < 3 && DateTime.UtcNow < deadline) await Task.Delay(200);
+                    Ensure(handler.UploadCount == 3 && File.Exists(editorLockPath), "Guardar debe subir mientras AutoCAD mantiene abierto el dibujo.");
+                    Ensure(handler.LastUploadedBody?.Contains("Ctrl+S sin cerrar AutoCAD", StringComparison.Ordinal) == true,
+                        "El guardado con AutoCAD abierto no llegó al servidor.");
+                }
                 var editorSession = session.WaitForEditorSessionEndAsync();
                 await Task.Delay(TimeSpan.FromMilliseconds(750));
                 await File.AppendAllTextAsync(session.LocalFilePath, "\nCambio antes de cerrar AutoCAD");
                 File.Delete(editorLockPath);
+                observer.Presence = DrawingPresence.Closed;
                 await editorSession.WaitAsync(TimeSpan.FromSeconds(8));
 
                 Ensure(
-                    handler.UploadCount == 3,
+                    handler.UploadCount == 4,
                     "Al cerrar AutoCAD se debe guardar el último cambio pendiente.");
                 Ensure(
                     handler.LastUploadedBody?.Contains(
                         "Cambio antes de cerrar AutoCAD",
                         StringComparison.Ordinal) == true,
                     "El cambio detectado al cerrar AutoCAD no llegó al servidor.");
+                var recovered = Path.Combine(temporaryRoot, "recuperado.dwg");
+                await File.WriteAllTextAsync(recovered, "AC1032-dibujo revisado tras error fatal");
+                await session.DeliverRecoveredDrawingAsync(recovered, CancellationToken.None);
+                Ensure(handler.UploadCount == 5 && session.RecoveryDelivered, "La recuperación revisada debe entregarse como nueva versión.");
+                await File.AppendAllTextAsync(session.LocalFilePath, "\nCambio tardío del dibujo anterior");
+                Ensure(!await session.SyncNowAsync() && handler.UploadCount == 5,
+                    "El dibujo anterior no debe sobrescribir la recuperación entregada.");
             }
 
             Ensure(
@@ -109,7 +135,7 @@ public static class SelfTest
                 handler.BearerTokens.Count(tokenValue => tokenValue is not null) >= 2,
                 "Las llamadas al servidor deben llevar la sesión de Dhyrium.");
             Console.WriteLine(
-                "Prueba correcta: autenticación, descarga, apertura local simulada, guardado, versionado y cierre de AutoCAD verificados.");
+                "Prueba correcta (servidor y editor simulados): autenticación, descarga, guardado, versionado y cierre.");
         }
         finally
         {
@@ -139,7 +165,7 @@ public static class SelfTest
         }
     }
 
-    private sealed class FakeDhyriumHandler : HttpMessageHandler
+    internal sealed class FakeDhyriumHandler : HttpMessageHandler
     {
         public const string TestToken = "token-de-prueba";
         public const string TestTicket = "0123456789012345678901234567890123456789012";
@@ -150,6 +176,8 @@ public static class SelfTest
         public const string InitialContent = "Plano inicial de Dhyrium";
         public int UploadCount { get; private set; }
         public int RedeemCount { get; private set; }
+        public bool FailNextUpload { get; set; }
+        public bool ConflictUploads { get; set; }
         public string? LastUploadedBody { get; private set; }
         public List<string?> BearerTokens { get; } = [];
 
@@ -197,8 +225,8 @@ public static class SelfTest
                             versionNumber = 1,
                             originalName = "Plano principal.dwg",
                             mimeType = "application/octet-stream",
-                            sizeBytes = InitialContent.Length,
-                            checksumSha256 = "a".PadLeft(64, 'a'),
+                            sizeBytes = Encoding.UTF8.GetByteCount(InitialContent),
+                            checksumSha256 = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(InitialContent))),
                             source = "ORIGINAL_IMPORT",
                         },
                         contentPath = $"/desktop/documents/{DocumentId}/versions/{InitialVersionId}/content",
@@ -208,7 +236,9 @@ public static class SelfTest
             }
 
             if (request.Method == HttpMethod.Get &&
-                path == $"/api/v1/desktop/documents/{DocumentId}/versions/{InitialVersionId}/content")
+                (path == $"/api/v1/desktop/documents/{DocumentId}/versions/{InitialVersionId}/content" ||
+                 path == $"/api/v1/desktop/documents/{DocumentId}/versions/{SecondVersionId}/content" ||
+                 path == $"/api/v1/desktop/documents/{DocumentId}/versions/{ThirdVersionId}/content"))
             {
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {
@@ -219,6 +249,8 @@ public static class SelfTest
             if (request.Method == HttpMethod.Post &&
                 path == $"/api/v1/desktop/documents/{DocumentId}/versions")
             {
+                if (FailNextUpload) { FailNextUpload = false; return new HttpResponseMessage(HttpStatusCode.ServiceUnavailable); }
+                if (ConflictUploads) return new HttpResponseMessage(HttpStatusCode.Conflict);
                 UploadCount++;
                 LastUploadedBody = await request.Content!.ReadAsStringAsync(cancellationToken);
                 Ensure(

@@ -1,4 +1,20 @@
 import { z } from 'zod';
+import { transferInputSchema } from './desktopDocuments.transfers';
+
+export const desktopTransferParamsSchema = z
+  .object({
+    documentId: z.string().uuid(),
+    transferId: z.string().uuid(),
+  })
+  .strict();
+export const desktopTransferChunkParamsSchema =
+  desktopTransferParamsSchema.extend({
+    index: z.coerce.number().int().nonnegative().max(1023),
+  });
+export const createDesktopTransferSchema = z.object({
+  params: z.object({ documentId: z.string().uuid() }).strict(),
+  body: transferInputSchema,
+});
 
 const desktopSourceKindSchema = z.enum(['TASK_FILE', 'BASIC_FILE']);
 const opaqueTicketSchema = z.string().regex(/^[A-Za-z0-9_-]{43}$/);
@@ -23,6 +39,10 @@ export const desktopDocumentContentSchema = z.object({
       versionId: z.string().uuid(),
     })
     .strict(),
+});
+
+export const desktopDocumentLockParamsSchema = z.object({
+  params: z.object({ documentId: z.string().uuid() }).strict(),
 });
 
 export const saveDesktopDocumentVersionSchema = z.object({

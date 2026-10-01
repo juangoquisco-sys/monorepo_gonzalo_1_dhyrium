@@ -2,7 +2,7 @@
 ; The release pipeline must sign both the published executable and this installer.
 
 #define AppName "Dhyrium Desktop"
-#define AppVersion "0.1.3"
+#define AppVersion "0.3.1"
 #define AppExecutable "Dhyrium.Desktop.Connector.exe"
 
 [Setup]

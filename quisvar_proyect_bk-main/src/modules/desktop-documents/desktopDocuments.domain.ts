@@ -2,8 +2,28 @@ import { createHash, randomBytes } from 'crypto';
 import path from 'path';
 import AppError from '@/utils/appError';
 
-export const MAX_DESKTOP_DOCUMENT_BYTES = 160 * 1024 * 1024;
+const configuredMaxBytes = Number(
+  process.env.DESKTOP_DOCUMENT_MAX_BYTES ?? 4 * 1024 ** 3
+);
+if (
+  !Number.isSafeInteger(configuredMaxBytes) ||
+  configuredMaxBytes < 1 ||
+  configuredMaxBytes > 8 * 1024 ** 3
+) {
+  throw new Error(
+    'DESKTOP_DOCUMENT_MAX_BYTES debe estar entre 1 byte y 8 GiB.'
+  );
+}
+export const MAX_DESKTOP_DOCUMENT_BYTES = configuredMaxBytes;
+export const desktopSizeLimitMessage = () =>
+  `El archivo supera el límite de ${Math.floor(
+    MAX_DESKTOP_DOCUMENT_BYTES / 1024 ** 2
+  )} MB para Dhyrium Desktop.`;
 export const DESKTOP_LAUNCH_TICKET_TTL_MS = 60_000;
+// Dhyrium Desktop sends a heartbeat every ~10s while a document is open for
+// editing; a lease this short releases the edit lock quickly after a crash
+// or lost connection without expiring during normal, continuous use.
+export const DESKTOP_LOCK_LEASE_MS = 60_000;
 
 export type DesktopDocumentSourceKind = 'TASK_FILE' | 'BASIC_FILE';
 
@@ -58,7 +78,8 @@ const BLOCKED_DESKTOP_EXTENSIONS = new Set([
   'wsh',
 ]);
 
-const WINDOWS_RESERVED_FILE_NAMES = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\..*)?$/i;
+const WINDOWS_RESERVED_FILE_NAMES =
+  /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\..*)?$/i;
 
 export const sha256 = (value: Buffer | string) =>
   createHash('sha256').update(value).digest('hex');
@@ -66,8 +87,9 @@ export const sha256 = (value: Buffer | string) =>
 export const createDesktopLaunchTicket = () =>
   randomBytes(32).toString('base64url');
 
-export const desktopTaskKindForSource = (sourceKind: DesktopDocumentSourceKind) =>
-  sourceKind === 'TASK_FILE' ? 'subtasks' : 'basictasks';
+export const desktopTaskKindForSource = (
+  sourceKind: DesktopDocumentSourceKind
+) => (sourceKind === 'TASK_FILE' ? 'subtasks' : 'basictasks');
 
 export const sanitizeDesktopFileName = (value: string) => {
   const baseName = path.basename(value || 'archivo');
@@ -107,16 +129,20 @@ export const assertDesktopFileNameAllowed = (fileName: string) => {
 };
 
 export const assertDesktopDocumentBuffer = (buffer: Buffer) => {
-  if (!buffer.length) {
+  assertDesktopDocumentSize(buffer.length);
+};
+
+export const assertDesktopDocumentSize = (size: number) => {
+  if (!Number.isSafeInteger(size) || size < 1) {
     throw new AppError(
       'El archivo no puede estar vacío.',
       422,
       'DESKTOP_DOCUMENT_EMPTY_FILE'
     );
   }
-  if (buffer.length > MAX_DESKTOP_DOCUMENT_BYTES) {
+  if (size > MAX_DESKTOP_DOCUMENT_BYTES) {
     throw new AppError(
-      'El archivo supera el límite de 160 MB para Dhyrium Desktop.',
+      desktopSizeLimitMessage(),
       413,
       'DESKTOP_DOCUMENT_FILE_TOO_LARGE'
     );
@@ -139,7 +165,9 @@ export const assertDesktopFileExtensionMatches = (input: {
 };
 
 export const normalizeDesktopMimeType = (value: string | undefined) => {
-  const mimeType = String(value || '').trim().toLowerCase();
+  const mimeType = String(value || '')
+    .trim()
+    .toLowerCase();
   return /^[a-z0-9!#$&^_.+-]+\/[a-z0-9!#$&^_.+-]+$/.test(mimeType)
     ? mimeType
     : 'application/octet-stream';

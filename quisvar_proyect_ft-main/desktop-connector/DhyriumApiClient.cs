@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace Dhyrium.Desktop.Connector;
 
-public sealed class DhyriumApiClient
+public sealed partial class DhyriumApiClient
 {
     private readonly HttpClient _httpClient;
     private readonly string _serverUrl;
@@ -32,7 +32,7 @@ public sealed class DhyriumApiClient
             Content = new StringContent(payload, Encoding.UTF8, "application/json"),
         };
         using var response = await _httpClient.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        await EnsureSuccessAsync(response, cancellationToken);
 
         using var document = JsonDocument.Parse(
             await response.Content.ReadAsStreamAsync(cancellationToken));
@@ -59,7 +59,7 @@ public sealed class DhyriumApiClient
             $"desktop/documents/launches/{EscapePath(launchTicket)}/redeem",
             token);
         using var response = await _httpClient.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        await EnsureSuccessAsync(response, cancellationToken);
         using var responseDocument = JsonDocument.Parse(
             await response.Content.ReadAsStreamAsync(cancellationToken));
 
@@ -105,63 +105,43 @@ public sealed class DhyriumApiClient
             resolvedVersionId,
             DhyriumProtocol.SafeFileName(fileName.GetString()!),
             contentPath.GetString()!,
-            savePath.GetString()!);
+            savePath.GetString()!,
+            version.TryGetProperty("sizeBytes", out var size) ? size.GetInt64() : 0,
+            version.TryGetProperty("checksumSha256", out var checksum) ? checksum.GetString() : null,
+            launch.TryGetProperty("transferPath", out var transferPath) &&
+                transferPath.GetString() == $"/desktop/documents/{resolvedDocumentId}/transfers"
+                ? transferPath.GetString() : null,
+            launch.TryGetProperty("maxFileBytes", out var maxBytes) ? maxBytes.GetInt64() : 4L * 1024 * 1024 * 1024,
+            launch.TryGetProperty("readOnly", out var readOnly) && readOnly.GetBoolean(),
+            launch.TryGetProperty("lockedByName", out var lockedByName) ? lockedByName.GetString() : null);
     }
 
-    public async Task DownloadDocumentContentAsync(
-        DesktopDocumentOpenRequest request,
-        string destinationPath,
-        string token,
-        CancellationToken cancellationToken = default)
+    public async Task HeartbeatLockAsync(DesktopDocumentOpenRequest request, string token, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(request);
-        ArgumentException.ThrowIfNullOrWhiteSpace(destinationPath);
-        ArgumentException.ThrowIfNullOrWhiteSpace(token);
+        using var httpRequest = CreateAuthorizedRequest(HttpMethod.Post, $"desktop/documents/{EscapePath(request.DocumentId)}/lock/heartbeat", token);
+        using var response = await _httpClient.SendAsync(httpRequest, cancellationToken);
+        await EnsureSuccessAsync(response, cancellationToken);
+    }
 
-        var destinationDirectory = Path.GetDirectoryName(destinationPath);
-        if (string.IsNullOrWhiteSpace(destinationDirectory))
-        {
-            throw new ArgumentException("La ruta local del archivo no es válida.", nameof(destinationPath));
-        }
+    public async Task ReleaseLockAsync(DesktopDocumentOpenRequest request, string token, CancellationToken cancellationToken = default)
+    {
+        using var httpRequest = CreateAuthorizedRequest(HttpMethod.Delete, $"desktop/documents/{EscapePath(request.DocumentId)}/lock", token);
+        using var response = await _httpClient.SendAsync(httpRequest, cancellationToken);
+        await EnsureSuccessAsync(response, cancellationToken);
+    }
 
-        Directory.CreateDirectory(destinationDirectory);
-        var temporaryPath = Path.Combine(
-            destinationDirectory,
-            $".{Path.GetFileName(destinationPath)}.{Guid.NewGuid():N}.download");
+    public Task DownloadDocumentContentAsync(
+        DesktopDocumentOpenRequest request, string destinationPath, string token,
+        CancellationToken cancellationToken = default) =>
+        DownloadResumableAsync(request, destinationPath, token, cancellationToken);
 
-        try
-        {
-            using var requestMessage = CreateAuthorizedRequest(
-                HttpMethod.Get,
-                request.ContentPath,
-                token);
-            using var response = await _httpClient.SendAsync(
-                requestMessage,
-                HttpCompletionOption.ResponseHeadersRead,
-                cancellationToken);
-            response.EnsureSuccessStatusCode();
-
-            await using (var source = await response.Content.ReadAsStreamAsync(cancellationToken))
-            await using (var destination = new FileStream(
-                temporaryPath,
-                FileMode.CreateNew,
-                FileAccess.Write,
-                FileShare.None,
-                bufferSize: 1024 * 64,
-                useAsync: true))
-            {
-                await source.CopyToAsync(destination, cancellationToken);
-            }
-
-            File.Move(temporaryPath, destinationPath, overwrite: true);
-        }
-        finally
-        {
-            if (File.Exists(temporaryPath))
-            {
-                File.Delete(temporaryPath);
-            }
-        }
+    internal async Task AuthorizeResumeAsync(DesktopDocumentOpenRequest document, string token)
+    {
+        if (!DhyriumProtocol.IsApprovedApiPath(document.ContentPath, document.DocumentId, document.VersionId, false))
+            throw new InvalidDataException("Ruta de recuperación de sesión no válida.");
+        using var request = CreateAuthorizedRequest(HttpMethod.Get, document.ContentPath, token);
+        using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+        await EnsureSuccessAsync(response, CancellationToken.None);
     }
 
     public async Task<DesktopUploadResult> UploadDocumentVersionAsync(
@@ -176,6 +156,9 @@ public sealed class DhyriumApiClient
         ArgumentException.ThrowIfNullOrWhiteSpace(localFilePath);
         ArgumentException.ThrowIfNullOrWhiteSpace(token);
 
+        if (request.TransferPath is not null)
+            return await UploadResumableAsync(request, baseVersionId, localFilePath, token, cancellationToken);
+
         await using var stream = new FileStream(
             localFilePath,
             FileMode.Open,
@@ -186,7 +169,7 @@ public sealed class DhyriumApiClient
         using var form = new MultipartFormDataContent();
         using var file = new StreamContent(stream);
         file.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-        form.Add(file, "file", Path.GetFileName(localFilePath));
+        form.Add(file, "file", request.FileName);
         form.Add(new StringContent(baseVersionId, Encoding.UTF8), "baseVersionId");
 
         using var requestMessage = CreateAuthorizedRequest(
@@ -201,7 +184,7 @@ public sealed class DhyriumApiClient
             throw new InvalidOperationException(
                 "El archivo fue actualizado por otra persona. Vuelva a abrirlo desde Dhyrium antes de guardar sus cambios.");
         }
-        response.EnsureSuccessStatusCode();
+        await EnsureSuccessAsync(response, cancellationToken);
         using var responseDocument = JsonDocument.Parse(
             await response.Content.ReadAsStreamAsync(cancellationToken));
 
@@ -216,7 +199,8 @@ public sealed class DhyriumApiClient
                 "Dhyrium no devolvió la versión creada por el guardado.");
         }
 
-        return new DesktopUploadResult(id.GetString()!, number);
+        return new DesktopUploadResult(id.GetString()!, number,
+            version.TryGetProperty("sourcePublicationPending", out var pending) && pending.GetBoolean());
     }
 
     private HttpRequestMessage CreateAuthorizedRequest(

@@ -1,4 +1,16 @@
 import { axiosInstance } from '@/services/axiosInstance';
+import { isAxiosError } from 'axios';
+import { SnackbarUtilities } from '@/utils/SnackbarManager';
+
+export const reportDesktopOpenError = (error: unknown) => {
+  // The HTTP interceptor already displays the precise server/network failure.
+  if (isAxiosError(error)) return;
+  SnackbarUtilities.error(
+    error instanceof Error
+      ? error.message
+      : 'No se pudo preparar la apertura en Dhyrium Desktop.'
+  );
+};
 
 export type DhyriumDesktopSourceKind = 'TASK_FILE' | 'BASIC_FILE';
 

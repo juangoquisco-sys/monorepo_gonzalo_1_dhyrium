@@ -4,7 +4,7 @@ import './dhyriumDesktopPage.css';
 
 const DESKTOP_PILOT_DOWNLOAD =
   import.meta.env.VITE_DHYRIUM_DESKTOP_DOWNLOAD_URL ||
-  '/desktop/DhyriumDesktop-0.1.4-win-x64-pilot.zip';
+  '/desktop/DhyriumDesktop-0.3.3-win-x64-pilot.zip';
 
 const DhyriumDesktopPage = () => {
   const [copied, setCopied] = useState(false);
@@ -57,8 +57,9 @@ const DhyriumDesktopPage = () => {
         <div className="dhyrium-desktop-notice">
           <ShieldCheck aria-hidden="true" />
           <span>
-            Prueba interna: Dhyrium conserva el archivo y crea una nueva versión
-            cada vez que usted guarda desde la aplicación local.
+            Prueba interna: Desktop envía los guardados sin esperar a cerrar la
+            aplicación. Los autoguardados de AutoCAD se conservan como copias
+            de recuperación separadas. Los paquetes MPK requieren entrega manual.
           </span>
         </div>
 
@@ -66,8 +67,10 @@ const DhyriumDesktopPage = () => {
           <li>
             <strong>Descargue la herramienta.</strong>
             <span>
-              Versión 0.1.4: corrige el seguimiento del guardado de AutoCAD y
-              conserva los cambios como versiones en Dhyrium.
+              Versión 0.3.3: guardado durante la edición y copias de recuperación
+              de AutoCAD y Civil 3D. Incluye transferencias de archivos grandes
+              reanudables y bloqueo de edición: si alguien más ya tiene el
+              archivo abierto, usted lo verá en modo solo lectura.
             </span>
             <a
               className="dhyrium-desktop-download"
@@ -107,7 +110,9 @@ const DhyriumDesktopPage = () => {
             <strong>Vuelva a una tarea y pulse un archivo.</strong>
             <span>
               Dhyrium Desktop abrirá el programa correspondiente de Windows y
-              enviará los guardados de vuelta a Dhyrium como versiones.
+              enviará los guardados de vuelta a Dhyrium como versiones. Mantenga
+              Desktop abierto durante el trabajo y compruebe la confirmación
+              de guardado. Use la misma cuenta en la web y en Desktop.
             </span>
           </li>
         </ol>

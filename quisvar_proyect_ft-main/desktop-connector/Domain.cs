@@ -20,9 +20,17 @@ public sealed record DesktopDocumentOpenRequest(
     string VersionId,
     string FileName,
     string ContentPath,
-    string SavePath);
+    string SavePath,
+    long SizeBytes = 0,
+    string? ChecksumSha256 = null,
+    string? TransferPath = null,
+    long MaxFileBytes = 4L * 1024 * 1024 * 1024,
+    bool ReadOnly = false,
+    string? LockedByName = null);
 
-public sealed record DesktopUploadResult(string VersionId, int VersionNumber);
+public sealed record TransferProgress(string Phase, long CompletedBytes, long TotalBytes);
+
+public sealed record DesktopUploadResult(string VersionId, int VersionNumber, bool SourcePublicationPending = false);
 
 public static class ServerEndpoint
 {
@@ -106,7 +114,7 @@ public static class DhyriumProtocol
 
     public static string HashFile(string path)
     {
-        using var stream = File.OpenRead(path);
+        using var stream = StableFileSnapshot.Open(path);
         return Convert.ToHexString(SHA256.HashData(stream));
     }
 

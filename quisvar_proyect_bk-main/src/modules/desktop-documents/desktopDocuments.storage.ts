@@ -1,38 +1,35 @@
-import { mkdir, open, readFile, realpath, rename, rm, stat } from 'fs/promises';
+import { mkdir, open, realpath, rename, rm, stat, link } from 'fs/promises';
+import { createReadStream } from 'fs';
+import { Transform, Writable, type Readable } from 'stream';
+import { pipeline } from 'stream/promises';
 import path from 'path';
-import { randomUUID } from 'crypto';
+import { createHash, randomUUID } from 'crypto';
 import AppError from '@/utils/appError';
-import { assertDesktopDocumentBuffer } from './desktopDocuments.domain';
+import {
+  assertDesktopDocumentSize,
+  MAX_DESKTOP_DOCUMENT_BYTES,
+  desktopSizeLimitMessage,
+} from './desktopDocuments.domain';
 
-const VAULT_ROOT = path.resolve(process.cwd(), 'uploads', 'desktop-documents');
-const STAGING_ROOT = path.join(VAULT_ROOT, '.staging');
+export const DESKTOP_VAULT_ROOT = path.resolve(
+  process.cwd(),
+  'uploads',
+  'desktop-documents'
+);
+export const DESKTOP_STAGING_ROOT = path.join(DESKTOP_VAULT_ROOT, '.staging');
 const UPLOADS_ROOT = path.resolve(process.cwd(), 'uploads');
 const STORAGE_KEY_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\.bin$/i;
 
-const assertInside = (root: string, target: string, code: string) => {
+const assertInside = (root: string, target: string) => {
   const relative = path.relative(root, target);
   if (relative.startsWith('..') || path.isAbsolute(relative)) {
     throw new AppError(
-      'La referencia de almacenamiento está fuera de la ubicación autorizada.',
+      'La ubicación del archivo no está autorizada.',
       403,
-      code
+      'DESKTOP_DOCUMENT_SOURCE_PATH_REJECTED'
     );
   }
-};
-
-const resolveStorageKey = (storageKey: string) => {
-  const normalized = storageKey.replace(/\\/g, '/');
-  if (!STORAGE_KEY_PATTERN.test(normalized)) {
-    throw new AppError(
-      'La referencia de almacenamiento del documento no es válida.',
-      500,
-      'DESKTOP_DOCUMENT_STORAGE_KEY_INVALID'
-    );
-  }
-  const absolute = path.resolve(VAULT_ROOT, normalized);
-  assertInside(VAULT_ROOT, absolute, 'DESKTOP_DOCUMENT_STORAGE_KEY_INVALID');
-  return absolute;
 };
 
 export const createDesktopDocumentStorageKey = (
@@ -40,36 +37,104 @@ export const createDesktopDocumentStorageKey = (
   versionId: string
 ) => path.posix.join(documentId, `${versionId}.bin`);
 
+/** Bounded memory, incremental checksum, exclusive creation and fsync before publication. */
+export async function writeDesktopStream(
+  source: Readable,
+  target: string,
+  maxBytes = MAX_DESKTOP_DOCUMENT_BYTES
+) {
+  // createReadStream starts opening immediately.  Capture an open failure before
+  // the asynchronous target open below so it is returned to the request instead
+  // of becoming an uncaught EventEmitter error.
+  let earlySourceError: Error | null = null;
+  const captureEarlySourceError = (error: Error) => {
+    earlySourceError ??= error;
+  };
+  source.on('error', captureEarlySourceError);
+  const handle = await open(target, 'wx');
+  let sizeBytes = 0;
+  const hash = createHash('sha256');
+  const meter = new Transform({
+    transform(chunk: Buffer, _encoding, callback) {
+      sizeBytes += chunk.length;
+      if (sizeBytes > maxBytes) {
+        callback(
+          new AppError(
+            desktopSizeLimitMessage(),
+            413,
+            'DESKTOP_DOCUMENT_FILE_TOO_LARGE'
+          )
+        );
+        return;
+      }
+      hash.update(chunk);
+      callback(null, chunk);
+    },
+  });
+  let succeeded = false;
+  try {
+    if (earlySourceError) throw earlySourceError;
+    await pipeline(
+      source,
+      meter,
+      new Writable({
+        write(chunk: Buffer, _encoding, callback) {
+          void handle.writeFile(chunk).then(
+            () => callback(),
+            error => callback(error)
+          );
+        },
+      })
+    );
+    assertDesktopDocumentSize(sizeBytes);
+    await handle.sync();
+    succeeded = true;
+    return { sizeBytes, checksumSha256: hash.digest('hex') };
+  } finally {
+    source.off('error', captureEarlySourceError);
+    await handle.close();
+    if (!succeeded) await rm(target, { force: true });
+  }
+}
+
 class DesktopDocumentsStorage {
-  static async writeImmutable(storageKey: string, buffer: Buffer) {
-    assertDesktopDocumentBuffer(buffer);
-    const target = resolveStorageKey(storageKey);
-    await mkdir(path.dirname(target), { recursive: true });
-    await mkdir(STAGING_ROOT, { recursive: true });
-    const temporary = path.join(STAGING_ROOT, `${randomUUID()}.tmp`);
-    const handle = await open(temporary, 'wx');
-    try {
-      await handle.writeFile(buffer);
-      await handle.sync();
-    } finally {
-      await handle.close();
+  static resolveStorageKey(storageKey: string) {
+    if (!STORAGE_KEY_PATTERN.test(storageKey)) {
+      throw new AppError(
+        'Referencia de almacenamiento inválida.',
+        500,
+        'DESKTOP_DOCUMENT_STORAGE_KEY_INVALID'
+      );
     }
+    return path.resolve(DESKTOP_VAULT_ROOT, storageKey);
+  }
+
+  static async importFile(storageKey: string, sourcePath: string) {
+    const target = this.resolveStorageKey(storageKey);
+    await mkdir(path.dirname(target), { recursive: true });
+    await mkdir(DESKTOP_STAGING_ROOT, { recursive: true });
+    const temporary = path.join(DESKTOP_STAGING_ROOT, `${randomUUID()}.tmp`);
     try {
-      await rename(temporary, target);
-    } catch (error) {
+      const metadata = await writeDesktopStream(
+        createReadStream(sourcePath),
+        temporary
+      );
+      await link(temporary, target);
+      return metadata;
+    } finally {
       await rm(temporary, { force: true });
-      throw error;
     }
   }
 
-  static async read(storageKey: string) {
-    const buffer = await readFile(resolveStorageKey(storageKey));
-    assertDesktopDocumentBuffer(buffer);
-    return buffer;
+  static async contentPath(storageKey: string) {
+    const absolute = this.resolveStorageKey(storageKey);
+    const info = await stat(absolute);
+    assertDesktopDocumentSize(info.size);
+    return absolute;
   }
 
   static async remove(storageKey: string) {
-    await rm(resolveStorageKey(storageKey), { force: true });
+    await rm(this.resolveStorageKey(storageKey), { force: true });
   }
 
   static async resolveSourcePath(directory: string, fileName: string) {
@@ -78,90 +143,45 @@ class DesktopDocumentsStorage {
       directory.replace(/\\/g, '/')
     );
     const candidate = path.resolve(directoryPath, path.basename(fileName));
-    assertInside(UPLOADS_ROOT, candidate, 'DESKTOP_DOCUMENT_SOURCE_PATH_REJECTED');
-
+    assertInside(UPLOADS_ROOT, candidate);
     try {
-      const [realUploadsRoot, realCandidate] = await Promise.all([
+      const [root, realCandidate] = await Promise.all([
         realpath(UPLOADS_ROOT),
         realpath(candidate),
       ]);
-      assertInside(
-        realUploadsRoot,
-        realCandidate,
-        'DESKTOP_DOCUMENT_SOURCE_PATH_REJECTED'
-      );
+      assertInside(root, realCandidate);
+      const info = await stat(realCandidate);
+      if (!info.isFile()) throw new Error('Not a file');
+      assertDesktopDocumentSize(info.size);
       return realCandidate;
     } catch (error) {
       if (error instanceof AppError) throw error;
       throw new AppError(
-        'El archivo adjunto ya no está disponible en el almacenamiento.',
+        'El adjunto ya no está disponible.',
         404,
         'DESKTOP_DOCUMENT_SOURCE_MISSING'
       );
     }
   }
 
-  static async readSource(directory: string, fileName: string) {
-    const absolutePath = await this.resolveSourcePath(directory, fileName);
-    try {
-      const fileStat = await stat(absolutePath);
-      if (!fileStat.isFile()) {
-        throw new AppError(
-          'El adjunto solicitado no es un archivo válido.',
-          404,
-          'DESKTOP_DOCUMENT_SOURCE_MISSING'
-        );
-      }
-      if (fileStat.size > 160 * 1024 * 1024) {
-        throw new AppError(
-          'El archivo supera el límite de 160 MB para Dhyrium Desktop.',
-          413,
-          'DESKTOP_DOCUMENT_FILE_TOO_LARGE'
-        );
-      }
-      const buffer = await readFile(absolutePath);
-      assertDesktopDocumentBuffer(buffer);
-      return buffer;
-    } catch (error) {
-      if (error instanceof AppError) throw error;
-      throw new AppError(
-        'El archivo adjunto ya no está disponible en el almacenamiento.',
-        404,
-        'DESKTOP_DOCUMENT_SOURCE_MISSING'
-      );
-    }
-  }
-
-  /**
-   * Replaces the file that the task already exposes to Dhyrium users.
-   * The new Desktop version is written to its immutable vault first; this
-   * method then publishes that saved content with an atomic same-directory
-   * rename so normal downloads always receive the latest saved file.
-   */
   static async replaceSource(
     directory: string,
     fileName: string,
-    buffer: Buffer
+    storageKey: string
   ) {
-    assertDesktopDocumentBuffer(buffer);
     const target = await this.resolveSourcePath(directory, fileName);
     const temporary = path.join(
       path.dirname(target),
       `.${path.basename(target)}.${randomUUID()}.desktop.tmp`
     );
-    const handle = await open(temporary, 'wx');
     try {
-      await handle.writeFile(buffer);
-      await handle.sync();
-    } finally {
-      await handle.close();
-    }
-
-    try {
+      await writeDesktopStream(
+        createReadStream(this.resolveStorageKey(storageKey)),
+        temporary
+      );
       await rename(temporary, target);
-    } catch (error) {
+    } finally {
       await rm(temporary, { force: true });
-      throw error;
     }
   }
 }

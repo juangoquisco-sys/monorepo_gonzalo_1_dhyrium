@@ -8,6 +8,7 @@
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>Dhyrium.Desktop.Connector</AssemblyName>
+    <Version>0.3.3</Version>
     <RootNamespace>Dhyrium.Desktop.Connector</RootNamespace>
   </PropertyGroup>
 </Project>

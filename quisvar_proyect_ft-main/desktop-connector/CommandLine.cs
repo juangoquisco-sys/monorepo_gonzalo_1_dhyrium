@@ -48,6 +48,7 @@ public static class CommandLine
         }
         catch (Exception exception)
         {
+            if (args.Contains("--self-test")) { Console.Error.WriteLine(exception); return 1; }
             ShowFailure(exception.Message);
             return 1;
         }
@@ -156,7 +157,7 @@ public static class CommandLine
 
     private static HttpClient CreateHttpClient() => new()
     {
-        Timeout = TimeSpan.FromMinutes(4),
+        Timeout = TimeSpan.FromMinutes(15),
     };
 
     private static string ReadPassword()

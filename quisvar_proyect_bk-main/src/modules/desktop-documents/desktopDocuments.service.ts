@@ -1,15 +1,27 @@
+import {
+  queueDesktopPublication,
+  publishDesktopSource,
+  removeDesktopPublication,
+} from './desktopDocuments.publication';
 import { randomUUID } from 'crypto';
+import { rm } from 'fs/promises';
+import {
+  desktopTransfers,
+  type DesktopTransfer,
+} from './desktopDocuments.transfers';
 import { Prisma } from '@prisma/client';
 import type { UserType } from '@/middlewares/auth.middleware';
 import AppError from '@/utils/appError';
 import { prisma } from '@/utils/prisma.server';
 import TaskDocumentOfficePolicy from '@/modules/task-documents/taskDocumentOffice.policy';
 import {
-  assertDesktopDocumentBuffer,
+  assertDesktopDocumentSize,
   assertDesktopFileExtensionMatches,
   assertDesktopFileNameAllowed,
   createDesktopLaunchTicket,
   DESKTOP_LAUNCH_TICKET_TTL_MS,
+  DESKTOP_LOCK_LEASE_MS,
+  MAX_DESKTOP_DOCUMENT_BYTES,
   desktopTaskKindForSource,
   normalizeDesktopMimeType,
   sanitizeDesktopFileName,
@@ -52,6 +64,88 @@ const versionResponse = (version: VersionResponseInput) => ({
 });
 
 class DesktopDocumentsService {
+  static async createTransfer(
+    input: Parameters<typeof desktopTransfers.create>[0],
+    documentId: string,
+    user: UserType
+  ) {
+    await this.authorizeTransfer(documentId, user, input.originalName);
+    return prisma.$transaction(async tx => {
+      const quotaKey = `desktop-transfer-user-${user.id}`;
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${quotaKey}, 0))`;
+      return desktopTransfers.create(input, documentId, user.id);
+    });
+  }
+  static async authorizeTransfer(
+    documentId: string,
+    user: UserType,
+    originalName?: string
+  ) {
+    const document = await this.loadAccessibleDocument(documentId, user);
+    if (originalName)
+      assertDesktopFileExtensionMatches({
+        documentName: document.originalName,
+        uploadedName: originalName,
+      });
+    return document;
+  }
+
+  static async completeTransfer(transfer: DesktopTransfer, user: UserType) {
+    return desktopTransfers.withLease(transfer, async () => {
+      return this.completeLeasedTransfer(transfer, user);
+    });
+  }
+
+  private static async completeLeasedTransfer(
+    transfer: DesktopTransfer,
+    user: UserType
+  ) {
+    await this.authorizeTransfer(transfer.documentId, user, transfer.originalName);
+    // A lost success response must not turn a completed upload into a conflict.
+    const latest = await prisma.desktopDocumentVersion.findFirst({
+      where: { documentId: transfer.documentId },
+      orderBy: { versionNumber: 'desc' },
+    });
+    const base = await prisma.desktopDocumentVersion.findFirst({
+      where: { id: transfer.baseVersionId, documentId: transfer.documentId },
+    });
+    if (
+      latest &&
+      base &&
+      latest.createdById === user.id &&
+      latest.checksumSha256 === transfer.checksumSha256 &&
+      (latest.id === base.id || latest.versionNumber === base.versionNumber + 1)
+    )
+      return versionResponse(latest);
+    if (!base)
+      throw new AppError(
+        'La versión base no pertenece al archivo.',
+        422,
+        'DESKTOP_DOCUMENT_BASE_VERSION_INVALID'
+      );
+    if (latest?.id !== base.id)
+      throw new AppError(
+        'Otra persona actualizó el archivo. La entrega local se conserva; abra la versión actual antes de continuar.',
+        409,
+        'DESKTOP_DOCUMENT_VERSION_CONFLICT'
+      );
+    const assembled = await desktopTransfers.assemble(transfer);
+    try {
+      return await this.saveVersion({
+        documentId: transfer.documentId,
+        baseVersionId: transfer.baseVersionId,
+        user,
+        file: {
+          path: assembled,
+          size: transfer.sizeBytes,
+          originalname: transfer.originalName,
+          mimetype: 'application/octet-stream',
+        } as Express.Multer.File,
+      });
+    } finally {
+      await rm(assembled, { force: true });
+    }
+  }
   private static async loadSourceRecord(input: {
     sourceKind: DesktopDocumentSourceKind;
     sourceFileId: number;
@@ -155,15 +249,19 @@ class DesktopDocumentsService {
       input.source.originalname || input.source.name
     );
     const extension = assertDesktopFileNameAllowed(originalName);
-    const buffer = await DesktopDocumentsStorage.readSource(
+    const sourcePath = await DesktopDocumentsStorage.resolveSourcePath(
       input.source.dir,
       input.source.name
     );
     const documentId = randomUUID();
     const versionId = randomUUID();
     const storageKey = createDesktopDocumentStorageKey(documentId, versionId);
-    const checksumSha256 = sha256(buffer);
-    await DesktopDocumentsStorage.writeImmutable(storageKey, buffer);
+    const { checksumSha256, sizeBytes } =
+      await DesktopDocumentsStorage.importFile(storageKey, sourcePath);
+    const importPublication = await queueDesktopPublication(
+      documentId,
+      versionId
+    );
 
     try {
       const document = await prisma.desktopDocument.create({
@@ -186,7 +284,7 @@ class DesktopDocumentsService {
               storageKey,
               originalName,
               mimeType: 'application/octet-stream',
-              sizeBytes: BigInt(buffer.length),
+              sizeBytes: BigInt(sizeBytes),
               checksumSha256,
               source: 'ORIGINAL_IMPORT',
               createdById: input.userId,
@@ -197,9 +295,11 @@ class DesktopDocumentsService {
           versions: { orderBy: { versionNumber: 'desc' }, take: 1 },
         },
       });
+      await removeDesktopPublication(importPublication);
       return { document, version: document.versions[0] };
     } catch (error) {
-      await DesktopDocumentsStorage.remove(storageKey);
+      // A connection failure can hide a successful commit. Leave the immutable
+      // bytes and journal intact until maintenance can establish the DB outcome.
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === 'P2002'
@@ -291,7 +391,7 @@ class DesktopDocumentsService {
     };
   }
 
-  private static async loadAccessibleDocument(documentId: string, user: UserType) {
+  static async loadAccessibleDocument(documentId: string, user: UserType) {
     const document = await prisma.desktopDocument.findUnique({
       where: { id: documentId },
       include: {
@@ -336,6 +436,65 @@ class DesktopDocumentsService {
     return document;
   }
 
+  private static lockHolderName(
+    holder: { profile: { firstName: string; lastName: string } | null } | null
+  ) {
+    if (!holder?.profile) return 'otro usuario';
+    return `${holder.profile.firstName} ${holder.profile.lastName}`.trim();
+  }
+
+  // Takes the edit lock when it is free, expired or already ours; otherwise
+  // reports who holds it so the caller can be opened read-only.
+  private static async acquireOrRenewLock(documentId: string, user: UserType) {
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + DESKTOP_LOCK_LEASE_MS);
+    const acquired = await prisma.desktopDocument.updateMany({
+      where: {
+        id: documentId,
+        OR: [
+          { lockedById: user.id },
+          { lockedById: null },
+          { lockExpiresAt: { lt: now } },
+        ],
+      },
+      data: { lockedById: user.id, lockedAt: now, lockExpiresAt: expiresAt },
+    });
+    if (acquired.count === 1) return { readOnly: false, lockedByName: null };
+    const document = await prisma.desktopDocument.findUnique({
+      where: { id: documentId },
+      select: {
+        lockedBy: { select: { profile: { select: { firstName: true, lastName: true } } } },
+      },
+    });
+    return {
+      readOnly: true,
+      lockedByName: this.lockHolderName(document?.lockedBy ?? null),
+    };
+  }
+
+  static async heartbeatLock(documentId: string, user: UserType) {
+    await this.loadAccessibleDocument(documentId, user);
+    const now = new Date();
+    const renewed = await prisma.desktopDocument.updateMany({
+      where: { id: documentId, lockedById: user.id },
+      data: { lockExpiresAt: new Date(now.getTime() + DESKTOP_LOCK_LEASE_MS) },
+    });
+    if (renewed.count !== 1) {
+      throw new AppError(
+        'Su bloqueo de edición expiró porque otra persona ya abrió este archivo. Vuelva a abrirlo desde la web.',
+        409,
+        'DESKTOP_DOCUMENT_LOCK_LOST'
+      );
+    }
+  }
+
+  static async releaseLock(documentId: string, user: UserType) {
+    await prisma.desktopDocument.updateMany({
+      where: { id: documentId, lockedById: user.id },
+      data: { lockedById: null, lockedAt: null, lockExpiresAt: null },
+    });
+  }
+
   static async redeemLaunch(input: { ticket: string; user: UserType }) {
     const now = new Date();
     const ticket = await prisma.desktopDocumentLaunchTicket.findFirst({
@@ -370,7 +529,10 @@ class DesktopDocumentsService {
         'DESKTOP_DOCUMENT_LAUNCH_REDEEMED'
       );
     }
-    const document = await this.loadAccessibleDocument(ticket.documentId, input.user);
+    const document = await this.loadAccessibleDocument(
+      ticket.documentId,
+      input.user
+    );
     const version = await prisma.desktopDocumentVersion.findFirst({
       where: { id: ticket.versionId, documentId: document.id },
     });
@@ -381,6 +543,7 @@ class DesktopDocumentsService {
         'DESKTOP_DOCUMENT_VERSION_NOT_FOUND'
       );
     }
+    const lock = await this.acquireOrRenewLock(document.id, input.user);
     return {
       document: {
         id: document.id,
@@ -391,6 +554,10 @@ class DesktopDocumentsService {
       version: versionResponse(version),
       contentPath: `/desktop/documents/${document.id}/versions/${version.id}/content`,
       savePath: `/desktop/documents/${document.id}/versions`,
+      transferPath: `/desktop/documents/${document.id}/transfers`,
+      maxFileBytes: MAX_DESKTOP_DOCUMENT_BYTES,
+      readOnly: lock.readOnly,
+      lockedByName: lock.lockedByName,
     };
   }
 
@@ -413,8 +580,10 @@ class DesktopDocumentsService {
         'DESKTOP_DOCUMENT_VERSION_NOT_FOUND'
       );
     }
-    const buffer = await DesktopDocumentsStorage.read(version.storageKey);
-    return { document, version, buffer };
+    const contentPath = await DesktopDocumentsStorage.contentPath(
+      version.storageKey
+    );
+    return { document, version, contentPath };
   }
 
   static async saveVersion(input: {
@@ -438,12 +607,23 @@ class DesktopDocumentsService {
         'DESKTOP_DOCUMENT_SOURCE_MISSING'
       );
     }
-    const sourceDirectory = source.dir;
     assertDesktopFileExtensionMatches({
       documentName: document.originalName,
       uploadedName: input.file.originalname,
     });
-    assertDesktopDocumentBuffer(input.file.buffer);
+    assertDesktopDocumentSize(input.file.size);
+    if (
+      document.lockedById !== null &&
+      document.lockedById !== input.user.id &&
+      document.lockExpiresAt !== null &&
+      document.lockExpiresAt > new Date()
+    ) {
+      throw new AppError(
+        'Otra persona tiene este archivo abierto para editar. Sus cambios no se pueden guardar.',
+        409,
+        'DESKTOP_DOCUMENT_LOCKED'
+      );
+    }
 
     const baseVersion = await prisma.desktopDocumentVersion.findFirst({
       where: { id: input.baseVersionId, documentId: document.id },
@@ -463,16 +643,18 @@ class DesktopDocumentsService {
       );
     }
 
-    const checksumSha256 = sha256(input.file.buffer);
-    if (checksumSha256 === baseVersion.checksumSha256) {
-      return versionResponse(baseVersion);
-    }
-
     const versionId = randomUUID();
     const storageKey = createDesktopDocumentStorageKey(document.id, versionId);
-    await DesktopDocumentsStorage.writeImmutable(storageKey, input.file.buffer);
-    try {
-      const version = await prisma.$transaction(async transaction => {
+    const { checksumSha256, sizeBytes } =
+      await DesktopDocumentsStorage.importFile(storageKey, input.file.path);
+    if (checksumSha256 === baseVersion.checksumSha256) {
+      await DesktopDocumentsStorage.remove(storageKey);
+      return versionResponse(baseVersion);
+    }
+    const publication = await queueDesktopPublication(document.id, versionId);
+    const version = await prisma.$transaction(
+      async transaction => {
+        await transaction.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${document.id}, 0))`;
         const updated = await transaction.desktopDocument.updateMany({
           where: {
             id: document.id,
@@ -498,24 +680,24 @@ class DesktopDocumentsService {
             storageKey,
             originalName: document.originalName,
             mimeType: normalizeDesktopMimeType(input.file.mimetype),
-            sizeBytes: BigInt(input.file.buffer.length),
+            sizeBytes: BigInt(sizeBytes),
             checksumSha256,
             source: 'DESKTOP_SAVE',
             createdById: input.user.id,
           },
         });
-        await DesktopDocumentsStorage.replaceSource(
-          sourceDirectory,
-          source.name,
-          input.file.buffer
-        );
         return createdVersion;
-      });
-      return versionResponse(version);
-    } catch (error) {
-      await DesktopDocumentsStorage.remove(storageKey);
-      throw error;
-    }
+      },
+      { timeout: 15_000, maxWait: 120_000 }
+    );
+    const published = await publishDesktopSource(publication).catch(
+      () => false
+    );
+    return {
+      ...versionResponse(version),
+      sourcePublicationPending: !published,
+    };
+    // On an uncertain commit response, maintenance retains/repairs the journal.
   }
 }
 
