@@ -322,6 +322,11 @@
 }
 
 .tableListMealOrder-mobileName {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
   min-width: 0;
   color: var(--color-secondary);
   font-size: 0.86rem;
@@ -329,6 +334,71 @@
   line-height: 1.18;
   overflow-wrap: anywhere;
   white-space: normal;
+}
+
+.tableListMealOrder-mobileName:disabled {
+  cursor: default;
+}
+
+.tableListMealOrder-mobileNameBlock {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.tableListMealOrder-mobileMenuToggle {
+  flex-shrink: 0;
+  padding: 0.22rem 0.45rem;
+  border: 1px solid rgba(0, 145, 217, 0.34);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--color-primary);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.tableListMealOrder-mobileMenuToggle:hover {
+  background: var(--color-primarylight);
+}
+
+.tableListMealOrder-mobileLunchDetails {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin-left: 2.3rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid rgba(0, 145, 217, 0.25);
+  border-radius: 0.45rem;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.tableListMealOrder-mobileLunchDetails div {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.tableListMealOrder-mobileLunchDetails span {
+  color: var(--color-gray-tertiary);
+  font-size: 0.64rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.tableListMealOrder-mobileLunchDetails strong,
+.tableListMealOrder-mobileLunchDetails p {
+  margin: 0;
+  color: var(--color-secondary);
+  font-size: 0.76rem;
+  line-height: 1.25;
+}
+
+.tableListMealOrder-mobileLunchDetails p {
+  grid-column: 1 / -1;
+  color: var(--color-correction);
 }
 
 .tableListMealOrder-mobileFooter {

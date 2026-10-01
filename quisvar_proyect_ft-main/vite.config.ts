@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
@@ -36,11 +36,15 @@ const ON_DEMAND_PRELOAD_CHUNKS = [
 
 // En desarrollo, usa la misma entrada publicada que localhost:8088. Así Vite
 // no queda conectado a una instancia local antigua cuando Docker recrea el backend.
-const LOCAL_BACKEND_TARGET = 'http://localhost:8081';
 const LOCAL_BACKEND_PATHS =
   '^/(api|socket\\.io|projects|uploads|index|models|editables|reviews|task-document-assets|file-user|general|reports|images|public|api-docs|iclock)(/|$)';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  const localBackendTarget =
+    env.VITE_DEV_BACKEND_URL || 'http://localhost:8081';
+
+  return {
   plugins: [react(), tailwindcss()],
   define: {
     __APP_COMMIT__: JSON.stringify(getGitCommit()),
@@ -56,7 +60,7 @@ export default defineConfig({
     port: 8001,
     proxy: {
       [LOCAL_BACKEND_PATHS]: {
-        target: LOCAL_BACKEND_TARGET,
+        target: localBackendTarget,
         changeOrigin: true,
         ws: true,
       },
@@ -74,4 +78,5 @@ export default defineConfig({
       },
     },
   },
+  };
 });

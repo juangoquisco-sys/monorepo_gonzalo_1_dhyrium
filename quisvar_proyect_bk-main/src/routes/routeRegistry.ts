@@ -77,6 +77,7 @@ import desktopDocumentsRouter from '@/modules/desktop-documents/desktopDocuments
 import liquidationsRouter from '@/modules/liquidations/liquidations.routes';
 import corporateArchiveRouter from '@/modules/corporate-archive/corporateArchive.routes';
 import letterArchiveRouter from '@/modules/letter-archive/letterArchive.routes';
+import lunchMenuRouter from '@/modules/lunch-menu/lunchMenu.routes';
 
 export const routesConfig = [
   { path: '/health', router: healthRouter },
@@ -146,6 +147,7 @@ export const routesConfig = [
   { path: '/liquidations', router: liquidationsRouter },
   { path: '/corporate-archive', router: corporateArchiveRouter },
   { path: '/letter-archive', router: letterArchiveRouter },
+  { path: '/lunch-menus', router: lunchMenuRouter },
   { path: '/meetings', router: meetingsRoutes },
   { path: '/meeting-external-contacts', router: meetingExternalContactsRoutes },
   { path: '/progress-reports', router: progressReportsRoutes },
