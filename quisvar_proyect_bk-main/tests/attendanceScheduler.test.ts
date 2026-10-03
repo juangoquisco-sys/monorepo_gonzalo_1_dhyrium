@@ -71,6 +71,45 @@ test('opens only the next configured call and never while another list is active
   }
 });
 
+test('does not open a call whose capture window already expired', async () => {
+  const list = prisma.list as unknown as Record<string, unknown>;
+  const originalFindFirst = list.findFirst;
+  const originalFindMany = list.findMany;
+  const originalResolve = AttendanceCallConfigService.resolveCallsForDate;
+  const originalCreate = AttendanceListService.create;
+  let created = false;
+
+  list.findFirst = async () => null;
+  list.findMany = async () => [];
+  AttendanceCallConfigService.resolveCallsForDate = async () => [
+    {
+      callConfigId: 4,
+      position: 1,
+      title: 'Llamado vencido',
+      captureStartTime: '08:00',
+      captureEndTime: '08:15',
+      captureMode: AttendanceCaptureMode.BIOMETRIC,
+    },
+  ];
+  AttendanceListService.create = async () => {
+    created = true;
+    return { id: 99 } as never;
+  };
+
+  try {
+    const result = await AttendanceSchedulerService.autoOpenNextCall(
+      new Date('2026-07-23T14:00:00.000Z')
+    );
+    assert.equal(result, null);
+    assert.equal(created, false);
+  } finally {
+    list.findFirst = originalFindFirst;
+    list.findMany = originalFindMany;
+    AttendanceCallConfigService.resolveCallsForDate = originalResolve;
+    AttendanceListService.create = originalCreate;
+  }
+});
+
 test('moves expired biometric capture to review and finalizes an expired review', async () => {
   const list = prisma.list as unknown as Record<string, unknown>;
   const originalFindMany = list.findMany;

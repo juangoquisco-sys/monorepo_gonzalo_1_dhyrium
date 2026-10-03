@@ -55,13 +55,14 @@ class AttendanceSchedulerService {
 
     const nextCall = resolvedCalls
       .filter(call => !createdConfigIds.has(call.callConfigId))
+      .map(call => ({
+        ...call,
+        startAt: combineLimaDateAndTime(now, call.captureStartTime),
+        endAt: combineLimaDateAndTime(now, call.captureEndTime),
+      }))
+      .filter(call => now >= call.startAt && now < call.endAt)
       .sort((a, b) => a.position - b.position)[0];
     if (!nextCall) return null;
-
-    const startAt = combineLimaDateAndTime(now, nextCall.captureStartTime);
-    if (now < startAt) return null;
-
-    const endAt = combineLimaDateAndTime(now, nextCall.captureEndTime);
 
     try {
       return await AttendanceListService.create(
@@ -70,7 +71,7 @@ class AttendanceSchedulerService {
           timer: nextCall.captureStartTime,
           captureMode: nextCall.captureMode,
           callConfigId: nextCall.callConfigId,
-          captureWindowEndsAt: endAt,
+          captureWindowEndsAt: nextCall.endAt,
         },
         null
       );
