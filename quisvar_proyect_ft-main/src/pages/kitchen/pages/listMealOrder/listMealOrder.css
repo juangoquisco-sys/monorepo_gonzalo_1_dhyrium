@@ -27,6 +27,52 @@
   gap: 0.85rem;
 }
 
+.listMealOrder-viewTabs {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem;
+  border: 1px solid rgba(0, 27, 105, 0.1);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.82);
+  width: fit-content;
+  max-width: 100%;
+}
+
+.listMealOrder-viewTab {
+  min-height: 2.5rem;
+  padding: 0.55rem 0.85rem;
+  border: 0;
+  border-radius: 0.55rem;
+  background: transparent;
+  color: var(--color-gray-tertiary);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.listMealOrder-viewTab:hover {
+  background: var(--color-primarylight);
+  color: var(--color-secondary);
+}
+
+.listMealOrder-viewTab--active {
+  background: var(--color-secondary);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 27, 105, 0.16);
+}
+
+.listMealOrder-viewTab--active:hover {
+  background: var(--color-secondary);
+  color: #fff;
+}
+
+.listMealOrder-menuView {
+  width: 100%;
+  max-width: 62rem;
+}
+
 .listMealOrder-inlineLoader {
   min-height: 3.2rem;
   display: flex;
@@ -68,5 +114,17 @@
   .listMealOrder-resultsBody {
     overflow: visible;
     height: auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .listMealOrder-viewTabs {
+    width: 100%;
+  }
+
+  .listMealOrder-viewTab {
+    flex: 1;
+    padding-inline: 0.45rem;
+    font-size: 0.76rem;
   }
 }

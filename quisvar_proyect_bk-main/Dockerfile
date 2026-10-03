@@ -74,7 +74,9 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/src/docs ./src/docs
 COPY 404_page/ ./404_page/
 COPY resource/ ./resource/
-COPY jsonData/ ./jsonData/
+# jsonData es un directorio local ignorado por Git. Crear el punto de montaje
+# permite construir la imagen aun cuando los datos se inyectan como volumen.
+RUN mkdir -p ./jsonData
 
 # Expone el puerto de la aplicación
 EXPOSE 8081

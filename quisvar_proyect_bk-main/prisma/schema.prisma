@@ -139,6 +139,80 @@ model Users {
   desktopDocumentLaunchTickets        DesktopDocumentLaunchTicket[]     @relation("DesktopDocumentLaunchUser")
   lockedDesktopDocuments              DesktopDocument[]                 @relation("DesktopDocumentLockHolder")
   iclockCommands                      IclockDeviceCommand[]
+  createdLunchMenuVersions            LunchMenuVersion[]                @relation("LunchMenuVersionCreator")
+  manuallyClosedLunchMenus            LunchMenu[]                       @relation("LunchMenuManualCloser")
+  lunchMenuSelections                 LunchMenuSelection[]              @relation("LunchMenuSelectionUser")
+  assignedLunchMenuSelections         LunchMenuSelection[]              @relation("LunchMenuSelectionAssigner")
+}
+
+model LunchMenu {
+  id                 Int                @id @default(autoincrement())
+  serviceDate        DateTime           @unique
+  activeVersion      Int                @default(1)
+  isManuallyClosed   Boolean            @default(false)
+  manuallyClosedAt   DateTime?
+  manuallyClosedById Int?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  manuallyClosedBy   Users?             @relation("LunchMenuManualCloser", fields: [manuallyClosedById], references: [id])
+  versions           LunchMenuVersion[]
+
+  @@index([serviceDate])
+}
+
+model LunchMenuVersion {
+  id                   Int                  @id @default(autoincrement())
+  lunchMenuId          Int
+  version              Int
+  soupAvailable        Boolean
+  soupName             String?              @db.VarChar(180)
+  dessertAvailable     Boolean              @default(false)
+  dessertName          String?              @db.VarChar(180)
+  refreshmentAvailable Boolean              @default(false)
+  refreshmentName      String?              @db.VarChar(180)
+  closesAt             DateTime
+  publishedAt          DateTime             @default(now())
+  createdById          Int
+  createdAt            DateTime             @default(now())
+  lunchMenu            LunchMenu            @relation(fields: [lunchMenuId], references: [id], onDelete: Cascade)
+  createdBy            Users                @relation("LunchMenuVersionCreator", fields: [createdById], references: [id])
+  seconds              LunchMenuSecond[]
+  selections           LunchMenuSelection[]
+
+  @@unique([lunchMenuId, version])
+  @@index([closesAt])
+}
+
+model LunchMenuSecond {
+  id                 Int                  @id @default(autoincrement())
+  lunchMenuVersionId Int
+  name               String               @db.VarChar(180)
+  position           Int
+  lunchMenuVersion   LunchMenuVersion     @relation(fields: [lunchMenuVersionId], references: [id], onDelete: Cascade)
+  selections         LunchMenuSelection[]
+
+  @@unique([lunchMenuVersionId, position])
+}
+
+model LunchMenuSelection {
+  id                 Int                      @id @default(autoincrement())
+  lunchMenuVersionId Int
+  userId             Int
+  lunchMenuSecondId  Int
+  wantsSoup          Boolean
+  wantsDessert       Boolean                  @default(true)
+  wantsRefreshment   Boolean                  @default(true)
+  source             LunchMenuSelectionSource @default(SELF)
+  assignedById       Int?
+  selectedAt         DateTime                 @default(now())
+  lunchMenuVersion   LunchMenuVersion         @relation(fields: [lunchMenuVersionId], references: [id], onDelete: Cascade)
+  user               Users                    @relation("LunchMenuSelectionUser", fields: [userId], references: [id], onDelete: Cascade)
+  lunchMenuSecond    LunchMenuSecond          @relation(fields: [lunchMenuSecondId], references: [id])
+  assignedBy         Users?                   @relation("LunchMenuSelectionAssigner", fields: [assignedById], references: [id])
+
+  @@unique([lunchMenuVersionId, userId])
+  @@index([userId, selectedAt])
+  @@index([assignedById])
 }
 
 model IclockDeviceCommand {
@@ -3556,6 +3630,12 @@ enum MealPickupStatus {
   PICKED_UP
   NOT_PICKED_UP
   RESERVED
+}
+
+enum LunchMenuSelectionSource {
+  SELF
+  ADMIN
+  AUTO
 }
 
 enum UserType {

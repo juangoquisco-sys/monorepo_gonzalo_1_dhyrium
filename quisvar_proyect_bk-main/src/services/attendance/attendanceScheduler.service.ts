@@ -30,6 +30,8 @@ const isConflict = (error: unknown) =>
   error instanceof AppError && error.statusCode === 409;
 
 class AttendanceSchedulerService {
+  private static activeTick: Promise<void> | null = null;
+
   static async autoOpenNextCall(now = new Date()) {
     const activeList = await prisma.list.findFirst({
       where: {
@@ -171,12 +173,20 @@ class AttendanceSchedulerService {
     }
   }
 
-  static async runTick(now = new Date()) {
-    await this.autoFinalizeReview(now);
-    await this.autoFinalizeManualCalls(now);
-    await this.autoCloseCaptureWindow(now);
-    await this.notifyClosingSoon(now);
-    await this.autoOpenNextCall(now);
+  static runTick(now = new Date()) {
+    if (this.activeTick) return this.activeTick;
+
+    this.activeTick = (async () => {
+      await this.autoFinalizeReview(now);
+      await this.autoFinalizeManualCalls(now);
+      await this.autoCloseCaptureWindow(now);
+      await this.notifyClosingSoon(now);
+      await this.autoOpenNextCall(now);
+    })().finally(() => {
+      this.activeTick = null;
+    });
+
+    return this.activeTick;
   }
 }
 

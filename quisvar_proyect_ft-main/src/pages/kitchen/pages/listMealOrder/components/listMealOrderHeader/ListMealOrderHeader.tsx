@@ -1,6 +1,5 @@
 import {
   PiArrowClockwiseBold,
-  PiArrowsClockwiseBold,
   PiFileJpgFill,
   PiFilePdfFill,
   PiMagnifyingGlassBold,
@@ -43,9 +42,7 @@ const ListMealOrderHeader = () => {
     searchText,
     handleSearchChange,
     isLoading,
-    isDistributing,
-    onGenerateDistribution,
-    onResetDistribution,
+    activeView,
   } = useContext(ListMealOrderContext);
   const [isExportingImage, setIsExportingImage] = useState(false);
 
@@ -55,20 +52,7 @@ const ListMealOrderHeader = () => {
         mealOrderSelected.hour || '00:00'
       )} - ${formatFullDayDateUtc(date)}`
     : `Pedidos del dia - ${formatFullDayDateUtc(date)}`;
-  const distributionUsers = mealUsers
-    .filter(user => user.mealStatus === true && user.distributionOrder)
-    .sort(
-      (left, right) =>
-        (left.distributionOrder || 0) - (right.distributionOrder || 0)
-    );
-  const whatsappMessage = mealOrderSelected?.order?.isDistributed
-    ? `Comparto el consolidado de ${exportName}.\n\nOrden de reparto:\n${distributionUsers
-        .map(user => `#${user.distributionOrder} ${user.profile.lastName}, ${user.profile.firstName}`)
-        .join('\n')}`
-    : `Comparto el consolidado de ${exportName}.`;
-  const canDistribute =
-    mealOrderSelected?.type === 'Almuerzo' &&
-    !!mealOrderSelected.order?.isClose;
+  const whatsappMessage = `Comparto el consolidado de ${exportName}.\nEstado de entrega: ${filters.pickupStatus}.`;
 
   const mealSummary = useMemo(() => {
     const positive = mealUsers.filter(user => user.mealStatus === true).length;
@@ -329,8 +313,7 @@ const ListMealOrderHeader = () => {
             cuando el pedido esté cerrado.
           </p>
         </div>
-
-        <div className="listMealOrder-toolbar">
+        {activeView === 'delivery' && <div className="listMealOrder-toolbar">
           <Input
             type="search"
             value={searchText}
@@ -374,6 +357,20 @@ const ListMealOrderHeader = () => {
             width={12}
           />
 
+          {mealOrderSelected?.type.toLowerCase() === 'almuerzo' && (
+            <Select
+              value={filters.lunchMenuOrder}
+              data={['Orden original', 'Segundo (A-Z)']}
+              placeholder="Ordenar"
+              onChange={onChangeFilter}
+              name="lunchMenuOrder"
+              extractValue={value => value}
+              renderTextField={value => value}
+              styleVariant="tertiary"
+              width={12}
+            />
+          )}
+
           <Button
             leftIcon={<PiArrowClockwiseBold size={17} />}
             size="xxs"
@@ -382,7 +379,7 @@ const ListMealOrderHeader = () => {
             borderRadius={10}
             disabled={isLoading}
           />
-        </div>
+        </div>}
       </div>
 
       <div className="listMealOrder-summaryBlock">
@@ -416,32 +413,6 @@ const ListMealOrderHeader = () => {
       <DivFlex autoWidth className="listMealOrder-actions">
         {mealOrderSelected && (
           <DivFlex autoWidth gap={0.8} className="listMealOrder-exportActions">
-            {canDistribute && (
-              <Button
-                size="xxs"
-                variant="outline"
-                text={
-                  mealOrderSelected.order?.isDistributed
-                    ? 'Re-sortear justo'
-                    : 'Realizar Sorteo Justo'
-                }
-                leftIcon={<PiArrowsClockwiseBold size={16} />}
-                onClick={onGenerateDistribution}
-                color="secondary"
-                disabled={isDistributing}
-              />
-            )}
-            {canDistribute && mealOrderSelected.order?.isDistributed && (
-              <Button
-                size="xxs"
-                variant="outline"
-                text="Restablecer orden"
-                leftIcon={<PiArrowClockwiseBold size={16} />}
-                onClick={onResetDistribution}
-                color="secondary"
-                disabled={isDistributing}
-              />
-            )}
             <Button
               size="xxs"
               variant="outline"
@@ -451,17 +422,15 @@ const ListMealOrderHeader = () => {
               color="secondary"
               disabled={isExportingImage}
             />
-            {!!navigator.share && (
-              <Button
-                size="xxs"
-                variant="outline"
-                text="Compartir"
-                leftIcon={<PiShareNetworkFill size={16} />}
-                onClick={handleShareToWhatsApp}
-                color="secondary"
-                disabled={isExportingImage}
-              />
-            )}
+            <Button
+              size="xxs"
+              variant="outline"
+              text="Compartir"
+              leftIcon={<PiShareNetworkFill size={16} />}
+              onClick={handleShareToWhatsApp}
+              color="secondary"
+              disabled={isExportingImage}
+            />
             <Button
               size="xxs"
               variant="outline"

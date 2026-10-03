@@ -88,7 +88,6 @@ export interface Order {
   orderDate: Date;
   createdAt?: Date;
   isClose: boolean;
-  isDistributed: boolean;
   mealOrderOnUsers: MealOrderOnUser[];
   users?: UserMeal[];
 }
@@ -99,8 +98,6 @@ export interface MealOrderOnUser {
   amountOfFood: AmountOfFood;
   pickupStatus?: MealPickupStatus | null;
   pickupUpdatedAt?: Date | string | null;
-  distributionOrder?: number | null;
-  distributionGeneratedAt?: Date | string | null;
 }
 
 export interface UserMeal extends UserProfile {
@@ -112,8 +109,6 @@ export interface UserMeal extends UserProfile {
   pickupStatus: MealPickupStatus | null;
   deliveryStatus: DeliveryStatus;
   pickupUpdatedAt?: Date | string | null;
-  distributionOrder?: number | null;
-  distributionGeneratedAt?: Date | string | null;
   licenseJustification?: KitchenLicenseJustification | null;
 }
 

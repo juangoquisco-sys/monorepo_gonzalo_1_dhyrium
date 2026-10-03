@@ -21,7 +21,9 @@ if (process.env.NODE_ENV === 'production') {
   if (!global.db) {
     console.log(pc.bgWhite(pc.bold('🚧 Database is under development 🚧 ')));
     global.db = createPrismaClient();
-    global.db.$connect();
+    if (process.env.NODE_ENV !== 'test') {
+      global.db.$connect();
+    }
   }
   prisma = global.db;
 }

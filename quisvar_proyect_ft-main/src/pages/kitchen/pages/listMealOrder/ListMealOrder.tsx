@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 import './listMealOrder.css';
 import { _date } from '@/utils/formatDate';
@@ -12,6 +13,9 @@ import TableListMealOrder from './components/tableListMealOrder/TableListMealOrd
 import LoaderForComponent from '@/components/loaderForComponent/LoaderForComponent';
 import LoaderOnly from '@/components/loaderOnly/LoaderOnly';
 import TableNoData from '@/components/table/TableNoData';
+import LunchMenuProviderSummary from '../../lunch-menu/LunchMenuProviderSummary';
+import LunchMenuModerationPanel from '../../lunch-menu/LunchMenuModerationPanel';
+import { getLunchMenuModeration } from '../../lunch-menu/lunchMenu.service';
 import {
   ListMealOrderContext,
   type OrderFilters,
@@ -24,13 +28,14 @@ const ListMealOrder = () => {
   const [filters, setFilters] = useState<OrderFilters>({
     orderStatus: 'Todos',
     pickupStatus: 'Todos',
+    lunchMenuOrder: 'Orden original',
   });
+  const [activeView, setActiveView] = useState<'delivery' | 'menu'>('delivery');
   const [searchText, setSearchText] = useState('');
   const [mealsOrder, setMealsOrder] = useState<Meal[] | null>(null);
   const [mealOrderSelected, setMealOrderSelected] = useState<Meal | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isTogglingMealClose, setIsTogglingMealClose] = useState(false);
-  const [isDistributing, setIsDistributing] = useState(false);
   const isBeforeToday = isBeforeTodayFn(date);
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -119,31 +124,41 @@ const ListMealOrder = () => {
     }
   };
 
-  const runDistributionAction = async (action: 'generate' | 'reset') => {
-    const mealOrderId = mealOrderSelected?.order?.id;
-    if (!mealOrderId) return;
-
-    try {
-      setIsDistributing(true);
-      await axiosInstance.post(`/kitchen/distribution-order/${action}`, {
-        mealOrderId,
-      });
-      SnackbarUtilities.success(
-        action === 'generate'
-          ? mealOrderSelected?.order?.isDistributed
-            ? 'Sorteo realizado nuevamente'
-            : 'Sorteo justo realizado'
-          : 'Orden del sorteo restablecido'
-      );
-      await getOrderMealByDate(date);
-    } finally {
-      setIsDistributing(false);
-    }
-  };
-
   const hasMeals = (mealsOrder?.length || 0) > 0;
   const hasLoadedMeals = mealsOrder !== null;
+  const isLunchSelected = mealOrderSelected?.type.toLowerCase() === 'almuerzo';
+  const menuStateQuery = useQuery({
+    queryKey: ['lunch-menu-moderation', date],
+    queryFn: ({ signal }) => getLunchMenuModeration(date, signal),
+    enabled: isLunchSelected,
+    retry: false,
+  });
+  const viewDefaultKey = useRef<string | null>(null);
   const showInitialLoading = isLoading && !hasLoadedMeals;
+
+  useEffect(() => {
+    if (!mealOrderSelected) return;
+    setFilters(previous => ({
+      ...previous,
+      orderStatus:
+        mealOrderSelected.type.toLowerCase() === 'almuerzo' ? 'Si' : 'Todos',
+      pickupStatus: 'Todos',
+      lunchMenuOrder: 'Orden original',
+    }));
+  }, [mealOrderSelected?.id]);
+
+  useEffect(() => {
+    if (!isLunchSelected || menuStateQuery.isLoading) {
+      if (!isLunchSelected) setActiveView('delivery');
+      return;
+    }
+
+    const viewKey = `${date}-${mealOrderSelected?.id}`;
+    if (viewDefaultKey.current === viewKey) return;
+
+    viewDefaultKey.current = viewKey;
+    setActiveView(menuStateQuery.data?.isOpen ? 'menu' : 'delivery');
+  }, [date, isLunchSelected, mealOrderSelected?.id, menuStateQuery.data?.isOpen, menuStateQuery.isLoading]);
 
   return (
     <ListMealOrderContext.Provider
@@ -163,9 +178,8 @@ const ListMealOrder = () => {
         handleSearchChange,
         isLoading,
         isTogglingMealClose,
-        isDistributing,
-        onGenerateDistribution: () => runDistributionAction('generate'),
-        onResetDistribution: () => runDistributionAction('reset'),
+        activeView,
+        setActiveView,
       }}
     >
       <div
@@ -175,7 +189,33 @@ const ListMealOrder = () => {
         }}
       >
         <ListMealOrderHeader />
-        {showInitialLoading ? (
+        <main className="listMealOrder-results">
+          {isLunchSelected && (
+            <nav className="listMealOrder-viewTabs" aria-label="Vistas de almuerzo">
+              <button
+                type="button"
+                className={activeView === 'menu' ? 'listMealOrder-viewTab listMealOrder-viewTab--active' : 'listMealOrder-viewTab'}
+                aria-current={activeView === 'menu' ? 'page' : undefined}
+                onClick={() => setActiveView('menu')}
+              >
+                Selección de almuerzos
+              </button>
+              <button
+                type="button"
+                className={activeView === 'delivery' ? 'listMealOrder-viewTab listMealOrder-viewTab--active' : 'listMealOrder-viewTab'}
+                aria-current={activeView === 'delivery' ? 'page' : undefined}
+                onClick={() => setActiveView('delivery')}
+              >
+                Entrega y lista SI/NO
+              </button>
+            </nav>
+          )}
+          {isLunchSelected && activeView === 'menu' ? (
+            <section className="listMealOrder-menuView" aria-label="Administración del menú de almuerzo">
+              <LunchMenuProviderSummary date={date} />
+              <LunchMenuModerationPanel date={date} />
+            </section>
+          ) : showInitialLoading ? (
           <div className="listMealOrder-feedback">
             <LoaderForComponent width={90} />
           </div>
@@ -194,7 +234,8 @@ const ListMealOrder = () => {
               </div>
             )}
           </div>
-        )}
+          )}
+        </main>
       </div>
     </ListMealOrderContext.Provider>
   );

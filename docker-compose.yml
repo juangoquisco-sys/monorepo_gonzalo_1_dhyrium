@@ -1,24 +1,21 @@
 name: dhyrium-vibecode
 
-# Corte aislado del legacy. No incluye PostgreSQL: el backend usa la instancia
-# existente de 5492 indicada por DATABASE_URL en el .env privado de la raíz.
+# Corte de producción aislado. No incluye PostgreSQL: el backend usa la
+# instancia externa de 5495 definida en el archivo de entorno privado.
 services:
   backend:
-    image: dhyrium-vibecode-backend:local
+    image: ${DHYRIUM_BACKEND_IMAGE:?Defina DHYRIUM_BACKEND_IMAGE con la etiqueta inmutable del release}
     build:
       context: ./quisvar_proyect_bk-main
       dockerfile: Dockerfile
     env_file:
-      # Conserva claves de autenticación/cifrado. El archivo raíz se carga
-      # después para fijar DATABASE_URL en 5492.
-      - ./quisvar_proyect_bk-main/.env
-      - ./.env
+      - ${DHYRIUM_RUNTIME_ENV_FILE:?Defina DHYRIUM_RUNTIME_ENV_FILE con el archivo de entorno privado}
     environment:
       NODE_ENV: production
       HOST: 0.0.0.0
       PORT: 8081
       ROUTE: api/v1
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL debe apuntar explícitamente a la base de producción en 5495}
       DOCX_RENDERER_URL: http://host.docker.internal:8092/render/docx-to-pdf
       DOCX_RENDERER_TOKEN: dhyrium-local-word-renderer-v1
       DOCX_RENDERER_REQUIRE_EXACT: "true"
@@ -31,7 +28,7 @@ services:
       - "8081"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    restart: "no"
+    restart: unless-stopped
     healthcheck:
       test:
         [
@@ -46,7 +43,7 @@ services:
       start_period: 20s
 
   frontend:
-    image: dhyrium-vibecode-frontend:local
+    image: ${DHYRIUM_FRONTEND_IMAGE:?Defina DHYRIUM_FRONTEND_IMAGE con la etiqueta inmutable del release}
     build:
       context: ./quisvar_proyect_ft-main
       dockerfile: Dockerfile
@@ -62,4 +59,19 @@ services:
     volumes:
       # Artefacto validado de Desktop; Nginx lo sirve sin incorporarlo a la imagen.
       - "./artifacts/dhyrium-desktop:/usr/share/nginx/html/desktop:ro"
+    restart: unless-stopped
+
+  schema:
+    profiles: ["schema"]
+    image: ${DHYRIUM_SCHEMA_IMAGE:?Defina DHYRIUM_SCHEMA_IMAGE con la etiqueta inmutable del release}
+    build:
+      context: ./quisvar_proyect_bk-main
+      dockerfile: Dockerfile
+      target: builder
+    env_file:
+      - ${DHYRIUM_RUNTIME_ENV_FILE:?Defina DHYRIUM_RUNTIME_ENV_FILE con el archivo de entorno privado}
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL debe apuntar explícitamente a la base de producción en 5495}
+    entrypoint: ["./node_modules/.bin/prisma", "db", "push"]
     restart: "no"

@@ -49,14 +49,16 @@ async function main() {
   }
 
   await prisma.$transaction(
-    [
-      ...levelChanges.map(({ id, index }) =>
-        prisma.levels.update({ where: { id }, data: { index } })
-      ),
-      ...taskChanges.map(({ id, index }) =>
-        prisma.subTasks.update({ where: { id }, data: { index } })
-      ),
-    ],
+    async transaction => {
+      await Promise.all([
+        ...levelChanges.map(({ id, index }) =>
+          transaction.levels.update({ where: { id }, data: { index } })
+        ),
+        ...taskChanges.map(({ id, index }) =>
+          transaction.subTasks.update({ where: { id }, data: { index } })
+        ),
+      ]);
+    },
     { timeout: 120000 }
   );
   console.log('Índices renumerados.');

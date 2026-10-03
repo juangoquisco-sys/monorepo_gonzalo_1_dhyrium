@@ -25,10 +25,12 @@ import {
   formatFullDayDateUtc,
 } from '@/utils/dayjsSpanish';
 import { useContext, useMemo, useState, type ReactNode } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { ListMealOrderContext } from '../../ListMealOrderContext';
 import { FiCalendar, FiCheck, FiX } from 'react-icons/fi';
 import { PiLockKeyFill, PiLockKeyOpenFill } from 'react-icons/pi';
 import { COLOR_CSS } from '@/utils/cssData';
+import { getLunchMenuModeration } from '../../../../lunch-menu/lunchMenu.service';
 
 const deliveryStatusLabelMap: Record<DeliveryStatus, string> = {
   [DeliveryStatus.PICKED_UP]: 'Recogió',
@@ -175,8 +177,32 @@ const TableListMealOrder = () => {
   const [pickupSavingUserId, setPickupSavingUserId] = useState<number | null>(
     null
   );
+  const [expandedLunchUserId, setExpandedLunchUserId] = useState<number | null>(
+    null
+  );
   const showActionColumn = !!meal?.order?.isClose && !isBeforeToday;
-  const hasActiveDistribution = !!meal?.order?.isDistributed;
+  const isLunch = meal?.type.toLowerCase() === 'almuerzo';
+  const lunchMenuQuery = useQuery({
+    queryKey: ['lunch-menu-moderation', date],
+    queryFn: ({ signal }) => getLunchMenuModeration(date, signal),
+    enabled: isLunch,
+    retry: false,
+  });
+  const lunchSelectionByUserId = useMemo(
+    () => new Map((lunchMenuQuery.data?.users ?? []).map(user => [user.userId, user.selection])),
+    [lunchMenuQuery.data]
+  );
+  const lunchSecondNameByUserId = useMemo(
+    () =>
+      new Map(
+        (lunchMenuQuery.data?.users ?? []).map(user => {
+          const secondId = user.selection?.lunchMenuSecondId;
+          const second = lunchMenuQuery.data?.seconds?.find(item => item.id === secondId);
+          return [user.userId, second?.name ?? 'Sin elección'];
+        })
+      ),
+    [lunchMenuQuery.data]
+  );
 
   const columnHelper = createColumnHelper<UserMeal>();
 
@@ -278,20 +304,9 @@ const TableListMealOrder = () => {
   const columns = [
     columnHelper.display({
       header: 'N°',
-      cell: ({ row }) => {
-        const order = row.original.distributionOrder;
-        return (
-          <div style={{ textAlign: 'center' }}>
-            {hasActiveDistribution && order ? (
-              <TableListMealOrderChip className="tableListMealOrder-chip--food">
-                #{order}
-              </TableListMealOrderChip>
-            ) : (
-              row.index + 1
-            )}
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <div style={{ textAlign: 'center' }}>{row.index + 1}</div>
+      ),
     }),
     columnHelper.accessor(user => getFullNameRevert(user), {
       id: 'fullName',
@@ -299,34 +314,30 @@ const TableListMealOrder = () => {
 
       cell: ({ getValue }) => <span title={getValue()}>{getValue()}</span>,
     }),
-    columnHelper.accessor('profile.phone', {
-      header: 'CELULAR',
-      cell: ({ getValue }) => getValue() || '---',
+    columnHelper.display({
+      id: 'lunchMenu',
+      header: 'MENÚ',
+      cell: ({ row: { original } }) => {
+        if (!isLunch || original.mealStatus !== true) return '---';
+        const selection = lunchSelectionByUserId.get(original.id);
+        if (!selection) return <TableListMealOrderChip className="tableListMealOrder-chip--pending">Pendiente de menú</TableListMealOrderChip>;
+        const second = lunchMenuQuery.data?.seconds?.find(item => item.id === selection.lunchMenuSecondId);
+        return second?.name || '---';
+      },
     }),
-    // columnHelper.accessor('userType', {
-    //   header: 'TIPO DE PERSONAL',
-    //   cell: ({ getValue }) => getValue(),
-    // }),
-    columnHelper.accessor('amountOfFood', {
-      header: 'CANTIDAD',
-      cell: ({ getValue }) => (
-        <TableListMealOrderChip
-          className={getValue() ? 'tableListMealOrder-chip--food' : ''}
-        >
-          {getValue() || '---'}
-        </TableListMealOrderChip>
-      ),
-    }),
-    columnHelper.accessor('mealComment', {
-      header: 'COMENTARIO',
-      cell: ({ getValue }) => (
-        <span
-          className="tableListMealOrder-comment"
-          title={getValue() || 'Sin comentario'}
-        >
-          {getValue() || 'Sin comentario'}
-        </span>
-      ),
+    columnHelper.display({
+      id: 'accompaniments',
+      header: 'ACOMPAÑAMIENTOS',
+      cell: ({ row: { original } }) => {
+        if (!isLunch || original.mealStatus !== true) return '---';
+        const selection = lunchSelectionByUserId.get(original.id);
+        if (!selection) return 'Pendiente';
+        return [
+          lunchMenuQuery.data?.soupAvailable ? (selection.wantsSoup ? 'Sopa: Sí' : 'Sopa: No') : null,
+          lunchMenuQuery.data?.dessertAvailable ? (selection.wantsDessert ? 'Postre: Sí' : 'Postre: No') : null,
+          lunchMenuQuery.data?.refreshmentAvailable ? (selection.wantsRefreshment ? 'Refresco: Sí' : 'Refresco: No') : null,
+        ].filter(Boolean).join(' · ');
+      },
     }),
     columnHelper.accessor('mealStatus', {
       header: () => (
@@ -441,8 +452,7 @@ const TableListMealOrder = () => {
   const filteredData = useMemo(() => {
     const searchValue = searchText.trim().toLowerCase();
 
-    return (meal?.order?.users ?? [])
-      .filter(user => !hasActiveDistribution || user.mealStatus === true)
+    const users = (meal?.order?.users ?? [])
       .filter(user => {
         if (filters.orderStatus === 'Todos') {
           return true;
@@ -484,20 +494,19 @@ const TableListMealOrder = () => {
         const fullName = getFullNameRevert(user).toLowerCase();
         const phone = user.profile.phone?.toLowerCase() || '';
         return fullName.includes(searchValue) || phone.includes(searchValue);
-      })
-      .sort((left, right) => {
-        if (!hasActiveDistribution) return 0;
-        return (left.distributionOrder || Number.MAX_SAFE_INTEGER) - (
-          right.distributionOrder || Number.MAX_SAFE_INTEGER
-        );
       });
-  }, [
-    meal,
-    filters.orderStatus,
-    filters.pickupStatus,
-    searchText,
-    hasActiveDistribution,
-  ]);
+
+    if (isLunch && filters.lunchMenuOrder === 'Segundo (A-Z)') {
+      return users.sort((first, second) => {
+        const firstSecond = lunchSecondNameByUserId.get(first.id) ?? 'Sin elección';
+        const secondSecond = lunchSecondNameByUserId.get(second.id) ?? 'Sin elección';
+        const bySecond = firstSecond.localeCompare(secondSecond, 'es');
+        return bySecond || getFullNameRevert(first).localeCompare(getFullNameRevert(second), 'es');
+      });
+    }
+
+    return users;
+  }, [meal, filters.orderStatus, filters.pickupStatus, filters.lunchMenuOrder, searchText, isLunch, lunchSecondNameByUserId]);
 
   const table = useReactTable({
     data: filteredData,
@@ -592,6 +601,12 @@ const TableListMealOrder = () => {
                 const deliveryStatus =
                   user.deliveryStatus || DeliveryStatus.NOT_APPLICABLE;
                 const mealStatusChip = getMealStatusChipData(user.mealStatus);
+                const lunchSelection = lunchSelectionByUserId.get(user.id);
+                const selectedSecond = lunchMenuQuery.data?.seconds?.find(
+                  second => second.id === lunchSelection?.lunchMenuSecondId
+                );
+                const canExpandLunchMenu = isLunch && user.mealStatus === true;
+                const isLunchMenuExpanded = expandedLunchUserId === user.id;
 
                 return (
                   <article
@@ -602,14 +617,62 @@ const TableListMealOrder = () => {
                   >
                     <div className="tableListMealOrder-mobileHeader">
                       <span className="tableListMealOrder-mobileNumber">
-                        {hasActiveDistribution && user.distributionOrder
-                          ? `#${user.distributionOrder}`
-                          : index + 1}
+                        {index + 1}
                       </span>
-                      <strong className="tableListMealOrder-mobileName">
-                        {getFullNameRevert(user)}
-                      </strong>
+                      <div className="tableListMealOrder-mobileNameBlock">
+                        <button
+                          type="button"
+                          className="tableListMealOrder-mobileName"
+                          disabled={!canExpandLunchMenu}
+                          aria-expanded={
+                            canExpandLunchMenu ? isLunchMenuExpanded : undefined
+                          }
+                          onClick={() =>
+                            canExpandLunchMenu &&
+                            setExpandedLunchUserId(current =>
+                              current === user.id ? null : user.id
+                            )
+                          }
+                        >
+                          {getFullNameRevert(user)}
+                        </button>
+                        {canExpandLunchMenu && (
+                          <button
+                            type="button"
+                            className="tableListMealOrder-mobileMenuToggle"
+                            aria-expanded={isLunchMenuExpanded}
+                            onClick={() =>
+                              setExpandedLunchUserId(current =>
+                                current === user.id ? null : user.id
+                              )
+                            }
+                          >
+                            {isLunchMenuExpanded ? 'Ocultar pedido' : 'Ver pedido'}
+                          </button>
+                        )}
+                      </div>
                     </div>
+
+                    {canExpandLunchMenu && isLunchMenuExpanded && (
+                      <div className="tableListMealOrder-mobileLunchDetails">
+                        {lunchSelection ? (
+                          <>
+                            <div>
+                              <span>Segundo</span>
+                              <strong>{selectedSecond?.name || 'No disponible'}</strong>
+                            </div>
+                            <div>
+                              <span>Acompañamientos</span>
+                              <strong>
+                                {[lunchMenuQuery.data?.soupAvailable ? `${lunchMenuQuery.data.soupName || 'Sopa'}: ${lunchSelection.wantsSoup ? 'Sí' : 'No'}` : null, lunchMenuQuery.data?.dessertAvailable ? `${lunchMenuQuery.data.dessertName || 'Postre'}: ${lunchSelection.wantsDessert ? 'Sí' : 'No'}` : null, lunchMenuQuery.data?.refreshmentAvailable ? `${lunchMenuQuery.data.refreshmentName || 'Refresco'}: ${lunchSelection.wantsRefreshment ? 'Sí' : 'No'}` : null].filter(Boolean).join(' · ')}
+                              </strong>
+                            </div>
+                          </>
+                        ) : (
+                          <p>Menú pendiente de selección.</p>
+                        )}
+                      </div>
+                    )}
 
                     <div className="tableListMealOrder-mobileFooter">
                       <div className="tableListMealOrder-mobileMeta">

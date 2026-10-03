@@ -5,6 +5,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import {
   CalendarDays,
   ChevronLeft,
@@ -43,6 +44,7 @@ import type {
   MonthlyMeal,
   MonthlyMealVisualStatus,
 } from './interfaces/mealOrder.types';
+import LunchMenuSelectionCard from '../../lunch-menu/LunchMenuSelectionCard';
 
 const today = _date(new Date());
 const weekdays = ['DOM', 'LUN', 'MAR', 'MIE', 'JUE', 'VIE', 'SAB'];
@@ -129,11 +131,14 @@ const buildSelectableDatesBetween = (startDate: string, endDate: string) => {
 };
 
 const FormMealOrder = () => {
+  const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
   const calendarPanelRef = useRef<HTMLDivElement | null>(null);
-  const currentMonth = dayjsSpanish(today).format('YYYY-MM');
+  const requestedDate = searchParams.get('date')?.slice(0, 10) ?? null;
+  const notificationDate = requestedDate && /^\d{4}-\d{2}-\d{2}$/.test(requestedDate) && requestedDate >= today ? requestedDate : today;
+  const currentMonth = dayjsSpanish(notificationDate).format('YYYY-MM');
   const [calendarMonth, setCalendarMonth] = useState(currentMonth);
-  const [selectedDate, setSelectedDate] = useState(today);
+  const [selectedDate, setSelectedDate] = useState(notificationDate);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isBulkSelectionMode, setIsBulkSelectionMode] = useState(false);
   const [bulkBaseMeals, setBulkBaseMeals] = useState<Meal[]>([]);
@@ -145,6 +150,11 @@ const FormMealOrder = () => {
   const [calendarPanelHeight, setCalendarPanelHeight] = useState<number | null>(
     null
   );
+
+  useEffect(() => {
+    setCalendarMonth(dayjsSpanish(notificationDate).format('YYYY-MM'));
+    setSelectedDate(notificationDate);
+  }, [notificationDate]);
 
   const monthQuery = useQuery({
     queryKey: ['myMealOrdersMonth', calendarMonth],
@@ -738,6 +748,7 @@ const FormMealOrder = () => {
             </UiButton>
           </CardHeader>
           <CardContent className="formMealOrder-detailContent">
+            {!isBulkSelectionMode && <LunchMenuSelectionCard date={selectedDate} />}
             {monthQuery.isLoading || isMonthTransitioning ? (
               <div className="formMealOrder-feedback">
                 <LoaderForComponent width={90} variant="transparent" />
