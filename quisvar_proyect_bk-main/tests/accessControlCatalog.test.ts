@@ -58,6 +58,22 @@ test('registers productivity rankings as a directive-compliance submenu with a s
   ]);
 });
 
+test('publishes the productivity rankings API route', () => {
+  const routeRegistry = readFileSync(
+    join(__dirname, '../src/routes/routeRegistry.ts'),
+    'utf8'
+  );
+
+  assert.match(
+    routeRegistry,
+    /import productivityRankingsRouter from ['"]@\/modules\/productivity-rankings\/productivityRankings\.routes['"]/
+  );
+  assert.match(
+    routeRegistry,
+    /\{ path: '\/productivity-rankings', router: productivityRankingsRouter \}/
+  );
+});
+
 test('authorizes departures by its stable legacy permission, not by visual placement', () => {
   const userInfo = {
     role: {
