@@ -143,6 +143,7 @@ model Users {
   manuallyClosedLunchMenus            LunchMenu[]                       @relation("LunchMenuManualCloser")
   lunchMenuSelections                 LunchMenuSelection[]              @relation("LunchMenuSelectionUser")
   assignedLunchMenuSelections         LunchMenuSelection[]              @relation("LunchMenuSelectionAssigner")
+  lunchMenuImportProposals            LunchMenuImportProposal[]         @relation("LunchMenuImportProposalCreator")
 }
 
 model LunchMenu {
@@ -170,12 +171,21 @@ model LunchMenuVersion {
   dessertName          String?              @db.VarChar(180)
   refreshmentAvailable Boolean              @default(false)
   refreshmentName      String?              @db.VarChar(180)
+  soupFoodDishId       Int?
+  dessertFoodDishId    Int?
+  refreshmentFoodDishId Int?
+  soupNutritionSnapshot Json?
+  dessertNutritionSnapshot Json?
+  refreshmentNutritionSnapshot Json?
   closesAt             DateTime
   publishedAt          DateTime             @default(now())
   createdById          Int
   createdAt            DateTime             @default(now())
   lunchMenu            LunchMenu            @relation(fields: [lunchMenuId], references: [id], onDelete: Cascade)
   createdBy            Users                @relation("LunchMenuVersionCreator", fields: [createdById], references: [id])
+  soupFoodDish         FoodDish?            @relation("LunchMenuSoupDish", fields: [soupFoodDishId], references: [id])
+  dessertFoodDish      FoodDish?            @relation("LunchMenuDessertDish", fields: [dessertFoodDishId], references: [id])
+  refreshmentFoodDish  FoodDish?            @relation("LunchMenuRefreshmentDish", fields: [refreshmentFoodDishId], references: [id])
   seconds              LunchMenuSecond[]
   selections           LunchMenuSelection[]
 
@@ -188,7 +198,10 @@ model LunchMenuSecond {
   lunchMenuVersionId Int
   name               String               @db.VarChar(180)
   position           Int
+  foodDishId         Int?
+  nutritionSnapshot  Json?
   lunchMenuVersion   LunchMenuVersion     @relation(fields: [lunchMenuVersionId], references: [id], onDelete: Cascade)
+  foodDish           FoodDish?            @relation(fields: [foodDishId], references: [id])
   selections         LunchMenuSelection[]
 
   @@unique([lunchMenuVersionId, position])
@@ -213,6 +226,64 @@ model LunchMenuSelection {
   @@unique([lunchMenuVersionId, userId])
   @@index([userId, selectedAt])
   @@index([assignedById])
+}
+
+model FoodDish {
+  id                  Int                @id @default(autoincrement())
+  canonicalName       String             @db.VarChar(180)
+  normalizedName      String             @unique @db.VarChar(180)
+  status              FoodDishStatus     @default(PENDING_REVIEW)
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  aliases             FoodDishAlias[]
+  nutrition           DishNutrition?
+  seconds             LunchMenuSecond[]
+  soupVersions        LunchMenuVersion[] @relation("LunchMenuSoupDish")
+  dessertVersions     LunchMenuVersion[] @relation("LunchMenuDessertDish")
+  refreshmentVersions LunchMenuVersion[] @relation("LunchMenuRefreshmentDish")
+}
+
+model FoodDishAlias {
+  id              Int      @id @default(autoincrement())
+  foodDishId      Int
+  value           String   @db.VarChar(180)
+  normalizedValue String   @unique @db.VarChar(180)
+  foodDish        FoodDish @relation(fields: [foodDishId], references: [id], onDelete: Cascade)
+}
+
+model DishNutrition {
+  id           Int             @id @default(autoincrement())
+  foodDishId   Int             @unique
+  servingLabel String          @db.VarChar(120)
+  caloriesKcal Int
+  proteinG     Float
+  carbsG       Float
+  fatG         Float
+  source       NutritionSource
+  confidence   Float
+  summaryEs    String?         @db.VarChar(500)
+  summaryEn    String?         @db.VarChar(500)
+  reviewedAt   DateTime?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  foodDish     FoodDish        @relation(fields: [foodDishId], references: [id], onDelete: Cascade)
+}
+
+model LunchMenuImportProposal {
+  id              String                        @id @default(uuid())
+  serviceDate     DateTime
+  durationMinutes Int
+  originalText    String                        @db.Text
+  parsedMenu      Json
+  status          LunchMenuImportProposalStatus @default(DRAFT)
+  model           String                        @db.VarChar(100)
+  createdById     Int
+  reviewedAt      DateTime?
+  publishedAt     DateTime?
+  createdAt       DateTime                      @default(now())
+  updatedAt       DateTime                      @updatedAt
+  createdBy       Users                         @relation("LunchMenuImportProposalCreator", fields: [createdById], references: [id])
+  @@index([serviceDate, status])
 }
 
 model IclockDeviceCommand {
@@ -3636,6 +3707,23 @@ enum LunchMenuSelectionSource {
   SELF
   ADMIN
   AUTO
+}
+
+enum FoodDishStatus {
+  PENDING_REVIEW
+  VERIFIED
+}
+
+enum NutritionSource {
+  GEMINI_ESTIMATE
+  MANUAL
+}
+
+enum LunchMenuImportProposalStatus {
+  DRAFT
+  REVIEWED
+  PUBLISHED
+  FAILED
 }
 
 enum UserType {
