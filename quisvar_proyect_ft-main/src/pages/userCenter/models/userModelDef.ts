@@ -26,6 +26,11 @@ export const HEADER_USER_MODEL = [
   },
   {
     id: 6,
+    route: 'beneficios',
+    title: 'Beneficios',
+  },
+  {
+    id: 7,
     route: 'planillas',
     title: 'Planillas',
   },

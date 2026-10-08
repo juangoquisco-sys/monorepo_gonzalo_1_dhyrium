@@ -2,9 +2,13 @@ import { Suspense, type ReactNode } from 'react';
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import {
+  AccommodationBenefits,
   Attendance,
   AttendanceIncidents,
   AttendanceReconciliation,
+  BenefitsLayout,
+  Comeya,
+  Datos,
   AuditLogsPage,
   BasicsPage,
   BudgetsPage,
@@ -143,6 +147,12 @@ const Navigation = () => {
           <Route element={<ProtectedRoute />}>
             <Route path="/home" element={<Home />} />
             <Route path="/dhyrium-desktop" element={<DhyriumDesktopPage />} />
+            <Route element={<ProtectedRole menuAccess="comeya" />}>
+              <Route path="/comeya" element={<Comeya />} />
+            </Route>
+            <Route element={<ProtectedRole menuAccess="comeya" />}>
+              <Route path="/datos" element={<Datos />} />
+            </Route>
             {/* <Route path="/dashboard" element={<Dashboard />} /> */}
 
             <Route element={<ProtectedRole menuAccess="centro-de-usuarios" />}>
@@ -172,6 +182,35 @@ const Navigation = () => {
                   />
                 </Route>
                 <Route path="organigrama" element={<OrgChart />} />
+                <Route
+                  element={<ProtectedRole menuAccess="control-asistencia" />}
+                >
+                  <Route path="beneficios" element={<BenefitsLayout />}>
+                    <Route index element={<Navigate to="comida/lista" replace />} />
+                    <Route path="alojamiento" element={<AccommodationBenefits />} />
+                    <Route
+                      path="comidas/lista"
+                      element={<Navigate to="../comida/lista" replace />}
+                    />
+                    <Route element={<ProtectedRole menuAccess="cocina" />}>
+                      <Route path="comida" element={<Kitchen />}>
+                        <Route index element={<Navigate to="lista" replace />} />
+                        <Route path="formulario" element={<FormMealOrder />} />
+                        <Route path="lista" element={<ListMealOrder />} />
+                        <Route
+                          element={
+                            <ProtectedRole
+                              menuAccess="cocina"
+                              subMenuAccess="historial"
+                            />
+                          }
+                        >
+                          <Route path="historial" element={<KitchenHistory />} />
+                        </Route>
+                      </Route>
+                    </Route>
+                  </Route>
+                </Route>
                 <Route
                   element={
                     <ProtectedRole

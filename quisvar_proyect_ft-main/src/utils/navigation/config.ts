@@ -1,5 +1,5 @@
 export const itemsEmployee = [
-  { id: 1, title: 'Inicio', icon: 'home-bar', link: '/home' },
+  { id: 1, title: 'Dhyrium', icon: 'home-bar', link: '/home' },
   { id: 2, title: 'Tramites', icon: 'ant-design_delivered', link: '/tramites' },
   {
     id: 3,
@@ -30,8 +30,8 @@ export const itemsAdmin = [
   },
   {
     id: 7,
-    title: 'Indice General',
-    icon: 'generalIndex-icon',
+    title: 'CRM Dhyrium',
+    icon: 'crm-dhyrium',
     link: '/indice-general/contratos',
   },
   {

@@ -30,7 +30,7 @@ services:
   backend:
     image: diegoromani560/dhyrium_software_v1:production-latest
     env_file:
-      - ./.env
+      - ./quisvar_proyect_bk-main/.env
     environment:
       NODE_ENV: production
       HOST: 0.0.0.0
@@ -39,8 +39,6 @@ services:
       DOCX_RENDERER_URL: http://host.docker.internal:8092/render/docx-to-pdf
       DOCX_RENDERER_TOKEN: dhyrium-local-word-renderer-v1
       DOCX_RENDERER_REQUIRE_EXACT: "true"
-      # El contenedor nunca usa la DATABASE_URL externa heredada de .env.
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/dhyrium_db?schema=public
     restart: unless-stopped
     volumes:
       - ./quisvar_proyect_ft-main/data/uploads:/app/uploads
@@ -48,6 +46,8 @@ services:
       - ./quisvar_proyect_ft-main/data/index:/app/index
     expose:
       - "8081"
+    ports:
+      - "8081:8081"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:

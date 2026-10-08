@@ -14,6 +14,7 @@ const ChipItem = ({ item, offsetTop = 0 }: ChipItemProps) => {
   const isPayrollPath =
     location.pathname.startsWith('/planilla') ||
     location.pathname.startsWith('/tramites/tramite-de-pago/planilla');
+  const isPriorityModule = item.route === 'home' || item.route === 'comeya';
 
   return (
     <li>
@@ -31,7 +32,10 @@ const ChipItem = ({ item, offsetTop = 0 }: ChipItemProps) => {
             (isProcedureItem && isActive && !isPayrollPath) ||
             (!isPayrollItem && !isProcedureItem && isActive);
 
-          return shouldBeActive ? 'item-nav nav-active' : 'item-nav';
+          const sizeClass = isPriorityModule ? '' : ' item-nav--compact';
+          return shouldBeActive
+            ? `item-nav nav-active${sizeClass}`
+            : `item-nav${sizeClass}`;
         }}
       >
         <span className="items-list-icon">

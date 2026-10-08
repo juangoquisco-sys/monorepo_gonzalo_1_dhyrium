@@ -74,6 +74,7 @@
     "react-router-dom": "^6.11.1",
     "react-select": "^5.8.0",
     "react-to-print": "^3.0.1",
+    "recharts": "^3.10.1",
     "rxjs": "^7.8.1",
     "shadcn": "^4.2.0",
     "socket.io-client": "^4.6.1",

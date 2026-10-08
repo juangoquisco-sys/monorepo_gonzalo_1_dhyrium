@@ -4053,3 +4053,45 @@ enum OrganizationalLegacyType {
   SPECIALITY
   TYPE_SPECIALITY
 }
+
+model ComeyaMenuCategory {
+  id          String                   @id @default(cuid())
+  name        String                   @unique
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
+  references  ComeyaMenuReference[]
+  products    ComeyaMenuProduct[]
+}
+
+model ComeyaMenuReference {
+  id             String              @id @default(cuid())
+  name           String
+  categoryId     String
+  minimumPrice   Decimal             @db.Decimal(10, 2)
+  maximumPrice   Decimal             @db.Decimal(10, 2)
+  suggestedPrice Decimal             @db.Decimal(10, 2)
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  category       ComeyaMenuCategory  @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@unique([name, categoryId])
+  @@index([categoryId])
+}
+
+model ComeyaMenuProduct {
+  id            String              @id @default(cuid())
+  restaurantKey String
+  menuName      String              @default("Carta principal")
+  name          String
+  description   String?
+  categoryId    String
+  price         Decimal             @db.Decimal(10, 2)
+  available     Boolean             @default(true)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  category      ComeyaMenuCategory  @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@unique([restaurantKey, name])
+  @@index([restaurantKey])
+  @@index([categoryId])
+}

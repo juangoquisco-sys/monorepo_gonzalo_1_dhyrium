@@ -12,6 +12,11 @@
   border-bottom: 1px solid #a1a9b8;
   background-color: #fff;
 }
+.generalIndex-header--crm {
+  min-height: 0;
+  gap: 0;
+  padding: 0.6rem 2rem;
+}
 .generalIndex-header-search-company {
   display: flex;
   gap: 1.5rem;
@@ -64,6 +69,61 @@
 .generalIndex-header-indexData {
   display: flex;
   gap: 1rem;
+}
+.generalIndex-crm-tabs {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  min-width: 0;
+}
+.generalIndex-crm-title {
+  flex: 0 0 auto;
+  color: var(--color-secondary);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.generalIndex-crm-tabs-list {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.35rem;
+  overflow-x: auto;
+  padding-bottom: 0.15rem;
+  scrollbar-width: thin;
+}
+.generalIndex-crm-tab {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.4rem;
+  border: 0;
+  border-radius: 0.45rem;
+  background: transparent;
+  padding: 0.5rem 0.7rem;
+  color: #53627a;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.generalIndex-crm-tab:hover {
+  background-color: #f0f6ff;
+  color: var(--color-primary);
+}
+.generalIndex-crm-tab--active {
+  background-color: #e7f1ff;
+  color: var(--color-primary);
+}
+@media (max-width: 760px) {
+  .generalIndex-crm-tabs {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .generalIndex-crm-tabs-list {
+    width: 100%;
+  }
 }
 .generalIndex-header-indexData-span {
   color: #6a6f79;

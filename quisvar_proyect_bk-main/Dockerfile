@@ -74,7 +74,8 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/src/docs ./src/docs
 COPY 404_page/ ./404_page/
 COPY resource/ ./resource/
-COPY jsonData/ ./jsonData/
+# El servicio crea professions.json con sus valores iniciales si aún no existe.
+RUN mkdir -p ./jsonData
 
 # Expone el puerto de la aplicación
 EXPOSE 8081

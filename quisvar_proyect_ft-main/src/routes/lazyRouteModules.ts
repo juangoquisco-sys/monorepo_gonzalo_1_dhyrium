@@ -18,7 +18,23 @@ const asLoader = <TName extends string, TProps>(
 ) => loader;
 
 export const routeLoaders = {
+  AccommodationBenefits: asLoader(() =>
+    import('@/pages/benefits/AccommodationBenefits').then(
+      ({ default: AccommodationBenefits }) => ({ AccommodationBenefits })
+    )
+  ),
   Attendance: asLoader(() => import('@/pages/attendance/Attendance')),
+  BenefitsLayout: asLoader(() =>
+    import('@/pages/benefits/BenefitsLayout').then(({ default: BenefitsLayout }) => ({
+      BenefitsLayout,
+    }))
+  ),
+  Comeya: asLoader(() =>
+    import('@/pages/comeya/Comeya').then(({ default: Comeya }) => ({ Comeya }))
+  ),
+  Datos: asLoader(() =>
+    import('@/pages/datos/Datos').then(({ default: Datos }) => ({ Datos }))
+  ),
   AttendanceIncidents: asLoader(() =>
     import('@/pages/controlAttendance/AttendanceIncidents').then(
       ({ default: AttendanceIncidents }) => ({ AttendanceIncidents })
@@ -512,6 +528,16 @@ export const ContractsLevels = lazyNamed(
 export const ControlAttendanceLayout = lazyNamed(
   routeLoaders.ControlAttendanceLayout,
   'ControlAttendanceLayout'
+);
+export const BenefitsLayout = lazyNamed(
+  routeLoaders.BenefitsLayout,
+  'BenefitsLayout'
+);
+export const Comeya = lazyNamed(routeLoaders.Comeya, 'Comeya');
+export const Datos = lazyNamed(routeLoaders.Datos, 'Datos');
+export const AccommodationBenefits = lazyNamed(
+  routeLoaders.AccommodationBenefits,
+  'AccommodationBenefits'
 );
 export const CustomizableInvoice = lazyNamed(
   routeLoaders.CustomizableInvoice,

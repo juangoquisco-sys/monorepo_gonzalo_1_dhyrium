@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useSearchParams } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import './generalIndex.css';
 import { axiosInstance } from '@/services/axiosInstance';
 import { useEffect, useState } from 'react';
@@ -8,11 +8,29 @@ import ButtonHeader from '@/components/buttonHeader/ButtonHeader';
 import DropDownSimple from '@/components/dropDownSimple/DropDownSimple';
 import useSubMenus from '@/hooks/useSubMenus';
 
+const CRM_DHYRIUM_TABS = [
+  { label: 'Cartera comercial', icon: '▦' },
+  { label: 'Oportunidades', icon: '◇' },
+  { label: 'Contratos', icon: '▤' },
+  { label: 'Seguimiento', icon: '◷' },
+  { label: 'Estadísticas', icon: '◔' },
+  { label: 'Documentos', icon: '▧' },
+] as const;
+
+export type CrmDhyriumTab = (typeof CRM_DHYRIUM_TABS)[number]['label'];
+export type CrmDhyriumOutletContext = {
+  crmTab: CrmDhyriumTab;
+  setCrmTab: (tab: CrmDhyriumTab) => void;
+};
+
 export const GeneralIndex = () => {
   const [coorpEntity, setCoorpEntity] = useState<CoorpEntity[] | null>(null);
   const [urlImgCompany, setUrlImgCompany] = useState('');
   const [params, setParams] = useSearchParams();
+  const [crmTab, setCrmTab] = useState<CrmDhyriumTab>('Contratos');
+  const location = useLocation();
   const { subMenu } = useSubMenus();
+  const isCrmDhyrium = location.pathname.startsWith('/indice-general/contratos');
   // Accedemos a la propiedad pathname del objeto de ubicación para obtener la URL actual
 
   useEffect(() => {
@@ -48,8 +66,8 @@ export const GeneralIndex = () => {
   };
   return (
     <div className="generalIndex">
-      <div className="generalIndex-header">
-        <div className="generalIndex-header-search">
+      <div className={'generalIndex-header' + (isCrmDhyrium ? ' generalIndex-header--crm' : '')}>
+        {!isCrmDhyrium && <div className="generalIndex-header-search">
           {coorpEntity && (
             <div className="generalIndex-header-search-company">
               <figure className="generalIndex-header-figure">
@@ -80,18 +98,30 @@ export const GeneralIndex = () => {
             className="generalIndex-header-input"
             placeholder="Buscar documentos, profesionales o empresas"
           />
-        </div>
-        <div className="generalIndex-header-indexData">
-          {subMenu.map(index => (
-            <NavLink key={index.id} to={{ pathname: index.route }}>
-              {({ isActive }) => (
-                <ButtonHeader isActive={isActive} text={index.title} />
-              )}
-            </NavLink>
-          ))}
-        </div>
+        </div>}
+        {isCrmDhyrium ? (
+          <nav className="generalIndex-crm-tabs" aria-label="Navegación de CRM Dhyrium">
+            <div className="generalIndex-crm-tabs-list">
+              {CRM_DHYRIUM_TABS.map(tab => (
+                <button key={tab.label} type="button" onClick={() => setCrmTab(tab.label)} className={'generalIndex-crm-tab ' + (tab.label === crmTab ? 'generalIndex-crm-tab--active' : '')}>
+                  <span aria-hidden="true">{tab.icon}</span>{tab.label}
+                </button>
+              ))}
+            </div>
+          </nav>
+        ) : (
+          <div className="generalIndex-header-indexData">
+            {subMenu.map(index => (
+              <NavLink key={index.id} to={{ pathname: index.route }}>
+                {({ isActive }) => (
+                  <ButtonHeader isActive={isActive} text={index.title} />
+                )}
+              </NavLink>
+            ))}
+          </div>
+        )}
       </div>
-      <Outlet />
+      <Outlet context={isCrmDhyrium ? { crmTab, setCrmTab } satisfies CrmDhyriumOutletContext : undefined} />
     </div>
   );
 };

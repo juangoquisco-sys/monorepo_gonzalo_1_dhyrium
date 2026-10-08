@@ -98,13 +98,41 @@ const buildVisibleMenuPoints = (menuPoints: MenuItem[] = []) => {
     .map(item =>
       isPersonalAttendanceIncidentsMenu(item)
         ? { ...item, path: '/control-asistencia/incidencias' }
-        : item
+        : item.route === 'home'
+          ? { ...item, title: 'Dhyrium' }
+          : item.route === 'indice-general'
+            ? { ...item, title: 'CRM Dhyrium' }
+            : item
     );
+  const hasComeyaAccess = menuPoints.some(item => item.route === 'comeya');
+  const hasDatosMenu = visibleMenuPoints.some(item => item.route === 'datos');
+  const menuWithDatosFallback =
+    hasComeyaAccess && !hasDatosMenu
+      ? [
+          ...visibleMenuPoints,
+          {
+            id: 18,
+            route: 'datos' as MenuItem['route'],
+            title: 'Datos',
+            typeRol: 'MOD',
+            menu: [],
+          },
+        ]
+      : visibleMenuPoints;
 
   const personalPayrollMenu = getPersonalPayrollMenu(menuPoints);
+  const sidebarPosition = (route: MenuItem['route']) => {
+    if (route === 'comeya') return 2;
+    if (route === 'datos') return 1;
+    return 0;
+  };
+  const orderedMenuPoints = [...menuWithDatosFallback].sort(
+    (a, b) => sidebarPosition(a.route) - sidebarPosition(b.route)
+  );
+
   return personalPayrollMenu
-    ? [...visibleMenuPoints, personalPayrollMenu]
-    : visibleMenuPoints;
+    ? [...orderedMenuPoints, personalPayrollMenu]
+    : orderedMenuPoints;
 };
 
 const Sidebar = () => {
@@ -255,9 +283,6 @@ const Sidebar = () => {
     navigate('login');
     queryClient.clear();
   };
-  const handleHome = () => {
-    navigate('/home');
-  };
   const handleShowSidebar = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     setSidebarShow(!sidebarShow);
@@ -294,14 +319,6 @@ const Sidebar = () => {
       <div className={`sidebar ${sidebarShow && 'sidebar---show'}`}>
         <nav className="nav-container ">
           <div className="nav-options">
-            <figure className="sidebar-figure">
-              <img
-                className="nav-logo"
-                src="/img/logo_img.png"
-                onClick={handleHome}
-                alt="logo QuisVar"
-              />
-            </figure>
             <div className="items-list scroll-slim" onScroll={handleScroll}>
               {buildVisibleMenuPoints(role?.menuPoints).map((item, index) => (
                 <ChipItem

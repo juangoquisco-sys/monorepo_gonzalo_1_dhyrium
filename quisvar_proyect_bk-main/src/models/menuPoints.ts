@@ -17,7 +17,9 @@ export type MenuAccess =
   | 'rotaciones'
   | 'control-puerta'
   | 'factura'
-  | 'metrados';
+  | 'metrados'
+  | 'comeya'
+  | 'datos';
 
 export type MenuRole = 'MOD' | 'MEMBER' | 'VIEWER' | 'USER';
 interface MenuGeneral {
@@ -205,7 +207,7 @@ export class MenuPoints {
 const MENU_POINTS: Menu[] = [
   {
     id: 1,
-    title: 'Inicio',
+    title: 'Dhyrium',
     route: 'home',
     access: ['MOD'],
     permissionKey: 'home.access',
@@ -256,7 +258,7 @@ const MENU_POINTS: Menu[] = [
   },
   {
     id: 8,
-    title: 'Indice General',
+    title: 'Registro de contratos',
     route: 'indice-general',
     access: ['MOD'],
   },
@@ -337,6 +339,22 @@ const MENU_POINTS: Menu[] = [
     route: 'metrados',
     access: ['MOD'],
     noView: true,
+  },
+  {
+    id: 17,
+    title: 'Comeya',
+    route: 'comeya',
+    access: ['MOD'],
+    permissionKey: 'comeya.access',
+    presentation: { group: 'operations', order: 999, placements: ['sidebar'] },
+  },
+  {
+    id: 18,
+    title: 'Datos',
+    route: 'datos',
+    access: ['MOD'],
+    permissionKey: 'data.access',
+    presentation: { group: 'operations', order: 110, placements: ['sidebar'] },
   },
 ];
 
@@ -503,6 +521,18 @@ export const CONTROL_ASISTENCIA_OPTIONS: SubMenu[] = [
       group: 'directive-compliance',
       order: 30,
       placements: ['directive-center'],
+    },
+  },
+  {
+    id: 4,
+    title: 'Beneficios',
+    route: 'beneficios',
+    access: ['MOD'],
+    permissionKey: 'attendance.benefits',
+    presentation: {
+      group: 'directive-compliance',
+      order: 50,
+      placements: ['user-center'],
     },
   },
 ];

@@ -16,6 +16,8 @@ $ErrorActionPreference = 'Stop'
 
 $pgDump = 'C:\Program Files\PostgreSQL\18\bin\pg_dump.exe'
 $pgRestore = 'C:\Program Files\PostgreSQL\18\bin\pg_restore.exe'
+$useDockerPgClient = $false
+$dockerDumpPath = $null
 $driveName = 'SRC250'
 $shareRoot = "\\$SourceHost\$SourceDriveShare"
 $backendUncPath = Join-Path $shareRoot $BackendRelativePath
@@ -52,10 +54,19 @@ function Write-StatusFile {
 }
 
 try {
-  foreach ($requiredTool in @($pgDump, $pgRestore)) {
-    if (-not (Test-Path -LiteralPath $requiredTool -PathType Leaf)) {
-      throw "No se encontro la herramienta requerida: $requiredTool"
+  $hasLocalPgClient = @($pgDump, $pgRestore | ForEach-Object {
+    Test-Path -LiteralPath $_ -PathType Leaf
+  }) -notcontains $false
+  if (-not $hasLocalPgClient) {
+    & docker.exe compose exec -T db pg_dump --version | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+      throw 'No se encontro PostgreSQL local ni pg_dump disponible en el contenedor Docker db.'
     }
+    & docker.exe compose exec -T db pg_restore --version | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+      throw 'No se encontro PostgreSQL local ni pg_restore disponible en el contenedor Docker db.'
+    }
+    $useDockerPgClient = $true
   }
   if (Test-Path -LiteralPath $dumpFullPath) {
     throw "El dump de destino ya existe: $dumpFullPath"
@@ -151,17 +162,38 @@ try {
     '--lock-wait-timeout=10s'
     "--file=$dumpFullPath"
   )
-  & $pgDump @dumpArguments
+  if ($useDockerPgClient) {
+    $dockerDumpPath = "/tmp/dhyrium-source-$([guid]::NewGuid().ToString('N')).dump"
+    $dockerDumpArguments = @(
+      'compose', 'exec', '-T', '-e', 'PGPASSWORD', 'db', 'pg_dump'
+    ) + ($dumpArguments | Where-Object { $_ -notlike '--file=*' }) + "--file=$dockerDumpPath"
+    & docker.exe @dockerDumpArguments
+  }
+  else {
+    & $pgDump @dumpArguments
+  }
   if ($LASTEXITCODE -ne 0) {
     throw "pg_dump termino con codigo $LASTEXITCODE"
   }
   Remove-Item Env:PGPASSWORD -ErrorAction SilentlyContinue
 
+  if ($useDockerPgClient) {
+    & docker.exe compose cp "db:$dockerDumpPath" $dumpFullPath
+    if ($LASTEXITCODE -ne 0) {
+      throw "No se pudo copiar el dump desde el contenedor Docker (codigo $LASTEXITCODE)"
+    }
+  }
+
   $dumpFile = Get-Item -LiteralPath $dumpFullPath
   if ($dumpFile.Length -le 0) {
     throw 'pg_dump produjo un archivo vacio.'
   }
-  & $pgRestore --list $dumpFullPath | Out-Null
+  if ($useDockerPgClient) {
+    & docker.exe compose exec -T db pg_restore --list $dockerDumpPath | Out-Null
+  }
+  else {
+    & $pgRestore --list $dumpFullPath | Out-Null
+  }
   if ($LASTEXITCODE -ne 0) {
     throw 'pg_restore no pudo validar el catalogo del dump.'
   }
@@ -230,6 +262,9 @@ catch {
   exit 1
 }
 finally {
+  if ($useDockerPgClient -and $null -ne $dockerDumpPath) {
+    & docker.exe compose exec -T db rm -f $dockerDumpPath 2>$null | Out-Null
+  }
   if ($null -eq $previousPgPassword) {
     Remove-Item Env:PGPASSWORD -ErrorAction SilentlyContinue
   }

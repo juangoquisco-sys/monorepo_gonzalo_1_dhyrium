@@ -21,12 +21,6 @@ const DIRECTIVE_MODULE_SHORTCUTS: DirectiveShortcut[] = [
     permission: { menu: 'factura', roles: ['MOD'] },
   },
   {
-    id: 'comidas',
-    route: '/cocina',
-    title: 'Comidas',
-    permission: { menu: 'cocina' },
-  },
-  {
     id: 'rotaciones',
     route: '/rotaciones',
     title: 'Rotaciones',
@@ -58,7 +52,9 @@ const ControlAttendanceLayout = () => {
     subMenu: 'salidas',
   });
   const attendanceSubMenu: SubMenu[] = [
-    ...subMenu.filter(item => String(item.route) !== 'salidas'),
+    ...subMenu.filter(
+      item => !['salidas', 'beneficios'].includes(String(item.route))
+    ),
     ...(canAccessDepartures
       ? [
           {

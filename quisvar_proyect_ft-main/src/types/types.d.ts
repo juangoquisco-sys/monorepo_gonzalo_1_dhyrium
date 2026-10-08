@@ -299,7 +299,9 @@ export type MenuAccess =
   | 'rotaciones'
   | 'control-puerta'
   | 'factura'
-  | 'metrados';
+  | 'metrados'
+  | 'comeya'
+  | 'datos';
 
 export interface User {
   id: number;

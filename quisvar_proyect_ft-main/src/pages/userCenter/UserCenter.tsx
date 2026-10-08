@@ -16,6 +16,7 @@ const UserCenter = () => {
   const isUsersDirectory = location.pathname.startsWith(
     '/centro-de-usuarios/usuarios/'
   );
+  const isBenefits = location.pathname.startsWith('/centro-de-usuarios/beneficios');
 
   const directoryViewToggle = isUsersDirectory ? (
     <div
@@ -54,7 +55,7 @@ const UserCenter = () => {
   return (
     <div className="userCenter">
       <Navbar subMenu={HEADER_USER_MODEL} component={directoryViewToggle} />
-      <div className="user-content ">
+      <div className={`user-content${isBenefits ? ' user-content--benefits' : ''}`}>
         <Outlet context={{ view } satisfies UsersDirectoryOutletContext} />
       </div>
       <CardOpenFile />

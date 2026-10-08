@@ -1,7 +1,11 @@
 type RoutePreloader = () => Promise<unknown>;
 
 const routePreloaders = {
+  AccommodationBenefits: () => import('@/pages/benefits/AccommodationBenefits'),
   Attendance: () => import('@/pages/attendance/Attendance'),
+  BenefitsLayout: () => import('@/pages/benefits/BenefitsLayout'),
+  Comeya: () => import('@/pages/comeya/Comeya'),
+  Datos: () => import('@/pages/datos/Datos'),
   AttendanceIncidents: () =>
     import('@/pages/controlAttendance/AttendanceIncidents'),
   AttendanceReconciliation: () =>
@@ -177,6 +181,13 @@ const preloadGroups: Record<string, RoutePreloader[]> = {
     routePreloaders.AttendanceIncidents,
     routePreloaders.AttendanceReconciliation,
   ],
+  beneficios: [
+    routePreloaders.BenefitsLayout,
+    routePreloaders.AccommodationBenefits,
+    routePreloaders.Kitchen,
+  ],
+  comeya: [routePreloaders.Comeya],
+  datos: [routePreloaders.Datos],
   rotaciones: [
     routePreloaders.DutyRotationsLayout,
     routePreloaders.MyDutyRotations,

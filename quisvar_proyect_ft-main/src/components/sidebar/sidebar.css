@@ -21,10 +21,6 @@
   overflow: auto;
 }
 
-.sidebar-figure {
-  width: calc(var(--header-height) - 0.5rem);
-}
-
 .items-list {
   height: 100%;
   width: 100%;
@@ -47,6 +43,11 @@
   padding: 10px;
   aspect-ratio: 1/1;
   z-index: 1;
+}
+
+.item-nav--compact {
+  height: 46px;
+  padding: 8px;
 }
 
 .nav-active {
@@ -190,10 +191,6 @@
 
 .sidebar-dropdown-content {
   min-width: 13rem;
-}
-
-.nav-logo {
-  cursor: pointer;
 }
 
 .sidebar-menu_figure {

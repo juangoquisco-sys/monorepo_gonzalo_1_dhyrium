@@ -68,3 +68,25 @@ test('authorizes departures by its stable legacy permission, not by visual place
     false
   );
 });
+
+test('defines benefits as an attendance permission in the directive center', () => {
+  const attendance = menus.find(menu => menu.route === 'control-asistencia');
+  const benefits = attendance?.menu?.find(menu => menu.route === 'beneficios');
+
+  assert.equal(benefits?.permissionKey, 'attendance.benefits');
+  assert.deepEqual(benefits?.presentation?.placements, ['user-center']);
+});
+
+test('defines Comeya as a sidebar module with a stable permission', () => {
+  const comeya = menus.find(menu => menu.route === 'comeya');
+
+  assert.equal(comeya?.permissionKey, 'comeya.access');
+  assert.deepEqual(comeya?.presentation?.placements, ['sidebar']);
+});
+
+test('defines Datos as a sidebar module with a stable permission', () => {
+  const datos = menus.find(menu => menu.route === 'datos');
+
+  assert.equal(datos?.permissionKey, 'data.access');
+  assert.deepEqual(datos?.presentation?.placements, ['sidebar']);
+});

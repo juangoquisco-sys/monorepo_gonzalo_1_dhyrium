@@ -26,6 +26,10 @@
   min-width: 0;
 }
 
+.user-content--benefits {
+  padding: 0;
+}
+
 @media (max-width: 768px) {
   .user-content {
     padding: 1rem;
