@@ -550,11 +550,14 @@ class LunchMenuService {
       dessertName: version.dessertName,
       refreshmentAvailable: version.refreshmentAvailable,
       refreshmentName: version.refreshmentName,
+      soupNutrition: version.soupNutritionSnapshot,
+      dessertNutrition: version.dessertNutritionSnapshot,
+      refreshmentNutrition: version.refreshmentNutritionSnapshot,
       publishedAt: version.publishedAt,
       closesAt: version.closesAt,
       isOpen: !menu.isManuallyClosed && version.closesAt > now,
       isEligible,
-      seconds: version.seconds.map(second => ({ id: second.id, name: second.name })),
+      seconds: version.seconds.map(second => ({ id: second.id, name: second.name, nutrition: second.nutritionSnapshot })),
       selection,
     };
   }

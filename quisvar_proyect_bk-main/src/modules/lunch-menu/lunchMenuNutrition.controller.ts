@@ -1,0 +1,10 @@
+import type { Request, Response } from 'express';
+import type { UserType } from '@/middlewares/auth.middleware';
+import LunchMenuNutritionService from './lunchMenuNutrition.service';
+import { createLunchMenuImportProposalSchema, proposalIdSchema, updateLunchMenuImportProposalSchema } from './lunchMenuNutrition.schema';
+const actor = (res: Response) => (res.locals.userInfo as UserType).id;
+const date = (value: string) => new Date(`${value}T00:00:00`);
+export const createLunchMenuImportProposal = async (req: Request, res: Response) => { const input = createLunchMenuImportProposalSchema.parse({ body: req.body }); res.status(201).json(await LunchMenuNutritionService.createProposal({ ...input.body, serviceDate: date(input.body.serviceDate), createdById: actor(res) })); };
+export const getLunchMenuImportProposal = async (req: Request, res: Response) => { const input = proposalIdSchema.parse({ params: req.params }); res.json(await LunchMenuNutritionService.getProposal(input.params.id)); };
+export const updateLunchMenuImportProposal = async (req: Request, res: Response) => { const input = updateLunchMenuImportProposalSchema.parse({ params: req.params, body: req.body }); res.json(await LunchMenuNutritionService.updateProposal(input.params.id, input.body)); };
+export const publishLunchMenuImportProposal = async (req: Request, res: Response) => { const input = proposalIdSchema.parse({ params: req.params }); res.status(201).json(await LunchMenuNutritionService.publishProposal(input.params.id, actor(res))); };
