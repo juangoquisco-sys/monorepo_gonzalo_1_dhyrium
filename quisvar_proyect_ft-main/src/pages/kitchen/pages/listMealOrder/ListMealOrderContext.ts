@@ -18,6 +18,7 @@ type PickupStatusFilter =
 export interface OrderFilters {
   orderStatus: OrderStatus;
   pickupStatus: PickupStatusFilter;
+  lunchMenuOrder: 'Orden original' | 'Segundo (A-Z)';
 }
 
 interface ListMealOrderContextProps {
@@ -36,6 +37,8 @@ interface ListMealOrderContextProps {
   handleSearchChange: (event: ChangeEvent<HTMLInputElement>) => void;
   isLoading: boolean;
   isTogglingMealClose: boolean;
+  activeView: 'delivery' | 'menu';
+  setActiveView: (view: 'delivery' | 'menu') => void;
 }
 
 export const ListMealOrderContext = createContext(

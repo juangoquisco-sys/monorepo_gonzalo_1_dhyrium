@@ -12,10 +12,12 @@ import { getStatusContract } from '../../utils/tools';
 interface SidebarContractCardProps {
   contract: Contract;
   onSave: () => void;
+  statusLabel: string;
 }
 export const SidebarContractCard = ({
   contract,
   onSave,
+  statusLabel,
 }: SidebarContractCardProps) => {
   const handleEditContract = () =>
     (isOpenCardRegisteContract$.setSubject = { isOpen: true, contract });
@@ -73,17 +75,20 @@ export const SidebarContractCard = ({
           } `
         }
       >
-        <figure className="SidebarContractCard-sidebar-figure">
-          <img src="/svg/contracts-icon.svg" alt="W3Schools" />
+        <figure className="SidebarContractCard-sidebar-figure" aria-hidden>
+          <img src="/svg/contracts-icon.svg" alt="" />
         </figure>
         <div className="SidebarContractCard-text-contain">
-          <h5 className="SidebarContractCard-sidebar-cui ">
+          <h5 className="SidebarContractCard-sidebar-cui" title={contract.projectShortName || undefined}>
             {contract.projectShortName}
           </h5>
-          <h4 className="SidebarContractCard-sidebar-name">
+          <h4 className="SidebarContractCard-sidebar-name" title={contract.contractNumber}>
             {contract.contractNumber}
           </h4>
-          <h5 className="SidebarContractCard-sidebar-cui">{contract.cui}</h5>
+          <div className="SidebarContractCard-sidebar-meta">
+            <h5 className="SidebarContractCard-sidebar-cui">{contract.cui}</h5>
+            <span className="SidebarContractCard-status-label">{statusLabel}</span>
+          </div>
         </div>
       </NavLink>
 

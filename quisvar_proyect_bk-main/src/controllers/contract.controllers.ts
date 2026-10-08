@@ -15,7 +15,8 @@ class ContractController {
 
   public static async showContracts(req: Request, res: Response) {
     const cui = req.query.cui as string;
-    const date = req.query.date as string;
+    const date = (req.query.year ?? req.query.date) as string;
+    const search = req.query.q as string;
     const type = req.query.type as ContractForm['type'];
     const company = req.query.companyId as string;
     const consortium = req.query.consortiumId as string;
@@ -26,8 +27,17 @@ class ContractController {
       compId,
       consortId,
       type,
-      date
+      date,
+      search
     );
+    res.status(200).json(result);
+  }
+
+  public static async getOrganizationFilterOptions(
+    _req: Request,
+    res: Response
+  ) {
+    const result = await ContractServices.getOrganizationFilterOptions();
     res.status(200).json(result);
   }
 

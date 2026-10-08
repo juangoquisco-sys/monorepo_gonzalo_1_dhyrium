@@ -14,6 +14,10 @@ class ContractRoutes {
     this.router.use(authenticateHandler);
     this.router.get('/', ContractController.showContracts);
     this.router.get(
+      '/filter-options/organizations',
+      ContractController.getOrganizationFilterOptions
+    );
+    this.router.get(
       '/lookup/cui/:cui',
       ContractController.lookupInvestmentByCui
     );

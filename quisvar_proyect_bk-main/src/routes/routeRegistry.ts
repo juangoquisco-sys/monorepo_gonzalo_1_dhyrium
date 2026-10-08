@@ -78,6 +78,7 @@ import liquidationsRouter from '@/modules/liquidations/liquidations.routes';
 import corporateArchiveRouter from '@/modules/corporate-archive/corporateArchive.routes';
 import letterArchiveRouter from '@/modules/letter-archive/letterArchive.routes';
 import comeyaMenuRouter from '@/modules/comeya-menu/comeyaMenu.routes';
+import lunchMenuRouter from '@/modules/lunch-menu/lunchMenu.routes';
 
 export const routesConfig = [
   { path: '/health', router: healthRouter },
@@ -148,6 +149,7 @@ export const routesConfig = [
   { path: '/corporate-archive', router: corporateArchiveRouter },
   { path: '/letter-archive', router: letterArchiveRouter },
   { path: '/comeya', router: comeyaMenuRouter },
+  { path: '/lunch-menus', router: lunchMenuRouter },
   { path: '/meetings', router: meetingsRoutes },
   { path: '/meeting-external-contacts', router: meetingExternalContactsRoutes },
   { path: '/progress-reports', router: progressReportsRoutes },

@@ -150,7 +150,7 @@ const Navigation = () => {
             <Route element={<ProtectedRole menuAccess="comeya" />}>
               <Route path="/comeya" element={<Comeya />} />
             </Route>
-            <Route element={<ProtectedRole menuAccess="comeya" />}>
+            <Route element={<ProtectedRole menuAccess="datos" />}>
               <Route path="/datos" element={<Datos />} />
             </Route>
             {/* <Route path="/dashboard" element={<Dashboard />} /> */}
