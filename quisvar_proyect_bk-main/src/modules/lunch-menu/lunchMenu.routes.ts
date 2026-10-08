@@ -2,6 +2,12 @@ import { Router } from 'express';
 import authenticateHandler from '@/middlewares/auth.middleware';
 import role from '@/middlewares/role.middleware';
 import LunchMenuController from './lunchMenu.controller';
+import {
+  createLunchMenuImportProposal,
+  getLunchMenuImportProposal,
+  publishLunchMenuImportProposal,
+  updateLunchMenuImportProposal,
+} from './lunchMenuNutrition.controller';
 
 const router = Router();
 
@@ -14,6 +20,10 @@ router.post(
   role.RoleHandler(['MOD'], 'cocina', 'lista'),
   LunchMenuController.publish
 );
+router.post('/import-proposals', role.RoleHandler(['MOD'], 'cocina', 'lista'), createLunchMenuImportProposal);
+router.get('/import-proposals/:id', role.RoleHandler(['MOD'], 'cocina', 'lista'), getLunchMenuImportProposal);
+router.patch('/import-proposals/:id', role.RoleHandler(['MOD'], 'cocina', 'lista'), updateLunchMenuImportProposal);
+router.post('/import-proposals/:id/publish', role.RoleHandler(['MOD'], 'cocina', 'lista'), publishLunchMenuImportProposal);
 router.post(
   '/:serviceDate/close',
   role.RoleHandler(['MOD'], 'cocina', 'lista'),

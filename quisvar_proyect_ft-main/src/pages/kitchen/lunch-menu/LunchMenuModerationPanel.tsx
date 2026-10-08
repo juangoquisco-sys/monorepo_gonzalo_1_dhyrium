@@ -6,6 +6,7 @@ import { openDialog, type DialogHandle } from '@/utils/dialog';
 import { SnackbarUtilities } from '@/utils/SnackbarManager';
 import { copyTextToClipboard } from '@/utils/copyTextToClipboard';
 import LunchMenuAutoAssignDialog, { type LunchMenuAutoAssignmentPreview } from './LunchMenuAutoAssignDialog';
+import LunchMenuImportDialog from './LunchMenuImportDialog';
 import { assignLunchMenuSelection, assignMostRequestedLunchMenuSelections, closeLunchMenu, getLunchMenuModeration, previewMostRequestedLunchMenuSelections, publishLunchMenu, reopenLunchMenu } from './lunchMenu.service';
 
 export default function LunchMenuModerationPanel({ date }: { date: string }) {
@@ -64,6 +65,10 @@ export default function LunchMenuModerationPanel({ date }: { date: string }) {
       SnackbarUtilities.error('No se pudo copiar el aviso para el grupo');
     }
   };
+  const openImportDialog = () => {
+    let dialogHandle: DialogHandle | null = null;
+    dialogHandle = openDialog({ title: hasMenu ? 'Importar nueva versión del restaurante' : 'Importar texto del restaurante', description: hasMenu ? 'Revisa la propuesta antes de reemplazar el menú activo.' : 'La propuesta requiere tu revisión antes de publicar.', width: 'min(92vw, 720px)', children: <LunchMenuImportDialog date={date} durationMinutes={duration} isReplacing={hasMenu} currentVersion={hasMenu ? data.version : undefined} getDialogHandle={() => dialogHandle} onPublished={async () => { refresh(); }} /> });
+  };
   const shareGroupAnnouncement = () => {
     const popup = window.open(`https://wa.me/?text=${encodeURIComponent(groupAnnouncement)}`, '_blank', 'noopener,noreferrer');
     if (!popup) SnackbarUtilities.error('El navegador bloqueó la ventana de WhatsApp');
@@ -84,7 +89,7 @@ export default function LunchMenuModerationPanel({ date }: { date: string }) {
         <label className="grid gap-1 font-medium">Minutos<Input type="number" min="1" max="1440" value={duration} onChange={event => setDuration(Number(event.target.value))} /></label>
       </div>
       <div className="mt-3 grid gap-3 md:grid-cols-3"><div className="rounded-md border border-border p-3"><label className="flex items-center gap-2 font-medium"><input type="checkbox" checked={soup} onChange={event => setSoup(event.target.checked)} />Ofrecer sopa</label><Input className="mt-2" disabled={!soup} value={soupName} onChange={event => setSoupName(event.target.value)} placeholder="Nombre opcional, ej.: Quinua" /></div><div className="rounded-md border border-border p-3"><label className="flex items-center gap-2 font-medium"><input type="checkbox" checked={dessertAvailable} onChange={event => setDessertAvailable(event.target.checked)} />Ofrecer postre</label><Input className="mt-2" disabled={!dessertAvailable} value={dessertName} onChange={event => setDessertName(event.target.value)} placeholder="Nombre opcional, ej.: Mazamorra" /></div><div className="rounded-md border border-border p-3"><strong>Refresco</strong><p className="mt-1 text-xs text-muted-foreground">Siempre se ofrece. El nombre es opcional.</p><Input className="mt-2" value={refreshmentName} onChange={event => setRefreshmentName(event.target.value)} placeholder="Ej.: Maracuyá" /></div></div>
-      <Button className="mt-4" disabled={publish.isPending || !secondsText.trim()} onClick={() => publish.mutate()}>{hasMenu ? 'Publicar nueva versión' : 'Publicar menú'}</Button>
+      <div className="mt-4 flex flex-wrap gap-2"><Button disabled={publish.isPending || !secondsText.trim()} onClick={() => publish.mutate()}>{hasMenu ? 'Publicar nueva versión' : 'Publicar menú'}</Button><Button variant="outline" onClick={openImportDialog}>{hasMenu ? 'Importar nueva versión' : 'Importar texto del restaurante'}</Button></div>
 
       {hasMenu && <div className="mt-6 border-t pt-4">
         <div className="flex flex-wrap items-center justify-between gap-3">

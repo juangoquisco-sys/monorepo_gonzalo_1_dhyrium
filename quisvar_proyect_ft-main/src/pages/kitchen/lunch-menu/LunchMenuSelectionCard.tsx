@@ -62,6 +62,7 @@ export default function LunchMenuSelectionCard({ date }: { date: string }) {
   const menu = menuQuery.data;
   if (menuQuery.isLoading || menuQuery.isError || !menu || !menu.isEligible) return null;
   const selectedSecond = menu.seconds.find(second => second.id === secondId)?.name;
+  const selectedNutrition = menu.seconds.find(second => second.id === secondId)?.nutrition;
 
   return (
     <Card className="mb-5 border-primary/40 bg-primary/5 shadow-sm">
@@ -72,13 +73,14 @@ export default function LunchMenuSelectionCard({ date }: { date: string }) {
           <div>
             <legend className="mb-2 text-lg font-semibold text-foreground">Elige tu segundo</legend>
             <div className="grid gap-2">
-              {menu.seconds.map(second => <label key={second.id} className={`flex cursor-pointer items-center gap-3 rounded-md border px-3 py-2 text-sm transition-colors ${secondId === second.id ? 'border-primary bg-primary/10 font-medium' : 'border-border bg-background hover:bg-muted'}`}><input type="radio" name={`lunch-second-${date}`} checked={secondId === second.id} onChange={() => setSecondId(second.id)} />{second.name}</label>)}
+              {menu.seconds.map(second => <label key={second.id} className={`flex cursor-pointer items-center gap-3 rounded-md border px-3 py-2 text-sm transition-colors ${secondId === second.id ? 'border-primary bg-primary/10 font-medium' : 'border-border bg-background hover:bg-muted'}`}><input type="radio" name={`lunch-second-${date}`} checked={secondId === second.id} onChange={() => setSecondId(second.id)} /><span>{second.name}{second.nutrition && <small className="block font-normal text-muted-foreground">{second.nutrition.caloriesKcal} kcal · P {second.nutrition.proteinG} g · C {second.nutrition.carbsG} g · G {second.nutrition.fatG} g · Estimado</small>}</span></label>)}
             </div>
           </div>
           {menu.soupAvailable && <AccompanimentChoice label={menu.soupName || 'Sopa'} value={wantsSoup} onChange={setWantsSoup} date={date} kind="soup" />}
           {menu.dessertAvailable && <AccompanimentChoice label={menu.dessertName || 'Postre'} value={wantsDessert} onChange={setWantsDessert} date={date} kind="dessert" />}
           {menu.refreshmentAvailable && <AccompanimentChoice label={menu.refreshmentName || 'Refresco'} value={wantsRefreshment} onChange={setWantsRefreshment} date={date} kind="refreshment" />}
         </fieldset>}
+        {selectedNutrition && <p className="rounded-md bg-muted p-3 text-sm text-muted-foreground">Total estimado del segundo: {selectedNutrition.caloriesKcal} kcal · proteína {selectedNutrition.proteinG} g · carbohidratos {selectedNutrition.carbsG} g · grasa {selectedNutrition.fatG} g.</p>}
         {menu.selection && !isEditing ? <Button type="button" variant="outline" disabled={!menu.isOpen} onClick={() => setIsEditing(true)}>Cambiar mi elección</Button> : <Button type="button" disabled={!menu.isOpen || !secondId || save.isPending} onClick={() => save.mutate()}>{save.isPending ? 'Guardando...' : menu.selection ? 'Confirmar cambio' : 'Guardar elección'}</Button>}
       </CardContent>
     </Card>
