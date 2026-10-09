@@ -20,7 +20,7 @@ import type { ContractStatus, ContractType } from './models/type.contracts';
 import { getStatusContract } from './utils/tools';
 import { excelContractReport } from './generateExcel/excelReportConctract';
 import { contractQueryKey, type ContractOrganizationOption, useContractList, useContractOrganizationOptions } from './hooks/useContractList';
-import './Contracts.css';
+import './contracts.css';
 
 const YEAR_STORAGE_KEY = 'dhyrium.contracts.last-year';
 const SIDEBAR_STORAGE_KEY = 'dhyrium.contracts.sidebar';
