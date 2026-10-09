@@ -7,6 +7,7 @@ export const ATTENDANCE_SOCKET_EVENTS = {
   closed: 'server:attendance-list-closed',
   finalized: 'server:attendance-list-finalized',
   discarded: 'server:attendance-list-discarded',
+  captureWindowClosingSoon: 'server:attendance-capture-window-closing-soon',
 } as const;
 
 type AttendanceSocketUser = {
@@ -34,6 +35,10 @@ type AttendanceStatusUpdatedEvent = AttendanceListEvent & {
 
 type AttendanceListDiscardedEvent = {
   listId: number;
+};
+
+type AttendanceCaptureWindowClosingSoonEvent = AttendanceListEvent & {
+  captureWindowEndsAt: string;
 };
 
 const canManageAttendance = (user?: AttendanceSocketUser | null) =>
@@ -115,6 +120,21 @@ class AttendanceRealtimeService {
   static discarded(payload: AttendanceListDiscardedEvent, userIds: number[]) {
     this.emitToUsers(userIds, ATTENDANCE_SOCKET_EVENTS.discarded, payload);
     this.emitToManagers(ATTENDANCE_SOCKET_EVENTS.discarded, payload);
+  }
+
+  static captureWindowClosingSoon(
+    payload: AttendanceCaptureWindowClosingSoonEvent,
+    userIds: number[]
+  ) {
+    this.emitToUsers(
+      userIds,
+      ATTENDANCE_SOCKET_EVENTS.captureWindowClosingSoon,
+      payload
+    );
+    this.emitToManagers(
+      ATTENDANCE_SOCKET_EVENTS.captureWindowClosingSoon,
+      payload
+    );
   }
 }
 

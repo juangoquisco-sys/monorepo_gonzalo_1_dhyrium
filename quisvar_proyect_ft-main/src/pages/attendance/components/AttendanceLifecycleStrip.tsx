@@ -8,6 +8,7 @@ interface AttendanceLifecycleStripProps {
   title: string;
   detail: string;
   actions?: ReactNode;
+  urgent?: boolean;
 }
 
 const stateStyles: Record<AttendanceListState, string> = {
@@ -22,6 +23,9 @@ const iconStyles: Record<AttendanceListState, string> = {
   FINALIZED: 'bg-background text-success',
 };
 
+const URGENT_STYLE = 'border-danger/45 bg-danger-muted/70';
+const URGENT_ICON_STYLE = 'bg-background text-danger';
+
 export const AttendanceLifecycleStrip = ({
   state,
   icon,
@@ -29,13 +33,18 @@ export const AttendanceLifecycleStrip = ({
   title,
   detail,
   actions,
+  urgent = false,
 }: AttendanceLifecycleStripProps) => (
   <section
-    className={`mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-lg border px-3 py-2.5 md:grid-cols-[auto_minmax(0,1fr)_auto] ${stateStyles[state]}`}
+    className={`mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-lg border px-3 py-2.5 md:grid-cols-[auto_minmax(0,1fr)_auto] ${
+      urgent ? URGENT_STYLE : stateStyles[state]
+    }`}
     aria-label={`${eyebrow}: ${title}`}
   >
     <span
-      className={`grid size-9 shrink-0 place-items-center rounded-md shadow-sm ${iconStyles[state]}`}
+      className={`grid size-9 shrink-0 place-items-center rounded-md shadow-sm ${
+        urgent ? URGENT_ICON_STYLE : iconStyles[state]
+      }`}
       aria-hidden="true"
     >
       {icon}

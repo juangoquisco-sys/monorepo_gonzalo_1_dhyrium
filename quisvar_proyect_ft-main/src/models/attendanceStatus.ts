@@ -71,6 +71,16 @@ export const ATTENDANCE_STATUS_RADIO_OPTIONS: {
   { value: 'SALIDA', className: 'list-s' },
 ];
 
+export const ATTENDANCE_STATUS_COLOR_VAR: Record<AttendanceStatus, string> = {
+  PUNTUAL: 'var(--color-list-p)',
+  TARDE: 'var(--color-list-t)',
+  SIMPLE: 'var(--color-list-f)',
+  GRAVE: 'var(--color-list-g)',
+  MUY_GRAVE: 'var(--color-list-m)',
+  PERMISO: 'var(--color-list-l)',
+  SALIDA: 'var(--color-list-s)',
+};
+
 export const isAttendanceStatus = (
   value: unknown
 ): value is AttendanceStatus => {

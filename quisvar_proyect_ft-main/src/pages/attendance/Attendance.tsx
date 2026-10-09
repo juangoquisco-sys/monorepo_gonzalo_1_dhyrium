@@ -13,7 +13,9 @@ import {
   Fingerprint,
   LockKeyhole,
   Radio,
+  Settings,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Input from '@/components/Input/Input';
 import Button from '@/components/button/Button';
 import { AppButton } from '@/components/app-ui/app-button';
@@ -394,11 +396,40 @@ export const Attendance = () => {
     : hasPendingAttendanceOnSelectedDate
     ? 'Guarde o descarte la lista en curso para crear otra.'
     : null;
-  const stateCopy = callList
+  const baseStateCopy = callList
     ? callList.captureMode === 'BIOMETRIC'
       ? BIOMETRIC_STATE_COPY[callList.state]
       : MANUAL_STATE_COPY[callList.state]
     : null;
+
+  const [nowTick, setNowTick] = useState(() => Date.now());
+  const captureWindowEndsAt =
+    isBiometricOpen && callList?.captureWindowEndsAt
+      ? callList.captureWindowEndsAt
+      : null;
+  useEffect(() => {
+    if (!captureWindowEndsAt) return;
+    const interval = setInterval(() => setNowTick(Date.now()), 1000);
+    return () => clearInterval(interval);
+  }, [captureWindowEndsAt]);
+  const msUntilCaptureCloses = captureWindowEndsAt
+    ? new Date(captureWindowEndsAt).getTime() - nowTick
+    : null;
+  const isCaptureClosingSoon =
+    msUntilCaptureCloses !== null &&
+    msUntilCaptureCloses > 0 &&
+    msUntilCaptureCloses <= 5 * 60 * 1000;
+  const stateCopy =
+    baseStateCopy && msUntilCaptureCloses !== null && msUntilCaptureCloses > 0
+      ? {
+          ...baseStateCopy,
+          detail: `${baseStateCopy.detail} Cierra en ${Math.floor(
+            msUntilCaptureCloses / 60000
+          )}:${Math.floor((msUntilCaptureCloses % 60000) / 1000)
+            .toString()
+            .padStart(2, '0')}.`,
+        }
+      : baseStateCopy;
 
   const openCreateAttendanceDialog = () => {
     if (!callLists || !canShowAddList) return;
@@ -540,6 +571,13 @@ export const Attendance = () => {
               onClick={openCreateAttendanceDialog}
             />
           ) : null}
+          <Link
+            to="/control-asistencia/configuracion-llamados"
+            className="attendance-config-link"
+          >
+            <Settings size={14} />
+            Configurar llamados
+          </Link>
         </span>
 
         {callList && (
@@ -552,6 +590,7 @@ export const Attendance = () => {
                   eyebrow={stateCopy.eyebrow}
                   title={stateCopy.title}
                   detail={stateCopy.detail}
+                  urgent={isCaptureClosingSoon}
                   actions={
                     isManualOpen || isBiometricOpen || isBiometricReview ? (
                       <>

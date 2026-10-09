@@ -54,6 +54,7 @@ import kitchenRoutes from '@/routes/kitchen.routes';
 import dutyRotationsRoutes from '@/routes/dutyRotations.routes';
 import gateControlRoutes from '@/routes/gateControl.routes';
 import attendanceControlRoutes from '@/routes/attendanceControl.routes';
+import attendanceCallConfigRoutes from '@/routes/attendanceCallConfig.routes';
 import meetingUnitsRoutes from '@/routes/meetingUnits.routes';
 import meetingsRoutes from '@/routes/meetings.routes';
 import meetingExternalContactsRoutes from '@/routes/meetingExternalContacts.routes';
@@ -138,6 +139,7 @@ export const routesConfig = [
   { path: '/duty-rotations', router: dutyRotationsRoutes },
   { path: '/gate-control', router: gateControlRoutes },
   { path: '/attendance-control', router: attendanceControlRoutes },
+  { path: '/attendance-call-config', router: attendanceCallConfigRoutes },
   { path: '/meeting-units', router: meetingUnitsRoutes },
   { path: '/basic-resources', router: basicResourcesRouter },
   { path: '/document-composer', router: documentComposerRouter },

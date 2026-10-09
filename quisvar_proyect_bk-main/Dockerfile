@@ -74,7 +74,9 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/src/docs ./src/docs
 COPY 404_page/ ./404_page/
 COPY resource/ ./resource/
-# El servicio crea professions.json con sus valores iniciales si aún no existe.
+# jsonData is a local ignored directory. Keep an empty mount point when it is
+# not provided by the build context; the service creates professions.json with
+# its initial values when it is still absent.
 RUN mkdir -p ./jsonData
 
 # Expone el puerto de la aplicación

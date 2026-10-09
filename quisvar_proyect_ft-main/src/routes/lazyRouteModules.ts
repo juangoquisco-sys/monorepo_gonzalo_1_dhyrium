@@ -35,6 +35,11 @@ export const routeLoaders = {
   Datos: asLoader(() =>
     import('@/pages/datos/Datos').then(({ default: Datos }) => ({ Datos }))
   ),
+  AttendanceCallConfigPage: asLoader(() =>
+    import('@/pages/attendanceCallConfig/AttendanceCallConfigPage').then(
+      ({ default: AttendanceCallConfigPage }) => ({ AttendanceCallConfigPage })
+    )
+  ),
   AttendanceIncidents: asLoader(() =>
     import('@/pages/controlAttendance/AttendanceIncidents').then(
       ({ default: AttendanceIncidents }) => ({ AttendanceIncidents })
@@ -471,6 +476,10 @@ export const routeLoaders = {
 };
 
 export const Attendance = lazyNamed(routeLoaders.Attendance, 'Attendance');
+export const AttendanceCallConfigPage = lazyNamed(
+  routeLoaders.AttendanceCallConfigPage,
+  'AttendanceCallConfigPage'
+);
 export const AttendanceIncidents = lazyNamed(
   routeLoaders.AttendanceIncidents,
   'AttendanceIncidents'

@@ -1,5 +1,21 @@
 import '@/config/env';
 import Server from '@/models/server';
+import AttendanceSchedulerService from '@/services/attendance/attendanceScheduler.service';
+
+const ATTENDANCE_SCHEDULER_INTERVAL_MS = 30_000;
+let attendanceSchedulerRunning = false;
+
+const runAttendanceScheduler = async () => {
+  if (attendanceSchedulerRunning) return;
+  attendanceSchedulerRunning = true;
+  try {
+    await AttendanceSchedulerService.runTick();
+  } catch (error) {
+    console.error('No se pudo ejecutar el programador de asistencias', error);
+  } finally {
+    attendanceSchedulerRunning = false;
+  }
+};
 
 const isDatabaseConnectionError = (error: unknown) => {
   const message =
@@ -38,6 +54,11 @@ process.on('uncaughtException', error => {
 const server = new Server();
 
 server.listen();
+void runAttendanceScheduler();
+const attendanceSchedulerInterval = setInterval(
+  () => void runAttendanceScheduler(),
+  ATTENDANCE_SCHEDULER_INTERVAL_MS
+);
 
 let isShuttingDown = false;
 const shutdown = async (signal: 'SIGINT' | 'SIGTERM') => {
@@ -46,6 +67,7 @@ const shutdown = async (signal: 'SIGINT' | 'SIGTERM') => {
   console.info(`Cerrando servidor (${signal})`);
 
   try {
+    clearInterval(attendanceSchedulerInterval);
     await server.close();
     process.exit(0);
   } catch (error) {
