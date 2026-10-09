@@ -52,13 +52,16 @@ class AttendanceSchedulerService {
     const createdConfigIds = new Set(createdToday.map(list => list.callConfigId));
 
     const nextCall = resolvedCalls
-      .filter(call => !createdConfigIds.has(call.callConfigId))
+      .filter(call => {
+        if (createdConfigIds.has(call.callConfigId)) return false;
+        const startAt = combineLimaDateAndTime(now, call.captureStartTime);
+        const endAt = combineLimaDateAndTime(now, call.captureEndTime);
+        return now >= startAt && now < endAt;
+      })
       .sort((a, b) => a.position - b.position)[0];
     if (!nextCall) return null;
 
     const startAt = combineLimaDateAndTime(now, nextCall.captureStartTime);
-    if (now < startAt) return null;
-
     const endAt = combineLimaDateAndTime(now, nextCall.captureEndTime);
 
     try {
