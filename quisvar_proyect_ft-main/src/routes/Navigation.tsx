@@ -3,6 +3,7 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import {
   Attendance,
+  AttendanceCallConfigPage,
   AttendanceIncidents,
   AttendanceReconciliation,
   AuditLogsPage,
@@ -542,6 +543,10 @@ const Navigation = () => {
                   }
                 >
                   <Route path="registro" element={<Attendance />} />
+                  <Route
+                    path="configuracion-llamados"
+                    element={<AttendanceCallConfigPage />}
+                  />
                 </Route>
                 <Route
                   element={

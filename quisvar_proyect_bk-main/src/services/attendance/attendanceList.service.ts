@@ -22,9 +22,11 @@ export type CreateAttendanceListInput = {
   title: string;
   timer: string;
   captureMode: AttendanceCaptureMode;
+  callConfigId?: number;
+  captureWindowEndsAt?: Date;
 };
 
-const limaDayStart = (now: Date) => {
+export const limaDayStart = (now: Date) => {
   const limaNow = new Date(now.getTime() - 5 * 60 * 60 * 1000);
   return new Date(
     Date.UTC(
@@ -37,8 +39,11 @@ const limaDayStart = (now: Date) => {
 };
 
 class AttendanceListService {
-  static async create(input: CreateAttendanceListInput, actorId: number) {
-    if (!isValidAttendanceActorId(actorId)) {
+  static async create(
+    input: CreateAttendanceListInput,
+    actorId: number | null
+  ) {
+    if (actorId !== null && !isValidAttendanceActorId(actorId)) {
       throw new AppError('Administrador autenticado invalido', 401);
     }
     const title = input.title.trim();
@@ -87,6 +92,10 @@ class AttendanceListService {
           title,
           timer,
           ...resolveAttendanceListLifecycle(input.captureMode, now),
+          ...(input.callConfigId ? { callConfigId: input.callConfigId } : {}),
+          ...(input.captureWindowEndsAt
+            ? { captureWindowEndsAt: input.captureWindowEndsAt }
+            : {}),
         },
       });
       const participants = buildAttendanceParticipantRows(
@@ -133,6 +142,8 @@ class AttendanceListService {
           state: true,
           openedAt: true,
           finalizedAt: true,
+          captureWindowEndsAt: true,
+          reviewDeadlineAt: true,
         },
       },
     } as const;
@@ -173,6 +184,8 @@ class AttendanceListService {
         state: participant.list.state,
         openedAt: participant.list.openedAt,
         finalizedAt: participant.list.finalizedAt,
+        captureWindowEndsAt: participant.list.captureWindowEndsAt,
+        reviewDeadlineAt: participant.list.reviewDeadlineAt,
         status: participant.status,
         statusSource: participant.statusSource,
         biometricMarkedAt: participant.biometricMarkedAt,
@@ -182,9 +195,9 @@ class AttendanceListService {
     };
   }
 
-  static async finalize(listId: List['id'], actorId: number) {
+  static async finalize(listId: List['id'], actorId: number | null) {
     if (!listId) throw new AppError('ID de lista invalido', 400);
-    if (!isValidAttendanceActorId(actorId)) {
+    if (actorId !== null && !isValidAttendanceActorId(actorId)) {
       throw new AppError('Administrador autenticado invalido', 401);
     }
     const now = new Date();

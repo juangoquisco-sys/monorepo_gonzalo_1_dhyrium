@@ -21,7 +21,8 @@ export type BiometricEventEvaluation =
         | 'VERIFY_MODE_NOT_ALLOWED'
         | 'INVALID_TIMESTAMP'
         | 'EVENT_BEFORE_OPEN'
-        | 'EVENT_IN_FUTURE';
+        | 'EVENT_IN_FUTURE'
+        | 'CAPTURE_WINDOW_CLOSED';
     };
 
 export type AttendanceBatchChange = {
@@ -222,6 +223,7 @@ export const evaluateBiometricEvent = ({
   verifyMode,
   timestamp,
   openedAt,
+  captureWindowEndsAt,
   now,
   configuration,
 }: {
@@ -229,6 +231,7 @@ export const evaluateBiometricEvent = ({
   verifyMode: string;
   timestamp: string;
   openedAt: Date;
+  captureWindowEndsAt?: Date | null;
   now: Date;
   configuration: BiometricConfiguration;
 }): BiometricEventEvaluation => {
@@ -249,6 +252,9 @@ export const evaluateBiometricEvent = ({
     now.getTime() + configuration.clockSkewSeconds * 1000
   ) {
     return { accepted: false, reason: 'EVENT_IN_FUTURE' };
+  }
+  if (captureWindowEndsAt && eventAt > captureWindowEndsAt) {
+    return { accepted: false, reason: 'CAPTURE_WINDOW_CLOSED' };
   }
 
   return { accepted: true, eventAt };

@@ -2209,7 +2209,7 @@ model List {
   captureWindowEndsAt   DateTime?
   closingSoonNotifiedAt DateTime?
   reviewDeadlineAt      DateTime?
-  AttendanceCallConfig  AttendanceCallConfig? @relation(fields: [callConfigId], references: [id])
+  attendanceCallConfig  AttendanceCallConfig? @relation(fields: [callConfigId], references: [id])
   users                 ListOnUsers[]
 
   @@index([captureMode, state, openedAt])
@@ -3387,9 +3387,9 @@ model AttendanceCallConfig {
   captureMode                   AttendanceCaptureMode           @default(BIOMETRIC)
   isActive                      Boolean                         @default(true)
   createdAt                     DateTime                        @default(now())
-  updatedAt                     DateTime
-  AttendanceCallWeekdayOverride AttendanceCallWeekdayOverride[]
-  List                          List[]
+  updatedAt                     DateTime                         @updatedAt
+  weekdayOverrides              AttendanceCallWeekdayOverride[]
+  lists                         List[]
 }
 
 model AttendanceCallWeekdayOverride {
@@ -3401,8 +3401,8 @@ model AttendanceCallWeekdayOverride {
   captureStartTime     String?
   captureEndTime       String?
   createdAt            DateTime             @default(now())
-  updatedAt            DateTime
-  AttendanceCallConfig AttendanceCallConfig @relation(fields: [callConfigId], references: [id], onDelete: Cascade)
+  updatedAt            DateTime             @updatedAt
+  callConfig           AttendanceCallConfig @relation(fields: [callConfigId], references: [id], onDelete: Cascade)
 
   @@unique([callConfigId, weekday])
   @@index([weekday])
