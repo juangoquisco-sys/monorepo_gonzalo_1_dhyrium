@@ -15,6 +15,7 @@ import useCurrentAttendance, {
   currentAttendanceQueryKey,
 } from '@/pages/attendance/hooks/useCurrentAttendance';
 import {
+  ATTENDANCE_STATUS_COLOR_VAR,
   ATTENDANCE_STATUS_LABELS,
   normalizeAttendanceStatus,
 } from '@/models/attendanceStatus';
@@ -51,6 +52,7 @@ const attendanceCopy = (
           ? 'Pendiente de marcar huella'
           : 'Pendiente de confirmación',
       origin: 'Estado inicial del llamado',
+      colorVar: 'var(--muted)',
     };
   }
   if (
@@ -59,7 +61,11 @@ const attendanceCopy = (
     attendance.statusSource === 'BIOMETRIC' &&
     status === 'PUNTUAL'
   ) {
-    return { status: 'Presente — huella validada', origin: 'Huella validada' };
+    return {
+      status: 'Presente — huella validada',
+      origin: 'Huella validada',
+      colorVar: ATTENDANCE_STATUS_COLOR_VAR.PUNTUAL,
+    };
   }
   const originBySource = {
     SYSTEM_DEFAULT: 'Estado inicial del llamado',
@@ -71,7 +77,17 @@ const attendanceCopy = (
   return {
     status: ATTENDANCE_STATUS_LABELS[status],
     origin: originBySource[attendance.statusSource],
+    colorVar: ATTENDANCE_STATUS_COLOR_VAR[status],
   };
+};
+
+const CLOSING_SOON_THRESHOLD_MS = 5 * 60 * 1000;
+
+const formatCountdown = (ms: number) => {
+  const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 };
 
 const formatMarkedAt = (value: string | null) =>
@@ -98,7 +114,58 @@ const AlertNotification = () => {
     readDismissedListId
   );
   const announcedListId = useRef<number | null>(null);
+  const closingSoonAnnouncedListId = useRef<number | null>(null);
   const attendance = currentAttendanceQuery.data?.attendance ?? null;
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    if (
+      !attendance ||
+      attendance.state !== 'OPEN' ||
+      attendance.captureMode !== 'BIOMETRIC' ||
+      !attendance.captureWindowEndsAt ||
+      attendance.biometricMarkedAt
+    ) {
+      return;
+    }
+    const interval = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(interval);
+  }, [
+    attendance?.listId,
+    attendance?.state,
+    attendance?.captureMode,
+    attendance?.captureWindowEndsAt,
+    attendance?.biometricMarkedAt,
+  ]);
+
+  const msUntilCaptureCloses =
+    attendance?.captureWindowEndsAt && !attendance.biometricMarkedAt
+      ? new Date(attendance.captureWindowEndsAt).getTime() - now
+      : null;
+  const isClosingSoon =
+    attendance?.state === 'OPEN' &&
+    attendance.captureMode === 'BIOMETRIC' &&
+    !attendance.biometricMarkedAt &&
+    msUntilCaptureCloses !== null &&
+    msUntilCaptureCloses > 0 &&
+    msUntilCaptureCloses <= CLOSING_SOON_THRESHOLD_MS;
+
+  useEffect(() => {
+    if (!attendance) {
+      closingSoonAnnouncedListId.current = null;
+      return;
+    }
+    if (isClosingSoon && closingSoonAnnouncedListId.current !== attendance.listId) {
+      closingSoonAnnouncedListId.current = attendance.listId;
+      playNotification();
+    }
+    if (!isClosingSoon && closingSoonAnnouncedListId.current === attendance.listId) {
+      closingSoonAnnouncedListId.current = null;
+    }
+    // Only listId/isClosingSoon (primitives) should trigger this — depending on the
+    // whole `attendance` object replayed the sound on every refetch that produced a
+    // new object reference even when nothing relevant had changed.
+  }, [attendance?.listId, isClosingSoon]);
 
   useEffect(() => {
     const refreshAttendance = () => {
@@ -127,7 +194,7 @@ const AlertNotification = () => {
       announcedListId.current = attendance.listId;
       if (dismissedListId !== attendance.listId) playNotification();
     }
-  }, [attendance, dismissedListId]);
+  }, [attendance?.listId, dismissedListId]);
 
   const dismissFinalized = () => {
     if (!attendance || attendance.state !== 'FINALIZED') return;
@@ -151,10 +218,16 @@ const AlertNotification = () => {
     visibleAttendance.state !== 'FINALIZED'
   ) {
     const copy = attendanceCopy(visibleAttendance);
+    const minimizedStatus =
+      isClosingSoon && msUntilCaptureCloses !== null
+        ? `¡Faltan ${formatCountdown(msUntilCaptureCloses)} para el cierre!`
+        : copy.status;
     return (
       <button
         type="button"
-        className="alertNotify-minimized"
+        className={`alertNotify-minimized${
+          isClosingSoon ? ' alertNotify-minimized--urgent' : ''
+        }`}
         onClick={() => setMinimizedListId(null)}
         aria-label="Expandir estado de asistencia"
       >
@@ -163,7 +236,7 @@ const AlertNotification = () => {
         ) : (
           <ClipboardCheck size={18} />
         )}
-        <span>{copy.status}</span>
+        <span>{minimizedStatus}</span>
         <ChevronUp size={17} />
       </button>
     );
@@ -174,7 +247,9 @@ const AlertNotification = () => {
 
   return (
     <motion.aside
-      className="alertNotify-content alertNotify-content--attendance"
+      className={`alertNotify-content alertNotify-content--attendance${
+        isClosingSoon ? ' alertNotify-content--urgent' : ''
+      }`}
       initial={{ x: '+100%' }}
       animate={{ x: 0 }}
       exit={{ x: '-100%' }}
@@ -215,8 +290,19 @@ const AlertNotification = () => {
       </div>
 
       <div className="alertNotify-attendanceBody">
+        {isClosingSoon && msUntilCaptureCloses !== null ? (
+          <p className="alertNotify-urgentBanner">
+            ¡Faltan {formatCountdown(msUntilCaptureCloses)} para el cierre de
+            captura! Registra tu huella ahora.
+          </p>
+        ) : null}
         <div className="alertNotify-statusRow">
-          <span className="alertNotify-status">{copy.status}</span>
+          <span
+            className="alertNotify-status"
+            style={{ backgroundColor: copy.colorVar }}
+          >
+            {copy.status}
+          </span>
           <span className="alertNotify-finality">
             {visibleAttendance.definitive ? 'Definitivo' : 'Provisional'}
           </span>
@@ -226,6 +312,12 @@ const AlertNotification = () => {
             <dt>Hora del llamado</dt>
             <dd>{visibleAttendance.timer ?? '—'}</dd>
           </div>
+          {visibleAttendance.captureWindowEndsAt ? (
+            <div>
+              <dt>Cierra a las</dt>
+              <dd>{formatMarkedAt(visibleAttendance.captureWindowEndsAt)}</dd>
+            </div>
+          ) : null}
           <div>
             <dt>Estado de lista</dt>
             <dd>{LIST_STATE_LABELS[visibleAttendance.state]}</dd>
