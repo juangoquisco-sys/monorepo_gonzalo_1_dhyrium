@@ -74,7 +74,9 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/src/docs ./src/docs
 COPY 404_page/ ./404_page/
 COPY resource/ ./resource/
-COPY jsonData/ ./jsonData/
+# jsonData is a local ignored directory. Keep an empty mount point when it is
+# not provided by the build context; deployments may inject it separately.
+RUN mkdir -p ./jsonData
 
 # Expone el puerto de la aplicación
 EXPOSE 8081
